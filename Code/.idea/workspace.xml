@@ -2,80 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="30dff34b-55df-4cb9-958e-6884dfab44ba" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Code.iml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/other.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.ipynb_checkpoints/PythonBasic-checkpoint.ipynb" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week2-LogisticRegression/.idea/Week2-LogisticRegression.iml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week2-LogisticRegression/.idea/misc.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week2-LogisticRegression/.idea/modules.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week2-LogisticRegression/.idea/other.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week2-LogisticRegression/.idea/vcs.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week2-LogisticRegression/.idea/workspace.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week2-LogisticRegression/.ipynb_checkpoints/LogisticRegressionWithCats-checkpoint.ipynb" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week2-LogisticRegression/Binary_Classification.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week2-LogisticRegression/Cost_Function.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week2-LogisticRegression/LogisticRegression.md" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week2-LogisticRegression/LogisticRegression.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week2-LogisticRegression/LogisticRegressionWithCats.ipynb" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week2-LogisticRegression/Logistic_Regression.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week2-LogisticRegression/PythonBasic.ipynb" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week2-LogisticRegression/logistic_regression.pptx" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week2-LogisticRegression/my_image.jpg" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week2-LogisticRegression/my_image_2.jpg" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week2-LogisticRegression/test_cat.h5" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week2-LogisticRegression/train_cat.h5" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week3&amp;4-NeuralNetwork/NeuralNetworkApplication.ipynb" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week3&amp;4-NeuralNetwork/SetUpModels.ipynb" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week3&amp;4-NeuralNetwork/classification with a hidden layer.ipynb" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week3&amp;4-NeuralNetwork/my_image_1.jpg" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week3&amp;4-NeuralNetwork/my_image_2.jpg" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week3&amp;4-NeuralNetwork/my_image_3.jpg" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week3&amp;4-NeuralNetwork/my_image_4.jpg" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week3&amp;4-NeuralNetwork/neural__network.pptx" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week3&amp;4-NeuralNetwork/test_cat.h5" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Week3&amp;4-NeuralNetwork/train_cat.h5" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Basic/GradientDescent.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Basic/Loss&amp;CostFunction.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Basic/python广播.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Basic/二分分类.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Basic/二分分类notes.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Basic/关于numpy的Note.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Basic/向量化.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Basic/向量化逻辑回归.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Basic/计算图.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Basic/逻辑回归.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Basic/逻辑回归notes.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Basic/逻辑回归中的GradientDescent.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Deep Neural Network/为什么使用深层表示.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Deep Neural Network/前向和反向传播.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Deep Neural Network/参数VS超参数.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Deep Neural Network/搭建神经深层网络块.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Deep Neural Network/核对矩阵的维数.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Deep Neural Network/深层神经网络.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Deep Neural Network/深层神经网络的前向传播.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Deep Neural Network/这和大脑有什么关系.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Introduction/1-1Note.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Introduction/1-1什么是神经网络.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Introduction/1-2notes.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Introduction/1-2监督学习.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Introduction/1-3notes.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Introduction/1-3为什么深度学习会兴起.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Introduction/1-4关于这门课.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Introduction/1-5课程资源.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Shallow Neural Network/为什么需要非线性回归.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Shallow Neural Network/多个例子的向量化.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Shallow Neural Network/推导梯度下降的导数（选修）.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Shallow Neural Network/激活函数.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Shallow Neural Network/激活函数的导数.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Shallow Neural Network/神经网络概览.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Shallow Neural Network/神经网络的梯度下降.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Shallow Neural Network/神经网络表示.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../PDF/Shallow Neural Network/随机初始化.pdf" afterPath="" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/../.idea/DeepLearning.iml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/../.idea/misc.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/../.idea/modules.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/../.idea/vcs.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
