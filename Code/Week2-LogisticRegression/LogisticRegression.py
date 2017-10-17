@@ -90,3 +90,19 @@ def optimize(w,b,X,Y,num_iterations,learning_rate,print_cost = False) #num_itera
 #预测出结果
 def predict(w,b,X):
     m = X.shape[1] #样本个数
+    Y_prediction = np.zeros((1,m)) #初始化预测输出
+    w = w.reshape(X.shape[0],1) #转置参数向量w
+
+    Y_hat = sigmoid(np.dot(w.T,X)+b) #最终得到的参数带入方程
+
+    for i in range(Y_hat.shape[1]):
+        if Y_hat[:,i]>0.5:
+            Y_prediction[:,i] = 1
+        else:
+            Y_prediction[:,i] = 0
+
+    return Y_prediction
+
+#建立整个预测模型
+def model(X_train,Y_train,X_test,Y_test,num_iterations = 2000,learning_rate = 0.5,print_cost = False):
+    #num_iterations-梯度下降次数
