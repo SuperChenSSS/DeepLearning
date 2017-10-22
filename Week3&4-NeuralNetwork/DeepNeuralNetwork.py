@@ -5,7 +5,7 @@ import time
 import scipy
 from PIL import Image
 from scipy import ndimage
-
+ 
 np.random.seed(1)
 
 
