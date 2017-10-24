@@ -5,6 +5,6 @@
 
 .ipynb需要用Jupyter Notebook打开
 
-部分资料是从[BinWeber](https://github.com/BinWeber/Deep-Learning)处得到的，感谢整理!
+部分资料是从[BinWeber](https://github.com/BinWeber)处得到的，感谢整理!
 
 这部分笔记还会持续更新
