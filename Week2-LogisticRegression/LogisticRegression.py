@@ -7,7 +7,6 @@ import h5py
 import scipy
 from PIL import Image
 from scipy import ndimage
- 
 #导入数据
 def load_dataset():
     train_dataset = h5py.File("train_cat.h5", "r")  # 读取训练数据，共209张图片
