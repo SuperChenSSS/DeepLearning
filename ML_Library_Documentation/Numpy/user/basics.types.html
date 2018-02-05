@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Data types &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" >
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../index.html" >
+    <link rel="up" title="NumPy basics" href="basics.html" >
+    <link rel="next" title="Array creation" href="basics.creation.html" >
+    <link rel="prev" title="NumPy basics" href="basics.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="index.html" >NumPy User Guide</a></li>
+          <li class="active"><a href="basics.html" accesskey="U">NumPy basics</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="basics.creation.html" title="Array creation"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="basics.html" title="NumPy basics"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Data types</a><ul>
+<li><a class="reference internal" href="#array-types-and-conversions-between-types">Array types and conversions between types</a></li>
+<li><a class="reference internal" href="#array-scalars">Array Scalars</a></li>
+<li><a class="reference internal" href="#extended-precision">Extended Precision</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="basics.html"
+                        title="previous chapter">NumPy basics</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="basics.creation.html"
+                        title="next chapter">Array creation</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="data-types">
+<h1>Data types<a class="headerlink" href="#data-types" title="Permalink to this headline">¶</a></h1>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="../reference/arrays.dtypes.html#arrays-dtypes"><span class="std std-ref">Data type objects</span></a></p>
+</div>
+<span class="target" id="module-numpy.doc.basics"></span><div class="section" id="array-types-and-conversions-between-types">
+<h2>Array types and conversions between types<a class="headerlink" href="#array-types-and-conversions-between-types" title="Permalink to this headline">¶</a></h2>
+<p>NumPy supports a much greater variety of numerical types than Python does.
+This section shows which are available, and how to modify an array&#8217;s data-type.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Data type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">bool_</span></code></td>
+<td>Boolean (True or False) stored as a byte</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">int_</span></code></td>
+<td>Default integer type (same as C <code class="docutils literal"><span class="pre">long</span></code>; normally either
+<code class="docutils literal"><span class="pre">int64</span></code> or <code class="docutils literal"><span class="pre">int32</span></code>)</td>
+</tr>
+<tr class="row-even"><td>intc</td>
+<td>Identical to C <code class="docutils literal"><span class="pre">int</span></code> (normally <code class="docutils literal"><span class="pre">int32</span></code> or <code class="docutils literal"><span class="pre">int64</span></code>)</td>
+</tr>
+<tr class="row-odd"><td>intp</td>
+<td>Integer used for indexing (same as C <code class="docutils literal"><span class="pre">ssize_t</span></code>; normally
+either <code class="docutils literal"><span class="pre">int32</span></code> or <code class="docutils literal"><span class="pre">int64</span></code>)</td>
+</tr>
+<tr class="row-even"><td>int8</td>
+<td>Byte (-128 to 127)</td>
+</tr>
+<tr class="row-odd"><td>int16</td>
+<td>Integer (-32768 to 32767)</td>
+</tr>
+<tr class="row-even"><td>int32</td>
+<td>Integer (-2147483648 to 2147483647)</td>
+</tr>
+<tr class="row-odd"><td>int64</td>
+<td>Integer (-9223372036854775808 to 9223372036854775807)</td>
+</tr>
+<tr class="row-even"><td>uint8</td>
+<td>Unsigned integer (0 to 255)</td>
+</tr>
+<tr class="row-odd"><td>uint16</td>
+<td>Unsigned integer (0 to 65535)</td>
+</tr>
+<tr class="row-even"><td>uint32</td>
+<td>Unsigned integer (0 to 4294967295)</td>
+</tr>
+<tr class="row-odd"><td>uint64</td>
+<td>Unsigned integer (0 to 18446744073709551615)</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">float_</span></code></td>
+<td>Shorthand for <code class="docutils literal"><span class="pre">float64</span></code>.</td>
+</tr>
+<tr class="row-odd"><td>float16</td>
+<td>Half precision float: sign bit, 5 bits exponent,
+10 bits mantissa</td>
+</tr>
+<tr class="row-even"><td>float32</td>
+<td>Single precision float: sign bit, 8 bits exponent,
+23 bits mantissa</td>
+</tr>
+<tr class="row-odd"><td>float64</td>
+<td>Double precision float: sign bit, 11 bits exponent,
+52 bits mantissa</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">complex_</span></code></td>
+<td>Shorthand for <code class="docutils literal"><span class="pre">complex128</span></code>.</td>
+</tr>
+<tr class="row-odd"><td>complex64</td>
+<td>Complex number, represented by two 32-bit floats (real
+and imaginary components)</td>
+</tr>
+<tr class="row-even"><td>complex128</td>
+<td>Complex number, represented by two 64-bit floats (real
+and imaginary components)</td>
+</tr>
+</tbody>
+</table>
+<p>Additionally to <code class="docutils literal"><span class="pre">intc</span></code> the platform dependent C integer types <code class="docutils literal"><span class="pre">short</span></code>,
+<code class="docutils literal"><span class="pre">long</span></code>, <code class="docutils literal"><span class="pre">longlong</span></code> and their unsigned versions are defined.</p>
+<p>NumPy numerical types are instances of <code class="docutils literal"><span class="pre">dtype</span></code> (data-type) objects, each
+having unique characteristics.  Once you have imported NumPy using</p>
+<blockquote>
+<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>the dtypes are available as <code class="docutils literal"><span class="pre">np.bool_</span></code>, <code class="docutils literal"><span class="pre">np.float32</span></code>, etc.</p>
+<p>Advanced types, not listed in the table above, are explored in
+section <a class="reference internal" href="basics.rec.html#structured-arrays"><span class="std std-ref">Structured arrays</span></a>.</p>
+<p>There are 5 basic numerical types representing booleans (bool), integers (int),
+unsigned integers (uint) floating point (float) and complex. Those with numbers
+in their name indicate the bitsize of the type (i.e. how many bits are needed
+to represent a single value in memory).  Some types, such as <code class="docutils literal"><span class="pre">int</span></code> and
+<code class="docutils literal"><span class="pre">intp</span></code>, have differing bitsizes, dependent on the platforms (e.g. 32-bit
+vs. 64-bit machines).  This should be taken into account when interfacing
+with low-level code (such as C or Fortran) where the raw memory is addressed.</p>
+<p>Data-types can be used as functions to convert python numbers to array scalars
+(see the array scalar section for an explanation), python sequences of numbers
+to arrays of that type, or as arguments to the dtype keyword that many numpy
+functions or methods accept. Some examples:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+<span class="go">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span>
+<span class="go">array([1, 2, 4])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span>
+<span class="go">array([0, 1, 2], dtype=uint8)</span>
+</pre></div>
+</div>
+<p>Array types can also be referred to by character codes, mostly to retain
+backward compatibility with older packages such as Numeric.  Some
+documentation may still refer to these, for example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>
+<span class="go">array([ 1.,  2.,  3.], dtype=float32)</span>
+</pre></div>
+</div>
+<p>We recommend using dtype objects instead.</p>
+<p>To convert the type of an array, use the .astype() method (preferred) or
+the type itself as a function. For example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">z</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>                 
+<span class="go">array([  0.,  1.,  2.])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+<span class="go">array([0, 1, 2], dtype=int8)</span>
+</pre></div>
+</div>
+<p>Note that, above, we use the <em>Python</em> float object as a dtype.  NumPy knows
+that <code class="docutils literal"><span class="pre">int</span></code> refers to <code class="docutils literal"><span class="pre">np.int_</span></code>, <code class="docutils literal"><span class="pre">bool</span></code> means <code class="docutils literal"><span class="pre">np.bool_</span></code>,
+that <code class="docutils literal"><span class="pre">float</span></code> is <code class="docutils literal"><span class="pre">np.float_</span></code> and <code class="docutils literal"><span class="pre">complex</span></code> is <code class="docutils literal"><span class="pre">np.complex_</span></code>.
+The other data-types do not have Python equivalents.</p>
+<p>To determine the type of an array, look at the dtype attribute:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">z</span><span class="o">.</span><span class="n">dtype</span>
+<span class="go">dtype(&#39;uint8&#39;)</span>
+</pre></div>
+</div>
+<p>dtype objects also contain information about the type, such as its bit-width
+and its byte-order.  The data type can also be used indirectly to query
+properties of the type, such as whether it is an integer:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span>
+<span class="go">dtype(&#39;int32&#39;)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">)</span>
+<span class="go">True</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="array-scalars">
+<h2>Array Scalars<a class="headerlink" href="#array-scalars" title="Permalink to this headline">¶</a></h2>
+<p>NumPy generally returns elements of arrays as array scalars (a scalar
+with an associated dtype).  Array scalars differ from Python scalars, but
+for the most part they can be used interchangeably (the primary
+exception is for versions of Python older than v2.x, where integer array
+scalars cannot act as indices for lists and tuples).  There are some
+exceptions, such as when code requires very specific attributes of a scalar
+or when it checks specifically whether a value is a Python scalar. Generally,
+problems are easily fixed by explicitly converting array scalars
+to Python scalars, using the corresponding Python type function
+(e.g., <code class="docutils literal"><span class="pre">int</span></code>, <code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">complex</span></code>, <code class="docutils literal"><span class="pre">str</span></code>, <code class="docutils literal"><span class="pre">unicode</span></code>).</p>
+<p>The primary advantage of using array scalars is that
+they preserve the array type (Python may not have a matching scalar type
+available, e.g. <code class="docutils literal"><span class="pre">int16</span></code>).  Therefore, the use of array scalars ensures
+identical behaviour between arrays and scalars, irrespective of whether the
+value is inside an array or not.  NumPy scalars also have many of the same
+methods arrays do.</p>
+</div>
+<div class="section" id="extended-precision">
+<h2>Extended Precision<a class="headerlink" href="#extended-precision" title="Permalink to this headline">¶</a></h2>
+<p>Python&#8217;s floating-point numbers are usually 64-bit floating-point numbers,
+nearly equivalent to <code class="docutils literal"><span class="pre">np.float64</span></code>. In some unusual situations it may be
+useful to use floating-point numbers with more precision. Whether this
+is possible in numpy depends on the hardware and on the development
+environment: specifically, x86 machines provide hardware floating-point
+with 80-bit precision, and while most C compilers provide this as their
+<code class="docutils literal"><span class="pre">long</span> <span class="pre">double</span></code> type, MSVC (standard for Windows builds) makes
+<code class="docutils literal"><span class="pre">long</span> <span class="pre">double</span></code> identical to <code class="docutils literal"><span class="pre">double</span></code> (64 bits). NumPy makes the
+compiler&#8217;s <code class="docutils literal"><span class="pre">long</span> <span class="pre">double</span></code> available as <code class="docutils literal"><span class="pre">np.longdouble</span></code> (and
+<code class="docutils literal"><span class="pre">np.clongdouble</span></code> for the complex numbers). You can find out what your
+numpy provides with <code class="docutils literal"><span class="pre">np.finfo(np.longdouble)</span></code>.</p>
+<p>NumPy does not provide a dtype with more precision than C
+<code class="docutils literal"><span class="pre">long</span> <span class="pre">double</span></code>s; in particular, the 128-bit IEEE quad precision
+data type (FORTRAN&#8217;s <code class="docutils literal"><span class="pre">REAL*16</span></code>) is not available.</p>
+<p>For efficient memory alignment, <code class="docutils literal"><span class="pre">np.longdouble</span></code> is usually stored
+padded with zero bits, either to 96 or 128 bits. Which is more efficient
+depends on hardware and development environment; typically on 32-bit
+systems they are padded to 96 bits, while on 64-bit systems they are
+typically padded to 128 bits. <code class="docutils literal"><span class="pre">np.longdouble</span></code> is padded to the system
+default; <code class="docutils literal"><span class="pre">np.float96</span></code> and <code class="docutils literal"><span class="pre">np.float128</span></code> are provided for users who
+want specific padding. In spite of the names, <code class="docutils literal"><span class="pre">np.float96</span></code> and
+<code class="docutils literal"><span class="pre">np.float128</span></code> provide only as much precision as <code class="docutils literal"><span class="pre">np.longdouble</span></code>,
+that is, 80 bits on most x86 machines and 64 bits in standard
+Windows builds.</p>
+<p>Be warned that even if <code class="docutils literal"><span class="pre">np.longdouble</span></code> offers more precision than
+python <code class="docutils literal"><span class="pre">float</span></code>, it is easy to lose that extra precision, since
+python often forces values to pass through <code class="docutils literal"><span class="pre">float</span></code>. For example,
+the <code class="docutils literal"><span class="pre">%</span></code> formatting operator requires its arguments to be converted
+to standard python types, and it is therefore impossible to preserve
+extended precision even if many decimal places are requested. It can
+be useful to test your code with the value
+<code class="docutils literal"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">np.finfo(np.longdouble).eps</span></code>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

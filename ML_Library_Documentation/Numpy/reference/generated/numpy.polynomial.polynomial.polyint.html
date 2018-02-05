@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.polynomial.polynomial.polyint &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="Polynomial Module (numpy.polynomial.polynomial)" href="../routines.polynomials.polynomial.html" >
+    <link rel="next" title="numpy.polynomial.polynomial.polyadd" href="numpy.polynomial.polynomial.polyadd.html" >
+    <link rel="prev" title="numpy.polynomial.polynomial.polyder" href="numpy.polynomial.polynomial.polyder.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.polynomials.html" >Polynomials</a></li>
+          <li class="active"><a href="../routines.polynomials.package.html" >Polynomial Package</a></li>
+          <li class="active"><a href="../routines.polynomials.polynomial.html" accesskey="U">Polynomial Module (<code class="docutils literal"><span class="pre">numpy.polynomial.polynomial</span></code>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.polynomial.polynomial.polyadd.html" title="numpy.polynomial.polynomial.polyadd"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.polynomial.polynomial.polyder.html" title="numpy.polynomial.polynomial.polyder"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.polynomial.polynomial.polyder.html"
+                        title="previous chapter">numpy.polynomial.polynomial.polyder</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.polynomial.polynomial.polyadd.html"
+                        title="next chapter">numpy.polynomial.polynomial.polyadd</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-polynomial-polynomial-polyint">
+<h1>numpy.polynomial.polynomial.polyint<a class="headerlink" href="#numpy-polynomial-polynomial-polyint" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="numpy.polynomial.polynomial.polyint">
+<code class="descclassname">numpy.polynomial.polynomial.</code><code class="descname">polyint</code><span class="sig-paren">(</span><em>c</em>, <em>m=1</em>, <em>k=[]</em>, <em>lbnd=0</em>, <em>scl=1</em>, <em>axis=0</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/numpy/numpy/blob/v1.14.0/numpy/polynomial/polynomial.py#L565-L685"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy.polynomial.polynomial.polyint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Integrate a polynomial.</p>
+<p>Returns the polynomial coefficients <em class="xref py py-obj">c</em> integrated <em class="xref py py-obj">m</em> times from
+<em class="xref py py-obj">lbnd</em> along <em class="xref py py-obj">axis</em>.  At each iteration the resulting series is
+<strong>multiplied</strong> by <em class="xref py py-obj">scl</em> and an integration constant, <em class="xref py py-obj">k</em>, is added.
+The scaling factor is for use in a linear change of variable.  (&#8220;Buyer
+beware&#8221;: note that, depending on what one is doing, one may want <em class="xref py py-obj">scl</em>
+to be the reciprocal of what one might expect; for more information,
+see the Notes section below.) The argument <em class="xref py py-obj">c</em> is an array of
+coefficients, from low to high degree along each axis, e.g., [1,2,3]
+represents the polynomial <code class="docutils literal"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">2*x</span> <span class="pre">+</span> <span class="pre">3*x**2</span></code> while [[1,2],[1,2]]
+represents <code class="docutils literal"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">1*x</span> <span class="pre">+</span> <span class="pre">2*y</span> <span class="pre">+</span> <span class="pre">2*x*y</span></code> if axis=0 is <code class="docutils literal"><span class="pre">x</span></code> and axis=1 is
+<code class="docutils literal"><span class="pre">y</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>c</strong> : array_like</p>
+<blockquote>
+<div><p>1-D array of polynomial coefficients, ordered from low to high.</p>
+</div></blockquote>
+<p><strong>m</strong> : int, optional</p>
+<blockquote>
+<div><p>Order of integration, must be positive. (Default: 1)</p>
+</div></blockquote>
+<p><strong>k</strong> : {[], list, scalar}, optional</p>
+<blockquote>
+<div><p>Integration constant(s).  The value of the first integral at zero
+is the first value in the list, the value of the second integral
+at zero is the second value, etc.  If <code class="docutils literal"><span class="pre">k</span> <span class="pre">==</span> <span class="pre">[]</span></code> (the default),
+all constants are set to zero.  If <code class="docutils literal"><span class="pre">m</span> <span class="pre">==</span> <span class="pre">1</span></code>, a single scalar can
+be given instead of a list.</p>
+</div></blockquote>
+<p><strong>lbnd</strong> : scalar, optional</p>
+<blockquote>
+<div><p>The lower bound of the integral. (Default: 0)</p>
+</div></blockquote>
+<p><strong>scl</strong> : scalar, optional</p>
+<blockquote>
+<div><p>Following each integration the result is <em>multiplied</em> by <em class="xref py py-obj">scl</em>
+before the integration constant is added. (Default: 1)</p>
+</div></blockquote>
+<p><strong>axis</strong> : int, optional</p>
+<blockquote>
+<div><p>Axis over which the integral is taken. (Default: 0).</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.7.0.</span></p>
+</div>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>S</strong> : ndarray</p>
+<blockquote>
+<div><p>Coefficient array of the integral.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
+<blockquote class="last">
+<div><p>If <code class="docutils literal"><span class="pre">m</span> <span class="pre">&lt;</span> <span class="pre">1</span></code>, <code class="docutils literal"><span class="pre">len(k)</span> <span class="pre">&gt;</span> <span class="pre">m</span></code>, <code class="docutils literal"><span class="pre">np.ndim(lbnd)</span> <span class="pre">!=</span> <span class="pre">0</span></code>, or
+<code class="docutils literal"><span class="pre">np.ndim(scl)</span> <span class="pre">!=</span> <span class="pre">0</span></code>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="numpy.polynomial.polynomial.polyder.html#numpy.polynomial.polynomial.polyder" title="numpy.polynomial.polynomial.polyder"><code class="xref py py-obj docutils literal"><span class="pre">polyder</span></code></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p>Note that the result of each integration is <em>multiplied</em> by <em class="xref py py-obj">scl</em>.  Why
+is this important to note?  Say one is making a linear change of
+variable <img class="math" src="../../_images/math/3068cb58cc65299c0b110d75ffdf32d78d55caa5.svg" alt="u = ax + b"/> in an integral relative to <em class="xref py py-obj">x</em>. Then
+<img class="math" src="../../_images/math/f9dd04643b1385cd2780f466a2a88d60daaf7eae.svg" alt="dx = du/a"/>, so one will need to set <em class="xref py py-obj">scl</em> equal to
+<img class="math" src="../../_images/math/852e06a6181521357b1430d188c67b281a2ee858.svg" alt="1/a"/> - perhaps not what one would have first thought.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy.polynomial</span> <span class="k">import</span> <span class="n">polynomial</span> <span class="k">as</span> <span class="n">P</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P</span><span class="o">.</span><span class="n">polyint</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="c1"># should return array([0, 1, 1, 1])</span>
+<span class="go">array([ 0.,  1.,  1.,  1.])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P</span><span class="o">.</span><span class="n">polyint</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># should return array([0, 0, 0, 1/6, 1/12, 1/20])</span>
+<span class="go">array([ 0.        ,  0.        ,  0.        ,  0.16666667,  0.08333333,</span>
+<span class="go">        0.05      ])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P</span><span class="o">.</span><span class="n">polyint</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># should return array([3, 1, 1, 1])</span>
+<span class="go">array([ 3.,  1.,  1.,  1.])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P</span><span class="o">.</span><span class="n">polyint</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">lbnd</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># should return array([6, 1, 1, 1])</span>
+<span class="go">array([ 6.,  1.,  1.,  1.])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P</span><span class="o">.</span><span class="n">polyint</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">scl</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># should return array([0, -2, -2, -2])</span>
+<span class="go">array([ 0., -2., -2., -2.])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

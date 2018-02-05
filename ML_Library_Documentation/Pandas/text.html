@@ -1,0 +1,1021 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Working with Text Data &#8212; pandas 0.22.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.22.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Options and Settings" href="options.html" />
+    <link rel="prev" title="Essential Basic Functionality" href="basics.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="options.html" title="Options and Settings"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="basics.html" title="Essential Basic Functionality"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pandas 0.22.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+<div class="content-wrapper">
+    <div class="content">
+        <div class="document">
+            <div class="sphinxsidebar">
+                <h3>Table Of Contents</h3>
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Package overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10min.html">10 Minutes to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dsintro.html">Intro to Data Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basics.html">Essential Basic Functionality</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Working with Text Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#splitting-and-replacing-strings">Splitting and Replacing Strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#indexing-with-str">Indexing with <code class="docutils literal"><span class="pre">.str</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#extracting-substrings">Extracting Substrings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#extract-first-match-in-each-subject-extract">Extract first match in each subject (extract)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#extract-all-matches-in-each-subject-extractall">Extract all matches in each subject (extractall)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#testing-for-strings-that-match-or-contain-a-pattern">Testing for Strings that Match or Contain a Pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-indicator-variables">Creating Indicator Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#method-summary">Method Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="options.html">Options and Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indexing.html">Indexing and Selecting Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">MultiIndex / Advanced Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="computation.html">Computational tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="missing_data.html">Working with missing data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="groupby.html">Group By: split-apply-combine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="merging.html">Merge, join, and concatenate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reshaping.html">Reshaping and Pivot Tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timeseries.html">Time Series / Date functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timedeltas.html">Time Deltas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="categorical.html">Categorical Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style.html">Styling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">IO Tools (Text, CSV, HDF5, ...)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="remote_data.html">Remote Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="enhancingperf.html">Enhancing Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sparse.html">Sparse data structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gotchas.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="r_interface.html">rpy2 / R interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ecosystem.html">pandas Ecosystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comparison_with_r.html">Comparison with R / R libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comparison_with_sql.html">Comparison with SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comparison_with_sas.html">Comparison with SAS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer.html">Developer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals.html">Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release.html">Release Notes</a></li>
+</ul>
+
+                <h3 style="margin-top: 1.5em;">Search</h3>
+
+                <form class="search" action="search.html" method="get">
+                    <input type="text" name="q" size="18"/>
+                    <input type="submit" value="Go"/>
+                    <input type="hidden" name="check_keywords" value="yes"/>
+                    <input type="hidden" name="area" value="default"/>
+                </form>
+                <p class="searchtip" style="font-size: 90%">
+                    Enter search terms or a module, class or function name.
+                </p>
+
+            </div>
+             
+            <div class="documentwrapper">
+                <div class="bodywrapper">
+                    <div class="body">
+                        
+  <div class="section" id="working-with-text-data">
+<span id="text"></span><h1>Working with Text Data<a class="headerlink" href="#working-with-text-data" title="Permalink to this headline">¶</a></h1>
+<p id="text-string-methods">Series and Index are equipped with a set of string processing methods
+that make it easy to operate on each element of the array. Perhaps most
+importantly, these methods exclude missing/NA values automatically. These are
+accessed via the <code class="docutils literal"><span class="pre">str</span></code> attribute and generally have names matching
+the equivalent (scalar) built-in string methods:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;Aaba&#39;</span><span class="p">,</span> <span class="s1">&#39;Baca&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="s1">&#39;CABA&#39;</span><span class="p">,</span> <span class="s1">&#39;dog&#39;</span><span class="p">,</span> <span class="s1">&#39;cat&#39;</span><span class="p">])</span>
+
+<span class="gp">In [2]: </span><span class="n">s</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+<span class="gh">Out[2]: </span><span class="go"></span>
+<span class="go">0       a</span>
+<span class="go">1       b</span>
+<span class="go">2       c</span>
+<span class="go">3    aaba</span>
+<span class="go">4    baca</span>
+<span class="go">5     NaN</span>
+<span class="go">6    caba</span>
+<span class="go">7     dog</span>
+<span class="go">8     cat</span>
+<span class="go">dtype: object</span>
+
+<span class="gp">In [3]: </span><span class="n">s</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+<span class="go">                                                                                                                 Out[3]: </span>
+<span class="go">0       A</span>
+<span class="go">1       B</span>
+<span class="go">2       C</span>
+<span class="go">3    AABA</span>
+<span class="go">4    BACA</span>
+<span class="go">5     NaN</span>
+<span class="go">6    CABA</span>
+<span class="go">7     DOG</span>
+<span class="go">8     CAT</span>
+<span class="go">dtype: object</span>
+
+<span class="gp">In [4]: </span><span class="n">s</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span>
+<span class="go">                                                                                                                                                                                                                                  Out[4]: </span>
+<span class="go">0    1.0</span>
+<span class="go">1    1.0</span>
+<span class="go">2    1.0</span>
+<span class="go">3    4.0</span>
+<span class="go">4    4.0</span>
+<span class="go">5    NaN</span>
+<span class="go">6    4.0</span>
+<span class="go">7    3.0</span>
+<span class="go">8    3.0</span>
+<span class="go">dtype: float64</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">idx</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">([</span><span class="s1">&#39; jack&#39;</span><span class="p">,</span> <span class="s1">&#39;jill &#39;</span><span class="p">,</span> <span class="s1">&#39; jesse &#39;</span><span class="p">,</span> <span class="s1">&#39;frank&#39;</span><span class="p">])</span>
+
+<span class="gp">In [6]: </span><span class="n">idx</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+<span class="gh">Out[6]: </span><span class="go">Index([&#39;jack&#39;, &#39;jill&#39;, &#39;jesse&#39;, &#39;frank&#39;], dtype=&#39;object&#39;)</span>
+
+<span class="gp">In [7]: </span><span class="n">idx</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()</span>
+<span class="go">                                                                  Out[7]: Index([&#39;jack&#39;, &#39;jill &#39;, &#39;jesse &#39;, &#39;frank&#39;], dtype=&#39;object&#39;)</span>
+
+<span class="gp">In [8]: </span><span class="n">idx</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+<span class="go">                                                                                                                                      Out[8]: Index([&#39; jack&#39;, &#39;jill&#39;, &#39; jesse&#39;, &#39;frank&#39;], dtype=&#39;object&#39;)</span>
+</pre></div>
+</div>
+<p>The string methods on Index are especially useful for cleaning up or
+transforming DataFrame columns. For instance, you may have columns with
+leading or trailing whitespace:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [9]: </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39; Column A &#39;</span><span class="p">,</span> <span class="s1">&#39; Column B &#39;</span><span class="p">],</span>
+<span class="gp">   ...: </span>                  <span class="n">index</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [10]: </span><span class="n">df</span>
+<span class="gh">Out[10]: </span><span class="go"></span>
+<span class="go">    Column A    Column B </span>
+<span class="go">0   -1.425575   -1.336299</span>
+<span class="go">1    0.740933    1.032121</span>
+<span class="go">2   -1.585660    0.913812</span>
+</pre></div>
+</div>
+<p>Since <code class="docutils literal"><span class="pre">df.columns</span></code> is an Index object, we can use the <code class="docutils literal"><span class="pre">.str</span></code> accessor</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [11]: </span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+<span class="gh">Out[11]: </span><span class="go">Index([&#39;Column A&#39;, &#39;Column B&#39;], dtype=&#39;object&#39;)</span>
+
+<span class="gp">In [12]: </span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+<span class="go">                                                         Out[12]: Index([&#39; column a &#39;, &#39; column b &#39;], dtype=&#39;object&#39;)</span>
+</pre></div>
+</div>
+<p>These string methods can then be used to clean up the columns as needed.
+Here we are removing leading and trailing whitespaces, lowercasing all names,
+and replacing any remaining whitespaces with underscores:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [13]: </span><span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span>
+
+<span class="gp">In [14]: </span><span class="n">df</span>
+<span class="gh">Out[14]: </span><span class="go"></span>
+<span class="go">   column_a  column_b</span>
+<span class="go">0 -1.425575 -1.336299</span>
+<span class="go">1  0.740933  1.032121</span>
+<span class="go">2 -1.585660  0.913812</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>If you have a <code class="docutils literal"><span class="pre">Series</span></code> where lots of elements are repeated
+(i.e. the number of unique elements in the <code class="docutils literal"><span class="pre">Series</span></code> is a lot smaller than the length of the
+<code class="docutils literal"><span class="pre">Series</span></code>), it can be faster to convert the original <code class="docutils literal"><span class="pre">Series</span></code> to one of type
+<code class="docutils literal"><span class="pre">category</span></code> and then use <code class="docutils literal"><span class="pre">.str.&lt;method&gt;</span></code> or <code class="docutils literal"><span class="pre">.dt.&lt;property&gt;</span></code> on that.
+The performance difference comes from the fact that, for <code class="docutils literal"><span class="pre">Series</span></code> of type <code class="docutils literal"><span class="pre">category</span></code>, the
+string operations are done on the <code class="docutils literal"><span class="pre">.categories</span></code> and not on each element of the
+<code class="docutils literal"><span class="pre">Series</span></code>.</p>
+<p class="last">Please note that a <code class="docutils literal"><span class="pre">Series</span></code> of type <code class="docutils literal"><span class="pre">category</span></code> with string <code class="docutils literal"><span class="pre">.categories</span></code> has
+some limitations in comparison of <code class="docutils literal"><span class="pre">Series</span></code> of type string (e.g. you can&#8217;t add strings to
+each other: <code class="docutils literal"><span class="pre">s</span> <span class="pre">+</span> <span class="pre">&quot;</span> <span class="pre">&quot;</span> <span class="pre">+</span> <span class="pre">s</span></code> won&#8217;t work if <code class="docutils literal"><span class="pre">s</span></code> is a <code class="docutils literal"><span class="pre">Series</span></code> of type <code class="docutils literal"><span class="pre">category</span></code>). Also,
+<code class="docutils literal"><span class="pre">.str</span></code> methods which operate on elements of type <code class="docutils literal"><span class="pre">list</span></code> are not available on such a
+<code class="docutils literal"><span class="pre">Series</span></code>.</p>
+</div>
+<div class="section" id="splitting-and-replacing-strings">
+<h2>Splitting and Replacing Strings<a class="headerlink" href="#splitting-and-replacing-strings" title="Permalink to this headline">¶</a></h2>
+<p id="text-split">Methods like <code class="docutils literal"><span class="pre">split</span></code> return a Series of lists:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [15]: </span><span class="n">s2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;a_b_c&#39;</span><span class="p">,</span> <span class="s1">&#39;c_d_e&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="s1">&#39;f_g_h&#39;</span><span class="p">])</span>
+
+<span class="gp">In [16]: </span><span class="n">s2</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
+<span class="gh">Out[16]: </span><span class="go"></span>
+<span class="go">0    [a, b, c]</span>
+<span class="go">1    [c, d, e]</span>
+<span class="go">2          NaN</span>
+<span class="go">3    [f, g, h]</span>
+<span class="go">dtype: object</span>
+</pre></div>
+</div>
+<p>Elements in the split lists can be accessed using <code class="docutils literal"><span class="pre">get</span></code> or <code class="docutils literal"><span class="pre">[]</span></code> notation:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [17]: </span><span class="n">s2</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gh">Out[17]: </span><span class="go"></span>
+<span class="go">0      b</span>
+<span class="go">1      d</span>
+<span class="go">2    NaN</span>
+<span class="go">3      g</span>
+<span class="go">dtype: object</span>
+
+<span class="gp">In [18]: </span><span class="n">s2</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">                                                            Out[18]: </span>
+<span class="go">0      b</span>
+<span class="go">1      d</span>
+<span class="go">2    NaN</span>
+<span class="go">3      g</span>
+<span class="go">dtype: object</span>
+</pre></div>
+</div>
+<p>Easy to expand this to return a DataFrame using <code class="docutils literal"><span class="pre">expand</span></code>.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [19]: </span><span class="n">s2</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gh">Out[19]: </span><span class="go"></span>
+<span class="go">     0    1    2</span>
+<span class="go">0    a    b    c</span>
+<span class="go">1    c    d    e</span>
+<span class="go">2  NaN  NaN  NaN</span>
+<span class="go">3    f    g    h</span>
+</pre></div>
+</div>
+<p>It is also possible to limit the number of splits:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [20]: </span><span class="n">s2</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gh">Out[20]: </span><span class="go"></span>
+<span class="go">     0    1</span>
+<span class="go">0    a  b_c</span>
+<span class="go">1    c  d_e</span>
+<span class="go">2  NaN  NaN</span>
+<span class="go">3    f  g_h</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">rsplit</span></code> is similar to <code class="docutils literal"><span class="pre">split</span></code> except it works in the reverse direction,
+i.e., from the end of the string to the beginning of the string:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [21]: </span><span class="n">s2</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gh">Out[21]: </span><span class="go"></span>
+<span class="go">     0    1</span>
+<span class="go">0  a_b    c</span>
+<span class="go">1  c_d    e</span>
+<span class="go">2  NaN  NaN</span>
+<span class="go">3  f_g    h</span>
+</pre></div>
+</div>
+<p>Methods like <code class="docutils literal"><span class="pre">replace</span></code> and <code class="docutils literal"><span class="pre">findall</span></code> take <a class="reference external" href="https://docs.python.org/2/library/re.html">regular expressions</a>, too:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [22]: </span><span class="n">s3</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;Aaba&#39;</span><span class="p">,</span> <span class="s1">&#39;Baca&#39;</span><span class="p">,</span>
+<span class="gp">   ....: </span>               <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="s1">&#39;CABA&#39;</span><span class="p">,</span> <span class="s1">&#39;dog&#39;</span><span class="p">,</span> <span class="s1">&#39;cat&#39;</span><span class="p">])</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [23]: </span><span class="n">s3</span>
+<span class="gh">Out[23]: </span><span class="go"></span>
+<span class="go">0       A</span>
+<span class="go">1       B</span>
+<span class="go">2       C</span>
+<span class="go">3    Aaba</span>
+<span class="go">4    Baca</span>
+<span class="go">5        </span>
+<span class="go">6     NaN</span>
+<span class="go">7    CABA</span>
+<span class="go">8     dog</span>
+<span class="go">9     cat</span>
+<span class="go">dtype: object</span>
+
+<span class="gp">In [24]: </span><span class="n">s3</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;^.a|dog&#39;</span><span class="p">,</span> <span class="s1">&#39;XX-XX &#39;</span><span class="p">,</span> <span class="n">case</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="go">                                                                                                                            Out[24]: </span>
+<span class="go">0           A</span>
+<span class="go">1           B</span>
+<span class="go">2           C</span>
+<span class="go">3    XX-XX ba</span>
+<span class="go">4    XX-XX ca</span>
+<span class="go">5            </span>
+<span class="go">6         NaN</span>
+<span class="go">7    XX-XX BA</span>
+<span class="go">8      XX-XX </span>
+<span class="go">9     XX-XX t</span>
+<span class="go">dtype: object</span>
+</pre></div>
+</div>
+<p>Some caution must be taken to keep regular expressions in mind! For example, the
+following code will cause trouble because of the regular expression meaning of
+<cite>$</cite>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="go"># Consider the following badly formatted financial data</span>
+<span class="gp">In [25]: </span><span class="n">dollars</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;12&#39;</span><span class="p">,</span> <span class="s1">&#39;-$10&#39;</span><span class="p">,</span> <span class="s1">&#39;$10,000&#39;</span><span class="p">])</span>
+
+<span class="go"># This does what you&#39;d naively expect:</span>
+<span class="gp">In [26]: </span><span class="n">dollars</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;$&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="gh">Out[26]: </span><span class="go"></span>
+<span class="go">0        12</span>
+<span class="go">1       -10</span>
+<span class="go">2    10,000</span>
+<span class="go">dtype: object</span>
+
+<span class="go"># But this doesn&#39;t:</span>
+<span class="gp">In [27]: </span><span class="n">dollars</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;-$&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>
+<span class="go">                                                            Out[27]: </span>
+<span class="go">0         12</span>
+<span class="go">1       -$10</span>
+<span class="go">2    $10,000</span>
+<span class="go">dtype: object</span>
+
+<span class="go"># We need to escape the special character (for &gt;1 len patterns)</span>
+<span class="gp">In [28]: </span><span class="n">dollars</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;-\$&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>
+<span class="go">                                                                                                                           Out[28]: </span>
+<span class="go">0         12</span>
+<span class="go">1        -10</span>
+<span class="go">2    $10,000</span>
+<span class="go">dtype: object</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">replace</span></code> method can also take a callable as replacement. It is called
+on every <code class="docutils literal"><span class="pre">pat</span></code> using <a class="reference external" href="https://docs.python.org/3/library/re.html#re.sub" title="(in Python v3.6)"><code class="xref py py-func docutils literal"><span class="pre">re.sub()</span></code></a>. The callable should expect one
+positional argument (a regex object) and return a string.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.20.0.</span></p>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="go"># Reverse every lowercase alphabetic word</span>
+<span class="gp">In [29]: </span><span class="n">pat</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;[a-z]+&#39;</span>
+
+<span class="gp">In [30]: </span><span class="n">repl</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">m</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="gp">In [31]: </span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;foo 123&#39;</span><span class="p">,</span> <span class="s1">&#39;bar baz&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">])</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">pat</span><span class="p">,</span> <span class="n">repl</span><span class="p">)</span>
+<span class="gh">Out[31]: </span><span class="go"></span>
+<span class="go">0    oof 123</span>
+<span class="go">1    rab zab</span>
+<span class="go">2        NaN</span>
+<span class="go">dtype: object</span>
+
+<span class="go"># Using regex groups</span>
+<span class="gp">In [32]: </span><span class="n">pat</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(?P&lt;one&gt;\w+) (?P&lt;two&gt;\w+) (?P&lt;three&gt;\w+)&quot;</span>
+
+<span class="gp">In [33]: </span><span class="n">repl</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">m</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;two&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">swapcase</span><span class="p">()</span>
+
+<span class="gp">In [34]: </span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;Foo Bar Baz&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">])</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">pat</span><span class="p">,</span> <span class="n">repl</span><span class="p">)</span>
+<span class="gh">Out[34]: </span><span class="go"></span>
+<span class="go">0    bAR</span>
+<span class="go">1    NaN</span>
+<span class="go">dtype: object</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">replace</span></code> method also accepts a compiled regular expression object
+from <a class="reference external" href="https://docs.python.org/3/library/re.html#re.compile" title="(in Python v3.6)"><code class="xref py py-func docutils literal"><span class="pre">re.compile()</span></code></a> as a pattern. All flags should be included in the
+compiled regular expression object.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.20.0.</span></p>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [35]: </span><span class="kn">import</span> <span class="nn">re</span>
+
+<span class="gp">In [36]: </span><span class="n">regex_pat</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^.a|dog&#39;</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+
+<span class="gp">In [37]: </span><span class="n">s3</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">regex_pat</span><span class="p">,</span> <span class="s1">&#39;XX-XX &#39;</span><span class="p">)</span>
+<span class="gh">Out[37]: </span><span class="go"></span>
+<span class="go">0           A</span>
+<span class="go">1           B</span>
+<span class="go">2           C</span>
+<span class="go">3    XX-XX ba</span>
+<span class="go">4    XX-XX ca</span>
+<span class="go">5            </span>
+<span class="go">6         NaN</span>
+<span class="go">7    XX-XX BA</span>
+<span class="go">8      XX-XX </span>
+<span class="go">9     XX-XX t</span>
+<span class="go">dtype: object</span>
+</pre></div>
+</div>
+<p>Including a <code class="docutils literal"><span class="pre">flags</span></code> argument when calling <code class="docutils literal"><span class="pre">replace</span></code> with a compiled
+regular expression object will raise a <code class="docutils literal"><span class="pre">ValueError</span></code>.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [38]: </span><span class="n">s3</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">regex_pat</span><span class="p">,</span> <span class="s1">&#39;XX-XX &#39;</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+<span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span>: case and flags cannot be set when pat is a compiled regex
+</pre></div>
+</div>
+</div>
+<div class="section" id="indexing-with-str">
+<h2>Indexing with <code class="docutils literal"><span class="pre">.str</span></code><a class="headerlink" href="#indexing-with-str" title="Permalink to this headline">¶</a></h2>
+<p id="text-indexing">You can use <code class="docutils literal"><span class="pre">[]</span></code> notation to directly index by position locations. If you index past the end
+of the string, the result will be a <code class="docutils literal"><span class="pre">NaN</span></code>.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [39]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;Aaba&#39;</span><span class="p">,</span> <span class="s1">&#39;Baca&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+<span class="gp">   ....: </span>               <span class="s1">&#39;CABA&#39;</span><span class="p">,</span> <span class="s1">&#39;dog&#39;</span><span class="p">,</span> <span class="s1">&#39;cat&#39;</span><span class="p">])</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [40]: </span><span class="n">s</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gh">Out[40]: </span><span class="go"></span>
+<span class="go">0      A</span>
+<span class="go">1      B</span>
+<span class="go">2      C</span>
+<span class="go">3      A</span>
+<span class="go">4      B</span>
+<span class="go">5    NaN</span>
+<span class="go">6      C</span>
+<span class="go">7      d</span>
+<span class="go">8      c</span>
+<span class="go">dtype: object</span>
+
+<span class="gp">In [41]: </span><span class="n">s</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">                                                                                                         Out[41]: </span>
+<span class="go">0    NaN</span>
+<span class="go">1    NaN</span>
+<span class="go">2    NaN</span>
+<span class="go">3      a</span>
+<span class="go">4      a</span>
+<span class="go">5    NaN</span>
+<span class="go">6      A</span>
+<span class="go">7      o</span>
+<span class="go">8      a</span>
+<span class="go">dtype: object</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="extracting-substrings">
+<h2>Extracting Substrings<a class="headerlink" href="#extracting-substrings" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="extract-first-match-in-each-subject-extract">
+<span id="text-extract"></span><h3>Extract first match in each subject (extract)<a class="headerlink" href="#extract-first-match-in-each-subject-extract" title="Permalink to this headline">¶</a></h3>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">In version 0.18.0, <code class="docutils literal"><span class="pre">extract</span></code> gained the <code class="docutils literal"><span class="pre">expand</span></code> argument. When
+<code class="docutils literal"><span class="pre">expand=False</span></code> it returns a <code class="docutils literal"><span class="pre">Series</span></code>, <code class="docutils literal"><span class="pre">Index</span></code>, or
+<code class="docutils literal"><span class="pre">DataFrame</span></code>, depending on the subject and regular expression
+pattern (same behavior as pre-0.18.0). When <code class="docutils literal"><span class="pre">expand=True</span></code> it
+always returns a <code class="docutils literal"><span class="pre">DataFrame</span></code>, which is more consistent and less
+confusing from the perspective of a user.</p>
+</div>
+<p>The <code class="docutils literal"><span class="pre">extract</span></code> method accepts a <a class="reference external" href="https://docs.python.org/2/library/re.html">regular expression</a> with at least one
+capture group.</p>
+<p>Extracting a regular expression with more than one group returns a
+DataFrame with one column per group.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [42]: </span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;a1&#39;</span><span class="p">,</span> <span class="s1">&#39;b2&#39;</span><span class="p">,</span> <span class="s1">&#39;c3&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="s1">&#39;([ab])(\d)&#39;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gh">Out[42]: </span><span class="go"></span>
+<span class="go">     0    1</span>
+<span class="go">0    a    1</span>
+<span class="go">1    b    2</span>
+<span class="go">2  NaN  NaN</span>
+</pre></div>
+</div>
+<p>Elements that do not match return a row filled with <code class="docutils literal"><span class="pre">NaN</span></code>. Thus, a
+Series of messy strings can be &#8220;converted&#8221; into a like-indexed Series
+or DataFrame of cleaned-up or more useful strings, without
+necessitating <code class="docutils literal"><span class="pre">get()</span></code> to access tuples or <code class="docutils literal"><span class="pre">re.match</span></code> objects. The
+dtype of the result is always object, even if no match is found and
+the result only contains <code class="docutils literal"><span class="pre">NaN</span></code>.</p>
+<p>Named groups like</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [43]: </span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;a1&#39;</span><span class="p">,</span> <span class="s1">&#39;b2&#39;</span><span class="p">,</span> <span class="s1">&#39;c3&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="s1">&#39;(?P&lt;letter&gt;[ab])(?P&lt;digit&gt;\d)&#39;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gh">Out[43]: </span><span class="go"></span>
+<span class="go">  letter digit</span>
+<span class="go">0      a     1</span>
+<span class="go">1      b     2</span>
+<span class="go">2    NaN   NaN</span>
+</pre></div>
+</div>
+<p>and optional groups like</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [44]: </span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;a1&#39;</span><span class="p">,</span> <span class="s1">&#39;b2&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="s1">&#39;([ab])?(\d)&#39;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gh">Out[44]: </span><span class="go"></span>
+<span class="go">     0  1</span>
+<span class="go">0    a  1</span>
+<span class="go">1    b  2</span>
+<span class="go">2  NaN  3</span>
+</pre></div>
+</div>
+<p>can also be used. Note that any capture group names in the regular
+expression will be used for column names; otherwise capture group
+numbers will be used.</p>
+<p>Extracting a regular expression with one group returns a <code class="docutils literal"><span class="pre">DataFrame</span></code>
+with one column if <code class="docutils literal"><span class="pre">expand=True</span></code>.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [45]: </span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;a1&#39;</span><span class="p">,</span> <span class="s1">&#39;b2&#39;</span><span class="p">,</span> <span class="s1">&#39;c3&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="s1">&#39;[ab](\d)&#39;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gh">Out[45]: </span><span class="go"></span>
+<span class="go">     0</span>
+<span class="go">0    1</span>
+<span class="go">1    2</span>
+<span class="go">2  NaN</span>
+</pre></div>
+</div>
+<p>It returns a Series if <code class="docutils literal"><span class="pre">expand=False</span></code>.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [46]: </span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;a1&#39;</span><span class="p">,</span> <span class="s1">&#39;b2&#39;</span><span class="p">,</span> <span class="s1">&#39;c3&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="s1">&#39;[ab](\d)&#39;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gh">Out[46]: </span><span class="go"></span>
+<span class="go">0      1</span>
+<span class="go">1      2</span>
+<span class="go">2    NaN</span>
+<span class="go">dtype: object</span>
+</pre></div>
+</div>
+<p>Calling on an <code class="docutils literal"><span class="pre">Index</span></code> with a regex with exactly one capture group
+returns a <code class="docutils literal"><span class="pre">DataFrame</span></code> with one column if <code class="docutils literal"><span class="pre">expand=True</span></code>,</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [47]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s2">&quot;a1&quot;</span><span class="p">,</span> <span class="s2">&quot;b2&quot;</span><span class="p">,</span> <span class="s2">&quot;c3&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;A11&quot;</span><span class="p">,</span> <span class="s2">&quot;B22&quot;</span><span class="p">,</span> <span class="s2">&quot;C33&quot;</span><span class="p">])</span>
+
+<span class="gp">In [48]: </span><span class="n">s</span>
+<span class="gh">Out[48]: </span><span class="go"></span>
+<span class="go">A11    a1</span>
+<span class="go">B22    b2</span>
+<span class="go">C33    c3</span>
+<span class="go">dtype: object</span>
+
+<span class="gp">In [49]: </span><span class="n">s</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="s2">&quot;(?P&lt;letter&gt;[a-zA-Z])&quot;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">                                                      Out[49]: </span>
+<span class="go">  letter</span>
+<span class="go">0      A</span>
+<span class="go">1      B</span>
+<span class="go">2      C</span>
+</pre></div>
+</div>
+<p>It returns an <code class="docutils literal"><span class="pre">Index</span></code> if <code class="docutils literal"><span class="pre">expand=False</span></code>.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [50]: </span><span class="n">s</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="s2">&quot;(?P&lt;letter&gt;[a-zA-Z])&quot;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gh">Out[50]: </span><span class="go">Index([&#39;A&#39;, &#39;B&#39;, &#39;C&#39;], dtype=&#39;object&#39;, name=&#39;letter&#39;)</span>
+</pre></div>
+</div>
+<p>Calling on an <code class="docutils literal"><span class="pre">Index</span></code> with a regex with more than one capture group
+returns a <code class="docutils literal"><span class="pre">DataFrame</span></code> if <code class="docutils literal"><span class="pre">expand=True</span></code>.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [51]: </span><span class="n">s</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="s2">&quot;(?P&lt;letter&gt;[a-zA-Z])([0-9]+)&quot;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gh">Out[51]: </span><span class="go"></span>
+<span class="go">  letter   1</span>
+<span class="go">0      A  11</span>
+<span class="go">1      B  22</span>
+<span class="go">2      C  33</span>
+</pre></div>
+</div>
+<p>It raises <code class="docutils literal"><span class="pre">ValueError</span></code> if <code class="docutils literal"><span class="pre">expand=False</span></code>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="s2">&quot;(?P&lt;letter&gt;[a-zA-Z])([0-9]+)&quot;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="go">ValueError: only one regex group is supported with Index</span>
+</pre></div>
+</div>
+<p>The table below summarizes the behavior of <code class="docutils literal"><span class="pre">extract(expand=False)</span></code>
+(input subject in first column, number of groups in regex in
+first row)</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="31%" />
+<col width="41%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>&#160;</td>
+<td>1 group</td>
+<td>&gt;1 group</td>
+</tr>
+<tr class="row-even"><td>Index</td>
+<td>Index</td>
+<td>ValueError</td>
+</tr>
+<tr class="row-odd"><td>Series</td>
+<td>Series</td>
+<td>DataFrame</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="extract-all-matches-in-each-subject-extractall">
+<h3>Extract all matches in each subject (extractall)<a class="headerlink" href="#extract-all-matches-in-each-subject-extractall" title="Permalink to this headline">¶</a></h3>
+<div class="versionadded" id="text-extractall">
+<p><span class="versionmodified">New in version 0.18.0.</span></p>
+</div>
+<p>Unlike <code class="docutils literal"><span class="pre">extract</span></code> (which returns only the first match),</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [52]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s2">&quot;a1a2&quot;</span><span class="p">,</span> <span class="s2">&quot;b1&quot;</span><span class="p">,</span> <span class="s2">&quot;c1&quot;</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">])</span>
+
+<span class="gp">In [53]: </span><span class="n">s</span>
+<span class="gh">Out[53]: </span><span class="go"></span>
+<span class="go">A    a1a2</span>
+<span class="go">B      b1</span>
+<span class="go">C      c1</span>
+<span class="go">dtype: object</span>
+
+<span class="gp">In [54]: </span><span class="n">two_groups</span> <span class="o">=</span> <span class="s1">&#39;(?P&lt;letter&gt;[a-z])(?P&lt;digit&gt;[0-9])&#39;</span>
+
+<span class="gp">In [55]: </span><span class="n">s</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">two_groups</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gh">Out[55]: </span><span class="go"></span>
+<span class="go">  letter digit</span>
+<span class="go">A      a     1</span>
+<span class="go">B      b     1</span>
+<span class="go">C      c     1</span>
+</pre></div>
+</div>
+<p>the <code class="docutils literal"><span class="pre">extractall</span></code> method returns every match. The result of
+<code class="docutils literal"><span class="pre">extractall</span></code> is always a <code class="docutils literal"><span class="pre">DataFrame</span></code> with a <code class="docutils literal"><span class="pre">MultiIndex</span></code> on its
+rows. The last level of the <code class="docutils literal"><span class="pre">MultiIndex</span></code> is named <code class="docutils literal"><span class="pre">match</span></code> and
+indicates the order in the subject.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [56]: </span><span class="n">s</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">two_groups</span><span class="p">)</span>
+<span class="gh">Out[56]: </span><span class="go"></span>
+<span class="go">        letter digit</span>
+<span class="go">  match             </span>
+<span class="go">A 0          a     1</span>
+<span class="go">  1          a     2</span>
+<span class="go">B 0          b     1</span>
+<span class="go">C 0          c     1</span>
+</pre></div>
+</div>
+<p>When each subject string in the Series has exactly one match,</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [57]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;a3&#39;</span><span class="p">,</span> <span class="s1">&#39;b3&#39;</span><span class="p">,</span> <span class="s1">&#39;c2&#39;</span><span class="p">])</span>
+
+<span class="gp">In [58]: </span><span class="n">s</span>
+<span class="gh">Out[58]: </span><span class="go"></span>
+<span class="go">0    a3</span>
+<span class="go">1    b3</span>
+<span class="go">2    c2</span>
+<span class="go">dtype: object</span>
+</pre></div>
+</div>
+<p>then <code class="docutils literal"><span class="pre">extractall(pat).xs(0,</span> <span class="pre">level='match')</span></code> gives the same result as
+<code class="docutils literal"><span class="pre">extract(pat)</span></code>.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [59]: </span><span class="n">extract_result</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">two_groups</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="gp">In [60]: </span><span class="n">extract_result</span>
+<span class="gh">Out[60]: </span><span class="go"></span>
+<span class="go">  letter digit</span>
+<span class="go">0      a     3</span>
+<span class="go">1      b     3</span>
+<span class="go">2      c     2</span>
+
+<span class="gp">In [61]: </span><span class="n">extractall_result</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">two_groups</span><span class="p">)</span>
+
+<span class="gp">In [62]: </span><span class="n">extractall_result</span>
+<span class="gh">Out[62]: </span><span class="go"></span>
+<span class="go">        letter digit</span>
+<span class="go">  match             </span>
+<span class="go">0 0          a     3</span>
+<span class="go">1 0          b     3</span>
+<span class="go">2 0          c     2</span>
+
+<span class="gp">In [63]: </span><span class="n">extractall_result</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">&quot;match&quot;</span><span class="p">)</span>
+<span class="go">                                                                                                                   Out[63]: </span>
+<span class="go">  letter digit</span>
+<span class="go">0      a     3</span>
+<span class="go">1      b     3</span>
+<span class="go">2      c     2</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">Index</span></code> also supports <code class="docutils literal"><span class="pre">.str.extractall</span></code>. It returns a <code class="docutils literal"><span class="pre">DataFrame</span></code> which has the
+same result as a <code class="docutils literal"><span class="pre">Series.str.extractall</span></code> with a default index (starts from 0).</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.19.0.</span></p>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [64]: </span><span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">([</span><span class="s2">&quot;a1a2&quot;</span><span class="p">,</span> <span class="s2">&quot;b1&quot;</span><span class="p">,</span> <span class="s2">&quot;c1&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">two_groups</span><span class="p">)</span>
+<span class="gh">Out[64]: </span><span class="go"></span>
+<span class="go">        letter digit</span>
+<span class="go">  match             </span>
+<span class="go">0 0          a     1</span>
+<span class="go">  1          a     2</span>
+<span class="go">1 0          b     1</span>
+<span class="go">2 0          c     1</span>
+
+<span class="gp">In [65]: </span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s2">&quot;a1a2&quot;</span><span class="p">,</span> <span class="s2">&quot;b1&quot;</span><span class="p">,</span> <span class="s2">&quot;c1&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">two_groups</span><span class="p">)</span>
+<span class="go">                                                                                                                                        Out[65]: </span>
+<span class="go">        letter digit</span>
+<span class="go">  match             </span>
+<span class="go">0 0          a     1</span>
+<span class="go">  1          a     2</span>
+<span class="go">1 0          b     1</span>
+<span class="go">2 0          c     1</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="testing-for-strings-that-match-or-contain-a-pattern">
+<h2>Testing for Strings that Match or Contain a Pattern<a class="headerlink" href="#testing-for-strings-that-match-or-contain-a-pattern" title="Permalink to this headline">¶</a></h2>
+<p>You can check whether elements contain a pattern:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [66]: </span><span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;[0-9][a-z]&#39;</span>
+
+<span class="gp">In [67]: </span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;3a&#39;</span><span class="p">,</span> <span class="s1">&#39;3b&#39;</span><span class="p">,</span> <span class="s1">&#39;03c&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+<span class="gh">Out[67]: </span><span class="go"></span>
+<span class="go">0    False</span>
+<span class="go">1    False</span>
+<span class="go">2     True</span>
+<span class="go">3     True</span>
+<span class="go">4     True</span>
+<span class="go">dtype: bool</span>
+</pre></div>
+</div>
+<p>or match a pattern:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [68]: </span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;3a&#39;</span><span class="p">,</span> <span class="s1">&#39;3b&#39;</span><span class="p">,</span> <span class="s1">&#39;03c&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+<span class="gh">Out[68]: </span><span class="go"></span>
+<span class="go">0    False</span>
+<span class="go">1    False</span>
+<span class="go">2     True</span>
+<span class="go">3     True</span>
+<span class="go">4    False</span>
+<span class="go">dtype: bool</span>
+</pre></div>
+</div>
+<p>The distinction between <code class="docutils literal"><span class="pre">match</span></code> and <code class="docutils literal"><span class="pre">contains</span></code> is strictness: <code class="docutils literal"><span class="pre">match</span></code>
+relies on strict <code class="docutils literal"><span class="pre">re.match</span></code>, while <code class="docutils literal"><span class="pre">contains</span></code> relies on <code class="docutils literal"><span class="pre">re.search</span></code>.</p>
+<p>Methods like <code class="docutils literal"><span class="pre">match</span></code>, <code class="docutils literal"><span class="pre">contains</span></code>, <code class="docutils literal"><span class="pre">startswith</span></code>, and <code class="docutils literal"><span class="pre">endswith</span></code> take
+an extra <code class="docutils literal"><span class="pre">na</span></code> argument so missing values can be considered True or False:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [69]: </span><span class="n">s4</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;Aaba&#39;</span><span class="p">,</span> <span class="s1">&#39;Baca&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="s1">&#39;CABA&#39;</span><span class="p">,</span> <span class="s1">&#39;dog&#39;</span><span class="p">,</span> <span class="s1">&#39;cat&#39;</span><span class="p">])</span>
+
+<span class="gp">In [70]: </span><span class="n">s4</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gh">Out[70]: </span><span class="go"></span>
+<span class="go">0     True</span>
+<span class="go">1    False</span>
+<span class="go">2    False</span>
+<span class="go">3     True</span>
+<span class="go">4    False</span>
+<span class="go">5    False</span>
+<span class="go">6     True</span>
+<span class="go">7    False</span>
+<span class="go">8    False</span>
+<span class="go">dtype: bool</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-indicator-variables">
+<span id="text-indicator"></span><h2>Creating Indicator Variables<a class="headerlink" href="#creating-indicator-variables" title="Permalink to this headline">¶</a></h2>
+<p>You can extract dummy variables from string columns.
+For example if they are separated by a <code class="docutils literal"><span class="pre">'|'</span></code>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [71]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a|b&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="s1">&#39;a|c&#39;</span><span class="p">])</span>
+
+<span class="gp">In [72]: </span><span class="n">s</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">sep</span><span class="o">=</span><span class="s1">&#39;|&#39;</span><span class="p">)</span>
+<span class="gh">Out[72]: </span><span class="go"></span>
+<span class="go">   a  b  c</span>
+<span class="go">0  1  0  0</span>
+<span class="go">1  1  1  0</span>
+<span class="go">2  0  0  0</span>
+<span class="go">3  1  0  1</span>
+</pre></div>
+</div>
+<p>String <code class="docutils literal"><span class="pre">Index</span></code> also supports <code class="docutils literal"><span class="pre">get_dummies</span></code> which returns a <code class="docutils literal"><span class="pre">MultiIndex</span></code>.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.18.1.</span></p>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [73]: </span><span class="n">idx</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a|b&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="s1">&#39;a|c&#39;</span><span class="p">])</span>
+
+<span class="gp">In [74]: </span><span class="n">idx</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">sep</span><span class="o">=</span><span class="s1">&#39;|&#39;</span><span class="p">)</span>
+<span class="gh">Out[74]: </span><span class="go"></span>
+<span class="go">MultiIndex(levels=[[0, 1], [0, 1], [0, 1]],</span>
+<span class="go">           labels=[[1, 1, 0, 1], [0, 1, 0, 0], [0, 0, 0, 1]],</span>
+<span class="go">           names=[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;])</span>
+</pre></div>
+</div>
+<p>See also <a class="reference internal" href="generated/pandas.get_dummies.html#pandas.get_dummies" title="pandas.get_dummies"><code class="xref py py-func docutils literal"><span class="pre">get_dummies()</span></code></a>.</p>
+</div>
+<div class="section" id="method-summary">
+<h2>Method Summary<a class="headerlink" href="#method-summary" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="colwidths-given docutils" id="text-summary">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Method</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="generated/pandas.Series.str.cat.html#pandas.Series.str.cat" title="pandas.Series.str.cat"><code class="xref py py-meth docutils literal"><span class="pre">cat()</span></code></a></td>
+<td>Concatenate strings</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pandas.Series.str.split.html#pandas.Series.str.split" title="pandas.Series.str.split"><code class="xref py py-meth docutils literal"><span class="pre">split()</span></code></a></td>
+<td>Split strings on delimiter</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pandas.Series.str.rsplit.html#pandas.Series.str.rsplit" title="pandas.Series.str.rsplit"><code class="xref py py-meth docutils literal"><span class="pre">rsplit()</span></code></a></td>
+<td>Split strings on delimiter working from the end of the string</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pandas.Series.str.get.html#pandas.Series.str.get" title="pandas.Series.str.get"><code class="xref py py-meth docutils literal"><span class="pre">get()</span></code></a></td>
+<td>Index into each element (retrieve i-th element)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pandas.Series.str.join.html#pandas.Series.str.join" title="pandas.Series.str.join"><code class="xref py py-meth docutils literal"><span class="pre">join()</span></code></a></td>
+<td>Join strings in each element of the Series with passed separator</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pandas.Series.str.get_dummies.html#pandas.Series.str.get_dummies" title="pandas.Series.str.get_dummies"><code class="xref py py-meth docutils literal"><span class="pre">get_dummies()</span></code></a></td>
+<td>Split strings on the delimiter returning DataFrame of dummy variables</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pandas.Series.str.contains.html#pandas.Series.str.contains" title="pandas.Series.str.contains"><code class="xref py py-meth docutils literal"><span class="pre">contains()</span></code></a></td>
+<td>Return boolean array if each string contains pattern/regex</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pandas.Series.str.replace.html#pandas.Series.str.replace" title="pandas.Series.str.replace"><code class="xref py py-meth docutils literal"><span class="pre">replace()</span></code></a></td>
+<td>Replace occurrences of pattern/regex with some other string or the return value of a callable given the occurrence</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pandas.Series.str.repeat.html#pandas.Series.str.repeat" title="pandas.Series.str.repeat"><code class="xref py py-meth docutils literal"><span class="pre">repeat()</span></code></a></td>
+<td>Duplicate values (<code class="docutils literal"><span class="pre">s.str.repeat(3)</span></code> equivalent to <code class="docutils literal"><span class="pre">x</span> <span class="pre">*</span> <span class="pre">3</span></code>)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pandas.Series.str.pad.html#pandas.Series.str.pad" title="pandas.Series.str.pad"><code class="xref py py-meth docutils literal"><span class="pre">pad()</span></code></a></td>
+<td>Add whitespace to left, right, or both sides of strings</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pandas.Series.str.center.html#pandas.Series.str.center" title="pandas.Series.str.center"><code class="xref py py-meth docutils literal"><span class="pre">center()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.center</span></code></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pandas.Series.str.ljust.html#pandas.Series.str.ljust" title="pandas.Series.str.ljust"><code class="xref py py-meth docutils literal"><span class="pre">ljust()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.ljust</span></code></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pandas.Series.str.rjust.html#pandas.Series.str.rjust" title="pandas.Series.str.rjust"><code class="xref py py-meth docutils literal"><span class="pre">rjust()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.rjust</span></code></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pandas.Series.str.zfill.html#pandas.Series.str.zfill" title="pandas.Series.str.zfill"><code class="xref py py-meth docutils literal"><span class="pre">zfill()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.zfill</span></code></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pandas.Series.str.wrap.html#pandas.Series.str.wrap" title="pandas.Series.str.wrap"><code class="xref py py-meth docutils literal"><span class="pre">wrap()</span></code></a></td>
+<td>Split long strings into lines with length less than a given width</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pandas.Series.str.slice.html#pandas.Series.str.slice" title="pandas.Series.str.slice"><code class="xref py py-meth docutils literal"><span class="pre">slice()</span></code></a></td>
+<td>Slice each string in the Series</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pandas.Series.str.slice_replace.html#pandas.Series.str.slice_replace" title="pandas.Series.str.slice_replace"><code class="xref py py-meth docutils literal"><span class="pre">slice_replace()</span></code></a></td>
+<td>Replace slice in each string with passed value</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pandas.Series.str.count.html#pandas.Series.str.count" title="pandas.Series.str.count"><code class="xref py py-meth docutils literal"><span class="pre">count()</span></code></a></td>
+<td>Count occurrences of pattern</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pandas.Series.str.startswith.html#pandas.Series.str.startswith" title="pandas.Series.str.startswith"><code class="xref py py-meth docutils literal"><span class="pre">startswith()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.startswith(pat)</span></code> for each element</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pandas.Series.str.endswith.html#pandas.Series.str.endswith" title="pandas.Series.str.endswith"><code class="xref py py-meth docutils literal"><span class="pre">endswith()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.endswith(pat)</span></code> for each element</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pandas.Series.str.findall.html#pandas.Series.str.findall" title="pandas.Series.str.findall"><code class="xref py py-meth docutils literal"><span class="pre">findall()</span></code></a></td>
+<td>Compute list of all occurrences of pattern/regex for each string</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pandas.Series.str.match.html#pandas.Series.str.match" title="pandas.Series.str.match"><code class="xref py py-meth docutils literal"><span class="pre">match()</span></code></a></td>
+<td>Call <code class="docutils literal"><span class="pre">re.match</span></code> on each element, returning matched groups as list</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pandas.Series.str.extract.html#pandas.Series.str.extract" title="pandas.Series.str.extract"><code class="xref py py-meth docutils literal"><span class="pre">extract()</span></code></a></td>
+<td>Call <code class="docutils literal"><span class="pre">re.search</span></code> on each element, returning DataFrame with one row for each element and one column for each regex capture group</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pandas.Series.str.extractall.html#pandas.Series.str.extractall" title="pandas.Series.str.extractall"><code class="xref py py-meth docutils literal"><span class="pre">extractall()</span></code></a></td>
+<td>Call <code class="docutils literal"><span class="pre">re.findall</span></code> on each element, returning DataFrame with one row for each match and one column for each regex capture group</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pandas.Series.str.len.html#pandas.Series.str.len" title="pandas.Series.str.len"><code class="xref py py-meth docutils literal"><span class="pre">len()</span></code></a></td>
+<td>Compute string lengths</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pandas.Series.str.strip.html#pandas.Series.str.strip" title="pandas.Series.str.strip"><code class="xref py py-meth docutils literal"><span class="pre">strip()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.strip</span></code></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pandas.Series.str.rstrip.html#pandas.Series.str.rstrip" title="pandas.Series.str.rstrip"><code class="xref py py-meth docutils literal"><span class="pre">rstrip()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.rstrip</span></code></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pandas.Series.str.lstrip.html#pandas.Series.str.lstrip" title="pandas.Series.str.lstrip"><code class="xref py py-meth docutils literal"><span class="pre">lstrip()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.lstrip</span></code></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pandas.Series.str.partition.html#pandas.Series.str.partition" title="pandas.Series.str.partition"><code class="xref py py-meth docutils literal"><span class="pre">partition()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.partition</span></code></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pandas.Series.str.rpartition.html#pandas.Series.str.rpartition" title="pandas.Series.str.rpartition"><code class="xref py py-meth docutils literal"><span class="pre">rpartition()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.rpartition</span></code></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pandas.Series.str.lower.html#pandas.Series.str.lower" title="pandas.Series.str.lower"><code class="xref py py-meth docutils literal"><span class="pre">lower()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.lower</span></code></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pandas.Series.str.upper.html#pandas.Series.str.upper" title="pandas.Series.str.upper"><code class="xref py py-meth docutils literal"><span class="pre">upper()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.upper</span></code></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pandas.Series.str.find.html#pandas.Series.str.find" title="pandas.Series.str.find"><code class="xref py py-meth docutils literal"><span class="pre">find()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.find</span></code></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pandas.Series.str.rfind.html#pandas.Series.str.rfind" title="pandas.Series.str.rfind"><code class="xref py py-meth docutils literal"><span class="pre">rfind()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.rfind</span></code></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pandas.Series.str.index.html#pandas.Series.str.index" title="pandas.Series.str.index"><code class="xref py py-meth docutils literal"><span class="pre">index()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.index</span></code></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pandas.Series.str.rindex.html#pandas.Series.str.rindex" title="pandas.Series.str.rindex"><code class="xref py py-meth docutils literal"><span class="pre">rindex()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.rindex</span></code></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pandas.Series.str.capitalize.html#pandas.Series.str.capitalize" title="pandas.Series.str.capitalize"><code class="xref py py-meth docutils literal"><span class="pre">capitalize()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.capitalize</span></code></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pandas.Series.str.swapcase.html#pandas.Series.str.swapcase" title="pandas.Series.str.swapcase"><code class="xref py py-meth docutils literal"><span class="pre">swapcase()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.swapcase</span></code></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pandas.Series.str.normalize.html#pandas.Series.str.normalize" title="pandas.Series.str.normalize"><code class="xref py py-meth docutils literal"><span class="pre">normalize()</span></code></a></td>
+<td>Return Unicode normal form. Equivalent to <code class="docutils literal"><span class="pre">unicodedata.normalize</span></code></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pandas.Series.str.translate.html#pandas.Series.str.translate" title="pandas.Series.str.translate"><code class="xref py py-meth docutils literal"><span class="pre">translate()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.translate</span></code></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pandas.Series.str.isalnum.html#pandas.Series.str.isalnum" title="pandas.Series.str.isalnum"><code class="xref py py-meth docutils literal"><span class="pre">isalnum()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.isalnum</span></code></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pandas.Series.str.isalpha.html#pandas.Series.str.isalpha" title="pandas.Series.str.isalpha"><code class="xref py py-meth docutils literal"><span class="pre">isalpha()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.isalpha</span></code></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pandas.Series.str.isdigit.html#pandas.Series.str.isdigit" title="pandas.Series.str.isdigit"><code class="xref py py-meth docutils literal"><span class="pre">isdigit()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.isdigit</span></code></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pandas.Series.str.isspace.html#pandas.Series.str.isspace" title="pandas.Series.str.isspace"><code class="xref py py-meth docutils literal"><span class="pre">isspace()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.isspace</span></code></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pandas.Series.str.islower.html#pandas.Series.str.islower" title="pandas.Series.str.islower"><code class="xref py py-meth docutils literal"><span class="pre">islower()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.islower</span></code></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pandas.Series.str.isupper.html#pandas.Series.str.isupper" title="pandas.Series.str.isupper"><code class="xref py py-meth docutils literal"><span class="pre">isupper()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.isupper</span></code></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pandas.Series.str.istitle.html#pandas.Series.str.istitle" title="pandas.Series.str.istitle"><code class="xref py py-meth docutils literal"><span class="pre">istitle()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.istitle</span></code></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pandas.Series.str.isnumeric.html#pandas.Series.str.isnumeric" title="pandas.Series.str.isnumeric"><code class="xref py py-meth docutils literal"><span class="pre">isnumeric()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.isnumeric</span></code></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pandas.Series.str.isdecimal.html#pandas.Series.str.isdecimal" title="pandas.Series.str.isdecimal"><code class="xref py py-meth docutils literal"><span class="pre">isdecimal()</span></code></a></td>
+<td>Equivalent to <code class="docutils literal"><span class="pre">str.isdecimal</span></code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="clearer"></div>
+        </div>
+    </div>
+</div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="options.html" title="Options and Settings"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="basics.html" title="Essential Basic Functionality"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pandas 0.22.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+<style type="text/css">
+    .scrollToTop {
+        text-align: center;
+        font-weight: bold;
+        position: fixed;
+        bottom: 60px;
+        right: 40px;
+        display: none;
+    }
+</style>
+<a href="#" class="scrollToTop">Scroll To Top</a>
+<script type="text/javascript">
+$(document).ready(function() {
+    //Check to see if the window is top if not then display button
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 200) {
+            $('.scrollToTop').fadeIn();
+        } else {
+            $('.scrollToTop').fadeOut();
+        }
+    });
+
+    //Click event to scroll to top
+    $('.scrollToTop').click(function() {
+        $('html, body').animate({
+            scrollTop: 0
+        }, 500);
+        return false;
+    });
+});
+</script>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27880019-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </body>
+</html>

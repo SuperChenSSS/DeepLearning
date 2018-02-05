@@ -1,0 +1,714 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Sparse data structures &#8212; pandas 0.22.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.22.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Frequently Asked Questions (FAQ)" href="gotchas.html" />
+    <link rel="prev" title="Enhancing Performance" href="enhancingperf.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gotchas.html" title="Frequently Asked Questions (FAQ)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="enhancingperf.html" title="Enhancing Performance"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pandas 0.22.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+<div class="content-wrapper">
+    <div class="content">
+        <div class="document">
+            <div class="sphinxsidebar">
+                <h3>Table Of Contents</h3>
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Package overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10min.html">10 Minutes to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dsintro.html">Intro to Data Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basics.html">Essential Basic Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="text.html">Working with Text Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="options.html">Options and Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indexing.html">Indexing and Selecting Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">MultiIndex / Advanced Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="computation.html">Computational tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="missing_data.html">Working with missing data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="groupby.html">Group By: split-apply-combine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="merging.html">Merge, join, and concatenate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reshaping.html">Reshaping and Pivot Tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timeseries.html">Time Series / Date functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timedeltas.html">Time Deltas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="categorical.html">Categorical Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style.html">Styling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">IO Tools (Text, CSV, HDF5, ...)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="remote_data.html">Remote Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="enhancingperf.html">Enhancing Performance</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Sparse data structures</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#sparsearray">SparseArray</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sparselist">SparseList</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sparseindex-objects">SparseIndex objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sparse-dtypes">Sparse Dtypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sparse-calculation">Sparse Calculation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interaction-with-scipy-sparse">Interaction with scipy.sparse</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sparsedataframe">SparseDataFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sparseseries">SparseSeries</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gotchas.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="r_interface.html">rpy2 / R interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ecosystem.html">pandas Ecosystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comparison_with_r.html">Comparison with R / R libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comparison_with_sql.html">Comparison with SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comparison_with_sas.html">Comparison with SAS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer.html">Developer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals.html">Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release.html">Release Notes</a></li>
+</ul>
+
+                <h3 style="margin-top: 1.5em;">Search</h3>
+
+                <form class="search" action="search.html" method="get">
+                    <input type="text" name="q" size="18"/>
+                    <input type="submit" value="Go"/>
+                    <input type="hidden" name="check_keywords" value="yes"/>
+                    <input type="hidden" name="area" value="default"/>
+                </form>
+                <p class="searchtip" style="font-size: 90%">
+                    Enter search terms or a module, class or function name.
+                </p>
+
+            </div>
+             
+            <div class="documentwrapper">
+                <div class="bodywrapper">
+                    <div class="body">
+                        
+  <div class="section" id="sparse-data-structures">
+<span id="sparse"></span><h1>Sparse data structures<a class="headerlink" href="#sparse-data-structures" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <code class="docutils literal"><span class="pre">SparsePanel</span></code> class has been removed in 0.19.0</p>
+</div>
+<p>We have implemented &#8220;sparse&#8221; versions of Series and DataFrame. These are not sparse
+in the typical &#8220;mostly 0&#8221;. Rather, you can view these objects as being &#8220;compressed&#8221;
+where any data matching a specific value (<code class="docutils literal"><span class="pre">NaN</span></code> / missing value, though any value
+can be chosen) is omitted. A special <code class="docutils literal"><span class="pre">SparseIndex</span></code> object tracks where data has been
+&#8220;sparsified&#8221;. This will make much more sense in an example. All of the standard pandas
+data structures have a <code class="docutils literal"><span class="pre">to_sparse</span></code> method:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">ts</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">randn</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="gp">In [2]: </span><span class="n">ts</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+<span class="gp">In [3]: </span><span class="n">sts</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">to_sparse</span><span class="p">()</span>
+
+<span class="gp">In [4]: </span><span class="n">sts</span>
+<span class="gh">Out[4]: </span><span class="go"></span>
+<span class="go">0    0.469112</span>
+<span class="go">1   -0.282863</span>
+<span class="go">2         NaN</span>
+<span class="go">3         NaN</span>
+<span class="go">4         NaN</span>
+<span class="go">5         NaN</span>
+<span class="go">6         NaN</span>
+<span class="go">7         NaN</span>
+<span class="go">8   -0.861849</span>
+<span class="go">9   -2.104569</span>
+<span class="go">dtype: float64</span>
+<span class="go">BlockIndex</span>
+<span class="go">Block locations: array([0, 8], dtype=int32)</span>
+<span class="go">Block lengths: array([2, 2], dtype=int32)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">to_sparse</span></code> method takes a <code class="docutils literal"><span class="pre">kind</span></code> argument (for the sparse index, see
+below) and a <code class="docutils literal"><span class="pre">fill_value</span></code>. So if we had a mostly zero Series, we could
+convert it to sparse with <code class="docutils literal"><span class="pre">fill_value=0</span></code>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">ts</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to_sparse</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gh">Out[5]: </span><span class="go"></span>
+<span class="go">0    0.469112</span>
+<span class="go">1   -0.282863</span>
+<span class="go">2    0.000000</span>
+<span class="go">3    0.000000</span>
+<span class="go">4    0.000000</span>
+<span class="go">5    0.000000</span>
+<span class="go">6    0.000000</span>
+<span class="go">7    0.000000</span>
+<span class="go">8   -0.861849</span>
+<span class="go">9   -2.104569</span>
+<span class="go">dtype: float64</span>
+<span class="go">BlockIndex</span>
+<span class="go">Block locations: array([0, 8], dtype=int32)</span>
+<span class="go">Block lengths: array([2, 2], dtype=int32)</span>
+</pre></div>
+</div>
+<p>The sparse objects exist for memory efficiency reasons. Suppose you had a
+large, mostly NA DataFrame:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">randn</span><span class="p">(</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+<span class="gp">In [7]: </span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">9998</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+<span class="gp">In [8]: </span><span class="n">sdf</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">to_sparse</span><span class="p">()</span>
+
+<span class="gp">In [9]: </span><span class="n">sdf</span>
+<span class="gh">Out[9]: </span><span class="go"></span>
+<span class="go">             0         1         2         3</span>
+<span class="go">0          NaN       NaN       NaN       NaN</span>
+<span class="go">1          NaN       NaN       NaN       NaN</span>
+<span class="go">2          NaN       NaN       NaN       NaN</span>
+<span class="go">3          NaN       NaN       NaN       NaN</span>
+<span class="go">4          NaN       NaN       NaN       NaN</span>
+<span class="go">5          NaN       NaN       NaN       NaN</span>
+<span class="go">6          NaN       NaN       NaN       NaN</span>
+<span class="go">...        ...       ...       ...       ...</span>
+<span class="go">9993       NaN       NaN       NaN       NaN</span>
+<span class="go">9994       NaN       NaN       NaN       NaN</span>
+<span class="go">9995       NaN       NaN       NaN       NaN</span>
+<span class="go">9996       NaN       NaN       NaN       NaN</span>
+<span class="go">9997       NaN       NaN       NaN       NaN</span>
+<span class="go">9998  0.509184 -0.774928 -1.369894 -0.382141</span>
+<span class="go">9999  0.280249 -1.648493  1.490865 -0.890819</span>
+
+<span class="go">[10000 rows x 4 columns]</span>
+
+<span class="gp">In [10]: </span><span class="n">sdf</span><span class="o">.</span><span class="n">density</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   Out[10]: 0.0002</span>
+</pre></div>
+</div>
+<p>As you can see, the density (% of values that have not been &#8220;compressed&#8221;) is
+extremely low. This sparse object takes up much less memory on disk (pickled)
+and in the Python interpreter. Functionally, their behavior should be nearly
+identical to their dense counterparts.</p>
+<p>Any sparse object can be converted back to the standard dense form by calling
+<code class="docutils literal"><span class="pre">to_dense</span></code>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [11]: </span><span class="n">sts</span><span class="o">.</span><span class="n">to_dense</span><span class="p">()</span>
+<span class="gh">Out[11]: </span><span class="go"></span>
+<span class="go">0    0.469112</span>
+<span class="go">1   -0.282863</span>
+<span class="go">2         NaN</span>
+<span class="go">3         NaN</span>
+<span class="go">4         NaN</span>
+<span class="go">5         NaN</span>
+<span class="go">6         NaN</span>
+<span class="go">7         NaN</span>
+<span class="go">8   -0.861849</span>
+<span class="go">9   -2.104569</span>
+<span class="go">dtype: float64</span>
+</pre></div>
+</div>
+<div class="section" id="sparsearray">
+<span id="sparse-array"></span><h2>SparseArray<a class="headerlink" href="#sparsearray" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">SparseArray</span></code> is the base layer for all of the sparse indexed data
+structures. It is a 1-dimensional ndarray-like object storing only values
+distinct from the <code class="docutils literal"><span class="pre">fill_value</span></code>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [12]: </span><span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="gp">In [13]: </span><span class="n">arr</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">;</span> <span class="n">arr</span><span class="p">[</span><span class="mi">7</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+<span class="gp">In [14]: </span><span class="n">sparr</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">SparseArray</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+
+<span class="gp">In [15]: </span><span class="n">sparr</span>
+<span class="gh">Out[15]: </span><span class="go"></span>
+<span class="go">[-1.9556635297215477, -1.6588664275960427, nan, nan, nan, 1.1589328886422277, 0.14529711373305043, nan, 0.6060271905134522, 1.3342113401317768]</span>
+<span class="go">Fill: nan</span>
+<span class="go">IntIndex</span>
+<span class="go">Indices: array([0, 1, 5, 6, 8, 9], dtype=int32)</span>
+</pre></div>
+</div>
+<p>Like the indexed objects (SparseSeries, SparseDataFrame), a <code class="docutils literal"><span class="pre">SparseArray</span></code>
+can be converted back to a regular ndarray by calling <code class="docutils literal"><span class="pre">to_dense</span></code>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [16]: </span><span class="n">sparr</span><span class="o">.</span><span class="n">to_dense</span><span class="p">()</span>
+<span class="gh">Out[16]: </span><span class="go"></span>
+<span class="go">array([-1.9557, -1.6589,     nan,     nan,     nan,  1.1589,  0.1453,</span>
+<span class="go">           nan,  0.606 ,  1.3342])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sparselist">
+<span id="sparse-list"></span><h2>SparseList<a class="headerlink" href="#sparselist" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">SparseList</span></code> class has been deprecated and will be removed in a future version.
+See the <a class="reference external" href="http://pandas.pydata.org/pandas-docs/version/0.18.1/sparse.html#sparselist">docs of a previous version</a>
+for documentation on <code class="docutils literal"><span class="pre">SparseList</span></code>.</p>
+</div>
+<div class="section" id="sparseindex-objects">
+<h2>SparseIndex objects<a class="headerlink" href="#sparseindex-objects" title="Permalink to this headline">¶</a></h2>
+<p>Two kinds of <code class="docutils literal"><span class="pre">SparseIndex</span></code> are implemented, <code class="docutils literal"><span class="pre">block</span></code> and <code class="docutils literal"><span class="pre">integer</span></code>. We
+recommend using <code class="docutils literal"><span class="pre">block</span></code> as it&#8217;s more memory efficient. The <code class="docutils literal"><span class="pre">integer</span></code> format
+keeps an arrays of all of the locations where the data are not equal to the
+fill value. The <code class="docutils literal"><span class="pre">block</span></code> format tracks only the locations and sizes of blocks
+of data.</p>
+</div>
+<div class="section" id="sparse-dtypes">
+<span id="sparse-dtype"></span><h2>Sparse Dtypes<a class="headerlink" href="#sparse-dtypes" title="Permalink to this headline">¶</a></h2>
+<p>Sparse data should have the same dtype as its dense representation. Currently,
+<code class="docutils literal"><span class="pre">float64</span></code>, <code class="docutils literal"><span class="pre">int64</span></code> and <code class="docutils literal"><span class="pre">bool</span></code> dtypes are supported. Depending on the original
+dtype, <code class="docutils literal"><span class="pre">fill_value</span></code> default changes:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">float64</span></code>: <code class="docutils literal"><span class="pre">np.nan</span></code></li>
+<li><code class="docutils literal"><span class="pre">int64</span></code>: <code class="docutils literal"><span class="pre">0</span></code></li>
+<li><code class="docutils literal"><span class="pre">bool</span></code>: <code class="docutils literal"><span class="pre">False</span></code></li>
+</ul>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [17]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">])</span>
+
+<span class="gp">In [18]: </span><span class="n">s</span>
+<span class="gh">Out[18]: </span><span class="go"></span>
+<span class="go">0    1.0</span>
+<span class="go">1    NaN</span>
+<span class="go">2    NaN</span>
+<span class="go">dtype: float64</span>
+
+<span class="gp">In [19]: </span><span class="n">s</span><span class="o">.</span><span class="n">to_sparse</span><span class="p">()</span>
+<span class="go">                                                    Out[19]: </span>
+<span class="go">0    1.0</span>
+<span class="go">1    NaN</span>
+<span class="go">2    NaN</span>
+<span class="go">dtype: float64</span>
+<span class="go">BlockIndex</span>
+<span class="go">Block locations: array([0], dtype=int32)</span>
+<span class="go">Block lengths: array([1], dtype=int32)</span>
+
+<span class="gp">In [20]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+
+<span class="gp">In [21]: </span><span class="n">s</span>
+<span class="gh">Out[21]: </span><span class="go"></span>
+<span class="go">0    1</span>
+<span class="go">1    0</span>
+<span class="go">2    0</span>
+<span class="go">dtype: int64</span>
+
+<span class="gp">In [22]: </span><span class="n">s</span><span class="o">.</span><span class="n">to_sparse</span><span class="p">()</span>
+<span class="go">                                            Out[22]: </span>
+<span class="go">0    1</span>
+<span class="go">1    0</span>
+<span class="go">2    0</span>
+<span class="go">dtype: int64</span>
+<span class="go">BlockIndex</span>
+<span class="go">Block locations: array([0], dtype=int32)</span>
+<span class="go">Block lengths: array([1], dtype=int32)</span>
+
+<span class="gp">In [23]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="bp">True</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">True</span><span class="p">])</span>
+
+<span class="gp">In [24]: </span><span class="n">s</span>
+<span class="gh">Out[24]: </span><span class="go"></span>
+<span class="go">0     True</span>
+<span class="go">1    False</span>
+<span class="go">2     True</span>
+<span class="go">dtype: bool</span>
+
+<span class="gp">In [25]: </span><span class="n">s</span><span class="o">.</span><span class="n">to_sparse</span><span class="p">()</span>
+<span class="go">                                                       Out[25]: </span>
+<span class="go">0     True</span>
+<span class="go">1    False</span>
+<span class="go">2     True</span>
+<span class="go">dtype: bool</span>
+<span class="go">BlockIndex</span>
+<span class="go">Block locations: array([0, 2], dtype=int32)</span>
+<span class="go">Block lengths: array([1, 1], dtype=int32)</span>
+</pre></div>
+</div>
+<p>You can change the dtype using <code class="docutils literal"><span class="pre">.astype()</span></code>, the result is also sparse. Note that
+<code class="docutils literal"><span class="pre">.astype()</span></code> also affects to the <code class="docutils literal"><span class="pre">fill_value</span></code> to keep its dense representation.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [26]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+
+<span class="gp">In [27]: </span><span class="n">s</span>
+<span class="gh">Out[27]: </span><span class="go"></span>
+<span class="go">0    1</span>
+<span class="go">1    0</span>
+<span class="go">2    0</span>
+<span class="go">3    0</span>
+<span class="go">4    0</span>
+<span class="go">dtype: int64</span>
+
+<span class="gp">In [28]: </span><span class="n">ss</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">to_sparse</span><span class="p">()</span>
+
+<span class="gp">In [29]: </span><span class="n">ss</span>
+<span class="gh">Out[29]: </span><span class="go"></span>
+<span class="go">0    1</span>
+<span class="go">1    0</span>
+<span class="go">2    0</span>
+<span class="go">3    0</span>
+<span class="go">4    0</span>
+<span class="go">dtype: int64</span>
+<span class="go">BlockIndex</span>
+<span class="go">Block locations: array([0], dtype=int32)</span>
+<span class="go">Block lengths: array([1], dtype=int32)</span>
+
+<span class="gp">In [30]: </span><span class="n">ss</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="go">                                                                                                                                                     Out[30]: </span>
+<span class="go">0    1.0</span>
+<span class="go">1    0.0</span>
+<span class="go">2    0.0</span>
+<span class="go">3    0.0</span>
+<span class="go">4    0.0</span>
+<span class="go">dtype: float64</span>
+<span class="go">BlockIndex</span>
+<span class="go">Block locations: array([0], dtype=int32)</span>
+<span class="go">Block lengths: array([1], dtype=int32)</span>
+</pre></div>
+</div>
+<p>It raises if any value cannot be coerced to specified dtype.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">ss</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">])</span><span class="o">.</span><span class="n">to_sparse</span><span class="p">()</span>
+<span class="go">0    1.0</span>
+<span class="go">1    NaN</span>
+<span class="go">2    NaN</span>
+<span class="go">dtype: float64</span>
+<span class="go">BlockIndex</span>
+<span class="go">Block locations: array([0], dtype=int32)</span>
+<span class="go">Block lengths: array([1], dtype=int32)</span>
+
+<span class="gp">In [2]: </span><span class="n">ss</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+<span class="go">ValueError: unable to coerce current fill_value nan to int64 dtype</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sparse-calculation">
+<span id="id1"></span><h2>Sparse Calculation<a class="headerlink" href="#sparse-calculation" title="Permalink to this headline">¶</a></h2>
+<p>You can apply NumPy <em>ufuncs</em> to <code class="docutils literal"><span class="pre">SparseArray</span></code> and get a <code class="docutils literal"><span class="pre">SparseArray</span></code> as a result.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [31]: </span><span class="n">arr</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">SparseArray</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">])</span>
+
+<span class="gp">In [32]: </span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+<span class="gh">Out[32]: </span><span class="go"></span>
+<span class="go">[1.0, nan, nan, 2.0, nan]</span>
+<span class="go">Fill: nan</span>
+<span class="go">IntIndex</span>
+<span class="go">Indices: array([0, 3], dtype=int32)</span>
+</pre></div>
+</div>
+<p>The <em>ufunc</em> is also applied to <code class="docutils literal"><span class="pre">fill_value</span></code>. This is needed to get
+the correct dense result.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [33]: </span><span class="n">arr</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">SparseArray</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">fill_value</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="gp">In [34]: </span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+<span class="gh">Out[34]: </span><span class="go"></span>
+<span class="go">[1.0, 1.0, 1.0, 2.0, 1.0]</span>
+<span class="go">Fill: 1</span>
+<span class="go">IntIndex</span>
+<span class="go">Indices: array([0, 3], dtype=int32)</span>
+
+<span class="gp">In [35]: </span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span><span class="o">.</span><span class="n">to_dense</span><span class="p">()</span>
+<span class="go">                                                                                         Out[35]: array([ 1.,  1.,  1.,  2.,  1.])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="interaction-with-scipy-sparse">
+<span id="sparse-scipysparse"></span><h2>Interaction with scipy.sparse<a class="headerlink" href="#interaction-with-scipy-sparse" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="sparsedataframe">
+<h3>SparseDataFrame<a class="headerlink" href="#sparsedataframe" title="Permalink to this headline">¶</a></h3>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.20.0.</span></p>
+</div>
+<p>Pandas supports creating sparse dataframes directly from <code class="docutils literal"><span class="pre">scipy.sparse</span></code> matrices.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [36]: </span><span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csr_matrix</span>
+
+<span class="gp">In [37]: </span><span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="gp">In [38]: </span><span class="n">arr</span><span class="p">[</span><span class="n">arr</span> <span class="o">&lt;</span> <span class="o">.</span><span class="mi">9</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="gp">In [39]: </span><span class="n">sp_arr</span> <span class="o">=</span> <span class="n">csr_matrix</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+
+<span class="gp">In [40]: </span><span class="n">sp_arr</span>
+<span class="gh">Out[40]: </span><span class="go"></span>
+<span class="go">&lt;1000x5 sparse matrix of type &#39;&lt;class &#39;numpy.float64&#39;&gt;&#39;</span>
+<span class="go">	with 517 stored elements in Compressed Sparse Row format&gt;</span>
+
+<span class="gp">In [41]: </span><span class="n">sdf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">SparseDataFrame</span><span class="p">(</span><span class="n">sp_arr</span><span class="p">)</span>
+
+<span class="gp">In [42]: </span><span class="n">sdf</span>
+<span class="gh">Out[42]: </span><span class="go"></span>
+<span class="go">            0   1        2         3   4</span>
+<span class="go">0    0.956380 NaN      NaN       NaN NaN</span>
+<span class="go">1         NaN NaN      NaN       NaN NaN</span>
+<span class="go">2         NaN NaN      NaN       NaN NaN</span>
+<span class="go">3         NaN NaN      NaN       NaN NaN</span>
+<span class="go">4    0.999552 NaN      NaN  0.956153 NaN</span>
+<span class="go">5         NaN NaN      NaN       NaN NaN</span>
+<span class="go">6    0.913638 NaN      NaN       NaN NaN</span>
+<span class="go">..        ...  ..      ...       ...  ..</span>
+<span class="go">993       NaN NaN      NaN       NaN NaN</span>
+<span class="go">994       NaN NaN      NaN       NaN NaN</span>
+<span class="go">995       NaN NaN      NaN  0.998834 NaN</span>
+<span class="go">996       NaN NaN      NaN       NaN NaN</span>
+<span class="go">997       NaN NaN      NaN       NaN NaN</span>
+<span class="go">998       NaN NaN  0.95659       NaN NaN</span>
+<span class="go">999       NaN NaN      NaN       NaN NaN</span>
+
+<span class="go">[1000 rows x 5 columns]</span>
+</pre></div>
+</div>
+<p>All sparse formats are supported, but matrices that are not in <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/sparse.html#module-scipy.sparse" title="(in SciPy v1.0.0)"><code class="xref py py-mod docutils literal"><span class="pre">COOrdinate</span></code></a> format will be converted, copying data as needed.
+To convert a <code class="docutils literal"><span class="pre">SparseDataFrame</span></code> back to sparse SciPy matrix in COO format, you can use the <a class="reference internal" href="generated/pandas.SparseDataFrame.to_coo.html#pandas.SparseDataFrame.to_coo" title="pandas.SparseDataFrame.to_coo"><code class="xref py py-meth docutils literal"><span class="pre">SparseDataFrame.to_coo()</span></code></a> method:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [43]: </span><span class="n">sdf</span><span class="o">.</span><span class="n">to_coo</span><span class="p">()</span>
+<span class="gh">Out[43]: </span><span class="go"></span>
+<span class="go">&lt;1000x5 sparse matrix of type &#39;&lt;class &#39;numpy.float64&#39;&gt;&#39;</span>
+<span class="go">	with 517 stored elements in COOrdinate format&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sparseseries">
+<h3>SparseSeries<a class="headerlink" href="#sparseseries" title="Permalink to this headline">¶</a></h3>
+<p>A <a class="reference internal" href="generated/pandas.SparseSeries.to_coo.html#pandas.SparseSeries.to_coo" title="pandas.SparseSeries.to_coo"><code class="xref py py-meth docutils literal"><span class="pre">SparseSeries.to_coo()</span></code></a> method is implemented for transforming a <code class="docutils literal"><span class="pre">SparseSeries</span></code> indexed by a <code class="docutils literal"><span class="pre">MultiIndex</span></code> to a <code class="docutils literal"><span class="pre">scipy.sparse.coo_matrix</span></code>.</p>
+<p>The method requires a <code class="docutils literal"><span class="pre">MultiIndex</span></code> with two or more levels.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [44]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">])</span>
+
+<span class="gp">In [45]: </span><span class="n">s</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">MultiIndex</span><span class="o">.</span><span class="n">from_tuples</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+<span class="gp">   ....: </span>                                     <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+<span class="gp">   ....: </span>                                     <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+<span class="gp">   ....: </span>                                     <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+<span class="gp">   ....: </span>                                     <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+<span class="gp">   ....: </span>                                     <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)],</span>
+<span class="gp">   ....: </span>                                     <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">])</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [46]: </span><span class="n">s</span>
+<span class="gh">Out[46]: </span><span class="go"></span>
+<span class="go">A  B  C  D</span>
+<span class="go">1  2  a  0    3.0</span>
+<span class="go">         1    NaN</span>
+<span class="go">   1  b  0    1.0</span>
+<span class="go">         1    3.0</span>
+<span class="go">2  1  b  0    NaN</span>
+<span class="go">         1    NaN</span>
+<span class="go">dtype: float64</span>
+
+<span class="go"># SparseSeries</span>
+<span class="gp">In [47]: </span><span class="n">ss</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">to_sparse</span><span class="p">()</span>
+
+<span class="gp">In [48]: </span><span class="n">ss</span>
+<span class="gh">Out[48]: </span><span class="go"></span>
+<span class="go">A  B  C  D</span>
+<span class="go">1  2  a  0    3.0</span>
+<span class="go">         1    NaN</span>
+<span class="go">   1  b  0    1.0</span>
+<span class="go">         1    3.0</span>
+<span class="go">2  1  b  0    NaN</span>
+<span class="go">         1    NaN</span>
+<span class="go">dtype: float64</span>
+<span class="go">BlockIndex</span>
+<span class="go">Block locations: array([0, 2], dtype=int32)</span>
+<span class="go">Block lengths: array([1, 2], dtype=int32)</span>
+</pre></div>
+</div>
+<p>In the example below, we transform the <code class="docutils literal"><span class="pre">SparseSeries</span></code> to a sparse representation of a 2-d array by specifying that the first and second <code class="docutils literal"><span class="pre">MultiIndex</span></code> levels define labels for the rows and the third and fourth levels define labels for the columns. We also specify that the column and row labels should be sorted in the final sparse representation.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [49]: </span><span class="n">A</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">to_coo</span><span class="p">(</span><span class="n">row_levels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                             <span class="n">column_levels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                             <span class="n">sort_labels</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [50]: </span><span class="n">A</span>
+<span class="gh">Out[50]: </span><span class="go"></span>
+<span class="go">&lt;3x4 sparse matrix of type &#39;&lt;class &#39;numpy.float64&#39;&gt;&#39;</span>
+<span class="go">	with 3 stored elements in COOrdinate format&gt;</span>
+
+<span class="gp">In [51]: </span><span class="n">A</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="go">                                                                                                             Out[51]: </span>
+<span class="go">matrix([[ 0.,  0.,  1.,  3.],</span>
+<span class="go">        [ 3.,  0.,  0.,  0.],</span>
+<span class="go">        [ 0.,  0.,  0.,  0.]])</span>
+
+<span class="gp">In [52]: </span><span class="n">rows</span>
+<span class="go">                                                                                                                                                                                                                  Out[52]: [(1, 1), (1, 2), (2, 1)]</span>
+
+<span class="gp">In [53]: </span><span class="n">columns</span>
+<span class="go">                                                                                                                                                                                                                                                    Out[53]: [(&#39;a&#39;, 0), (&#39;a&#39;, 1), (&#39;b&#39;, 0), (&#39;b&#39;, 1)]</span>
+</pre></div>
+</div>
+<p>Specifying different row and column labels (and not sorting them) yields a different sparse matrix:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [54]: </span><span class="n">A</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">to_coo</span><span class="p">(</span><span class="n">row_levels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                             <span class="n">column_levels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;D&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                             <span class="n">sort_labels</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [55]: </span><span class="n">A</span>
+<span class="gh">Out[55]: </span><span class="go"></span>
+<span class="go">&lt;3x2 sparse matrix of type &#39;&lt;class &#39;numpy.float64&#39;&gt;&#39;</span>
+<span class="go">	with 3 stored elements in COOrdinate format&gt;</span>
+
+<span class="gp">In [56]: </span><span class="n">A</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="go">                                                                                                             Out[56]: </span>
+<span class="go">matrix([[ 3.,  0.],</span>
+<span class="go">        [ 1.,  3.],</span>
+<span class="go">        [ 0.,  0.]])</span>
+
+<span class="gp">In [57]: </span><span class="n">rows</span>
+<span class="go">                                                                                                                                                                                    Out[57]: [(1, 2, &#39;a&#39;), (1, 1, &#39;b&#39;), (2, 1, &#39;b&#39;)]</span>
+
+<span class="gp">In [58]: </span><span class="n">columns</span>
+<span class="go">                                                                                                                                                                                                                                     Out[58]: [0, 1]</span>
+</pre></div>
+</div>
+<p>A convenience method <a class="reference internal" href="generated/pandas.SparseSeries.from_coo.html#pandas.SparseSeries.from_coo" title="pandas.SparseSeries.from_coo"><code class="xref py py-meth docutils literal"><span class="pre">SparseSeries.from_coo()</span></code></a> is implemented for creating a <code class="docutils literal"><span class="pre">SparseSeries</span></code> from a <code class="docutils literal"><span class="pre">scipy.sparse.coo_matrix</span></code>.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [59]: </span><span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">sparse</span>
+
+<span class="gp">In [60]: </span><span class="n">A</span> <span class="o">=</span> <span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">(([</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span> <span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])),</span>
+<span class="gp">   ....: </span>                      <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [61]: </span><span class="n">A</span>
+<span class="gh">Out[61]: </span><span class="go"></span>
+<span class="go">&lt;3x4 sparse matrix of type &#39;&lt;class &#39;numpy.float64&#39;&gt;&#39;</span>
+<span class="go">	with 3 stored elements in COOrdinate format&gt;</span>
+
+<span class="gp">In [62]: </span><span class="n">A</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="go">                                                                                                             Out[62]: </span>
+<span class="go">matrix([[ 0.,  0.,  1.,  2.],</span>
+<span class="go">        [ 3.,  0.,  0.,  0.],</span>
+<span class="go">        [ 0.,  0.,  0.,  0.]])</span>
+</pre></div>
+</div>
+<p>The default behaviour (with <code class="docutils literal"><span class="pre">dense_index=False</span></code>) simply returns a <code class="docutils literal"><span class="pre">SparseSeries</span></code> containing
+only the non-null entries.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [63]: </span><span class="n">ss</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">SparseSeries</span><span class="o">.</span><span class="n">from_coo</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+
+<span class="gp">In [64]: </span><span class="n">ss</span>
+<span class="gh">Out[64]: </span><span class="go"></span>
+<span class="go">0  2    1.0</span>
+<span class="go">   3    2.0</span>
+<span class="go">1  0    3.0</span>
+<span class="go">dtype: float64</span>
+<span class="go">BlockIndex</span>
+<span class="go">Block locations: array([0], dtype=int32)</span>
+<span class="go">Block lengths: array([3], dtype=int32)</span>
+</pre></div>
+</div>
+<p>Specifying <code class="docutils literal"><span class="pre">dense_index=True</span></code> will result in an index that is the Cartesian product of the
+row and columns coordinates of the matrix. Note that this will consume a significant amount of memory
+(relative to <code class="docutils literal"><span class="pre">dense_index=False</span></code>) if the sparse matrix is large (and sparse) enough.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [65]: </span><span class="n">ss_dense</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">SparseSeries</span><span class="o">.</span><span class="n">from_coo</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">dense_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="gp">In [66]: </span><span class="n">ss_dense</span>
+<span class="gh">Out[66]: </span><span class="go"></span>
+<span class="go">0  0    NaN</span>
+<span class="go">   1    NaN</span>
+<span class="go">   2    1.0</span>
+<span class="go">   3    2.0</span>
+<span class="go">1  0    3.0</span>
+<span class="go">   1    NaN</span>
+<span class="go">   2    NaN</span>
+<span class="go">   3    NaN</span>
+<span class="go">2  0    NaN</span>
+<span class="go">   1    NaN</span>
+<span class="go">   2    NaN</span>
+<span class="go">   3    NaN</span>
+<span class="go">dtype: float64</span>
+<span class="go">BlockIndex</span>
+<span class="go">Block locations: array([2], dtype=int32)</span>
+<span class="go">Block lengths: array([3], dtype=int32)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="clearer"></div>
+        </div>
+    </div>
+</div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gotchas.html" title="Frequently Asked Questions (FAQ)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="enhancingperf.html" title="Enhancing Performance"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pandas 0.22.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+<style type="text/css">
+    .scrollToTop {
+        text-align: center;
+        font-weight: bold;
+        position: fixed;
+        bottom: 60px;
+        right: 40px;
+        display: none;
+    }
+</style>
+<a href="#" class="scrollToTop">Scroll To Top</a>
+<script type="text/javascript">
+$(document).ready(function() {
+    //Check to see if the window is top if not then display button
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 200) {
+            $('.scrollToTop').fadeIn();
+        } else {
+            $('.scrollToTop').fadeOut();
+        }
+    });
+
+    //Click event to scroll to top
+    $('.scrollToTop').click(function() {
+        $('html, body').animate({
+            scrollTop: 0
+        }, 500);
+        return false;
+    });
+});
+</script>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27880019-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </body>
+</html>

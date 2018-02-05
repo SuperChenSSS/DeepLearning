@@ -1,0 +1,347 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pandas.DataFrame.truncate &#8212; pandas 0.22.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.22.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pandas.DataFrame.tshift" href="pandas.DataFrame.tshift.html" />
+    <link rel="prev" title="pandas.DataFrame.truediv" href="pandas.DataFrame.truediv.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pandas.DataFrame.tshift.html" title="pandas.DataFrame.tshift"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pandas.DataFrame.truediv.html" title="pandas.DataFrame.truediv"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pandas 0.22.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="pandas.DataFrame.html" accesskey="U">pandas.DataFrame</a> &#187;</li> 
+      </ul>
+    </div>
+<div class="content-wrapper">
+    <div class="content">
+        <div class="document">
+            <div class="sphinxsidebar">
+                <h3>Table Of Contents</h3>
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew.html">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Package overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../10min.html">10 Minutes to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dsintro.html">Intro to Data Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basics.html">Essential Basic Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text.html">Working with Text Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../options.html">Options and Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indexing.html">Indexing and Selecting Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced.html">MultiIndex / Advanced Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../computation.html">Computational tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../missing_data.html">Working with missing data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../groupby.html">Group By: split-apply-combine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../merging.html">Merge, join, and concatenate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reshaping.html">Reshaping and Pivot Tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timeseries.html">Time Series / Date functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timedeltas.html">Time Deltas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../categorical.html">Categorical Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../style.html">Styling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io.html">IO Tools (Text, CSV, HDF5, ...)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../remote_data.html">Remote Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enhancingperf.html">Enhancing Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sparse.html">Sparse data structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gotchas.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../r_interface.html">rpy2 / R interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ecosystem.html">pandas Ecosystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_r.html">Comparison with R / R libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_sql.html">Comparison with SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_sas.html">Comparison with SAS</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#input-output">Input/Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#general-functions">General functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#series">Series</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#dataframe">DataFrame</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../api.html#id1">Constructor</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="pandas.DataFrame.html">pandas.DataFrame</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#attributes-and-underlying-data">Attributes and underlying data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id2">Conversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id3">Indexing, iteration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id4">Binary operator functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id5">Function application, GroupBy &amp; Window</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#api-dataframe-stats">Computations / Descriptive Stats</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../api.html#id7">Reindexing / Selection / Label manipulation</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pandas.DataFrame.add_prefix.html">pandas.DataFrame.add_prefix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DataFrame.add_suffix.html">pandas.DataFrame.add_suffix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DataFrame.align.html">pandas.DataFrame.align</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DataFrame.drop.html">pandas.DataFrame.drop</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DataFrame.drop_duplicates.html">pandas.DataFrame.drop_duplicates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DataFrame.duplicated.html">pandas.DataFrame.duplicated</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DataFrame.equals.html">pandas.DataFrame.equals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DataFrame.filter.html">pandas.DataFrame.filter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DataFrame.first.html">pandas.DataFrame.first</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DataFrame.head.html">pandas.DataFrame.head</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DataFrame.idxmax.html">pandas.DataFrame.idxmax</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DataFrame.idxmin.html">pandas.DataFrame.idxmin</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DataFrame.last.html">pandas.DataFrame.last</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DataFrame.reindex.html">pandas.DataFrame.reindex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DataFrame.reindex_axis.html">pandas.DataFrame.reindex_axis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DataFrame.reindex_like.html">pandas.DataFrame.reindex_like</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DataFrame.rename.html">pandas.DataFrame.rename</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DataFrame.rename_axis.html">pandas.DataFrame.rename_axis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DataFrame.reset_index.html">pandas.DataFrame.reset_index</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DataFrame.sample.html">pandas.DataFrame.sample</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DataFrame.select.html">pandas.DataFrame.select</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DataFrame.set_index.html">pandas.DataFrame.set_index</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DataFrame.tail.html">pandas.DataFrame.tail</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DataFrame.take.html">pandas.DataFrame.take</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pandas.DataFrame.truncate</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#api-dataframe-missing">Missing data handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#reshaping-sorting-transposing">Reshaping, sorting, transposing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id9">Combining / joining / merging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id10">Time series-related</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#api-dataframe-plotting">Plotting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id12">Serialization / IO / Conversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id13">Sparse</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#panel">Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#index">Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#numeric-index">Numeric Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#categoricalindex">CategoricalIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#intervalindex">IntervalIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#multiindex">MultiIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#datetimeindex">DatetimeIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#timedeltaindex">TimedeltaIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#periodindex">PeriodIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#scalars">Scalars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#window">Window</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#groupby">GroupBy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#resampling">Resampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#style">Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#general-utility-functions">General utility functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developer.html">Developer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../internals.html">Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release Notes</a></li>
+</ul>
+
+                <h3 style="margin-top: 1.5em;">Search</h3>
+
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18"/>
+                    <input type="submit" value="Go"/>
+                    <input type="hidden" name="check_keywords" value="yes"/>
+                    <input type="hidden" name="area" value="default"/>
+                </form>
+                <p class="searchtip" style="font-size: 90%">
+                    Enter search terms or a module, class or function name.
+                </p>
+
+            </div>
+             
+            <div class="documentwrapper">
+                <div class="bodywrapper">
+                    <div class="body">
+                        
+  <div class="section" id="pandas-dataframe-truncate">
+<h1>pandas.DataFrame.truncate<a class="headerlink" href="#pandas-dataframe-truncate" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pandas.DataFrame.truncate">
+<code class="descclassname">DataFrame.</code><code class="descname">truncate</code><span class="sig-paren">(</span><em>before=None</em>, <em>after=None</em>, <em>axis=None</em>, <em>copy=True</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/pandas-dev/pandas/blob/v0.22.0/pandas/core/generic.py#L6285-L6382"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pandas.DataFrame.truncate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Truncates a sorted DataFrame/Series before and/or after some
+particular index value. If the axis contains only datetime values,
+before/after parameters are converted to datetime values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>before</strong> : date, string, int</p>
+<blockquote>
+<div><p>Truncate all rows before this index value</p>
+</div></blockquote>
+<p><strong>after</strong> : date, string, int</p>
+<blockquote>
+<div><p>Truncate all rows after this index value</p>
+</div></blockquote>
+<p><strong>axis</strong> : {0 or &#8216;index&#8217;, 1 or &#8216;columns&#8217;}</p>
+<blockquote>
+<div><ul class="simple">
+<li>0 or &#8216;index&#8217;: apply truncation to rows</li>
+<li>1 or &#8216;columns&#8217;: apply truncation to columns</li>
+</ul>
+<p>Default is stat axis for given data type (0 for Series and
+DataFrames, 1 for Panels)</p>
+</div></blockquote>
+<p><strong>copy</strong> : boolean, default is True,</p>
+<blockquote>
+<div><p>return a copy of the truncated section</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>truncated</strong> : type of caller</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">],</span>
+<span class="gp">... </span>                   <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="s1">&#39;j&#39;</span><span class="p">],</span>
+<span class="gp">... </span>                   <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">]},</span>
+<span class="gp">... </span>                   <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">truncate</span><span class="p">(</span><span class="n">before</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">after</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="go">   A  B  C</span>
+<span class="go">2  b  g  l</span>
+<span class="go">3  c  h  m</span>
+<span class="go">4  d  i  n</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+<span class="gp">... </span>                   <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+<span class="gp">... </span>                   <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">]},</span>
+<span class="gp">... </span>                   <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">truncate</span><span class="p">(</span><span class="n">before</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">after</span><span class="o">=</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+<span class="go">   A  B   C</span>
+<span class="go">b  2  7  12</span>
+<span class="go">c  3  8  13</span>
+<span class="go">d  4  9  14</span>
+</pre></div>
+</div>
+<p>The index values in <code class="docutils literal"><span class="pre">truncate</span></code> can be datetimes or string
+dates. Note that <code class="docutils literal"><span class="pre">truncate</span></code> assumes a 0 value for any unspecified
+date component in a <code class="docutils literal"><span class="pre">DatetimeIndex</span></code> in contrast to slicing which
+returns any partially matching dates.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dates</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="s1">&#39;2016-01-01&#39;</span><span class="p">,</span> <span class="s1">&#39;2016-02-01&#39;</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">dates</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">truncate</span><span class="p">(</span><span class="s1">&#39;2016-01-05&#39;</span><span class="p">,</span> <span class="s1">&#39;2016-01-10&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
+<span class="go">                     A</span>
+<span class="go">2016-01-09 23:59:56  1</span>
+<span class="go">2016-01-09 23:59:57  1</span>
+<span class="go">2016-01-09 23:59:58  1</span>
+<span class="go">2016-01-09 23:59:59  1</span>
+<span class="go">2016-01-10 00:00:00  1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;2016-01-05&#39;</span><span class="p">:</span><span class="s1">&#39;2016-01-10&#39;</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
+<span class="go">                     A</span>
+<span class="go">2016-01-10 23:59:55  1</span>
+<span class="go">2016-01-10 23:59:56  1</span>
+<span class="go">2016-01-10 23:59:57  1</span>
+<span class="go">2016-01-10 23:59:58  1</span>
+<span class="go">2016-01-10 23:59:59  1</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="clearer"></div>
+        </div>
+    </div>
+</div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pandas.DataFrame.tshift.html" title="pandas.DataFrame.tshift"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pandas.DataFrame.truediv.html" title="pandas.DataFrame.truediv"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pandas 0.22.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="pandas.DataFrame.html" >pandas.DataFrame</a> &#187;</li> 
+      </ul>
+    </div>
+<style type="text/css">
+    .scrollToTop {
+        text-align: center;
+        font-weight: bold;
+        position: fixed;
+        bottom: 60px;
+        right: 40px;
+        display: none;
+    }
+</style>
+<a href="#" class="scrollToTop">Scroll To Top</a>
+<script type="text/javascript">
+$(document).ready(function() {
+    //Check to see if the window is top if not then display button
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 200) {
+            $('.scrollToTop').fadeIn();
+        } else {
+            $('.scrollToTop').fadeOut();
+        }
+    });
+
+    //Click event to scroll to top
+    $('.scrollToTop').click(function() {
+        $('html, body').animate({
+            scrollTop: 0
+        }, 500);
+        return false;
+    });
+});
+</script>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27880019-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </body>
+</html>

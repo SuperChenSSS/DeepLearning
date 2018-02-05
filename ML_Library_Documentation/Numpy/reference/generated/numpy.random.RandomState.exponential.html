@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.random.RandomState.exponential &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="numpy.random.RandomState" href="numpy.random.RandomState.html" >
+    <link rel="next" title="numpy.random.RandomState.f" href="numpy.random.RandomState.f.html" >
+    <link rel="prev" title="numpy.random.RandomState.dirichlet" href="numpy.random.RandomState.dirichlet.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.random.html" >Random sampling (<code class="docutils literal"><span class="pre">numpy.random</span></code>)</a></li>
+          <li class="active"><a href="numpy.random.RandomState.html" accesskey="U">numpy.random.RandomState</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.random.RandomState.f.html" title="numpy.random.RandomState.f"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.random.RandomState.dirichlet.html" title="numpy.random.RandomState.dirichlet"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.random.RandomState.dirichlet.html"
+                        title="previous chapter">numpy.random.RandomState.dirichlet</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.random.RandomState.f.html"
+                        title="next chapter">numpy.random.RandomState.f</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-random-randomstate-exponential">
+<h1>numpy.random.RandomState.exponential<a class="headerlink" href="#numpy-random-randomstate-exponential" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="numpy.random.RandomState.exponential">
+<code class="descclassname">RandomState.</code><code class="descname">exponential</code><span class="sig-paren">(</span><em>scale=1.0</em>, <em>size=None</em><span class="sig-paren">)</span><a class="headerlink" href="#numpy.random.RandomState.exponential" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw samples from an exponential distribution.</p>
+<p>Its probability density function is</p>
+<div class="math">
+<p><img src="../../_images/math/8840abeb74cea46293b944971a4cac7f0db924f6.svg" alt="f(x; \frac{1}{\beta}) = \frac{1}{\beta} \exp(-\frac{x}{\beta}),"/></p>
+</div><p>for <code class="docutils literal"><span class="pre">x</span> <span class="pre">&gt;</span> <span class="pre">0</span></code> and 0 elsewhere. <img class="math" src="../../_images/math/410a9d0df9c135dd73b269cba7ef04dcfd932b1f.svg" alt="\beta"/> is the scale parameter,
+which is the inverse of the rate parameter <img class="math" src="../../_images/math/1f7f3998223bc37410f383bc148272c0a09e6b5a.svg" alt="\lambda = 1/\beta"/>.
+The rate parameter is an alternative, widely used parameterization
+of the exponential distribution <a class="reference internal" href="#r152" id="id1">[R152]</a>.</p>
+<p>The exponential distribution is a continuous analogue of the
+geometric distribution.  It describes many common situations, such as
+the size of raindrops measured over many rainstorms <a class="reference internal" href="#r150" id="id2">[R150]</a>, or the time
+between page requests to Wikipedia <a class="reference internal" href="#r151" id="id3">[R151]</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>scale</strong> : float or array_like of floats</p>
+<blockquote>
+<div><p>The scale parameter, <img class="math" src="../../_images/math/6a72a7c7bc1fa66d8101ce58960d80bfa794049a.svg" alt="\beta = 1/\lambda"/>.</p>
+</div></blockquote>
+<p><strong>size</strong> : int or tuple of ints, optional</p>
+<blockquote>
+<div><p>Output shape.  If the given shape is, e.g., <code class="docutils literal"><span class="pre">(m,</span> <span class="pre">n,</span> <span class="pre">k)</span></code>, then
+<code class="docutils literal"><span class="pre">m</span> <span class="pre">*</span> <span class="pre">n</span> <span class="pre">*</span> <span class="pre">k</span></code> samples are drawn.  If size is <code class="docutils literal"><span class="pre">None</span></code> (default),
+a single value is returned if <code class="docutils literal"><span class="pre">scale</span></code> is a scalar.  Otherwise,
+<code class="docutils literal"><span class="pre">np.array(scale).size</span></code> samples are drawn.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out</strong> : ndarray or scalar</p>
+<blockquote class="last">
+<div><p>Drawn samples from the parameterized exponential distribution.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r150" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R150]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id4">2</a>)</em> Peyton Z. Peebles Jr., &#8220;Probability, Random Variables and
+Random Signal Principles&#8221;, 4th ed, 2001, p. 57.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r151" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R151]</td><td><em>(<a class="fn-backref" href="#id3">1</a>, <a class="fn-backref" href="#id5">2</a>)</em> Wikipedia, &#8220;Poisson process&#8221;,
+<a class="reference external" href="http://en.wikipedia.org/wiki/Poisson_process">http://en.wikipedia.org/wiki/Poisson_process</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r152" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R152]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id6">2</a>)</em> Wikipedia, &#8220;Exponential distribution&#8221;,
+<a class="reference external" href="http://en.wikipedia.org/wiki/Exponential_distribution">http://en.wikipedia.org/wiki/Exponential_distribution</a></td></tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

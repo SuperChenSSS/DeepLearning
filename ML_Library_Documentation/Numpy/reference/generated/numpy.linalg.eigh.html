@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.linalg.eigh &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="Linear algebra (numpy.linalg)" href="../routines.linalg.html" >
+    <link rel="next" title="numpy.linalg.eigvals" href="numpy.linalg.eigvals.html" >
+    <link rel="prev" title="numpy.linalg.eig" href="numpy.linalg.eig.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.linalg.html" accesskey="U">Linear algebra (<code class="docutils literal"><span class="pre">numpy.linalg</span></code>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.linalg.eigvals.html" title="numpy.linalg.eigvals"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.linalg.eig.html" title="numpy.linalg.eig"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.linalg.eig.html"
+                        title="previous chapter">numpy.linalg.eig</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.linalg.eigvals.html"
+                        title="next chapter">numpy.linalg.eigvals</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-linalg-eigh">
+<h1>numpy.linalg.eigh<a class="headerlink" href="#numpy-linalg-eigh" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="numpy.linalg.eigh">
+<code class="descclassname">numpy.linalg.</code><code class="descname">eigh</code><span class="sig-paren">(</span><em>a</em>, <em>UPLO='L'</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/numpy/numpy/blob/v1.14.0/numpy/linalg/linalg.py#L1162-L1294"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy.linalg.eigh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the eigenvalues and eigenvectors of a Hermitian or symmetric matrix.</p>
+<p>Returns two objects, a 1-D array containing the eigenvalues of <em class="xref py py-obj">a</em>, and
+a 2-D square array or matrix (depending on the input type) of the
+corresponding eigenvectors (in columns).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : (..., M, M) array</p>
+<blockquote>
+<div><p>Hermitian/Symmetric matrices whose eigenvalues and
+eigenvectors are to be computed.</p>
+</div></blockquote>
+<p><strong>UPLO</strong> : {&#8216;L&#8217;, &#8216;U&#8217;}, optional</p>
+<blockquote>
+<div><p>Specifies whether the calculation is done with the lower triangular
+part of <em class="xref py py-obj">a</em> (&#8216;L&#8217;, default) or the upper triangular part (&#8216;U&#8217;).
+Irrespective of this value only the real parts of the diagonal will
+be considered in the computation to preserve the notion of a Hermitian
+matrix. It therefore follows that the imaginary part of the diagonal
+will always be treated as zero.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>w</strong> : (..., M) ndarray</p>
+<blockquote>
+<div><p>The eigenvalues in ascending order, each repeated according to
+its multiplicity.</p>
+</div></blockquote>
+<p><strong>v</strong> : {(..., M, M) ndarray, (..., M, M) matrix}</p>
+<blockquote>
+<div><p>The column <code class="docutils literal"><span class="pre">v[:,</span> <span class="pre">i]</span></code> is the normalized eigenvector corresponding
+to the eigenvalue <code class="docutils literal"><span class="pre">w[i]</span></code>.  Will return a matrix object if <em class="xref py py-obj">a</em> is
+a matrix object.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>LinAlgError</strong></p>
+<blockquote class="last">
+<div><p>If the eigenvalue computation does not converge.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="numpy.linalg.eigvalsh.html#numpy.linalg.eigvalsh" title="numpy.linalg.eigvalsh"><code class="xref py py-obj docutils literal"><span class="pre">eigvalsh</span></code></a></dt>
+<dd>eigenvalues of symmetric or Hermitian arrays.</dd>
+<dt><a class="reference internal" href="numpy.linalg.eig.html#numpy.linalg.eig" title="numpy.linalg.eig"><code class="xref py py-obj docutils literal"><span class="pre">eig</span></code></a></dt>
+<dd>eigenvalues and right eigenvectors for non-symmetric arrays.</dd>
+<dt><a class="reference internal" href="numpy.linalg.eigvals.html#numpy.linalg.eigvals" title="numpy.linalg.eigvals"><code class="xref py py-obj docutils literal"><span class="pre">eigvals</span></code></a></dt>
+<dd>eigenvalues of non-symmetric arrays.</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.8.0.</span></p>
+</div>
+<p>Broadcasting rules apply, see the <code class="xref py py-obj docutils literal"><span class="pre">numpy.linalg</span></code> documentation for
+details.</p>
+<p>The eigenvalues/eigenvectors are computed using LAPACK routines _syevd,
+_heevd</p>
+<p>The eigenvalues of real symmetric or complex Hermitian matrices are
+always real. <a class="reference internal" href="#r41" id="id1">[R41]</a> The array <em class="xref py py-obj">v</em> of (column) eigenvectors is unitary
+and <em class="xref py py-obj">a</em>, <em class="xref py py-obj">w</em>, and <em class="xref py py-obj">v</em> satisfy the equations
+<code class="docutils literal"><span class="pre">dot(a,</span> <span class="pre">v[:,</span> <span class="pre">i])</span> <span class="pre">=</span> <span class="pre">w[i]</span> <span class="pre">*</span> <span class="pre">v[:,</span> <span class="pre">i]</span></code>.</p>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r41" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R41]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id2">2</a>)</em> G. Strang, <em>Linear Algebra and Its Applications</em>, 2nd Ed., Orlando,
+FL, Academic Press, Inc., 1980, pg. 222.</td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">linalg</span> <span class="k">as</span> <span class="n">LA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="n">j</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="n">j</span><span class="p">,</span> <span class="mi">5</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
+<span class="go">array([[ 1.+0.j,  0.-2.j],</span>
+<span class="go">       [ 0.+2.j,  5.+0.j]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">LA</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="p">;</span> <span class="n">v</span>
+<span class="go">array([ 0.17157288,  5.82842712])</span>
+<span class="go">array([[-0.92387953+0.j        , -0.38268343+0.j        ],</span>
+<span class="go">       [ 0.00000000+0.38268343j,  0.00000000-0.92387953j]])</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">v</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="c1"># verify 1st e-val/vec pair</span>
+<span class="go">array([2.77555756e-17 + 0.j, 0. + 1.38777878e-16j])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">v</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="c1"># verify 2nd e-val/vec pair</span>
+<span class="go">array([ 0.+0.j,  0.+0.j])</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="c1"># what happens if input is a matrix object</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span>
+<span class="go">matrix([[ 1.+0.j,  0.-2.j],</span>
+<span class="go">        [ 0.+2.j,  5.+0.j]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">LA</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="p">;</span> <span class="n">v</span>
+<span class="go">array([ 0.17157288,  5.82842712])</span>
+<span class="go">matrix([[-0.92387953+0.j        , -0.38268343+0.j        ],</span>
+<span class="go">        [ 0.00000000+0.38268343j,  0.00000000-0.92387953j]])</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># demonstrate the treatment of the imaginary part of the diagonal</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">5</span><span class="o">+</span><span class="mi">2</span><span class="n">j</span><span class="p">,</span> <span class="mi">9</span><span class="o">-</span><span class="mi">2</span><span class="n">j</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="o">+</span><span class="mi">2</span><span class="n">j</span><span class="p">,</span> <span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
+<span class="go">array([[ 5.+2.j,  9.-2.j],</span>
+<span class="go">       [ 0.+2.j,  2.-1.j]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># with UPLO=&#39;L&#39; this is numerically equivalent to using LA.eig() with:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">5.</span><span class="o">+</span><span class="mf">0.</span><span class="n">j</span><span class="p">,</span> <span class="mf">0.</span><span class="o">-</span><span class="mf">2.</span><span class="n">j</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.</span><span class="o">+</span><span class="mf">2.</span><span class="n">j</span><span class="p">,</span> <span class="mf">2.</span><span class="o">-</span><span class="mf">0.</span><span class="n">j</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span>
+<span class="go">array([[ 5.+0.j,  0.-2.j],</span>
+<span class="go">       [ 0.+2.j,  2.+0.j]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wa</span><span class="p">,</span> <span class="n">va</span> <span class="o">=</span> <span class="n">LA</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wb</span><span class="p">,</span> <span class="n">vb</span> <span class="o">=</span> <span class="n">LA</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wa</span><span class="p">;</span> <span class="n">wb</span>
+<span class="go">array([ 1.,  6.])</span>
+<span class="go">array([ 6.+0.j,  1.+0.j])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">va</span><span class="p">;</span> <span class="n">vb</span>
+<span class="go">array([[-0.44721360-0.j        , -0.89442719+0.j        ],</span>
+<span class="go">       [ 0.00000000+0.89442719j,  0.00000000-0.4472136j ]])</span>
+<span class="go">array([[ 0.89442719+0.j       ,  0.00000000-0.4472136j],</span>
+<span class="go">       [ 0.00000000-0.4472136j,  0.89442719+0.j       ]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

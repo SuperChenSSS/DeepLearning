@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.linspace &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="Array creation routines" href="../routines.array-creation.html" >
+    <link rel="next" title="numpy.logspace" href="numpy.logspace.html" >
+    <link rel="prev" title="numpy.arange" href="numpy.arange.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.array-creation.html" accesskey="U">Array creation routines</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.logspace.html" title="numpy.logspace"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.arange.html" title="numpy.arange"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.arange.html"
+                        title="previous chapter">numpy.arange</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.logspace.html"
+                        title="next chapter">numpy.logspace</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-linspace">
+<h1>numpy.linspace<a class="headerlink" href="#numpy-linspace" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="numpy.linspace">
+<code class="descclassname">numpy.</code><code class="descname">linspace</code><span class="sig-paren">(</span><em>start</em>, <em>stop</em>, <em>num=50</em>, <em>endpoint=True</em>, <em>retstep=False</em>, <em>dtype=None</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/numpy/numpy/blob/v1.14.0/numpy/core/function_base.py#L25-L150"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy.linspace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return evenly spaced numbers over a specified interval.</p>
+<p>Returns <em class="xref py py-obj">num</em> evenly spaced samples, calculated over the
+interval [<em class="xref py py-obj">start</em>, <em class="xref py py-obj">stop</em>].</p>
+<p>The endpoint of the interval can optionally be excluded.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>start</strong> : scalar</p>
+<blockquote>
+<div><p>The starting value of the sequence.</p>
+</div></blockquote>
+<p><strong>stop</strong> : scalar</p>
+<blockquote>
+<div><p>The end value of the sequence, unless <em class="xref py py-obj">endpoint</em> is set to False.
+In that case, the sequence consists of all but the last of <code class="docutils literal"><span class="pre">num</span> <span class="pre">+</span> <span class="pre">1</span></code>
+evenly spaced samples, so that <em class="xref py py-obj">stop</em> is excluded.  Note that the step
+size changes when <em class="xref py py-obj">endpoint</em> is False.</p>
+</div></blockquote>
+<p><strong>num</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of samples to generate. Default is 50. Must be non-negative.</p>
+</div></blockquote>
+<p><strong>endpoint</strong> : bool, optional</p>
+<blockquote>
+<div><p>If True, <em class="xref py py-obj">stop</em> is the last sample. Otherwise, it is not included.
+Default is True.</p>
+</div></blockquote>
+<p><strong>retstep</strong> : bool, optional</p>
+<blockquote>
+<div><p>If True, return (<em class="xref py py-obj">samples</em>, <em class="xref py py-obj">step</em>), where <em class="xref py py-obj">step</em> is the spacing
+between samples.</p>
+</div></blockquote>
+<p><strong>dtype</strong> : dtype, optional</p>
+<blockquote>
+<div><p>The type of the output array.  If <a class="reference internal" href="numpy.dtype.html#numpy.dtype" title="numpy.dtype"><code class="xref py py-obj docutils literal"><span class="pre">dtype</span></code></a> is not given, infer the data
+type from the other input arguments.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.9.0.</span></p>
+</div>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>samples</strong> : ndarray</p>
+<blockquote>
+<div><p>There are <em class="xref py py-obj">num</em> equally spaced samples in the closed interval
+<code class="docutils literal"><span class="pre">[start,</span> <span class="pre">stop]</span></code> or the half-open interval <code class="docutils literal"><span class="pre">[start,</span> <span class="pre">stop)</span></code>
+(depending on whether <em class="xref py py-obj">endpoint</em> is True or False).</p>
+</div></blockquote>
+<p><strong>step</strong> : float, optional</p>
+<blockquote class="last">
+<div><p>Only returned if <em class="xref py py-obj">retstep</em> is True</p>
+<p>Size of spacing between samples.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="numpy.arange.html#numpy.arange" title="numpy.arange"><code class="xref py py-obj docutils literal"><span class="pre">arange</span></code></a></dt>
+<dd>Similar to <a class="reference internal" href="#numpy.linspace" title="numpy.linspace"><code class="xref py py-obj docutils literal"><span class="pre">linspace</span></code></a>, but uses a step size (instead of the number of samples).</dd>
+<dt><a class="reference internal" href="numpy.logspace.html#numpy.logspace" title="numpy.logspace"><code class="xref py py-obj docutils literal"><span class="pre">logspace</span></code></a></dt>
+<dd>Samples uniformly distributed in log space.</dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">array([ 2.  ,  2.25,  2.5 ,  2.75,  3.  ])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="go">array([ 2. ,  2.2,  2.4,  2.6,  2.8])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">retstep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">(array([ 2.  ,  2.25,  2.5 ,  2.75,  3.  ]), 0.25)</span>
+</pre></div>
+</div>
+<p>Graphical illustration:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">N</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
+<span class="go">[&lt;matplotlib.lines.Line2D object at 0x...&gt;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
+<span class="go">[&lt;matplotlib.lines.Line2D object at 0x...&gt;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="go">(-0.5, 1)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure">
+<img alt="../../_images/numpy-linspace-1.png" src="../../_images/numpy-linspace-1.png" />
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

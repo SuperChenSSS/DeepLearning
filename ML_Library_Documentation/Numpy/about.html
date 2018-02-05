@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>About NumPy &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-extend.css">
+    <link rel="stylesheet" href="_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="#" >
+    <link rel="index" title="Index" href="genindex.html" >
+    <link rel="search" title="Search" href="search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="index.html" >
+    <link rel="next" title="Reporting bugs" href="bugs.html" >
+    <link rel="prev" title="Release Notes" href="release.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="index.html">NumPy v1.14 Manual</a></li>
+        
+ 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="bugs.html" title="Reporting bugs"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="release.html" title="Release Notes"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">About NumPy</a><ul>
+<li><a class="reference internal" href="#numpy-community">NumPy community</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#about-this-documentation">About this documentation</a><ul>
+<li><a class="reference internal" href="#conventions">Conventions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="release.html"
+                        title="previous chapter">Release Notes</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="bugs.html"
+                        title="next chapter">Reporting bugs</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="about-numpy">
+<h1>About NumPy<a class="headerlink" href="#about-numpy" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://www.scipy.org/NumpPy/">NumPy</a> is the fundamental package
+needed for scientific computing with Python. This package contains:</p>
+<ul class="simple">
+<li>a powerful N-dimensional <a class="reference internal" href="reference/arrays.html#arrays"><span class="std std-ref">array object</span></a></li>
+<li>sophisticated <a class="reference internal" href="reference/ufuncs.html#ufuncs"><span class="std std-ref">(broadcasting) functions</span></a></li>
+<li>basic <a class="reference internal" href="reference/routines.linalg.html#routines-linalg"><span class="std std-ref">linear algebra functions</span></a></li>
+<li>basic <a class="reference internal" href="reference/routines.fft.html#routines-fft"><span class="std std-ref">Fourier transforms</span></a></li>
+<li>sophisticated <a class="reference internal" href="reference/routines.random.html#routines-random"><span class="std std-ref">random number capabilities</span></a></li>
+<li>tools for integrating Fortran code</li>
+<li>tools for integrating C/C++ code</li>
+</ul>
+<p>Besides its obvious scientific uses, <em>NumPy</em> can also be used as an
+efficient multi-dimensional container of generic data. Arbitrary
+data types can be defined. This allows <em>NumPy</em> to seamlessly and
+speedily integrate with a wide variety of databases.</p>
+<p>NumPy is a successor for two earlier scientific Python libraries:
+NumPy derives from the old <em>Numeric</em> code base and can be used
+as a replacement for <em>Numeric</em>.  It also adds the features introduced
+by <em>Numarray</em> and can also be used to replace <em>Numarray</em>.</p>
+<div class="section" id="numpy-community">
+<h2>NumPy community<a class="headerlink" href="#numpy-community" title="Permalink to this headline">¶</a></h2>
+<p>NumPy is a distributed, volunteer, open-source project. <em>You</em> can help
+us make it better; if you believe something should be improved either
+in functionality or in documentation, don&#8217;t hesitate to contact us &#8212; or
+even better, contact us and participate in fixing the problem.</p>
+<p>Our main means of communication are:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://scipy.org/">scipy.org website</a></li>
+<li><a class="reference external" href="http://scipy.org/Mailing_Lists">Mailing lists</a></li>
+<li><a class="reference external" href="https://github.com/numpy/numpy/issues">NumPy Issues</a> (bug reports go here)</li>
+<li><a class="reference external" href="http://projects.scipy.org/numpy">Old NumPy Trac</a> (no longer used)</li>
+</ul>
+<p>More information about the development of NumPy can be found at our <a class="reference external" href="https://scipy.scipy.org/scipylib/dev-zone.html">Developer Zone</a>.</p>
+<p>If you want to fix issues in this documentation, the easiest way
+is to participate in <a class="reference external" href="http://scipy.org/Developer_Zone/DocMarathon2008">our ongoing documentation marathon</a>.</p>
+</div>
+</div>
+<div class="section" id="about-this-documentation">
+<h1>About this documentation<a class="headerlink" href="#about-this-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="conventions">
+<h2>Conventions<a class="headerlink" href="#conventions" title="Permalink to this headline">¶</a></h2>
+<p>Names of classes, objects, constants, etc. are given in <strong>boldface</strong> font.
+Often they are also links to a more detailed documentation of the
+referred object.</p>
+<p>This manual contains many examples of use, usually prefixed with the
+Python prompt <code class="docutils literal"><span class="pre">&gt;&gt;&gt;</span></code> (which is not a part of the example code). The
+examples assume that you have first entered:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+<p>before running the examples.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

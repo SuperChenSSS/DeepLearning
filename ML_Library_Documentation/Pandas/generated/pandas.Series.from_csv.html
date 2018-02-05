@@ -1,0 +1,324 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pandas.Series.from_csv &#8212; pandas 0.22.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.22.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pandas.Series.ge" href="pandas.Series.ge.html" />
+    <link rel="prev" title="pandas.Series.from_array" href="pandas.Series.from_array.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pandas.Series.ge.html" title="pandas.Series.ge"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pandas.Series.from_array.html" title="pandas.Series.from_array"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pandas 0.22.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="pandas.Series.html" accesskey="U">pandas.Series</a> &#187;</li> 
+      </ul>
+    </div>
+<div class="content-wrapper">
+    <div class="content">
+        <div class="document">
+            <div class="sphinxsidebar">
+                <h3>Table Of Contents</h3>
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew.html">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Package overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../10min.html">10 Minutes to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dsintro.html">Intro to Data Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basics.html">Essential Basic Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text.html">Working with Text Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../options.html">Options and Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indexing.html">Indexing and Selecting Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced.html">MultiIndex / Advanced Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../computation.html">Computational tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../missing_data.html">Working with missing data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../groupby.html">Group By: split-apply-combine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../merging.html">Merge, join, and concatenate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reshaping.html">Reshaping and Pivot Tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timeseries.html">Time Series / Date functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timedeltas.html">Time Deltas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../categorical.html">Categorical Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../style.html">Styling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io.html">IO Tools (Text, CSV, HDF5, ...)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../remote_data.html">Remote Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enhancingperf.html">Enhancing Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sparse.html">Sparse data structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gotchas.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../r_interface.html">rpy2 / R interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ecosystem.html">pandas Ecosystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_r.html">Comparison with R / R libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_sql.html">Comparison with SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_sas.html">Comparison with SAS</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#input-output">Input/Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#general-functions">General functions</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#series">Series</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../api.html#constructor">Constructor</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="pandas.Series.html">pandas.Series</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#attributes">Attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#conversion">Conversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#indexing-iteration">Indexing, iteration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#binary-operator-functions">Binary operator functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#function-application-groupby-window">Function application, GroupBy &amp; Window</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#computations-descriptive-stats">Computations / Descriptive Stats</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#reindexing-selection-label-manipulation">Reindexing / Selection / Label manipulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#missing-data-handling">Missing data handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#reshaping-sorting">Reshaping, sorting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#combining-joining-merging">Combining / joining / merging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#time-series-related">Time series-related</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#datetimelike-properties">Datetimelike Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#string-handling">String handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#categorical">Categorical</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#plotting">Plotting</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../api.html#serialization-io-conversion">Serialization / IO / Conversion</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pandas.Series.from_csv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Series.to_pickle.html">pandas.Series.to_pickle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Series.to_csv.html">pandas.Series.to_csv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Series.to_dict.html">pandas.Series.to_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Series.to_excel.html">pandas.Series.to_excel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Series.to_frame.html">pandas.Series.to_frame</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Series.to_xarray.html">pandas.Series.to_xarray</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Series.to_hdf.html">pandas.Series.to_hdf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Series.to_sql.html">pandas.Series.to_sql</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Series.to_msgpack.html">pandas.Series.to_msgpack</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Series.to_json.html">pandas.Series.to_json</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Series.to_sparse.html">pandas.Series.to_sparse</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Series.to_dense.html">pandas.Series.to_dense</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Series.to_string.html">pandas.Series.to_string</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Series.to_clipboard.html">pandas.Series.to_clipboard</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Series.to_latex.html">pandas.Series.to_latex</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#sparse">Sparse</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#dataframe">DataFrame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#panel">Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#index">Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#numeric-index">Numeric Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#categoricalindex">CategoricalIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#intervalindex">IntervalIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#multiindex">MultiIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#datetimeindex">DatetimeIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#timedeltaindex">TimedeltaIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#periodindex">PeriodIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#scalars">Scalars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#window">Window</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#groupby">GroupBy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#resampling">Resampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#style">Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#general-utility-functions">General utility functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developer.html">Developer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../internals.html">Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release Notes</a></li>
+</ul>
+
+                <h3 style="margin-top: 1.5em;">Search</h3>
+
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18"/>
+                    <input type="submit" value="Go"/>
+                    <input type="hidden" name="check_keywords" value="yes"/>
+                    <input type="hidden" name="area" value="default"/>
+                </form>
+                <p class="searchtip" style="font-size: 90%">
+                    Enter search terms or a module, class or function name.
+                </p>
+
+            </div>
+             
+            <div class="documentwrapper">
+                <div class="bodywrapper">
+                    <div class="body">
+                        
+  <div class="section" id="pandas-series-from-csv">
+<h1>pandas.Series.from_csv<a class="headerlink" href="#pandas-series-from-csv" title="Permalink to this headline">¶</a></h1>
+<dl class="classmethod">
+<dt id="pandas.Series.from_csv">
+<em class="property">classmethod </em><code class="descclassname">Series.</code><code class="descname">from_csv</code><span class="sig-paren">(</span><em>path</em>, <em>sep='</em>, <em>'</em>, <em>parse_dates=True</em>, <em>header=None</em>, <em>index_col=0</em>, <em>encoding=None</em>, <em>infer_datetime_format=False</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/pandas-dev/pandas/blob/v0.22.0/pandas/core/series.py#L2831-L2895"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pandas.Series.from_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read CSV file (DEPRECATED, please use <a class="reference internal" href="pandas.read_csv.html#pandas.read_csv" title="pandas.read_csv"><code class="xref py py-func docutils literal"><span class="pre">pandas.read_csv()</span></code></a>
+instead).</p>
+<p>It is preferable to use the more powerful <a class="reference internal" href="pandas.read_csv.html#pandas.read_csv" title="pandas.read_csv"><code class="xref py py-func docutils literal"><span class="pre">pandas.read_csv()</span></code></a>
+for most general purposes, but <code class="docutils literal"><span class="pre">from_csv</span></code> makes for an easy
+roundtrip to and from a file (the exact counterpart of
+<code class="docutils literal"><span class="pre">to_csv</span></code>), especially with a time Series.</p>
+<p>This method only differs from <a class="reference internal" href="pandas.read_csv.html#pandas.read_csv" title="pandas.read_csv"><code class="xref py py-func docutils literal"><span class="pre">pandas.read_csv()</span></code></a> in some defaults:</p>
+<ul class="simple">
+<li><cite>index_col</cite> is <code class="docutils literal"><span class="pre">0</span></code> instead of <code class="docutils literal"><span class="pre">None</span></code> (take first column as index
+by default)</li>
+<li><cite>header</cite> is <code class="docutils literal"><span class="pre">None</span></code> instead of <code class="docutils literal"><span class="pre">0</span></code> (the first row is not used as
+the column names)</li>
+<li><cite>parse_dates</cite> is <code class="docutils literal"><span class="pre">True</span></code> instead of <code class="docutils literal"><span class="pre">False</span></code> (try parsing the index
+as datetime by default)</li>
+</ul>
+<p>With <a class="reference internal" href="pandas.read_csv.html#pandas.read_csv" title="pandas.read_csv"><code class="xref py py-func docutils literal"><span class="pre">pandas.read_csv()</span></code></a>, the option <code class="docutils literal"><span class="pre">squeeze=True</span></code> can be used
+to return a Series like <code class="docutils literal"><span class="pre">from_csv</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>path</strong> : string file path or file handle / StringIO</p>
+<p><strong>sep</strong> : string, default &#8216;,&#8217;</p>
+<blockquote>
+<div><p>Field delimiter</p>
+</div></blockquote>
+<p><strong>parse_dates</strong> : boolean, default True</p>
+<blockquote>
+<div><p>Parse dates. Different default from read_table</p>
+</div></blockquote>
+<p><strong>header</strong> : int, default None</p>
+<blockquote>
+<div><p>Row to use as header (skip prior rows)</p>
+</div></blockquote>
+<p><strong>index_col</strong> : int or sequence, default 0</p>
+<blockquote>
+<div><p>Column to use for index. If a sequence is given, a MultiIndex
+is used. Different default from read_table</p>
+</div></blockquote>
+<p><strong>encoding</strong> : string, optional</p>
+<blockquote>
+<div><p>a string representing the encoding to use if the contents are
+non-ascii, for python versions prior to 3</p>
+</div></blockquote>
+<p><strong>infer_datetime_format: boolean, default False</strong></p>
+<blockquote>
+<div><p>If True and <cite>parse_dates</cite> is True for a column, try to infer the
+datetime format based on the first datetime string. If the format
+can be inferred, there often will be a large parsing speed-up.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>y</strong> : Series</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="pandas.read_csv.html#pandas.read_csv" title="pandas.read_csv"><code class="xref py py-obj docutils literal"><span class="pre">pandas.read_csv</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="clearer"></div>
+        </div>
+    </div>
+</div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pandas.Series.ge.html" title="pandas.Series.ge"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pandas.Series.from_array.html" title="pandas.Series.from_array"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pandas 0.22.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="pandas.Series.html" >pandas.Series</a> &#187;</li> 
+      </ul>
+    </div>
+<style type="text/css">
+    .scrollToTop {
+        text-align: center;
+        font-weight: bold;
+        position: fixed;
+        bottom: 60px;
+        right: 40px;
+        display: none;
+    }
+</style>
+<a href="#" class="scrollToTop">Scroll To Top</a>
+<script type="text/javascript">
+$(document).ready(function() {
+    //Check to see if the window is top if not then display button
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 200) {
+            $('.scrollToTop').fadeIn();
+        } else {
+            $('.scrollToTop').fadeOut();
+        }
+    });
+
+    //Click event to scroll to top
+    $('.scrollToTop').click(function() {
+        $('html, body').animate({
+            scrollTop: 0
+        }, 500);
+        return false;
+    });
+});
+</script>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27880019-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </body>
+</html>

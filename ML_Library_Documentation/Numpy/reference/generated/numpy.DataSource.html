@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.DataSource &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="Input and output" href="../routines.io.html" >
+    <link rel="next" title="numpy.DataSource.abspath" href="numpy.DataSource.abspath.html" >
+    <link rel="prev" title="numpy.base_repr" href="numpy.base_repr.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.io.html" accesskey="U">Input and output</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.DataSource.abspath.html" title="numpy.DataSource.abspath"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.base_repr.html" title="numpy.base_repr"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.base_repr.html"
+                        title="previous chapter">numpy.base_repr</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.DataSource.abspath.html"
+                        title="next chapter">numpy.DataSource.abspath</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-datasource">
+<h1>numpy.DataSource<a class="headerlink" href="#numpy-datasource" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="numpy.DataSource">
+<em class="property">class </em><code class="descclassname">numpy.</code><code class="descname">DataSource</code><span class="sig-paren">(</span><em>destpath='.'</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/numpy/numpy/blob/v1.14.0/numpy/lib/_datasource.py#L263-L616"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy.DataSource" title="Permalink to this definition">¶</a></dt>
+<dd><p>A generic data source file (file, http, ftp, ...).</p>
+<p>DataSources can be local files or remote files/URLs.  The files may
+also be compressed or uncompressed. DataSource hides some of the
+low-level details of downloading the file, allowing you to simply pass
+in a valid file path (or URL) and obtain a file object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>destpath</strong> : str or None, optional</p>
+<blockquote class="last">
+<div><p>Path to the directory where the source file gets downloaded to for
+use.  If <em class="xref py py-obj">destpath</em> is None, a temporary directory will be created.
+The default path is the current directory.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>URLs require a scheme string (<code class="docutils literal"><span class="pre">http://</span></code>) to be used, without it they
+will fail:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">repos</span> <span class="o">=</span> <span class="n">DataSource</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">repos</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;www.google.com/index.html&#39;</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">repos</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;http://www.google.com/index.html&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>Temporary directories are deleted when the DataSource is deleted.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span> <span class="o">=</span> <span class="n">DataSource</span><span class="p">(</span><span class="s1">&#39;/home/guido&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">urlname</span> <span class="o">=</span> <span class="s1">&#39;http://www.google.com/index.html&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gfile</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;http://www.google.com/index.html&#39;</span><span class="p">)</span>  <span class="c1"># remote file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">urlname</span><span class="p">)</span>
+<span class="go">&#39;/home/guido/www.google.com/site/index.html&#39;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span> <span class="o">=</span> <span class="n">DataSource</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>  <span class="c1"># use with temporary file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;/home/guido/foobar.txt&#39;</span><span class="p">)</span>
+<span class="go">&lt;open file &#39;/home/guido.foobar.txt&#39;, mode &#39;r&#39; at 0x91d4430&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;/home/guido/foobar.txt&#39;</span><span class="p">)</span>
+<span class="go">&#39;/tmp/tmpy4pgsP/home/guido/foobar.txt&#39;</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="numpy.DataSource.abspath.html#numpy.DataSource.abspath" title="numpy.DataSource.abspath"><code class="xref py py-obj docutils literal"><span class="pre">abspath</span></code></a>(path)</td>
+<td>Return absolute path of file in the DataSource directory.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.DataSource.exists.html#numpy.DataSource.exists" title="numpy.DataSource.exists"><code class="xref py py-obj docutils literal"><span class="pre">exists</span></code></a>(path)</td>
+<td>Test if path exists.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.DataSource.open.html#numpy.DataSource.open" title="numpy.DataSource.open"><code class="xref py py-obj docutils literal"><span class="pre">open</span></code></a>(path[,&nbsp;mode,&nbsp;encoding,&nbsp;newline])</td>
+<td>Open and return file-like object.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

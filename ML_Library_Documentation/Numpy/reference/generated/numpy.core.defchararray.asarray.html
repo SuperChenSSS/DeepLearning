@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.core.defchararray.asarray &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="Array creation routines" href="../routines.array-creation.html" >
+    <link rel="next" title="numpy.arange" href="numpy.arange.html" >
+    <link rel="prev" title="numpy.core.records.fromfile" href="numpy.core.records.fromfile.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.array-creation.html" accesskey="U">Array creation routines</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.arange.html" title="numpy.arange"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.core.records.fromfile.html" title="numpy.core.records.fromfile"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.core.records.fromfile.html"
+                        title="previous chapter">numpy.core.records.fromfile</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.arange.html"
+                        title="next chapter">numpy.arange</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-core-defchararray-asarray">
+<h1>numpy.core.defchararray.asarray<a class="headerlink" href="#numpy-core-defchararray-asarray" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="numpy.core.defchararray.asarray">
+<code class="descclassname">numpy.core.defchararray.</code><code class="descname">asarray</code><span class="sig-paren">(</span><em>obj</em>, <em>itemsize=None</em>, <em>unicode=None</em>, <em>order=None</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/numpy/numpy/blob/v1.14.0/numpy/core/defchararray.py#L2630-L2679"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy.core.defchararray.asarray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the input to a <a class="reference internal" href="numpy.core.defchararray.chararray.html#numpy.core.defchararray.chararray" title="numpy.core.defchararray.chararray"><code class="xref py py-obj docutils literal"><span class="pre">chararray</span></code></a>, copying the data only if
+necessary.</p>
+<p>Versus a regular NumPy array of type <em class="xref py py-obj">str</em> or <em class="xref py py-obj">unicode</em>, this
+class adds the following functionality:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>values automatically have whitespace removed from the end
+when indexed</li>
+<li>comparison operators automatically remove whitespace from the
+end when comparing values</li>
+<li>vectorized string operations are provided as methods
+(e.g. <em class="xref py py-obj">str.endswith</em>) and infix operators (e.g. <code class="docutils literal"><span class="pre">+</span></code>, <code class="docutils literal"><span class="pre">*</span></code>,``%``)</li>
+</ol>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>obj</strong> : array of str or unicode-like</p>
+<p><strong>itemsize</strong> : int, optional</p>
+<blockquote>
+<div><p><em class="xref py py-obj">itemsize</em> is the number of characters per scalar in the
+resulting array.  If <em class="xref py py-obj">itemsize</em> is None, and <em class="xref py py-obj">obj</em> is an
+object array or a Python list, the <em class="xref py py-obj">itemsize</em> will be
+automatically determined.  If <em class="xref py py-obj">itemsize</em> is provided and <em class="xref py py-obj">obj</em>
+is of type str or unicode, then the <em class="xref py py-obj">obj</em> string will be
+chunked into <em class="xref py py-obj">itemsize</em> pieces.</p>
+</div></blockquote>
+<p><strong>unicode</strong> : bool, optional</p>
+<blockquote>
+<div><p>When true, the resulting <a class="reference internal" href="numpy.core.defchararray.chararray.html#numpy.core.defchararray.chararray" title="numpy.core.defchararray.chararray"><code class="xref py py-obj docutils literal"><span class="pre">chararray</span></code></a> can contain Unicode
+characters, when false only 8-bit characters.  If unicode is
+<em class="xref py py-obj">None</em> and <em class="xref py py-obj">obj</em> is one of the following:</p>
+<blockquote>
+<div><ul class="simple">
+<li>a <a class="reference internal" href="numpy.core.defchararray.chararray.html#numpy.core.defchararray.chararray" title="numpy.core.defchararray.chararray"><code class="xref py py-obj docutils literal"><span class="pre">chararray</span></code></a>,</li>
+<li>an ndarray of type <em class="xref py py-obj">str</em> or &#8216;unicode`</li>
+<li>a Python str or unicode object,</li>
+</ul>
+</div></blockquote>
+<p>then the unicode setting of the output array will be
+automatically determined.</p>
+</div></blockquote>
+<p><strong>order</strong> : {&#8216;C&#8217;, &#8216;F&#8217;}, optional</p>
+<blockquote class="last">
+<div><p>Specify the order of the array.  If order is &#8216;C&#8217; (default), then the
+array will be in C-contiguous order (last-index varies the
+fastest).  If order is &#8216;F&#8217;, then the returned array
+will be in Fortran-contiguous order (first-index varies the
+fastest).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

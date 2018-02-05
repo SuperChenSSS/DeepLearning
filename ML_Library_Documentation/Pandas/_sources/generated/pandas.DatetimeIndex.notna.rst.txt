@@ -1,0 +1,6 @@
+pandas\.DatetimeIndex\.notna
+============================
+
+.. currentmodule:: pandas
+
+.. automethod:: DatetimeIndex.notna

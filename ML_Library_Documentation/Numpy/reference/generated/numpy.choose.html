@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.choose &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="Indexing routines" href="../routines.indexing.html" >
+    <link rel="next" title="numpy.compress" href="numpy.compress.html" >
+    <link rel="prev" title="numpy.take" href="numpy.take.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.indexing.html" accesskey="U">Indexing routines</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.compress.html" title="numpy.compress"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.take.html" title="numpy.take"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.take.html"
+                        title="previous chapter">numpy.take</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.compress.html"
+                        title="next chapter">numpy.compress</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-choose">
+<h1>numpy.choose<a class="headerlink" href="#numpy-choose" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="numpy.choose">
+<code class="descclassname">numpy.</code><code class="descname">choose</code><span class="sig-paren">(</span><em>a</em>, <em>choices</em>, <em>out=None</em>, <em>mode='raise'</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/numpy/numpy/blob/v1.14.0/numpy/core/fromnumeric.py#L260-L379"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy.choose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct an array from an index array and a set of arrays to choose from.</p>
+<p>First of all, if confused or uncertain, definitely look at the Examples -
+in its full generality, this function is less simple than it might
+seem from the following code description (below ndi =
+<code class="xref py py-obj docutils literal"><span class="pre">numpy.lib.index_tricks</span></code>):</p>
+<p><code class="docutils literal"><span class="pre">np.choose(a,c)</span> <span class="pre">==</span> <span class="pre">np.array([c[a[I]][I]</span> <span class="pre">for</span> <span class="pre">I</span> <span class="pre">in</span> <span class="pre">ndi.ndindex(a.shape)])</span></code>.</p>
+<p>But this omits some subtleties.  Here is a fully general summary:</p>
+<p>Given an &#8220;index&#8221; array (<em class="xref py py-obj">a</em>) of integers and a sequence of <em class="xref py py-obj">n</em> arrays
+(<em class="xref py py-obj">choices</em>), <em class="xref py py-obj">a</em> and each choice array are first broadcast, as necessary,
+to arrays of a common shape; calling these <em>Ba</em> and <em>Bchoices[i], i =
+0,...,n-1</em> we have that, necessarily, <code class="docutils literal"><span class="pre">Ba.shape</span> <span class="pre">==</span> <span class="pre">Bchoices[i].shape</span></code>
+for each <em class="xref py py-obj">i</em>.  Then, a new array with shape <code class="docutils literal"><span class="pre">Ba.shape</span></code> is created as
+follows:</p>
+<ul class="simple">
+<li>if <code class="docutils literal"><span class="pre">mode=raise</span></code> (the default), then, first of all, each element of
+<em class="xref py py-obj">a</em> (and thus <em class="xref py py-obj">Ba</em>) must be in the range <em class="xref py py-obj">[0, n-1]</em>; now, suppose that
+<em class="xref py py-obj">i</em> (in that range) is the value at the <em class="xref py py-obj">(j0, j1, ..., jm)</em> position
+in <em class="xref py py-obj">Ba</em> - then the value at the same position in the new array is the
+value in <em class="xref py py-obj">Bchoices[i]</em> at that same position;</li>
+<li>if <code class="docutils literal"><span class="pre">mode=wrap</span></code>, values in <em class="xref py py-obj">a</em> (and thus <em class="xref py py-obj">Ba</em>) may be any (signed)
+integer; modular arithmetic is used to map integers outside the range
+<em class="xref py py-obj">[0, n-1]</em> back into that range; and then the new array is constructed
+as above;</li>
+<li>if <code class="docutils literal"><span class="pre">mode=clip</span></code>, values in <em class="xref py py-obj">a</em> (and thus <em class="xref py py-obj">Ba</em>) may be any (signed)
+integer; negative integers are mapped to 0; values greater than <em class="xref py py-obj">n-1</em>
+are mapped to <em class="xref py py-obj">n-1</em>; and then the new array is constructed as above.</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : int array</p>
+<blockquote>
+<div><p>This array must contain integers in <em class="xref py py-obj">[0, n-1]</em>, where <em class="xref py py-obj">n</em> is the number
+of choices, unless <code class="docutils literal"><span class="pre">mode=wrap</span></code> or <code class="docutils literal"><span class="pre">mode=clip</span></code>, in which cases any
+integers are permissible.</p>
+</div></blockquote>
+<p><strong>choices</strong> : sequence of arrays</p>
+<blockquote>
+<div><p>Choice arrays. <em class="xref py py-obj">a</em> and all of the choices must be broadcastable to the
+same shape.  If <em class="xref py py-obj">choices</em> is itself an array (not recommended), then
+its outermost dimension (i.e., the one corresponding to
+<code class="docutils literal"><span class="pre">choices.shape[0]</span></code>) is taken as defining the &#8220;sequence&#8221;.</p>
+</div></blockquote>
+<p><strong>out</strong> : array, optional</p>
+<blockquote>
+<div><p>If provided, the result will be inserted into this array. It should
+be of the appropriate shape and dtype.</p>
+</div></blockquote>
+<p><strong>mode</strong> : {&#8216;raise&#8217; (default), &#8216;wrap&#8217;, &#8216;clip&#8217;}, optional</p>
+<blockquote>
+<div><p>Specifies how indices outside <em class="xref py py-obj">[0, n-1]</em> will be treated:</p>
+<blockquote>
+<div><ul class="simple">
+<li>&#8216;raise&#8217; : an exception is raised</li>
+<li>&#8216;wrap&#8217; : value becomes value mod <em class="xref py py-obj">n</em></li>
+<li>&#8216;clip&#8217; : values &lt; 0 are mapped to 0, values &gt; n-1 are mapped to n-1</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>merged_array</strong> : array</p>
+<blockquote>
+<div><p>The merged result.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError: shape mismatch</strong></p>
+<blockquote class="last">
+<div><p>If <em class="xref py py-obj">a</em> and each choice array are not all broadcastable to the same
+shape.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="numpy.ndarray.choose.html#numpy.ndarray.choose" title="numpy.ndarray.choose"><code class="xref py py-obj docutils literal"><span class="pre">ndarray.choose</span></code></a></dt>
+<dd>equivalent method</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>To reduce the chance of misinterpretation, even though the following
+&#8220;abuse&#8221; is nominally supported, <em class="xref py py-obj">choices</em> should neither be, nor be
+thought of as, a single array, i.e., the outermost sequence-like container
+should be either a list or a tuple.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">choices</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">],</span>
+<span class="gp">... </span>  <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">23</span><span class="p">],</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">33</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">choose</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">choices</span>
+<span class="gp">... </span><span class="c1"># the first element of the result will be the first element of the</span>
+<span class="gp">... </span><span class="c1"># third (2+1) &quot;array&quot; in choices, namely, 20; the second element</span>
+<span class="gp">... </span><span class="c1"># will be the second element of the fourth (3+1) choice array, i.e.,</span>
+<span class="gp">... </span><span class="c1"># 31, etc.</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="go">array([20, 31, 12,  3])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">choose</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">choices</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;clip&#39;</span><span class="p">)</span> <span class="c1"># 4 goes to 3 (4-1)</span>
+<span class="go">array([20, 31, 12,  3])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># because there are 4 choice arrays</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">choose</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">choices</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;wrap&#39;</span><span class="p">)</span> <span class="c1"># 4 goes to (4 mod 4)</span>
+<span class="go">array([20,  1, 12,  3])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># i.e., 0</span>
+</pre></div>
+</div>
+<p>A couple examples illustrating how choose broadcasts:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">choices</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">choose</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">choices</span><span class="p">)</span>
+<span class="go">array([[ 10, -10,  10],</span>
+<span class="go">       [-10,  10, -10],</span>
+<span class="go">       [ 10, -10,  10]])</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># With thanks to Anne Archibald</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">choose</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">))</span> <span class="c1"># result is 2x3x5, res[0,:,:]=c1, res[1,:,:]=c2</span>
+<span class="go">array([[[ 1,  1,  1,  1,  1],</span>
+<span class="go">        [ 2,  2,  2,  2,  2],</span>
+<span class="go">        [ 3,  3,  3,  3,  3]],</span>
+<span class="go">       [[-1, -2, -3, -4, -5],</span>
+<span class="go">        [-1, -2, -3, -4, -5],</span>
+<span class="go">        [-1, -2, -3, -4, -5]]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>A Mechanism for Overriding Ufuncs &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" >
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../index.html" >
+    <link rel="up" title="NumPy Enhancement Proposals" href="index.html" >
+    <link rel="next" title="Generalized Universal Functions" href="generalized-ufuncs.html" >
+    <link rel="prev" title="NumPy Enhancement Proposals" href="index.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="index.html" accesskey="U">NumPy Enhancement Proposals</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="generalized-ufuncs.html" title="Generalized Universal Functions"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="index.html" title="NumPy Enhancement Proposals"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">A Mechanism for Overriding Ufuncs</a><ul>
+<li><a class="reference internal" href="#executive-summary">Executive summary</a></li>
+<li><a class="reference internal" href="#motivation">Motivation</a></li>
+<li><a class="reference internal" href="#proposed-interface">Proposed interface</a><ul>
+<li><a class="reference internal" href="#type-casting-hierarchy">Type casting hierarchy</a></li>
+<li><a class="reference internal" href="#subclass-hierarchies">Subclass hierarchies</a></li>
+<li><a class="reference internal" href="#turning-ufuncs-off">Turning Ufuncs off</a></li>
+<li><a class="reference internal" href="#behavior-in-combination-with-python-s-binary-operations">Behavior in combination with Python&#8217;s binary operations</a></li>
+<li><a class="reference internal" href="#recommendations-for-implementing-binary-operations">Recommendations for implementing binary operations</a></li>
+<li><a class="reference internal" href="#list-of-operators-and-numpy-ufuncs">List of operators and NumPy Ufuncs</a></li>
+<li><a class="reference internal" href="#future-extensions-to-other-functions">Future extensions to other functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">NumPy Enhancement Proposals</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="generalized-ufuncs.html"
+                        title="next chapter">Generalized Universal Functions</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="a-mechanism-for-overriding-ufuncs">
+<span id="neps-ufunc-overrides"></span><h1>A Mechanism for Overriding Ufuncs<a class="headerlink" href="#a-mechanism-for-overriding-ufuncs" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Blake Griffith</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:blake&#46;g&#37;&#52;&#48;utexas&#46;edu">blake<span>&#46;</span>g<span>&#64;</span>utexas<span>&#46;</span>edu</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2013-07-10</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Pauli Virtanen</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Nathaniel Smith</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Marten van Kerkwijk</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Stephan Hoyer</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">2017-03-31</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="executive-summary">
+<h2>Executive summary<a class="headerlink" href="#executive-summary" title="Permalink to this headline">¶</a></h2>
+<p>NumPy&#8217;s universal functions (ufuncs) currently have some limited
+functionality for operating on user defined subclasses of
+<a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a> using <code class="docutils literal"><span class="pre">__array_prepare__</span></code> and <code class="docutils literal"><span class="pre">__array_wrap__</span></code>
+<a class="footnote-reference" href="#id5" id="id1">[1]</a>, and there is little to no support for arbitrary
+objects. e.g. SciPy&#8217;s sparse matrices <a class="footnote-reference" href="#id6" id="id2">[2]</a> <a class="footnote-reference" href="#id7" id="id3">[3]</a>.</p>
+<p>Here we propose adding a mechanism to override ufuncs based on the ufunc
+checking each of it&#8217;s arguments for a <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> method.
+On discovery of <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> the ufunc will hand off the
+operation to the method.</p>
+<p>This covers some of the same ground as Travis Oliphant&#8217;s proposal to
+retro-fit NumPy with multi-methods <a class="footnote-reference" href="#id8" id="id4">[4]</a>, which would solve the same
+problem. The mechanism here follows more closely the way Python enables
+classes to override <code class="docutils literal"><span class="pre">__mul__</span></code> and other binary operations. It also
+specifically addresses how binary operators and ufuncs should interact.
+(Note that in earlier iterations, the override was called
+<code class="docutils literal"><span class="pre">__numpy_ufunc__</span></code>. An implementation was made, but had not quite the
+right behaviour, hence the change in name.)</p>
+<p>The <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> as described below requires that any
+corresponding Python binary operations (<code class="docutils literal"><span class="pre">__mul__</span></code> et al.) should be
+implemented in a specific way and be compatible with Numpy&#8217;s ndarray
+semantics. Objects that do not satisfy this cannot override any Numpy
+ufuncs.  We do not specify a future-compatible path by which this
+requirement can be relaxed &#8212; any changes here require corresponding
+changes in 3rd party code.</p>
+<table class="docutils footnote" frame="void" id="id5" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td><a class="reference external" href="http://docs.python.org/doc/numpy/user/basics.subclassing.html">http://docs.python.org/doc/numpy/user/basics.subclassing.html</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id6" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td><a class="reference external" href="https://github.com/scipy/scipy/issues/2123">https://github.com/scipy/scipy/issues/2123</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id7" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td><a class="reference external" href="https://github.com/scipy/scipy/issues/1569">https://github.com/scipy/scipy/issues/1569</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id8" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[4]</a></td><td><a class="reference external" href="http://technicaldiscovery.blogspot.com/2013/07/thoughts-after-scipy-2013-and-specific.html">http://technicaldiscovery.blogspot.com/2013/07/thoughts-after-scipy-2013-and-specific.html</a></td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="motivation">
+<h2>Motivation<a class="headerlink" href="#motivation" title="Permalink to this headline">¶</a></h2>
+<p>The current machinery for dispatching Ufuncs is generally agreed to be
+insufficient. There have been lengthy discussions and other proposed
+solutions <a class="footnote-reference" href="#id11" id="id9">[5]</a>, <a class="footnote-reference" href="#id12" id="id10">[6]</a>.</p>
+<p>Using ufuncs with subclasses of <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a> is limited to
+<code class="docutils literal"><span class="pre">__array_prepare__</span></code> and <code class="docutils literal"><span class="pre">__array_wrap__</span></code> to prepare the output arguments,
+but these don&#8217;t allow you to for example change the shape or the data of
+the arguments. Trying to ufunc things that don&#8217;t subclass
+<a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a> is even more difficult, as the input arguments tend to
+be cast to object arrays, which ends up producing surprising results.</p>
+<p>Take this example of ufuncs interoperability with sparse matrices.:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="k">as</span> <span class="nn">sp</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+
+<span class="n">asp</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">bsp</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:(</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+               <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+               <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]),</span>
+        <span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+               <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+               <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]))</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="c1"># The right answer</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+               <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+               <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">asp</span><span class="p">,</span> <span class="n">bsp</span><span class="p">)</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span> <span class="c1"># calls __mul__ which does matrix multi</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="n">matrix</span><span class="p">([[</span><span class="mi">16</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">8</span><span class="p">],</span>
+                <span class="p">[</span> <span class="mi">8</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span>  <span class="mi">5</span><span class="p">],</span>
+                <span class="p">[</span> <span class="mi">4</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span>  <span class="mi">4</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">int64</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">bsp</span><span class="p">)</span> <span class="c1"># Returns NotImplemented to user, bad!</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="n">NotImplemted</span>
+</pre></div>
+</div>
+<p>Returning <a class="reference external" href="https://docs.python.org/dev/library/constants.html#NotImplemented" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">NotImplemented</span></code></a> to user should not happen. Moreover:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">asp</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="n">array</span><span class="p">([[</span> <span class="o">&lt;</span><span class="mi">3</span><span class="n">x3</span> <span class="n">sparse</span> <span class="n">matrix</span> <span class="n">of</span> <span class="nb">type</span> <span class="s1">&#39;&lt;class &#39;</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="s1">&#39;&gt;&#39;</span>
+                <span class="k">with</span> <span class="mi">8</span> <span class="n">stored</span> <span class="n">elements</span> <span class="ow">in</span> <span class="n">Compressed</span> <span class="n">Sparse</span> <span class="n">Row</span> <span class="nb">format</span><span class="o">&gt;</span><span class="p">,</span>
+                    <span class="o">&lt;</span><span class="mi">3</span><span class="n">x3</span> <span class="n">sparse</span> <span class="n">matrix</span> <span class="n">of</span> <span class="nb">type</span> <span class="s1">&#39;&lt;class &#39;</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="s1">&#39;&gt;&#39;</span>
+                <span class="k">with</span> <span class="mi">8</span> <span class="n">stored</span> <span class="n">elements</span> <span class="ow">in</span> <span class="n">Compressed</span> <span class="n">Sparse</span> <span class="n">Row</span> <span class="nb">format</span><span class="o">&gt;</span><span class="p">,</span>
+                    <span class="o">&lt;</span><span class="mi">3</span><span class="n">x3</span> <span class="n">sparse</span> <span class="n">matrix</span> <span class="n">of</span> <span class="nb">type</span> <span class="s1">&#39;&lt;class &#39;</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="s1">&#39;&gt;&#39;</span>
+                <span class="k">with</span> <span class="mi">8</span> <span class="n">stored</span> <span class="n">elements</span> <span class="ow">in</span> <span class="n">Compressed</span> <span class="n">Sparse</span> <span class="n">Row</span> <span class="nb">format</span><span class="o">&gt;</span><span class="p">],</span>
+                   <span class="p">[</span> <span class="o">&lt;</span><span class="mi">3</span><span class="n">x3</span> <span class="n">sparse</span> <span class="n">matrix</span> <span class="n">of</span> <span class="nb">type</span> <span class="s1">&#39;&lt;class &#39;</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="s1">&#39;&gt;&#39;</span>
+                <span class="k">with</span> <span class="mi">8</span> <span class="n">stored</span> <span class="n">elements</span> <span class="ow">in</span> <span class="n">Compressed</span> <span class="n">Sparse</span> <span class="n">Row</span> <span class="nb">format</span><span class="o">&gt;</span><span class="p">,</span>
+                    <span class="o">&lt;</span><span class="mi">3</span><span class="n">x3</span> <span class="n">sparse</span> <span class="n">matrix</span> <span class="n">of</span> <span class="nb">type</span> <span class="s1">&#39;&lt;class &#39;</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="s1">&#39;&gt;&#39;</span>
+                <span class="k">with</span> <span class="mi">8</span> <span class="n">stored</span> <span class="n">elements</span> <span class="ow">in</span> <span class="n">Compressed</span> <span class="n">Sparse</span> <span class="n">Row</span> <span class="nb">format</span><span class="o">&gt;</span><span class="p">,</span>
+                    <span class="o">&lt;</span><span class="mi">3</span><span class="n">x3</span> <span class="n">sparse</span> <span class="n">matrix</span> <span class="n">of</span> <span class="nb">type</span> <span class="s1">&#39;&lt;class &#39;</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="s1">&#39;&gt;&#39;</span>
+                <span class="k">with</span> <span class="mi">8</span> <span class="n">stored</span> <span class="n">elements</span> <span class="ow">in</span> <span class="n">Compressed</span> <span class="n">Sparse</span> <span class="n">Row</span> <span class="nb">format</span><span class="o">&gt;</span><span class="p">],</span>
+                   <span class="p">[</span> <span class="o">&lt;</span><span class="mi">3</span><span class="n">x3</span> <span class="n">sparse</span> <span class="n">matrix</span> <span class="n">of</span> <span class="nb">type</span> <span class="s1">&#39;&lt;class &#39;</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="s1">&#39;&gt;&#39;</span>
+                <span class="k">with</span> <span class="mi">8</span> <span class="n">stored</span> <span class="n">elements</span> <span class="ow">in</span> <span class="n">Compressed</span> <span class="n">Sparse</span> <span class="n">Row</span> <span class="nb">format</span><span class="o">&gt;</span><span class="p">,</span>
+                    <span class="o">&lt;</span><span class="mi">3</span><span class="n">x3</span> <span class="n">sparse</span> <span class="n">matrix</span> <span class="n">of</span> <span class="nb">type</span> <span class="s1">&#39;&lt;class &#39;</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="s1">&#39;&gt;&#39;</span>
+                <span class="k">with</span> <span class="mi">8</span> <span class="n">stored</span> <span class="n">elements</span> <span class="ow">in</span> <span class="n">Compressed</span> <span class="n">Sparse</span> <span class="n">Row</span> <span class="nb">format</span><span class="o">&gt;</span><span class="p">,</span>
+                    <span class="o">&lt;</span><span class="mi">3</span><span class="n">x3</span> <span class="n">sparse</span> <span class="n">matrix</span> <span class="n">of</span> <span class="nb">type</span> <span class="s1">&#39;&lt;class &#39;</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="s1">&#39;&gt;&#39;</span>
+                <span class="k">with</span> <span class="mi">8</span> <span class="n">stored</span> <span class="n">elements</span> <span class="ow">in</span> <span class="n">Compressed</span> <span class="n">Sparse</span> <span class="n">Row</span> <span class="nb">format</span><span class="o">&gt;</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here, it appears that the sparse matrix was converted to an object array
+scalar, which was then multiplied with all elements of the <code class="docutils literal"><span class="pre">b</span></code> array.
+However, this behavior is more confusing than useful, and having a
+<a class="reference external" href="https://docs.python.org/dev/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> would be preferable.</p>
+<p>This proposal will <em>not</em> resolve the issue with scipy.sparse matrices,
+which have multiplication semantics incompatible with numpy arrays.
+However, the aim is to enable writing other custom array types that have
+strictly ndarray compatible semantics.</p>
+<table class="docutils footnote" frame="void" id="id11" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id9">[5]</a></td><td><a class="reference external" href="http://mail.python.org/pipermail/numpy-discussion/2011-June/056945.html">http://mail.python.org/pipermail/numpy-discussion/2011-June/056945.html</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id12" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[6]</td><td><em>(<a class="fn-backref" href="#id10">1</a>, <a class="fn-backref" href="#id18">2</a>)</em> <a class="reference external" href="https://github.com/numpy/numpy/issues/5844">https://github.com/numpy/numpy/issues/5844</a></td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="proposed-interface">
+<h2>Proposed interface<a class="headerlink" href="#proposed-interface" title="Permalink to this headline">¶</a></h2>
+<p>The standard array class <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a> gains an <code class="docutils literal"><span class="pre">__array_ufunc__</span></code>
+method and objects can override Ufuncs by overriding this method (if
+they are <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a> subclasses) or defining their own. The method
+signature is:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">__array_ufunc__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ufunc</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">inputs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here:</p>
+<ul class="simple">
+<li><em>ufunc</em> is the ufunc object that was called.</li>
+<li><em>method</em> is a string indicating how the Ufunc was called, either
+<code class="docutils literal"><span class="pre">&quot;__call__&quot;</span></code> to indicate it was called directly, or one of its
+<a class="reference internal" href="../reference/ufuncs.html#ufuncs-methods"><span class="std std-ref">methods</span></a>: <code class="docutils literal"><span class="pre">&quot;reduce&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;accumulate&quot;</span></code>,
+<code class="docutils literal"><span class="pre">&quot;reduceat&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;outer&quot;</span></code>, or <code class="docutils literal"><span class="pre">&quot;at&quot;</span></code>.</li>
+<li><em>inputs</em> is a tuple of the input arguments to the <code class="docutils literal"><span class="pre">ufunc</span></code></li>
+<li><em>kwargs</em> contains any optional or keyword arguments passed to the
+function. This includes any <code class="docutils literal"><span class="pre">out</span></code> arguments, which are always
+contained in a tuple.</li>
+</ul>
+<p>Hence, the arguments are normalized: only the required input arguments
+(<code class="docutils literal"><span class="pre">inputs</span></code>) are passed on as positional arguments, all the others are
+passed on as a dict of keyword arguments (<code class="docutils literal"><span class="pre">kwargs</span></code>). In particular, if
+there are output arguments, positional are otherwise, that are not
+<a class="reference external" href="https://docs.python.org/dev/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a>, they are passed on as a tuple in the <code class="docutils literal"><span class="pre">out</span></code> keyword
+argument (even for the <code class="docutils literal"><span class="pre">reduce</span></code>, <code class="docutils literal"><span class="pre">accumulate</span></code>, and <code class="docutils literal"><span class="pre">reduceat</span></code> methods
+where in all current cases only a single output makes sense).</p>
+<p>The function dispatch proceeds as follows:</p>
+<ul class="simple">
+<li>If one of the input or output arguments implements
+<code class="docutils literal"><span class="pre">__array_ufunc__</span></code>, it is executed instead of the ufunc.</li>
+<li>If more than one of the arguments implements <code class="docutils literal"><span class="pre">__array_ufunc__</span></code>,
+they are tried in the following order: subclasses before superclasses,
+inputs before outputs, otherwise left to right.</li>
+<li>The first <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> method returning something else than
+<a class="reference external" href="https://docs.python.org/dev/library/constants.html#NotImplemented" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">NotImplemented</span></code></a> determines the return value of the Ufunc.</li>
+<li>If all <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> methods of the input arguments return
+<a class="reference external" href="https://docs.python.org/dev/library/constants.html#NotImplemented" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">NotImplemented</span></code></a>, a <a class="reference external" href="https://docs.python.org/dev/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> is raised.</li>
+<li>If a <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> method raises an error, the error is
+propagated immediately.</li>
+<li>If none of the input arguments had an <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> method, the
+execution falls back on the default ufunc behaviour.</li>
+</ul>
+<p>In the above, there is one proviso: if a class has an
+<code class="docutils literal"><span class="pre">__array_ufunc__</span></code> attribute but it is identical to
+<code class="docutils literal"><span class="pre">ndarray.__array_ufunc__</span></code>, the attribute is ignored.  This happens for
+instances of <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> and for <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> subclasses that did not
+override their inherited <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> implementation.</p>
+<div class="section" id="type-casting-hierarchy">
+<h3>Type casting hierarchy<a class="headerlink" href="#type-casting-hierarchy" title="Permalink to this headline">¶</a></h3>
+<p>The Python operator override mechanism gives much freedom in how to
+write the override methods, and it requires some discipline in order to
+achieve predictable results. Here, we discuss an approach for
+understanding some of the implications, which can provide input in the
+design.</p>
+<p>It is useful to maintain a clear idea of what types can be &#8220;upcast&#8221; to
+others, possibly indirectly (e.g. indirect A-&gt;B-&gt;C is implemented but
+direct A-&gt;C not). If the implementations of <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> follow a
+coherent type casting hierarchy, it can be used to understand results of
+operations.</p>
+<p>Type casting can be expressed as a <a class="reference external" href="https://en.wikipedia.org/wiki/Graph_theory">graph</a>
+defined as follows:</p>
+<blockquote>
+<div><p>For each <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> method, draw directed edges from each
+possible input type to each possible output type.</p>
+<p>That is, in each case where <code class="docutils literal"><span class="pre">y</span> <span class="pre">=</span> <span class="pre">x.__array_ufunc__(a,</span> <span class="pre">b,</span> <span class="pre">c,</span> <span class="pre">...)</span></code>
+does something else than returning <code class="docutils literal"><span class="pre">NotImplemented</span></code> or raising an error,
+draw edges <code class="docutils literal"><span class="pre">type(a)</span> <span class="pre">-&gt;</span> <span class="pre">type(y)</span></code>, <code class="docutils literal"><span class="pre">type(b)</span> <span class="pre">-&gt;</span> <span class="pre">type(y)</span></code>, ...</p>
+</div></blockquote>
+<p>If the resulting graph is <em>acyclic</em>, it defines a coherent type casting
+hierarchy (unambiguous partial ordering between types).  In this case,
+operations involving multiple types generally predictably produce result
+of the &#8220;highest&#8221; type, or raise a <a class="reference external" href="https://docs.python.org/dev/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a>.  See examples at the
+end of this section.</p>
+<p>If the graph has cycles, the <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> type casting is not
+well-defined, and things such as <code class="docutils literal"><span class="pre">type(multiply(a,</span> <span class="pre">b))</span> <span class="pre">!=</span>
+<span class="pre">type(multiply(b,</span> <span class="pre">a))</span></code> or <code class="docutils literal"><span class="pre">type(add(a,</span> <span class="pre">add(b,</span> <span class="pre">c)))</span> <span class="pre">!=</span> <span class="pre">type(add(add(a,</span>
+<span class="pre">b),</span> <span class="pre">c))</span></code> are not excluded (and then probably always possible).</p>
+<p>If the type casting hierarchy is well defined, for each class A, all
+other classes that define <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> belong to exactly one of
+three groups:</p>
+<ul class="simple">
+<li><em>Above A</em>: the types that A can be (indirectly) upcast to in ufuncs.</li>
+<li><em>Below A</em>: the types that can be (indirectly) upcast to A in ufuncs.</li>
+<li><em>Incompatible</em>: neither above nor below A; types for which no
+(indirect) upcasting is possible.</li>
+</ul>
+<p>Note that the legacy behaviour of numpy ufuncs is to try to convert
+unknown objects to <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a> via <code class="xref py py-func docutils literal"><span class="pre">np.asarray</span></code>.  This is
+equivalent to placing <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a> above these objects in the graph.
+Since we above defined <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a> to return <em class="xref py py-obj">NotImplemented</em> for
+classes with custom <code class="docutils literal"><span class="pre">__array_ufunc__</span></code>, this puts <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a>
+below such classes in the type hierarchy, allowing the operations to be
+overridden.</p>
+<p>In view of the above, binary ufuncs describing transitive operations
+should aim to define a well-defined casting hierarchy.  This is likely
+also a sensible approach to all ufuncs &#8212; exceptions to this should
+consider carefully if any surprising behavior results.</p>
+<div class="admonition-example admonition">
+<p class="first admonition-title">Example</p>
+<p>Type casting hierarchy.</p>
+<img src="../_images/graphviz-eb38e96413da5f23f6c1dd672f47a0f47d1c2546.png" alt="digraph array_ufuncs {
+   rankdir=BT;
+   A -&gt; C [label=&quot;C&quot;];
+   B -&gt; C [label=&quot;C&quot;];
+   D -&gt; B [label=&quot;B&quot;];
+   ndarray -&gt; C [label=&quot;A&quot;];
+   ndarray -&gt; B [label=&quot;B&quot;];
+}" />
+<p class="last">The <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> of type A can handle ndarrays returning C,
+B can handle ndarray and D returning B, and C can handle A and B returning C,
+but not ndarrays or D.  The
+result is a directed acyclic graph, and defines a type casting
+hierarchy, with relations <code class="docutils literal"><span class="pre">C</span> <span class="pre">&gt;</span> <span class="pre">A</span></code>, <code class="docutils literal"><span class="pre">C</span> <span class="pre">&gt;</span> <span class="pre">ndarray</span></code>, <code class="docutils literal"><span class="pre">C</span> <span class="pre">&gt;</span> <span class="pre">B</span> <span class="pre">&gt;</span> <span class="pre">ndarray</span></code>,
+<code class="docutils literal"><span class="pre">C</span> <span class="pre">&gt;</span> <span class="pre">B</span> <span class="pre">&gt;</span> <span class="pre">D</span></code>. The type A is incompatible with B, D, ndarray,
+and D is incompatible with A and ndarray.  Ufunc
+expressions involving these classes should produce results of the
+highest type involved or raise a <a class="reference external" href="https://docs.python.org/dev/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a>.</p>
+</div>
+<div class="admonition-example admonition">
+<p class="first admonition-title">Example</p>
+<p>One-cycle in the <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> graph.</p>
+<img src="../_images/graphviz-ad4d250a1762a5d0161afb256033dfd14c2617dc.png" alt="digraph array_ufuncs {
+   rankdir=BT;
+   A -&gt; B [label=&quot;B&quot;];
+   B -&gt; A [label=&quot;A&quot;];
+}" />
+<p class="last">In this case, the <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> relations have a cycle of length 1,
+and a type casting hierarchy does not exist. Binary operations are not
+commutative: <code class="docutils literal"><span class="pre">type(a</span> <span class="pre">+</span> <span class="pre">b)</span> <span class="pre">is</span> <span class="pre">A</span></code> but <code class="docutils literal"><span class="pre">type(b</span> <span class="pre">+</span> <span class="pre">a)</span> <span class="pre">is</span> <span class="pre">B</span></code>.</p>
+</div>
+<div class="admonition-example admonition">
+<p class="first admonition-title">Example</p>
+<p>Longer cycle in the <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> graph.</p>
+<img src="../_images/graphviz-121f3dd229f270a12f19c2c55a2815091b210f22.png" alt="digraph array_ufuncs {
+   rankdir=BT;
+   A -&gt; B [label=&quot;B&quot;];
+   B -&gt; C [label=&quot;C&quot;];
+   C -&gt; A [label=&quot;A&quot;];
+}" />
+<p class="last">In this case, the <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> relations have a longer cycle, and a
+type casting hierarchy does not exist. Binary operations are still
+commutative, but type transitivity is lost: <code class="docutils literal"><span class="pre">type(a</span> <span class="pre">+</span> <span class="pre">(b</span> <span class="pre">+</span> <span class="pre">c))</span> <span class="pre">is</span> <span class="pre">A</span></code> but
+<code class="docutils literal"><span class="pre">type((a</span> <span class="pre">+</span> <span class="pre">b)</span> <span class="pre">+</span> <span class="pre">c)</span> <span class="pre">is</span> <span class="pre">C</span></code>.</p>
+</div>
+</div>
+<div class="section" id="subclass-hierarchies">
+<h3>Subclass hierarchies<a class="headerlink" href="#subclass-hierarchies" title="Permalink to this headline">¶</a></h3>
+<p>Generally, it is desirable to mirror the class hierarchy in the ufunc
+type casting hierarchy. The recommendation is that an
+<code class="docutils literal"><span class="pre">__array_ufunc__</span></code> implementation of a class should generally return
+<em class="xref py py-obj">NotImplemented</em> unless the inputs are instances of the same class or
+superclasses.  This guarantees that in the type casting hierarchy,
+superclasses are below, subclasses above, and other classes are
+incompatible.  Exceptions to this need to check they respect the
+implicit type casting hierarchy.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Note that type casting hierarchy and class hierarchy are here defined
+to go the &#8220;opposite&#8221; directions.  It would in principle also be
+consistent to have <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> handle also instances of
+subclasses. In this case, the &#8220;subclasses first&#8221; dispatch rule would
+ensure a relatively similar outcome. However, the behavior is then less
+explicitly specified.</p>
+</div>
+<p>Subclasses can be easily constructed if methods consistently use
+<a class="reference external" href="https://docs.python.org/dev/library/functions.html#super" title="(in Python v3.7)"><code class="xref py py-func docutils literal"><span class="pre">super</span></code></a> to pass through the class hierarchy <a class="footnote-reference" href="#id14" id="id13">[7]</a>.  To support
+this, <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a> has its own <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> method,
+equivalent to:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">__array_ufunc__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ufunc</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">inputs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="c1"># Cannot handle items that have __array_ufunc__ (other than our own).</span>
+    <span class="n">outputs</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;out&#39;</span><span class="p">,</span> <span class="p">())</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">inputs</span> <span class="o">+</span> <span class="n">outputs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s1">&#39;__array_ufunc__&#39;</span><span class="p">)</span> <span class="ow">and</span>
+                <span class="nb">type</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">__array_ufunc__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">ndarray</span><span class="o">.</span><span class="n">__array_ufunc__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+    <span class="c1"># If we didn&#39;t have to support legacy behaviour (__array_prepare__,</span>
+    <span class="c1"># __array_wrap__, etc.), we might here convert python floats,</span>
+    <span class="c1"># lists, etc, to arrays with</span>
+    <span class="c1"># items = [np.asarray(item) for item in inputs]</span>
+    <span class="c1"># and then start the right iterator for the given method.</span>
+    <span class="c1"># However, we do have to support legacy, so call back into the ufunc.</span>
+    <span class="c1"># Its arguments are now guaranteed not to have __array_ufunc__</span>
+    <span class="c1"># overrides, and it will do the coercion to array for us.</span>
+    <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ufunc</span><span class="p">,</span> <span class="n">method</span><span class="p">)(</span><span class="o">*</span><span class="n">items</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that, as a special case, the ufunc dispatch mechanism does not call
+this <code class="xref py py-obj docutils literal"><span class="pre">ndarray.__array_ufunc__</span></code> method, even for <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> subclasses
+if they have not overridden the default <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> implementation. As a
+consequence, calling <code class="xref py py-obj docutils literal"><span class="pre">ndarray.__array_ufunc__</span></code> will not result to a
+nested ufunc dispatch cycle.</p>
+<p>The use of <a class="reference external" href="https://docs.python.org/dev/library/functions.html#super" title="(in Python v3.7)"><code class="xref py py-func docutils literal"><span class="pre">super</span></code></a> should be particularly useful for subclasses of
+<a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a> that only add an attribute like a unit.  In their
+<em class="xref py py-obj">__array_ufunc__</em> implementation, such classes can do possible
+adjustment of the arguments relevant to their own class, and pass on to
+the superclass implementation using <a class="reference external" href="https://docs.python.org/dev/library/functions.html#super" title="(in Python v3.7)"><code class="xref py py-func docutils literal"><span class="pre">super</span></code></a> until the ufunc is
+actually done, and then do possible adjustments of the outputs.</p>
+<p>In general, custom implementations of <em class="xref py py-obj">__array_ufunc__</em> should avoid
+nested dispatch cycles, where one not just calls the ufunc via
+<code class="docutils literal"><span class="pre">getattr(ufunc,</span> <span class="pre">method)(*items,</span> <span class="pre">**kwargs)</span></code>, but catches possible
+exceptions, etc.  As always, there may be exceptions. For instance, for a
+class like <code class="xref py py-class docutils literal"><span class="pre">MaskedArray</span></code>, which only cares that whatever
+it contains is an <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a> subclass, a reimplementation with
+<code class="docutils literal"><span class="pre">__array_ufunc__</span></code> may well be more easily done by directly applying
+the ufunc to its data, and then adjusting the mask.  Indeed, one can
+think of this as part of the class determining whether it can handle the
+other argument (i.e., where in the type hierarchy it sits). In this
+case, one should return <a class="reference external" href="https://docs.python.org/dev/library/constants.html#NotImplemented" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">NotImplemented</span></code></a> if the trial fails.  So,
+the implementation would be something like:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">__array_ufunc__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ufunc</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">inputs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="c1"># for simplicity, outputs are ignored here.</span>
+    <span class="n">unmasked_items</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">((</span><span class="n">item</span><span class="o">.</span><span class="n">data</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">MaskedArray</span><span class="p">)</span>
+                            <span class="k">else</span> <span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">inputs</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">unmasked_result</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ufunc</span><span class="p">,</span> <span class="n">method</span><span class="p">)(</span><span class="o">*</span><span class="n">unmasked_items</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">NotImplemented</span>
+    <span class="c1"># for simplicity, ignore that unmasked_result could be a tuple</span>
+    <span class="c1"># or a scalar.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">unmasked_result</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">NotImplemented</span>
+    <span class="c1"># now combine masks and view as MaskedArray instance</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>As a specific example, consider a quantity and a masked array class
+which both override <code class="docutils literal"><span class="pre">__array_ufunc__</span></code>, with specific instances <code class="docutils literal"><span class="pre">q</span></code>
+and <code class="docutils literal"><span class="pre">ma</span></code>, where the latter contains a regular array. Executing
+<code class="docutils literal"><span class="pre">np.multiply(q,</span> <span class="pre">ma)</span></code>, the ufunc will first dispatch to
+<code class="docutils literal"><span class="pre">q.__array_ufunc__</span></code>, which returns <a class="reference external" href="https://docs.python.org/dev/library/constants.html#NotImplemented" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">NotImplemented</span></code></a> (since the
+quantity class turns itself into an array and calls <a class="reference external" href="https://docs.python.org/dev/library/functions.html#super" title="(in Python v3.7)"><code class="xref py py-func docutils literal"><span class="pre">super</span></code></a>, which
+passes on to <code class="docutils literal"><span class="pre">ndarray.__array_ufunc__</span></code>, which sees the override on
+<code class="docutils literal"><span class="pre">ma</span></code>). Next, <code class="docutils literal"><span class="pre">ma.__array_ufunc__</span></code> gets a chance. It does not know
+quantity, and if it were to just return <a class="reference external" href="https://docs.python.org/dev/library/constants.html#NotImplemented" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">NotImplemented</span></code></a> as well,
+an <a class="reference external" href="https://docs.python.org/dev/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> would result. But in our sample implementation, it
+uses <code class="docutils literal"><span class="pre">getattr(ufunc,</span> <span class="pre">method)</span></code> to, effectively, evaluate
+<code class="docutils literal"><span class="pre">np.multiply(q,</span> <span class="pre">ma.data)</span></code>. This again will pass to
+<code class="docutils literal"><span class="pre">q.__array_ufunc__</span></code>, but this time, since <code class="docutils literal"><span class="pre">ma.data</span></code> is a regular
+array, it will return a result that is also a quantity. Since this is a
+subclass of <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a>, <code class="docutils literal"><span class="pre">ma.__array_ufunc__</span></code> can turn this into
+a masked array and thus return a result (obviously, if it was not a
+array subclass, it could still return <a class="reference external" href="https://docs.python.org/dev/library/constants.html#NotImplemented" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">NotImplemented</span></code></a>).</p>
+<p>Note that in the context of the type hierarchy discussed above this is a
+somewhat tricky example, since <code class="xref py py-class docutils literal"><span class="pre">MaskedArray</span></code> has a strange
+position: it is above all subclasses of <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a>, in that it can
+cast them to its own type, but it does not itself know how to interact
+with them in ufuncs.</p>
+<table class="docutils footnote" frame="void" id="id14" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id13">[7]</a></td><td><a class="reference external" href="https://rhettinger.wordpress.com/2011/05/26/super-considered-super/">https://rhettinger.wordpress.com/2011/05/26/super-considered-super/</a></td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="turning-ufuncs-off">
+<span id="neps-ufunc-overrides-turning-ufuncs-off"></span><h3>Turning Ufuncs off<a class="headerlink" href="#turning-ufuncs-off" title="Permalink to this headline">¶</a></h3>
+<p>For some classes, Ufuncs make no sense, and, like for some other special
+methods such as <code class="docutils literal"><span class="pre">__hash__</span></code> and <code class="docutils literal"><span class="pre">__iter__</span></code> <a class="footnote-reference" href="#id16" id="id15">[8]</a>, one can indicate
+Ufuncs are not available by setting <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> to <a class="reference external" href="https://docs.python.org/dev/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a>.
+If a Ufunc is called on any operand that sets <code class="docutils literal"><span class="pre">__array_ufunc__</span> <span class="pre">=</span> <span class="pre">None</span></code>,
+it will unconditionally raise <a class="reference external" href="https://docs.python.org/dev/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a>.</p>
+<p>In the type casting hierarchy, this makes it explicit that the type is
+incompatible relative to <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a>.</p>
+<table class="docutils footnote" frame="void" id="id16" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id15">[8]</a></td><td><a class="reference external" href="https://docs.python.org/3/reference/datamodel.html#specialnames">https://docs.python.org/3/reference/datamodel.html#specialnames</a></td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="behavior-in-combination-with-python-s-binary-operations">
+<h3>Behavior in combination with Python&#8217;s binary operations<a class="headerlink" href="#behavior-in-combination-with-python-s-binary-operations" title="Permalink to this headline">¶</a></h3>
+<p>The Python operator override mechanism in <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a> is coupled to
+the <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> mechanism. For the special methods calls such as
+<code class="docutils literal"><span class="pre">ndarray.__mul__(self,</span> <span class="pre">other)</span></code> that Python calls for implementing
+binary operations such as <code class="docutils literal"><span class="pre">*</span></code> and <code class="docutils literal"><span class="pre">+</span></code>, NumPy&#8217;s <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a>
+implements the following behavior:</p>
+<ul class="simple">
+<li>If <code class="docutils literal"><span class="pre">other.__array_ufunc__</span> <span class="pre">is</span> <span class="pre">None</span></code>, <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a>
+returns <a class="reference external" href="https://docs.python.org/dev/library/constants.html#NotImplemented" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">NotImplemented</span></code></a>. Control reverts to Python, which in turn
+will try calling a corresponding reflexive method on <code class="docutils literal"><span class="pre">other</span></code> (e.g.,
+<code class="docutils literal"><span class="pre">other.__rmul__</span></code>), if present.</li>
+<li>If the <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> attribute is absent on <code class="docutils literal"><span class="pre">other</span></code> and
+<code class="docutils literal"><span class="pre">other.__array_priority__</span> <span class="pre">&gt;</span> <span class="pre">self.__array_priority__</span></code>, <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a>
+also returns <a class="reference external" href="https://docs.python.org/dev/library/constants.html#NotImplemented" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">NotImplemented</span></code></a> (and the logic proceeds as in the
+previous case). This ensures backwards compatibility with old versions
+of NumPy.</li>
+<li>Otherwise, <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a> unilaterally calls the corresponding Ufunc.
+Ufuncs never return <code class="docutils literal"><span class="pre">NotImplemented</span></code>, so <strong>reflexive methods such
+as</strong> <code class="docutils literal"><span class="pre">other.__rmul__</span></code> <strong>cannot be used to override arithmetic with
+NumPy arrays if</strong> <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> <strong>is set</strong> to any value other than
+<code class="docutils literal"><span class="pre">None</span></code>. Instead, their behavior needs to be changed by implementing
+<code class="docutils literal"><span class="pre">__array_ufunc__</span></code> in a fashion consistent with the corresponding Ufunc,
+e.g., <code class="docutils literal"><span class="pre">np.multiply</span></code>. See <a class="reference internal" href="#neps-ufunc-overrides-list-of-operators"><span class="std std-ref">List of operators and NumPy Ufuncs</span></a>
+for a list of affected operators and their corresponding ufuncs.</li>
+</ul>
+<p>A class wishing to modify the interaction with <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a> in
+binary operations therefore has two options:</p>
+<ol class="arabic simple">
+<li>Implement <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> and follow Numpy semantics for Python
+binary operations (see below).</li>
+<li>Set <code class="docutils literal"><span class="pre">__array_ufunc__</span> <span class="pre">=</span> <span class="pre">None</span></code>, and implement Python binary
+operations freely.  In this case, ufuncs called on this argument will
+raise <a class="reference external" href="https://docs.python.org/dev/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> (see
+<a class="reference internal" href="#neps-ufunc-overrides-turning-ufuncs-off"><span class="std std-ref">Turning Ufuncs off</span></a>).</li>
+</ol>
+</div>
+<div class="section" id="recommendations-for-implementing-binary-operations">
+<h3>Recommendations for implementing binary operations<a class="headerlink" href="#recommendations-for-implementing-binary-operations" title="Permalink to this headline">¶</a></h3>
+<p>For most numerical classes, the easiest way to override binary
+operations is thus to define <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> and override the
+corresponding Ufunc. The class can then, like <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a> itself,
+define the binary operators in terms of Ufuncs. Here, one has to take
+some care to ensure that one allows for other classes to indicate they
+are not compatible, i.e., implementations should be something like:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_disables_array_ufunc</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">__array_ufunc__</span> <span class="ow">is</span> <span class="kc">None</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+<span class="k">class</span> <span class="nc">ArrayLike</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="o">...</span>
+    <span class="k">def</span> <span class="nf">__array_ufunc__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ufunc</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">inputs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="o">...</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="c1"># Option 1: call ufunc directly</span>
+    <span class="k">def</span> <span class="nf">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">_disables_array_ufunc</span><span class="p">(</span><span class="n">other</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">_disables_array_ufunc</span><span class="p">(</span><span class="n">other</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__imul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="p">,))</span>
+
+    <span class="c1"># Option 2: call into one&#39;s own __array_ufunc__</span>
+    <span class="k">def</span> <span class="nf">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__array_ufunc__</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">,</span> <span class="s1">&#39;__call__&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__array_ufunc__</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">,</span> <span class="s1">&#39;__call__&#39;</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__imul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__array_ufunc__</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">,</span> <span class="s1">&#39;__call__&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span>
+                                      <span class="n">out</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="p">,))</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="bp">NotImplemented</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To see why some care is necessary, consider another class <code class="docutils literal"><span class="pre">other</span></code> that
+does not know how to deal with arrays and ufuncs, and thus has set
+<code class="docutils literal"><span class="pre">__array_ufunc__</span></code> to <a class="reference external" href="https://docs.python.org/dev/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a>, but does know how to do
+multiplication:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyObject</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">__array_ufunc__</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;MyObject(</span><span class="si">{!r}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">MyObject</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">MyObject</span><span class="p">(</span><span class="mi">4321</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For either option above, we get the expected result:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mine</span> <span class="o">=</span> <span class="n">MyObject</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">arr</span> <span class="o">=</span> <span class="n">ArrayLike</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">mine</span> <span class="o">*</span> <span class="n">arr</span>    <span class="c1"># -&gt; MyObject(1234)</span>
+<span class="n">mine</span> <span class="o">*=</span> <span class="n">arr</span>   <span class="c1"># -&gt; MyObject(1234)</span>
+<span class="n">arr</span> <span class="o">*</span> <span class="n">mine</span>    <span class="c1"># -&gt; MyObject(4321)</span>
+<span class="n">arr</span> <span class="o">*=</span> <span class="n">mine</span>   <span class="c1"># -&gt; TypeError</span>
+</pre></div>
+</div>
+<p>Here, in the first and second example, <code class="docutils literal"><span class="pre">mine.__mul__(arr)</span></code> gets called
+and the result arrives immediately.  In the third example, first
+<code class="docutils literal"><span class="pre">arr.__mul__(mine)</span></code> is called. In option (1), the check on
+<code class="docutils literal"><span class="pre">mine.__array_ufunc__</span> <span class="pre">is</span> <span class="pre">None</span></code> will succeed and thus
+<a class="reference external" href="https://docs.python.org/dev/library/constants.html#NotImplemented" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">NotImplemented</span></code></a> is returned, which causes <code class="docutils literal"><span class="pre">mine.__rmul__(arg)</span></code>
+to be executed.  In option (2), it is presumably inside
+<code class="docutils literal"><span class="pre">arr.__array_ufunc__</span></code> that it becomes clear that the other argument
+cannot be dealt with, and again <a class="reference external" href="https://docs.python.org/dev/library/constants.html#NotImplemented" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">NotImplemented</span></code></a> is returned,
+causing control to pass to <code class="docutils literal"><span class="pre">mine.__rmul__</span></code>.</p>
+<p>For the fourth example, with the in-place operators, we have here
+followed <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a> and ensure we never return
+<a class="reference external" href="https://docs.python.org/dev/library/constants.html#NotImplemented" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">NotImplemented</span></code></a>, but rather raise a <a class="reference external" href="https://docs.python.org/dev/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a>. In
+option (1) this happens indirectly: we pass to <code class="docutils literal"><span class="pre">np.multiply</span></code>, which
+in turn immediately raises <a class="reference external" href="https://docs.python.org/dev/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a>, because one of its operands
+(<code class="docutils literal"><span class="pre">out[0]</span></code>) disables Ufuncs.  In option (2), we pass directly to
+<code class="docutils literal"><span class="pre">arr.__array_ufunc__</span></code>, which will return <a class="reference external" href="https://docs.python.org/dev/library/constants.html#NotImplemented" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">NotImplemented</span></code></a>, which
+we catch.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the reason for not allowing in-place operations to return
+<a class="reference external" href="https://docs.python.org/dev/library/constants.html#NotImplemented" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">NotImplemented</span></code></a> is that these cannot generically be replaced by
+a simple reverse operation: most array operations assume the contents
+of the instance are changed in-place, and do not expect a new
+instance.  Also, what would <code class="docutils literal"><span class="pre">ndarr[:]</span> <span class="pre">*=</span> <span class="pre">mine</span></code> imply?  Assuming it
+means <code class="docutils literal"><span class="pre">ndarr[:]</span> <span class="pre">=</span> <span class="pre">ndarr[:]</span> <span class="pre">*</span> <span class="pre">mine</span></code>, as python does by default if
+the <code class="docutils literal"><span class="pre">ndarr.__imul__</span></code> were to return <a class="reference external" href="https://docs.python.org/dev/library/constants.html#NotImplemented" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">NotImplemented</span></code></a>, is
+likely to be wrong.</p>
+</div>
+<p>Now consider what would happen if we had not added checks. For option
+(1), the relevant case is if we had not checked whether
+<code class="docutils literal"><span class="pre">__array_func__</span></code> was set to <a class="reference external" href="https://docs.python.org/dev/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a>.  In the third example,
+<code class="docutils literal"><span class="pre">arr.__mul__(mine)</span></code> is called, and without the check, this would go to
+<code class="docutils literal"><span class="pre">np.multiply(arr,</span> <span class="pre">mine)</span></code>. This tries <code class="docutils literal"><span class="pre">arr.__array_ufunc__</span></code>, which
+returns <a class="reference external" href="https://docs.python.org/dev/library/constants.html#NotImplemented" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">NotImplemented</span></code></a> and sees that <code class="docutils literal"><span class="pre">mine.__array_ufunc__</span> <span class="pre">is</span>
+<span class="pre">None</span></code>, so a <a class="reference external" href="https://docs.python.org/dev/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> is raised.</p>
+<p>For option (2), the relevant example is the fourth, with <code class="docutils literal"><span class="pre">arr</span> <span class="pre">*=</span>
+<span class="pre">mine</span></code>: if we had let the <a class="reference external" href="https://docs.python.org/dev/library/constants.html#NotImplemented" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">NotImplemented</span></code></a> pass, python would have
+replaced this with <code class="docutils literal"><span class="pre">arr</span> <span class="pre">=</span> <span class="pre">mine.__rmul__(arr)</span></code>, which is not wanted.</p>
+<p>Because the semantics of Ufunc overrides and Python&#8217;s binary operations
+are nearly identical, in most cases options (1) and (2) will
+yield the same result with the same implementation of <code class="docutils literal"><span class="pre">__array_ufunc__</span></code>.
+One exception is the order in which implementations are tried when the
+second argument is a subclass of the first argument, due to a Python
+bug <a class="footnote-reference" href="#id19" id="id17">[9]</a> expected to be fixed in Python 3.7.</p>
+<p>In general, we recommend adopting option (1), which is the option most
+similar to that used by <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a> itself. Note that option (1)
+is viral, in the sense that any other class that wishes to support binary
+operations with your class now must also follow these rules for supporting
+binary arithmetic with <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a> (i.e., they must either implement
+<code class="docutils literal"><span class="pre">__array_ufunc__</span></code> or set it to <a class="reference external" href="https://docs.python.org/dev/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a>). We believe this is a good
+thing, because it ensures the consistency of ufuncs and arithmetic on all
+objects that support them.</p>
+<p>To make implementing such array-like classes easier, the mixin class
+<a class="reference internal" href="../reference/generated/numpy.lib.mixins.NDArrayOperatorsMixin.html#numpy.lib.mixins.NDArrayOperatorsMixin" title="numpy.lib.mixins.NDArrayOperatorsMixin"><code class="xref py py-class docutils literal"><span class="pre">NDArrayOperatorsMixin</span></code></a> provides option (1) style
+overrides for all binary operators with corresponding Ufuncs. Classes
+that wish to implement <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> for compatible versions
+of NumPy but that also need to support binary arithmetic with NumPy arrays
+on older versions should ensure that <code class="docutils literal"><span class="pre">__array_ufunc__</span></code> can also be used
+to implement all binary operations they support.</p>
+<p>Finally, we note that we had extensive discussion about whether it might
+make more sense to ask classes like <code class="docutils literal"><span class="pre">MyObject</span></code> to implement a full
+<code class="docutils literal"><span class="pre">__array_ufunc__</span></code> <a class="footnote-reference" href="#id12" id="id18">[6]</a>. In the end, allowing classes to opt out was
+preferred, and the above reasoning led us to agree on a similar
+implementation for <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a> itself. The opt-out mechanism requires
+disabling Ufuncs so a class cannot define a Ufuncs to return a different
+result than the corresponding binary operations (i.e., if
+<code class="docutils literal"><span class="pre">np.add(x,</span> <span class="pre">y)</span></code> is defined, it should match <code class="docutils literal"><span class="pre">x</span> <span class="pre">+</span> <span class="pre">y</span></code>). Our goal was to
+simplify the dispatch logic for binary operations with NumPy arrays
+as much as possible, by making it possible to use Python&#8217;s dispatch rules
+or NumPy&#8217;s dispatch rules, but not some mixture of both at the same time.</p>
+<table class="docutils footnote" frame="void" id="id19" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id17">[9]</a></td><td><a class="reference external" href="http://bugs.python.org/issue30140">http://bugs.python.org/issue30140</a></td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="list-of-operators-and-numpy-ufuncs">
+<span id="neps-ufunc-overrides-list-of-operators"></span><h3>List of operators and NumPy Ufuncs<a class="headerlink" href="#list-of-operators-and-numpy-ufuncs" title="Permalink to this headline">¶</a></h3>
+<p>Here is a full list of Python binary operators and the corresponding NumPy
+Ufuncs used by <a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a> and
+<a class="reference internal" href="../reference/generated/numpy.lib.mixins.NDArrayOperatorsMixin.html#numpy.lib.mixins.NDArrayOperatorsMixin" title="numpy.lib.mixins.NDArrayOperatorsMixin"><code class="xref py py-class docutils literal"><span class="pre">NDArrayOperatorsMixin</span></code></a>:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="20%" />
+<col width="69%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Symbol</th>
+<th class="head">Operator</th>
+<th class="head">NumPy Ufunc(s)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">&lt;</span></code></td>
+<td><code class="docutils literal"><span class="pre">lt</span></code></td>
+<td><a class="reference internal" href="../reference/generated/numpy.less.html#numpy.less" title="numpy.less"><code class="xref py py-func docutils literal"><span class="pre">less</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">&lt;=</span></code></td>
+<td><code class="docutils literal"><span class="pre">le</span></code></td>
+<td><a class="reference internal" href="../reference/generated/numpy.less_equal.html#numpy.less_equal" title="numpy.less_equal"><code class="xref py py-func docutils literal"><span class="pre">less_equal</span></code></a></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">==</span></code></td>
+<td><code class="docutils literal"><span class="pre">eq</span></code></td>
+<td><a class="reference internal" href="../reference/generated/numpy.equal.html#numpy.equal" title="numpy.equal"><code class="xref py py-func docutils literal"><span class="pre">equal</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">!=</span></code></td>
+<td><code class="docutils literal"><span class="pre">ne</span></code></td>
+<td><a class="reference internal" href="../reference/generated/numpy.not_equal.html#numpy.not_equal" title="numpy.not_equal"><code class="xref py py-func docutils literal"><span class="pre">not_equal</span></code></a></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">&gt;</span></code></td>
+<td><code class="docutils literal"><span class="pre">gt</span></code></td>
+<td><a class="reference internal" href="../reference/generated/numpy.greater.html#numpy.greater" title="numpy.greater"><code class="xref py py-func docutils literal"><span class="pre">greater</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">&gt;=</span></code></td>
+<td><code class="docutils literal"><span class="pre">ge</span></code></td>
+<td><a class="reference internal" href="../reference/generated/numpy.greater_equal.html#numpy.greater_equal" title="numpy.greater_equal"><code class="xref py py-func docutils literal"><span class="pre">greater_equal</span></code></a></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">+</span></code></td>
+<td><code class="docutils literal"><span class="pre">add</span></code></td>
+<td><a class="reference internal" href="../reference/generated/numpy.add.html#numpy.add" title="numpy.add"><code class="xref py py-func docutils literal"><span class="pre">add</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">-</span></code></td>
+<td><code class="docutils literal"><span class="pre">sub</span></code></td>
+<td><a class="reference internal" href="../reference/generated/numpy.subtract.html#numpy.subtract" title="numpy.subtract"><code class="xref py py-func docutils literal"><span class="pre">subtract</span></code></a></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">*</span></code></td>
+<td><code class="docutils literal"><span class="pre">mul</span></code></td>
+<td><a class="reference internal" href="../reference/generated/numpy.multiply.html#numpy.multiply" title="numpy.multiply"><code class="xref py py-func docutils literal"><span class="pre">multiply</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">/</span></code></td>
+<td><code class="docutils literal"><span class="pre">truediv</span></code>
+(Python 3)</td>
+<td><a class="reference internal" href="../reference/generated/numpy.true_divide.html#numpy.true_divide" title="numpy.true_divide"><code class="xref py py-func docutils literal"><span class="pre">true_divide</span></code></a></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">/</span></code></td>
+<td><code class="docutils literal"><span class="pre">div</span></code>
+(Python 2)</td>
+<td><a class="reference internal" href="../reference/generated/numpy.divide.html#numpy.divide" title="numpy.divide"><code class="xref py py-func docutils literal"><span class="pre">divide</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">//</span></code></td>
+<td><code class="docutils literal"><span class="pre">floordiv</span></code></td>
+<td><a class="reference internal" href="../reference/generated/numpy.floor_divide.html#numpy.floor_divide" title="numpy.floor_divide"><code class="xref py py-func docutils literal"><span class="pre">floor_divide</span></code></a></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">%</span></code></td>
+<td><code class="docutils literal"><span class="pre">mod</span></code></td>
+<td><a class="reference internal" href="../reference/generated/numpy.remainder.html#numpy.remainder" title="numpy.remainder"><code class="xref py py-func docutils literal"><span class="pre">remainder</span></code></a></td>
+</tr>
+<tr class="row-odd"><td>NA</td>
+<td><code class="docutils literal"><span class="pre">divmod</span></code></td>
+<td><a class="reference internal" href="../reference/generated/numpy.divmod.html#numpy.divmod" title="numpy.divmod"><code class="xref py py-func docutils literal"><span class="pre">divmod</span></code></a></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">**</span></code></td>
+<td><code class="docutils literal"><span class="pre">pow</span></code></td>
+<td><a class="reference internal" href="../reference/generated/numpy.power.html#numpy.power" title="numpy.power"><code class="xref py py-func docutils literal"><span class="pre">power</span></code></a> <a class="footnote-reference" href="#id23" id="id20">[10]</a></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">&lt;&lt;</span></code></td>
+<td><code class="docutils literal"><span class="pre">lshift</span></code></td>
+<td><a class="reference internal" href="../reference/generated/numpy.left_shift.html#numpy.left_shift" title="numpy.left_shift"><code class="xref py py-func docutils literal"><span class="pre">left_shift</span></code></a></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">&gt;&gt;</span></code></td>
+<td><code class="docutils literal"><span class="pre">rshift</span></code></td>
+<td><a class="reference internal" href="../reference/generated/numpy.right_shift.html#numpy.right_shift" title="numpy.right_shift"><code class="xref py py-func docutils literal"><span class="pre">right_shift</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">&amp;</span></code></td>
+<td><code class="docutils literal"><span class="pre">and_</span></code></td>
+<td><a class="reference internal" href="../reference/generated/numpy.bitwise_and.html#numpy.bitwise_and" title="numpy.bitwise_and"><code class="xref py py-func docutils literal"><span class="pre">bitwise_and</span></code></a></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">^</span></code></td>
+<td><code class="docutils literal"><span class="pre">xor_</span></code></td>
+<td><a class="reference internal" href="../reference/generated/numpy.bitwise_xor.html#numpy.bitwise_xor" title="numpy.bitwise_xor"><code class="xref py py-func docutils literal"><span class="pre">bitwise_xor</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">|</span></code></td>
+<td><code class="docutils literal"><span class="pre">or_</span></code></td>
+<td><a class="reference internal" href="../reference/generated/numpy.bitwise_or.html#numpy.bitwise_or" title="numpy.bitwise_or"><code class="xref py py-func docutils literal"><span class="pre">bitwise_or</span></code></a></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">&#64;</span></code></td>
+<td><code class="docutils literal"><span class="pre">matmul</span></code></td>
+<td>Not yet implemented as a ufunc <a class="footnote-reference" href="#id24" id="id21">[11]</a></td>
+</tr>
+</tbody>
+</table>
+<p>And here is the list of unary operators:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="20%" />
+<col width="69%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Symbol</th>
+<th class="head">Operator</th>
+<th class="head">NumPy Ufunc(s)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">-</span></code></td>
+<td><code class="docutils literal"><span class="pre">neg</span></code></td>
+<td><a class="reference internal" href="../reference/generated/numpy.negative.html#numpy.negative" title="numpy.negative"><code class="xref py py-func docutils literal"><span class="pre">negative</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">+</span></code></td>
+<td><code class="docutils literal"><span class="pre">pos</span></code></td>
+<td><a class="reference internal" href="../reference/generated/numpy.positive.html#numpy.positive" title="numpy.positive"><code class="xref py py-func docutils literal"><span class="pre">positive</span></code></a> <a class="footnote-reference" href="#id25" id="id22">[12]</a></td>
+</tr>
+<tr class="row-even"><td>NA</td>
+<td><code class="docutils literal"><span class="pre">abs</span></code></td>
+<td><a class="reference internal" href="../reference/generated/numpy.absolute.html#numpy.absolute" title="numpy.absolute"><code class="xref py py-func docutils literal"><span class="pre">absolute</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">~</span></code></td>
+<td><code class="docutils literal"><span class="pre">invert</span></code></td>
+<td><a class="reference internal" href="../reference/generated/numpy.invert.html#numpy.invert" title="numpy.invert"><code class="xref py py-func docutils literal"><span class="pre">invert</span></code></a></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id23" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id20">[10]</a></td><td>class :<a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> takes short cuts for <code class="docutils literal"><span class="pre">__pow__</span></code> for the
+cases where the power equals <code class="docutils literal"><span class="pre">1</span></code> (<a class="reference internal" href="../reference/generated/numpy.positive.html#numpy.positive" title="numpy.positive"><code class="xref py py-func docutils literal"><span class="pre">positive</span></code></a>),
+<code class="docutils literal"><span class="pre">-1</span></code> (<a class="reference internal" href="../reference/generated/numpy.reciprocal.html#numpy.reciprocal" title="numpy.reciprocal"><code class="xref py py-func docutils literal"><span class="pre">reciprocal</span></code></a>), <code class="docutils literal"><span class="pre">2</span></code> (<a class="reference internal" href="../reference/generated/numpy.square.html#numpy.square" title="numpy.square"><code class="xref py py-func docutils literal"><span class="pre">square</span></code></a>), <code class="docutils literal"><span class="pre">0</span></code> (an
+otherwise private <code class="docutils literal"><span class="pre">_ones_like</span></code> ufunc), and <code class="docutils literal"><span class="pre">0.5</span></code>
+(<a class="reference internal" href="../reference/generated/numpy.sqrt.html#numpy.sqrt" title="numpy.sqrt"><code class="xref py py-func docutils literal"><span class="pre">sqrt</span></code></a>), and the array is float or complex (or integer
+for square).</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id24" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id21">[11]</a></td><td>Because NumPy&#8217;s <a class="reference internal" href="../reference/generated/numpy.matmul.html#numpy.matmul" title="numpy.matmul"><code class="xref py py-func docutils literal"><span class="pre">matmul</span></code></a> is not a ufunc, it is
+<a class="reference external" href="https://github.com/numpy/numpy/issues/9028">currently not possible</a>
+to override <code class="docutils literal"><span class="pre">numpy_array</span> <span class="pre">&#64;</span> <span class="pre">other</span></code> with <code class="docutils literal"><span class="pre">other</span></code> taking precedence
+if <code class="docutils literal"><span class="pre">other</span></code> implements <code class="docutils literal"><span class="pre">__array_func__</span></code>.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id25" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id22">[12]</a></td><td><a class="reference internal" href="../reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a> currently does a copy instead of using this ufunc.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="future-extensions-to-other-functions">
+<h3>Future extensions to other functions<a class="headerlink" href="#future-extensions-to-other-functions" title="Permalink to this headline">¶</a></h3>
+<p>Some numpy functions could be implemented as (generalized) Ufunc, in
+which case it would be possible for them to be overridden by the
+<code class="docutils literal"><span class="pre">__array_ufunc__</span></code> method.  A prime candidate is <a class="reference internal" href="../reference/generated/numpy.matmul.html#numpy.matmul" title="numpy.matmul"><code class="xref py py-func docutils literal"><span class="pre">matmul</span></code></a>,
+which currently is not a Ufunc, but could be relatively easily be
+rewritten as a (set of) generalized Ufuncs. The same may happen with
+functions such as <a class="reference internal" href="../reference/generated/numpy.median.html#numpy.median" title="numpy.median"><code class="xref py py-func docutils literal"><span class="pre">median</span></code></a>, <code class="xref py py-func docutils literal"><span class="pre">min</span></code>, and
+<a class="reference internal" href="../reference/generated/numpy.argsort.html#numpy.argsort" title="numpy.argsort"><code class="xref py py-func docutils literal"><span class="pre">argsort</span></code></a>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Following the latest source &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="Working with NumPy source code" href="index.html" >
+    <link rel="next" title="Git for development" href="git_development.html" >
+    <link rel="prev" title="Introduction" href="git_intro.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >Contributing to NumPy</a></li>
+          <li class="active"><a href="index.html" accesskey="U">Working with <em>NumPy</em> source code</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="git_development.html" title="Git for development"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="git_intro.html" title="Introduction"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Following the latest source</a><ul>
+<li><a class="reference internal" href="#get-the-local-copy-of-the-code">Get the local copy of the code</a></li>
+<li><a class="reference internal" href="#updating-the-code">Updating the code</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="git_intro.html"
+                        title="previous chapter">Introduction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="git_development.html"
+                        title="next chapter">Git for development</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="following-the-latest-source">
+<span id="following-latest"></span><h1>Following the latest source<a class="headerlink" href="#following-the-latest-source" title="Permalink to this headline">¶</a></h1>
+<p>These are the instructions if you just want to follow the latest
+<em>NumPy</em> source, but you don&#8217;t need to do any development for now.
+If you do want to contribute a patch (excellent!) or do more extensive
+NumPy development, see <a class="reference internal" href="development_workflow.html#development-workflow"><span class="std std-ref">Development workflow</span></a>.</p>
+<p>The steps are:</p>
+<ul class="simple">
+<li><a class="reference internal" href="git_intro.html#install-git"><span class="std std-ref">Install git</span></a></li>
+<li>get local copy of the git repository from <a class="reference external" href="https://github.com/numpy">Github</a></li>
+<li>update local copy from time to time</li>
+</ul>
+<div class="section" id="get-the-local-copy-of-the-code">
+<h2>Get the local copy of the code<a class="headerlink" href="#get-the-local-copy-of-the-code" title="Permalink to this headline">¶</a></h2>
+<p>From the command line:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">numpy</span><span class="o">/</span><span class="n">numpy</span><span class="o">.</span><span class="n">git</span>
+</pre></div>
+</div>
+<p>You now have a copy of the code tree in the new <code class="docutils literal"><span class="pre">numpy</span></code> directory.
+If this doesn&#8217;t work you can try the alternative read-only url:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">numpy</span><span class="o">/</span><span class="n">numpy</span><span class="o">.</span><span class="n">git</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="updating-the-code">
+<h2>Updating the code<a class="headerlink" href="#updating-the-code" title="Permalink to this headline">¶</a></h2>
+<p>From time to time you may want to pull down the latest code.  Do this with:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">numpy</span>
+<span class="n">git</span> <span class="n">fetch</span>
+<span class="n">git</span> <span class="n">merge</span> <span class="o">--</span><span class="n">ff</span><span class="o">-</span><span class="n">only</span>
+</pre></div>
+</div>
+<p>The tree in <code class="docutils literal"><span class="pre">numpy</span></code> will now have the latest changes from the initial
+repository.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

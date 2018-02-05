@@ -1,0 +1,1473 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Merge, join, and concatenate &#8212; pandas 0.22.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.22.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Reshaping and Pivot Tables" href="reshaping.html" />
+    <link rel="prev" title="Group By: split-apply-combine" href="groupby.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="reshaping.html" title="Reshaping and Pivot Tables"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="groupby.html" title="Group By: split-apply-combine"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pandas 0.22.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+<div class="content-wrapper">
+    <div class="content">
+        <div class="document">
+            <div class="sphinxsidebar">
+                <h3>Table Of Contents</h3>
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Package overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10min.html">10 Minutes to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dsintro.html">Intro to Data Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basics.html">Essential Basic Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="text.html">Working with Text Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="options.html">Options and Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indexing.html">Indexing and Selecting Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">MultiIndex / Advanced Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="computation.html">Computational tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="missing_data.html">Working with missing data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="groupby.html">Group By: split-apply-combine</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Merge, join, and concatenate</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#concatenating-objects">Concatenating objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#set-logic-on-the-other-axes">Set logic on the other axes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#concatenating-using-append">Concatenating using <code class="docutils literal"><span class="pre">append</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ignoring-indexes-on-the-concatenation-axis">Ignoring indexes on the concatenation axis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#concatenating-with-mixed-ndims">Concatenating with mixed ndims</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#more-concatenating-with-group-keys">More concatenating with group keys</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#appending-rows-to-a-dataframe">Appending rows to a DataFrame</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#database-style-dataframe-joining-merging">Database-style DataFrame joining/merging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#brief-primer-on-merge-methods-relational-algebra">Brief primer on merge methods (relational algebra)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#checking-for-duplicate-keys">Checking for duplicate keys</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-merge-indicator">The merge indicator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#merge-dtypes">Merge Dtypes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#joining-on-index">Joining on index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#joining-key-columns-on-an-index">Joining key columns on an index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#joining-a-single-index-to-a-multi-index">Joining a single Index to a Multi-index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#joining-with-two-multi-indexes">Joining with two multi-indexes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#overlapping-value-columns">Overlapping value columns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#joining-multiple-dataframe-or-panel-objects">Joining multiple DataFrame or Panel objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#merging-together-values-within-series-or-dataframe-columns">Merging together values within Series or DataFrame columns</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#timeseries-friendly-merging">Timeseries friendly merging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#merging-ordered-data">Merging Ordered Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#merging-asof">Merging AsOf</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reshaping.html">Reshaping and Pivot Tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timeseries.html">Time Series / Date functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timedeltas.html">Time Deltas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="categorical.html">Categorical Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style.html">Styling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">IO Tools (Text, CSV, HDF5, ...)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="remote_data.html">Remote Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="enhancingperf.html">Enhancing Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sparse.html">Sparse data structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gotchas.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="r_interface.html">rpy2 / R interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ecosystem.html">pandas Ecosystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comparison_with_r.html">Comparison with R / R libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comparison_with_sql.html">Comparison with SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comparison_with_sas.html">Comparison with SAS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer.html">Developer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals.html">Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release.html">Release Notes</a></li>
+</ul>
+
+                <h3 style="margin-top: 1.5em;">Search</h3>
+
+                <form class="search" action="search.html" method="get">
+                    <input type="text" name="q" size="18"/>
+                    <input type="submit" value="Go"/>
+                    <input type="hidden" name="check_keywords" value="yes"/>
+                    <input type="hidden" name="area" value="default"/>
+                </form>
+                <p class="searchtip" style="font-size: 90%">
+                    Enter search terms or a module, class or function name.
+                </p>
+
+            </div>
+             
+            <div class="documentwrapper">
+                <div class="bodywrapper">
+                    <div class="body">
+                        
+  <div class="section" id="merge-join-and-concatenate">
+<span id="merging"></span><h1>Merge, join, and concatenate<a class="headerlink" href="#merge-join-and-concatenate" title="Permalink to this headline">¶</a></h1>
+<p>pandas provides various facilities for easily combining together Series,
+DataFrame, and Panel objects with various kinds of set logic for the indexes
+and relational algebra functionality in the case of join / merge-type
+operations.</p>
+<div class="section" id="concatenating-objects">
+<span id="merging-concat"></span><h2>Concatenating objects<a class="headerlink" href="#concatenating-objects" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">concat</span></code> function (in the main pandas namespace) does all of the heavy
+lifting of performing concatenation operations along an axis while performing
+optional set logic (union or intersection) of the indexes (if any) on the other
+axes. Note that I say &#8220;if any&#8221; because there is only a single possible axis of
+concatenation for Series.</p>
+<p>Before diving into all of the details of <code class="docutils literal"><span class="pre">concat</span></code> and what it can do, here is
+a simple example:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">df1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;A0&#39;</span><span class="p">,</span> <span class="s1">&#39;A1&#39;</span><span class="p">,</span> <span class="s1">&#39;A2&#39;</span><span class="p">,</span> <span class="s1">&#39;A3&#39;</span><span class="p">],</span>
+<span class="gp">   ...: </span>                    <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;B0&#39;</span><span class="p">,</span> <span class="s1">&#39;B1&#39;</span><span class="p">,</span> <span class="s1">&#39;B2&#39;</span><span class="p">,</span> <span class="s1">&#39;B3&#39;</span><span class="p">],</span>
+<span class="gp">   ...: </span>                    <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;C0&#39;</span><span class="p">,</span> <span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="s1">&#39;C2&#39;</span><span class="p">,</span> <span class="s1">&#39;C3&#39;</span><span class="p">],</span>
+<span class="gp">   ...: </span>                    <span class="s1">&#39;D&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;D0&#39;</span><span class="p">,</span> <span class="s1">&#39;D1&#39;</span><span class="p">,</span> <span class="s1">&#39;D2&#39;</span><span class="p">,</span> <span class="s1">&#39;D3&#39;</span><span class="p">]},</span>
+<span class="gp">   ...: </span>                    <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [2]: </span><span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;A4&#39;</span><span class="p">,</span> <span class="s1">&#39;A5&#39;</span><span class="p">,</span> <span class="s1">&#39;A6&#39;</span><span class="p">,</span> <span class="s1">&#39;A7&#39;</span><span class="p">],</span>
+<span class="gp">   ...: </span>                    <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;B4&#39;</span><span class="p">,</span> <span class="s1">&#39;B5&#39;</span><span class="p">,</span> <span class="s1">&#39;B6&#39;</span><span class="p">,</span> <span class="s1">&#39;B7&#39;</span><span class="p">],</span>
+<span class="gp">   ...: </span>                    <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;C4&#39;</span><span class="p">,</span> <span class="s1">&#39;C5&#39;</span><span class="p">,</span> <span class="s1">&#39;C6&#39;</span><span class="p">,</span> <span class="s1">&#39;C7&#39;</span><span class="p">],</span>
+<span class="gp">   ...: </span>                    <span class="s1">&#39;D&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;D4&#39;</span><span class="p">,</span> <span class="s1">&#39;D5&#39;</span><span class="p">,</span> <span class="s1">&#39;D6&#39;</span><span class="p">,</span> <span class="s1">&#39;D7&#39;</span><span class="p">]},</span>
+<span class="gp">   ...: </span>                     <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">])</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [3]: </span><span class="n">df3</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;A8&#39;</span><span class="p">,</span> <span class="s1">&#39;A9&#39;</span><span class="p">,</span> <span class="s1">&#39;A10&#39;</span><span class="p">,</span> <span class="s1">&#39;A11&#39;</span><span class="p">],</span>
+<span class="gp">   ...: </span>                    <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;B8&#39;</span><span class="p">,</span> <span class="s1">&#39;B9&#39;</span><span class="p">,</span> <span class="s1">&#39;B10&#39;</span><span class="p">,</span> <span class="s1">&#39;B11&#39;</span><span class="p">],</span>
+<span class="gp">   ...: </span>                    <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;C8&#39;</span><span class="p">,</span> <span class="s1">&#39;C9&#39;</span><span class="p">,</span> <span class="s1">&#39;C10&#39;</span><span class="p">,</span> <span class="s1">&#39;C11&#39;</span><span class="p">],</span>
+<span class="gp">   ...: </span>                    <span class="s1">&#39;D&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;D8&#39;</span><span class="p">,</span> <span class="s1">&#39;D9&#39;</span><span class="p">,</span> <span class="s1">&#39;D10&#39;</span><span class="p">,</span> <span class="s1">&#39;D11&#39;</span><span class="p">]},</span>
+<span class="gp">   ...: </span>                    <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">])</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [4]: </span><span class="n">frames</span> <span class="o">=</span> <span class="p">[</span><span class="n">df1</span><span class="p">,</span> <span class="n">df2</span><span class="p">,</span> <span class="n">df3</span><span class="p">]</span>
+
+<span class="gp">In [5]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">frames</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_concat_basic.png" src="_images/merging_concat_basic.png" />
+<p>Like its sibling function on ndarrays, <code class="docutils literal"><span class="pre">numpy.concatenate</span></code>, <code class="docutils literal"><span class="pre">pandas.concat</span></code>
+takes a list or dict of homogeneously-typed objects and concatenates them with
+some configurable handling of &#8220;what to do with the other axes&#8221;:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">objs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">join</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">,</span> <span class="n">join_axes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+          <span class="n">keys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verify_integrity</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+          <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">objs</span></code> : a sequence or mapping of Series, DataFrame, or Panel objects. If a
+dict is passed, the sorted keys will be used as the <cite>keys</cite> argument, unless
+it is passed, in which case the values will be selected (see below). Any None
+objects will be dropped silently unless they are all None in which case a
+ValueError will be raised.</li>
+<li><code class="docutils literal"><span class="pre">axis</span></code> : {0, 1, ...}, default 0. The axis to concatenate along.</li>
+<li><code class="docutils literal"><span class="pre">join</span></code> : {&#8216;inner&#8217;, &#8216;outer&#8217;}, default &#8216;outer&#8217;. How to handle indexes on
+other axis(es). Outer for union and inner for intersection.</li>
+<li><code class="docutils literal"><span class="pre">ignore_index</span></code> : boolean, default False. If True, do not use the index
+values on the concatenation axis. The resulting axis will be labeled 0, ...,
+n - 1. This is useful if you are concatenating objects where the
+concatenation axis does not have meaningful indexing information. Note
+the index values on the other axes are still respected in the join.</li>
+<li><code class="docutils literal"><span class="pre">join_axes</span></code> : list of Index objects. Specific indexes to use for the other
+n - 1 axes instead of performing inner/outer set logic.</li>
+<li><code class="docutils literal"><span class="pre">keys</span></code> : sequence, default None. Construct hierarchical index using the
+passed keys as the outermost level. If multiple levels passed, should
+contain tuples.</li>
+<li><code class="docutils literal"><span class="pre">levels</span></code> : list of sequences, default None. Specific levels (unique values)
+to use for constructing a MultiIndex. Otherwise they will be inferred from the
+keys.</li>
+<li><code class="docutils literal"><span class="pre">names</span></code> : list, default None. Names for the levels in the resulting
+hierarchical index.</li>
+<li><code class="docutils literal"><span class="pre">verify_integrity</span></code> : boolean, default False. Check whether the new
+concatenated axis contains duplicates. This can be very expensive relative
+to the actual data concatenation.</li>
+<li><code class="docutils literal"><span class="pre">copy</span></code> : boolean, default True. If False, do not copy data unnecessarily.</li>
+</ul>
+<p>Without a little bit of context and example many of these arguments don&#8217;t make
+much sense. Let&#8217;s take the above example. Suppose we wanted to associate
+specific keys with each of the pieces of the chopped up DataFrame. We can do
+this using the <code class="docutils literal"><span class="pre">keys</span></code> argument:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">frames</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_concat_keys.png" src="_images/merging_concat_keys.png" />
+<p>As you can see (if you&#8217;ve read the rest of the documentation), the resulting
+object&#8217;s index has a <a class="reference internal" href="advanced.html#advanced-hierarchical"><span class="std std-ref">hierarchical index</span></a>. This
+means that we can now do stuff like select out each chunk by key:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">result</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+<span class="gh">Out[7]: </span><span class="go"></span>
+<span class="go">    A   B   C   D</span>
+<span class="go">4  A4  B4  C4  D4</span>
+<span class="go">5  A5  B5  C5  D5</span>
+<span class="go">6  A6  B6  C6  D6</span>
+<span class="go">7  A7  B7  C7  D7</span>
+</pre></div>
+</div>
+<p>It&#8217;s not a stretch to see how this can be very useful. More detail on this
+functionality below.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It is worth noting however, that <code class="docutils literal"><span class="pre">concat</span></code> (and therefore <code class="docutils literal"><span class="pre">append</span></code>) makes
+a full copy of the data, and that constantly reusing this function can
+create a significant performance hit. If you need to use the operation over
+several datasets, use a list comprehension.</p>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">frames</span> <span class="o">=</span> <span class="p">[</span> <span class="n">process_your_file</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span> <span class="p">]</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">frames</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="set-logic-on-the-other-axes">
+<h3>Set logic on the other axes<a class="headerlink" href="#set-logic-on-the-other-axes" title="Permalink to this headline">¶</a></h3>
+<p>When gluing together multiple DataFrames (or Panels or...), for example, you
+have a choice of how to handle the other axes (other than the one being
+concatenated). This can be done in three ways:</p>
+<ul class="simple">
+<li>Take the (sorted) union of them all, <code class="docutils literal"><span class="pre">join='outer'</span></code>. This is the default
+option as it results in zero information loss.</li>
+<li>Take the intersection, <code class="docutils literal"><span class="pre">join='inner'</span></code>.</li>
+<li>Use a specific index (in the case of DataFrame) or indexes (in the case of
+Panel or future higher dimensional objects), i.e. the <code class="docutils literal"><span class="pre">join_axes</span></code> argument</li>
+</ul>
+<p>Here is a example of each of these methods. First, the default <code class="docutils literal"><span class="pre">join='outer'</span></code>
+behavior:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="n">df4</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;B2&#39;</span><span class="p">,</span> <span class="s1">&#39;B3&#39;</span><span class="p">,</span> <span class="s1">&#39;B6&#39;</span><span class="p">,</span> <span class="s1">&#39;B7&#39;</span><span class="p">],</span>
+<span class="gp">   ...: </span>                 <span class="s1">&#39;D&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;D2&#39;</span><span class="p">,</span> <span class="s1">&#39;D3&#39;</span><span class="p">,</span> <span class="s1">&#39;D6&#39;</span><span class="p">,</span> <span class="s1">&#39;D7&#39;</span><span class="p">],</span>
+<span class="gp">   ...: </span>                 <span class="s1">&#39;F&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;F2&#39;</span><span class="p">,</span> <span class="s1">&#39;F3&#39;</span><span class="p">,</span> <span class="s1">&#39;F6&#39;</span><span class="p">,</span> <span class="s1">&#39;F7&#39;</span><span class="p">]},</span>
+<span class="gp">   ...: </span>                <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">])</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [9]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df1</span><span class="p">,</span> <span class="n">df4</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_concat_axis1.png" src="_images/merging_concat_axis1.png" />
+<p>Note that the row indexes have been unioned and sorted. Here is the same thing
+with <code class="docutils literal"><span class="pre">join='inner'</span></code>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df1</span><span class="p">,</span> <span class="n">df4</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">join</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_concat_axis1_inner.png" src="_images/merging_concat_axis1_inner.png" />
+<p>Lastly, suppose we just wanted to reuse the <em>exact index</em> from the original
+DataFrame:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [11]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df1</span><span class="p">,</span> <span class="n">df4</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">join_axes</span><span class="o">=</span><span class="p">[</span><span class="n">df1</span><span class="o">.</span><span class="n">index</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_concat_axis1_join_axes.png" src="_images/merging_concat_axis1_join_axes.png" />
+</div>
+<div class="section" id="concatenating-using-append">
+<span id="merging-concatenation"></span><h3>Concatenating using <code class="docutils literal"><span class="pre">append</span></code><a class="headerlink" href="#concatenating-using-append" title="Permalink to this headline">¶</a></h3>
+<p>A useful shortcut to <code class="docutils literal"><span class="pre">concat</span></code> are the <code class="docutils literal"><span class="pre">append</span></code> instance methods on Series
+and DataFrame. These methods actually predated <code class="docutils literal"><span class="pre">concat</span></code>. They concatenate
+along <code class="docutils literal"><span class="pre">axis=0</span></code>, namely the index:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [12]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">df1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df2</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_append1.png" src="_images/merging_append1.png" />
+<p>In the case of DataFrame, the indexes must be disjoint but the columns do not
+need to be:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [13]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">df1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df4</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_append2.png" src="_images/merging_append2.png" />
+<p><code class="docutils literal"><span class="pre">append</span></code> may take multiple objects to concatenate:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [14]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">df1</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">df2</span><span class="p">,</span> <span class="n">df3</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_append3.png" src="_images/merging_append3.png" />
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Unlike <cite>list.append</cite> method, which appends to the original list and
+returns nothing, <code class="docutils literal"><span class="pre">append</span></code> here <strong>does not</strong> modify <code class="docutils literal"><span class="pre">df1</span></code> and
+returns its copy with <code class="docutils literal"><span class="pre">df2</span></code> appended.</p>
+</div>
+</div>
+<div class="section" id="ignoring-indexes-on-the-concatenation-axis">
+<span id="merging-ignore-index"></span><h3>Ignoring indexes on the concatenation axis<a class="headerlink" href="#ignoring-indexes-on-the-concatenation-axis" title="Permalink to this headline">¶</a></h3>
+<p>For DataFrames which don&#8217;t have a meaningful index, you may wish to append them
+and ignore the fact that they may have overlapping indexes:</p>
+<p>To do this, use the <code class="docutils literal"><span class="pre">ignore_index</span></code> argument:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [15]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df1</span><span class="p">,</span> <span class="n">df4</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_concat_ignore_index.png" src="_images/merging_concat_ignore_index.png" />
+<p>This is also a valid argument to <code class="docutils literal"><span class="pre">DataFrame.append</span></code>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [16]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">df1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df4</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_append_ignore_index.png" src="_images/merging_append_ignore_index.png" />
+</div>
+<div class="section" id="concatenating-with-mixed-ndims">
+<span id="merging-mixed-ndims"></span><h3>Concatenating with mixed ndims<a class="headerlink" href="#concatenating-with-mixed-ndims" title="Permalink to this headline">¶</a></h3>
+<p>You can concatenate a mix of Series and DataFrames. The
+Series will be transformed to DataFrames with the column name as
+the name of the Series.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [17]: </span><span class="n">s1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;X0&#39;</span><span class="p">,</span> <span class="s1">&#39;X1&#39;</span><span class="p">,</span> <span class="s1">&#39;X2&#39;</span><span class="p">,</span> <span class="s1">&#39;X3&#39;</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;X&#39;</span><span class="p">)</span>
+
+<span class="gp">In [18]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df1</span><span class="p">,</span> <span class="n">s1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_concat_mixed_ndim.png" src="_images/merging_concat_mixed_ndim.png" />
+<p>If unnamed Series are passed they will be numbered consecutively.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [19]: </span><span class="n">s2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;_0&#39;</span><span class="p">,</span> <span class="s1">&#39;_1&#39;</span><span class="p">,</span> <span class="s1">&#39;_2&#39;</span><span class="p">,</span> <span class="s1">&#39;_3&#39;</span><span class="p">])</span>
+
+<span class="gp">In [20]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">s2</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_concat_unnamed_series.png" src="_images/merging_concat_unnamed_series.png" />
+<p>Passing <code class="docutils literal"><span class="pre">ignore_index=True</span></code> will drop all name references.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [21]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df1</span><span class="p">,</span> <span class="n">s1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_concat_series_ignore_index.png" src="_images/merging_concat_series_ignore_index.png" />
+</div>
+<div class="section" id="more-concatenating-with-group-keys">
+<h3>More concatenating with group keys<a class="headerlink" href="#more-concatenating-with-group-keys" title="Permalink to this headline">¶</a></h3>
+<p>A fairly common use of the <code class="docutils literal"><span class="pre">keys</span></code> argument is to override the column names when creating a new DataFrame based on existing Series.
+Notice how the default behaviour consists on letting the resulting DataFrame inherits the parent Series&#8217; name, when these existed.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [22]: </span><span class="n">s3</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+
+<span class="gp">In [23]: </span><span class="n">s4</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+
+<span class="gp">In [24]: </span><span class="n">s5</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+
+<span class="gp">In [25]: </span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">s3</span><span class="p">,</span> <span class="n">s4</span><span class="p">,</span> <span class="n">s5</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gh">Out[25]: </span><span class="go"></span>
+<span class="go">   foo  0  1</span>
+<span class="go">0    0  0  0</span>
+<span class="go">1    1  1  1</span>
+<span class="go">2    2  2  4</span>
+<span class="go">3    3  3  5</span>
+</pre></div>
+</div>
+<p>Through the <code class="docutils literal"><span class="pre">keys</span></code> argument we can override the existing column names.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [26]: </span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">s3</span><span class="p">,</span> <span class="n">s4</span><span class="p">,</span> <span class="n">s5</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">,</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span><span class="s1">&#39;yellow&#39;</span><span class="p">])</span>
+<span class="gh">Out[26]: </span><span class="go"></span>
+<span class="go">   red  blue  yellow</span>
+<span class="go">0    0     0       0</span>
+<span class="go">1    1     1       1</span>
+<span class="go">2    2     2       4</span>
+<span class="go">3    3     3       5</span>
+</pre></div>
+</div>
+<p>Let&#8217;s consider now a variation on the very first example presented:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [27]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">frames</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_concat_group_keys2.png" src="_images/merging_concat_group_keys2.png" />
+<p>You can also pass a dict to <code class="docutils literal"><span class="pre">concat</span></code> in which case the dict keys will be used
+for the <code class="docutils literal"><span class="pre">keys</span></code> argument (unless other keys are specified):</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [28]: </span><span class="n">pieces</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">df1</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">df2</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="n">df3</span><span class="p">}</span>
+
+<span class="gp">In [29]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">pieces</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_concat_dict.png" src="_images/merging_concat_dict.png" />
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [30]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">pieces</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_concat_dict_keys.png" src="_images/merging_concat_dict_keys.png" />
+<p>The MultiIndex created has levels that are constructed from the passed keys and
+the index of the DataFrame pieces:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [31]: </span><span class="n">result</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">levels</span>
+<span class="gh">Out[31]: </span><span class="go">FrozenList([[&#39;z&#39;, &#39;y&#39;], [4, 5, 6, 7, 8, 9, 10, 11]])</span>
+</pre></div>
+</div>
+<p>If you wish to specify other levels (as will occasionally be the case), you can
+do so using the <code class="docutils literal"><span class="pre">levels</span></code> argument:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [32]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">pieces</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                <span class="n">levels</span><span class="o">=</span><span class="p">[[</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">]],</span>
+<span class="gp">   ....: </span>                <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;group_key&#39;</span><span class="p">])</span>
+<span class="gp">   ....: </span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_concat_dict_keys_names.png" src="_images/merging_concat_dict_keys_names.png" />
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [33]: </span><span class="n">result</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">levels</span>
+<span class="gh">Out[33]: </span><span class="go">FrozenList([[&#39;z&#39;, &#39;y&#39;, &#39;x&#39;, &#39;w&#39;], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]])</span>
+</pre></div>
+</div>
+<p>Yes, this is fairly esoteric, but is actually necessary for implementing things
+like GroupBy where the order of a categorical variable is meaningful.</p>
+</div>
+<div class="section" id="appending-rows-to-a-dataframe">
+<span id="merging-append-row"></span><h3>Appending rows to a DataFrame<a class="headerlink" href="#appending-rows-to-a-dataframe" title="Permalink to this headline">¶</a></h3>
+<p>While not especially efficient (since a new object must be created), you can
+append a single row to a DataFrame by passing a Series or dict to <code class="docutils literal"><span class="pre">append</span></code>,
+which returns a new DataFrame as above.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [34]: </span><span class="n">s2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;X0&#39;</span><span class="p">,</span> <span class="s1">&#39;X1&#39;</span><span class="p">,</span> <span class="s1">&#39;X2&#39;</span><span class="p">,</span> <span class="s1">&#39;X3&#39;</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">])</span>
+
+<span class="gp">In [35]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">df1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s2</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_append_series_as_row.png" src="_images/merging_append_series_as_row.png" />
+<p>You should use <code class="docutils literal"><span class="pre">ignore_index</span></code> with this method to instruct DataFrame to
+discard its index. If you wish to preserve the index, you should construct an
+appropriately-indexed DataFrame and append or concatenate those objects.</p>
+<p>You can also pass a list of dicts or Series:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [36]: </span><span class="n">dicts</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;X&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">},</span>
+<span class="gp">   ....: </span>         <span class="p">{</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">}]</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [37]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">df1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dicts</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_append_dits.png" src="_images/merging_append_dits.png" />
+</div>
+</div>
+<div class="section" id="database-style-dataframe-joining-merging">
+<span id="merging-join"></span><h2>Database-style DataFrame joining/merging<a class="headerlink" href="#database-style-dataframe-joining-merging" title="Permalink to this headline">¶</a></h2>
+<p>pandas has full-featured, <strong>high performance</strong> in-memory join operations
+idiomatically very similar to relational databases like SQL. These methods
+perform significantly better (in some cases well over an order of magnitude
+better) than other open source implementations (like <code class="docutils literal"><span class="pre">base::merge.data.frame</span></code>
+in R). The reason for this is careful algorithmic design and internal layout of
+the data in DataFrame.</p>
+<p>See the <a class="reference internal" href="cookbook.html#cookbook-merge"><span class="std std-ref">cookbook</span></a> for some advanced strategies.</p>
+<p>Users who are familiar with SQL but new to pandas might be interested in a
+<a class="reference internal" href="comparison_with_sql.html#compare-with-sql-join"><span class="std std-ref">comparison with SQL</span></a>.</p>
+<p>pandas provides a single function, <code class="docutils literal"><span class="pre">merge</span></code>, as the entry point for all
+standard database join operations between DataFrame objects:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+         <span class="n">left_index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">right_index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+         <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;_x&#39;</span><span class="p">,</span> <span class="s1">&#39;_y&#39;</span><span class="p">),</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">indicator</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+         <span class="n">validate</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul>
+<li><p class="first"><code class="docutils literal"><span class="pre">left</span></code>: A DataFrame object</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">right</span></code>: Another DataFrame object</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">on</span></code>: Columns (names) to join on. Must be found in both the left and
+right DataFrame objects. If not passed and <code class="docutils literal"><span class="pre">left_index</span></code> and
+<code class="docutils literal"><span class="pre">right_index</span></code> are <code class="docutils literal"><span class="pre">False</span></code>, the intersection of the columns in the
+DataFrames will be inferred to be the join keys</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">left_on</span></code>: Columns from the left DataFrame to use as keys. Can either be
+column names or arrays with length equal to the length of the DataFrame</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">right_on</span></code>: Columns from the right DataFrame to use as keys. Can either be
+column names or arrays with length equal to the length of the DataFrame</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">left_index</span></code>: If <code class="docutils literal"><span class="pre">True</span></code>, use the index (row labels) from the left
+DataFrame as its join key(s). In the case of a DataFrame with a MultiIndex
+(hierarchical), the number of levels must match the number of join keys
+from the right DataFrame</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">right_index</span></code>: Same usage as <code class="docutils literal"><span class="pre">left_index</span></code> for the right DataFrame</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">how</span></code>: One of <code class="docutils literal"><span class="pre">'left'</span></code>, <code class="docutils literal"><span class="pre">'right'</span></code>, <code class="docutils literal"><span class="pre">'outer'</span></code>, <code class="docutils literal"><span class="pre">'inner'</span></code>. Defaults
+to <code class="docutils literal"><span class="pre">inner</span></code>. See below for more detailed description of each method</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">sort</span></code>: Sort the result DataFrame by the join keys in lexicographical
+order. Defaults to <code class="docutils literal"><span class="pre">True</span></code>, setting to <code class="docutils literal"><span class="pre">False</span></code> will improve performance
+substantially in many cases</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">suffixes</span></code>: A tuple of string suffixes to apply to overlapping
+columns. Defaults to <code class="docutils literal"><span class="pre">('_x',</span> <span class="pre">'_y')</span></code>.</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">copy</span></code>: Always copy data (default <code class="docutils literal"><span class="pre">True</span></code>) from the passed DataFrame
+objects, even when reindexing is not necessary. Cannot be avoided in many
+cases but may improve performance / memory usage. The cases where copying
+can be avoided are somewhat pathological but this option is provided
+nonetheless.</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">indicator</span></code>: Add a column to the output DataFrame called <code class="docutils literal"><span class="pre">_merge</span></code>
+with information on the source of each row. <code class="docutils literal"><span class="pre">_merge</span></code> is Categorical-type
+and takes on a value of <code class="docutils literal"><span class="pre">left_only</span></code> for observations whose merge key
+only appears in <code class="docutils literal"><span class="pre">'left'</span></code> DataFrame, <code class="docutils literal"><span class="pre">right_only</span></code> for observations whose
+merge key only appears in <code class="docutils literal"><span class="pre">'right'</span></code> DataFrame, and <code class="docutils literal"><span class="pre">both</span></code> if the
+observation&#8217;s merge key is found in both.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.17.0.</span></p>
+</div>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">validate</span></code> : string, default None.
+If specified, checks if merge is of specified type.</p>
+<ul class="simple">
+<li>&#8220;one_to_one&#8221; or &#8220;1:1&#8221;: checks if merge keys are unique in both
+left and right datasets.</li>
+<li>&#8220;one_to_many&#8221; or &#8220;1:m&#8221;: checks if merge keys are unique in left
+dataset.</li>
+<li>&#8220;many_to_one&#8221; or &#8220;m:1&#8221;: checks if merge keys are unique in right
+dataset.</li>
+<li>&#8220;many_to_many&#8221; or &#8220;m:m&#8221;: allowed, but does not result in checks.</li>
+</ul>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.21.0.</span></p>
+</div>
+</li>
+</ul>
+<p>The return type will be the same as <code class="docutils literal"><span class="pre">left</span></code>. If <code class="docutils literal"><span class="pre">left</span></code> is a <code class="docutils literal"><span class="pre">DataFrame</span></code>
+and <code class="docutils literal"><span class="pre">right</span></code> is a subclass of DataFrame, the return type will still be
+<code class="docutils literal"><span class="pre">DataFrame</span></code>.</p>
+<p><code class="docutils literal"><span class="pre">merge</span></code> is a function in the pandas namespace, and it is also available as a
+DataFrame instance method, with the calling DataFrame being implicitly
+considered the left object in the join.</p>
+<p>The related <code class="docutils literal"><span class="pre">DataFrame.join</span></code> method, uses <code class="docutils literal"><span class="pre">merge</span></code> internally for the
+index-on-index (by default) and column(s)-on-index join. If you are joining on
+index only, you may wish to use <code class="docutils literal"><span class="pre">DataFrame.join</span></code> to save yourself some typing.</p>
+<div class="section" id="brief-primer-on-merge-methods-relational-algebra">
+<h3>Brief primer on merge methods (relational algebra)<a class="headerlink" href="#brief-primer-on-merge-methods-relational-algebra" title="Permalink to this headline">¶</a></h3>
+<p>Experienced users of relational databases like SQL will be familiar with the
+terminology used to describe join operations between two SQL-table like
+structures (DataFrame objects). There are several cases to consider which are
+very important to understand:</p>
+<ul class="simple">
+<li><strong>one-to-one</strong> joins: for example when joining two DataFrame objects on
+their indexes (which must contain unique values)</li>
+<li><strong>many-to-one</strong> joins: for example when joining an index (unique) to one or
+more columns in a DataFrame</li>
+<li><strong>many-to-many</strong> joins: joining columns on columns.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When joining columns on columns (potentially a many-to-many join), any
+indexes on the passed DataFrame objects <strong>will be discarded</strong>.</p>
+</div>
+<p>It is worth spending some time understanding the result of the <strong>many-to-many</strong>
+join case. In SQL / standard relational algebra, if a key combination appears
+more than once in both tables, the resulting table will have the <strong>Cartesian
+product</strong> of the associated data. Here is a very basic example with one unique
+key combination:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [38]: </span><span class="n">left</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;key&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K1&#39;</span><span class="p">,</span> <span class="s1">&#39;K2&#39;</span><span class="p">,</span> <span class="s1">&#39;K3&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                     <span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;A0&#39;</span><span class="p">,</span> <span class="s1">&#39;A1&#39;</span><span class="p">,</span> <span class="s1">&#39;A2&#39;</span><span class="p">,</span> <span class="s1">&#39;A3&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                     <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;B0&#39;</span><span class="p">,</span> <span class="s1">&#39;B1&#39;</span><span class="p">,</span> <span class="s1">&#39;B2&#39;</span><span class="p">,</span> <span class="s1">&#39;B3&#39;</span><span class="p">]})</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [39]: </span><span class="n">right</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;key&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K1&#39;</span><span class="p">,</span> <span class="s1">&#39;K2&#39;</span><span class="p">,</span> <span class="s1">&#39;K3&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                      <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;C0&#39;</span><span class="p">,</span> <span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="s1">&#39;C2&#39;</span><span class="p">,</span> <span class="s1">&#39;C3&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                      <span class="s1">&#39;D&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;D0&#39;</span><span class="p">,</span> <span class="s1">&#39;D1&#39;</span><span class="p">,</span> <span class="s1">&#39;D2&#39;</span><span class="p">,</span> <span class="s1">&#39;D3&#39;</span><span class="p">]})</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [40]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;key&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_merge_on_key.png" src="_images/merging_merge_on_key.png" />
+<p>Here is a more complicated example with multiple join keys:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [41]: </span><span class="n">left</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;key1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K1&#39;</span><span class="p">,</span> <span class="s1">&#39;K2&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                     <span class="s1">&#39;key2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K1&#39;</span><span class="p">,</span> <span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K1&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                     <span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;A0&#39;</span><span class="p">,</span> <span class="s1">&#39;A1&#39;</span><span class="p">,</span> <span class="s1">&#39;A2&#39;</span><span class="p">,</span> <span class="s1">&#39;A3&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                     <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;B0&#39;</span><span class="p">,</span> <span class="s1">&#39;B1&#39;</span><span class="p">,</span> <span class="s1">&#39;B2&#39;</span><span class="p">,</span> <span class="s1">&#39;B3&#39;</span><span class="p">]})</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [42]: </span><span class="n">right</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;key1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K1&#39;</span><span class="p">,</span> <span class="s1">&#39;K1&#39;</span><span class="p">,</span> <span class="s1">&#39;K2&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                      <span class="s1">&#39;key2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K0&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                      <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;C0&#39;</span><span class="p">,</span> <span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="s1">&#39;C2&#39;</span><span class="p">,</span> <span class="s1">&#39;C3&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                      <span class="s1">&#39;D&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;D0&#39;</span><span class="p">,</span> <span class="s1">&#39;D1&#39;</span><span class="p">,</span> <span class="s1">&#39;D2&#39;</span><span class="p">,</span> <span class="s1">&#39;D3&#39;</span><span class="p">]})</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [43]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;key1&#39;</span><span class="p">,</span> <span class="s1">&#39;key2&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_merge_on_key_multiple.png" src="_images/merging_merge_on_key_multiple.png" />
+<p>The <code class="docutils literal"><span class="pre">how</span></code> argument to <code class="docutils literal"><span class="pre">merge</span></code> specifies how to determine which keys are to
+be included in the resulting table. If a key combination <strong>does not appear</strong> in
+either the left or right tables, the values in the joined table will be
+<code class="docutils literal"><span class="pre">NA</span></code>. Here is a summary of the <code class="docutils literal"><span class="pre">how</span></code> options and their SQL equivalent names:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="20%" />
+<col width="60%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Merge method</th>
+<th class="head">SQL Join Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">left</span></code></td>
+<td><code class="docutils literal"><span class="pre">LEFT</span> <span class="pre">OUTER</span> <span class="pre">JOIN</span></code></td>
+<td>Use keys from left frame only</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">right</span></code></td>
+<td><code class="docutils literal"><span class="pre">RIGHT</span> <span class="pre">OUTER</span> <span class="pre">JOIN</span></code></td>
+<td>Use keys from right frame only</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">outer</span></code></td>
+<td><code class="docutils literal"><span class="pre">FULL</span> <span class="pre">OUTER</span> <span class="pre">JOIN</span></code></td>
+<td>Use union of keys from both frames</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">inner</span></code></td>
+<td><code class="docutils literal"><span class="pre">INNER</span> <span class="pre">JOIN</span></code></td>
+<td>Use intersection of keys from both frames</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [44]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;key1&#39;</span><span class="p">,</span> <span class="s1">&#39;key2&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_merge_on_key_left.png" src="_images/merging_merge_on_key_left.png" />
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [45]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;key1&#39;</span><span class="p">,</span> <span class="s1">&#39;key2&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_merge_on_key_right.png" src="_images/merging_merge_on_key_right.png" />
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [46]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;key1&#39;</span><span class="p">,</span> <span class="s1">&#39;key2&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_merge_on_key_outer.png" src="_images/merging_merge_on_key_outer.png" />
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [47]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;key1&#39;</span><span class="p">,</span> <span class="s1">&#39;key2&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_merge_on_key_inner.png" src="_images/merging_merge_on_key_inner.png" />
+<p>Here is another example with duplicate join keys in DataFrames:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [48]: </span><span class="n">left</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;B&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]})</span>
+
+<span class="gp">In [49]: </span><span class="n">right</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">],</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]})</span>
+
+<span class="gp">In [50]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_merge_on_key_dup.png" src="_images/merging_merge_on_key_dup.png" />
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Joining / merging on duplicate keys can cause a returned frame that is the multiplication of the row dimensions, which may result in memory overflow. It is the user&#8217; s responsibility to manage duplicate values in keys before joining large DataFrames.</p>
+</div>
+</div>
+<div class="section" id="checking-for-duplicate-keys">
+<span id="merging-validation"></span><h3>Checking for duplicate keys<a class="headerlink" href="#checking-for-duplicate-keys" title="Permalink to this headline">¶</a></h3>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.21.0.</span></p>
+</div>
+<p>Users can use the <code class="docutils literal"><span class="pre">validate</span></code> argument to automatically check whether there are unexpected duplicates in their merge keys. Key uniqueness is checked before merge operations and so should protect against memory overflows. Checking key uniqueness is also a good way to ensure user data structures are as expected.</p>
+<p>In the following example, there are duplicate values of <code class="docutils literal"><span class="pre">B</span></code> in the right DataFrame. As this is not a one-to-one merge &#8211; as specified in the <code class="docutils literal"><span class="pre">validate</span></code> argument &#8211; an exception will be raised.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [51]: </span><span class="n">left</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;B&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]})</span>
+
+<span class="gp">In [52]: </span><span class="n">right</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">],</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]})</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [53]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="s2">&quot;one_to_one&quot;</span><span class="p">)</span>
+<span class="go">...</span>
+<span class="go">MergeError: Merge keys are not unique in right dataset; not a one-to-one merge</span>
+</pre></div>
+</div>
+<p>If the user is aware of the duplicates in the right <cite>DataFrame</cite> but wants to ensure there are no duplicates in the left DataFrame, one can use the <cite>validate=&#8217;one_to_many&#8217;</cite> argument instead, which will not raise an exception.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [53]: </span><span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="s2">&quot;one_to_many&quot;</span><span class="p">)</span>
+<span class="gh">Out[53]: </span><span class="go"></span>
+<span class="go">   A_x  B  A_y</span>
+<span class="go">0    1  1  NaN</span>
+<span class="go">1    2  2  4.0</span>
+<span class="go">2    2  2  5.0</span>
+<span class="go">3    2  2  6.0</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-merge-indicator">
+<span id="merging-indicator"></span><h3>The merge indicator<a class="headerlink" href="#the-merge-indicator" title="Permalink to this headline">¶</a></h3>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.17.0.</span></p>
+</div>
+<p><code class="docutils literal"><span class="pre">merge</span></code> now accepts the argument <code class="docutils literal"><span class="pre">indicator</span></code>. If <code class="docutils literal"><span class="pre">True</span></code>, a Categorical-type column called <code class="docutils literal"><span class="pre">_merge</span></code> will be added to the output object that takes on values:</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="69%" />
+<col width="31%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Observation Origin</th>
+<th class="head"><code class="docutils literal"><span class="pre">_merge</span></code> value</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Merge key only in <code class="docutils literal"><span class="pre">'left'</span></code> frame</td>
+<td><code class="docutils literal"><span class="pre">left_only</span></code></td>
+</tr>
+<tr class="row-odd"><td>Merge key only in <code class="docutils literal"><span class="pre">'right'</span></code> frame</td>
+<td><code class="docutils literal"><span class="pre">right_only</span></code></td>
+</tr>
+<tr class="row-even"><td>Merge key in both frames</td>
+<td><code class="docutils literal"><span class="pre">both</span></code></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [54]: </span><span class="n">df1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;col1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;col_left&#39;</span><span class="p">:[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">]})</span>
+
+<span class="gp">In [55]: </span><span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;col1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span><span class="s1">&#39;col_right&#39;</span><span class="p">:[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]})</span>
+
+<span class="gp">In [56]: </span><span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df1</span><span class="p">,</span> <span class="n">df2</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;col1&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">,</span> <span class="n">indicator</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gh">Out[56]: </span><span class="go"></span>
+<span class="go">   col1 col_left  col_right      _merge</span>
+<span class="go">0     0        a        NaN   left_only</span>
+<span class="go">1     1        b        2.0        both</span>
+<span class="go">2     2      NaN        2.0  right_only</span>
+<span class="go">3     2      NaN        2.0  right_only</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">indicator</span></code> argument will also accept string arguments, in which case the indicator function will use the value of the passed string as the name for the indicator column.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [57]: </span><span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df1</span><span class="p">,</span> <span class="n">df2</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;col1&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">,</span> <span class="n">indicator</span><span class="o">=</span><span class="s1">&#39;indicator_column&#39;</span><span class="p">)</span>
+<span class="gh">Out[57]: </span><span class="go"></span>
+<span class="go">   col1 col_left  col_right indicator_column</span>
+<span class="go">0     0        a        NaN        left_only</span>
+<span class="go">1     1        b        2.0             both</span>
+<span class="go">2     2      NaN        2.0       right_only</span>
+<span class="go">3     2      NaN        2.0       right_only</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="merge-dtypes">
+<span id="merging-dtypes"></span><h3>Merge Dtypes<a class="headerlink" href="#merge-dtypes" title="Permalink to this headline">¶</a></h3>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.19.0.</span></p>
+</div>
+<p>Merging will preserve the dtype of the join keys.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [58]: </span><span class="n">left</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;key&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;v1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">]})</span>
+
+<span class="gp">In [59]: </span><span class="n">left</span>
+<span class="gh">Out[59]: </span><span class="go"></span>
+<span class="go">   key  v1</span>
+<span class="go">0    1  10</span>
+
+<span class="gp">In [60]: </span><span class="n">right</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;key&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;v1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">]})</span>
+
+<span class="gp">In [61]: </span><span class="n">right</span>
+<span class="gh">Out[61]: </span><span class="go"></span>
+<span class="go">   key  v1</span>
+<span class="go">0    1  20</span>
+<span class="go">1    2  30</span>
+</pre></div>
+</div>
+<p>We are able to preserve the join keys</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [62]: </span><span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">)</span>
+<span class="gh">Out[62]: </span><span class="go"></span>
+<span class="go">   key  v1</span>
+<span class="go">0    1  10</span>
+<span class="go">1    1  20</span>
+<span class="go">2    2  30</span>
+
+<span class="gp">In [63]: </span><span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">dtypes</span>
+<span class="go">                                                      Out[63]: </span>
+<span class="go">key    int64</span>
+<span class="go">v1     int64</span>
+<span class="go">dtype: object</span>
+</pre></div>
+</div>
+<p>Of course if you have missing values that are introduced, then the
+resulting dtype will be upcast.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [64]: </span><span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;key&#39;</span><span class="p">)</span>
+<span class="gh">Out[64]: </span><span class="go"></span>
+<span class="go">   key  v1_x  v1_y</span>
+<span class="go">0    1  10.0    20</span>
+<span class="go">1    2   NaN    30</span>
+
+<span class="gp">In [65]: </span><span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;key&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">dtypes</span>
+<span class="go">                                                                   Out[65]: </span>
+<span class="go">key       int64</span>
+<span class="go">v1_x    float64</span>
+<span class="go">v1_y      int64</span>
+<span class="go">dtype: object</span>
+</pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.20.0.</span></p>
+</div>
+<p>Merging will preserve <code class="docutils literal"><span class="pre">category</span></code> dtypes of the mergands. See also the section on <a class="reference internal" href="categorical.html#categorical-merge"><span class="std std-ref">categoricals</span></a></p>
+<p>The left frame.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [66]: </span><span class="kn">from</span> <span class="nn">pandas.api.types</span> <span class="kn">import</span> <span class="n">CategoricalDtype</span>
+
+<span class="gp">In [67]: </span><span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,)))</span>
+
+<span class="gp">In [68]: </span><span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">CategoricalDtype</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">]))</span>
+
+<span class="gp">In [69]: </span><span class="n">left</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;X&#39;</span><span class="p">:</span> <span class="n">X</span><span class="p">,</span>
+<span class="gp">   ....: </span>                     <span class="s1">&#39;Y&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s1">&#39;one&#39;</span><span class="p">,</span> <span class="s1">&#39;two&#39;</span><span class="p">,</span> <span class="s1">&#39;three&#39;</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,))})</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [70]: </span><span class="n">left</span>
+<span class="gh">Out[70]: </span><span class="go"></span>
+<span class="go">     X      Y</span>
+<span class="go">0  bar    one</span>
+<span class="go">1  foo    one</span>
+<span class="go">2  foo  three</span>
+<span class="go">3  bar  three</span>
+<span class="go">4  foo    one</span>
+<span class="go">5  bar    one</span>
+<span class="go">6  bar  three</span>
+<span class="go">7  bar  three</span>
+<span class="go">8  bar  three</span>
+<span class="go">9  foo  three</span>
+
+<span class="gp">In [71]: </span><span class="n">left</span><span class="o">.</span><span class="n">dtypes</span>
+<span class="go">                                                                                                                                                                    Out[71]: </span>
+<span class="go">X    category</span>
+<span class="go">Y      object</span>
+<span class="go">dtype: object</span>
+</pre></div>
+</div>
+<p>The right frame.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [72]: </span><span class="n">right</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">   ....: </span>     <span class="s1">&#39;X&#39;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                    <span class="n">dtype</span><span class="o">=</span><span class="n">CategoricalDtype</span><span class="p">([</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">])),</span>
+<span class="gp">   ....: </span>     <span class="s1">&#39;Z&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="gp">   ....: </span><span class="p">})</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [73]: </span><span class="n">right</span>
+<span class="gh">Out[73]: </span><span class="go"></span>
+<span class="go">     X  Z</span>
+<span class="go">0  foo  1</span>
+<span class="go">1  bar  2</span>
+
+<span class="gp">In [74]: </span><span class="n">right</span><span class="o">.</span><span class="n">dtypes</span>
+<span class="go">                                        Out[74]: </span>
+<span class="go">X    category</span>
+<span class="go">Z       int64</span>
+<span class="go">dtype: object</span>
+</pre></div>
+</div>
+<p>The merged result</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [75]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">)</span>
+
+<span class="gp">In [76]: </span><span class="n">result</span>
+<span class="gh">Out[76]: </span><span class="go"></span>
+<span class="go">     X      Y  Z</span>
+<span class="go">0  bar    one  2</span>
+<span class="go">1  bar  three  2</span>
+<span class="go">2  bar    one  2</span>
+<span class="go">3  bar  three  2</span>
+<span class="go">4  bar  three  2</span>
+<span class="go">5  bar  three  2</span>
+<span class="go">6  foo    one  1</span>
+<span class="go">7  foo  three  1</span>
+<span class="go">8  foo    one  1</span>
+<span class="go">9  foo  three  1</span>
+
+<span class="gp">In [77]: </span><span class="n">result</span><span class="o">.</span><span class="n">dtypes</span>
+<span class="go">                                                                                                                                                                                                     Out[77]: </span>
+<span class="go">X    category</span>
+<span class="go">Y      object</span>
+<span class="go">Z       int64</span>
+<span class="go">dtype: object</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The category dtypes must be <em>exactly</em> the same, meaning the same categories and the ordered attribute.
+Otherwise the result will coerce to <code class="docutils literal"><span class="pre">object</span></code> dtype.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Merging on <code class="docutils literal"><span class="pre">category</span></code> dtypes that are the same can be quite performant compared to <code class="docutils literal"><span class="pre">object</span></code> dtype merging.</p>
+</div>
+</div>
+<div class="section" id="joining-on-index">
+<span id="merging-join-index"></span><h3>Joining on index<a class="headerlink" href="#joining-on-index" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">DataFrame.join</span></code> is a convenient method for combining the columns of two
+potentially differently-indexed DataFrames into a single result DataFrame. Here
+is a very basic example:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [78]: </span><span class="n">left</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;A0&#39;</span><span class="p">,</span> <span class="s1">&#39;A1&#39;</span><span class="p">,</span> <span class="s1">&#39;A2&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                     <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;B0&#39;</span><span class="p">,</span> <span class="s1">&#39;B1&#39;</span><span class="p">,</span> <span class="s1">&#39;B2&#39;</span><span class="p">]},</span>
+<span class="gp">   ....: </span>                     <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K1&#39;</span><span class="p">,</span> <span class="s1">&#39;K2&#39;</span><span class="p">])</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [79]: </span><span class="n">right</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;C0&#39;</span><span class="p">,</span> <span class="s1">&#39;C2&#39;</span><span class="p">,</span> <span class="s1">&#39;C3&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                      <span class="s1">&#39;D&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;D0&#39;</span><span class="p">,</span> <span class="s1">&#39;D2&#39;</span><span class="p">,</span> <span class="s1">&#39;D3&#39;</span><span class="p">]},</span>
+<span class="gp">   ....: </span>                      <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K2&#39;</span><span class="p">,</span> <span class="s1">&#39;K3&#39;</span><span class="p">])</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [80]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">right</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_join.png" src="_images/merging_join.png" />
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [81]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">right</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_join_outer.png" src="_images/merging_join_outer.png" />
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [82]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">right</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_join_inner.png" src="_images/merging_join_inner.png" />
+<p>The data alignment here is on the indexes (row labels). This same behavior can
+be achieved using <code class="docutils literal"><span class="pre">merge</span></code> plus additional arguments instructing it to use the
+indexes:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [83]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">left_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">right_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_merge_index_outer.png" src="_images/merging_merge_index_outer.png" />
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [84]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">left_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">right_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_merge_index_inner.png" src="_images/merging_merge_index_inner.png" />
+</div>
+<div class="section" id="joining-key-columns-on-an-index">
+<h3>Joining key columns on an index<a class="headerlink" href="#joining-key-columns-on-an-index" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">join</span></code> takes an optional <code class="docutils literal"><span class="pre">on</span></code> argument which may be a column or multiple
+column names, which specifies that the passed DataFrame is to be aligned on
+that column in the DataFrame. These two function calls are completely
+equivalent:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">left</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">right</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="n">key_or_keys</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="n">key_or_keys</span><span class="p">,</span> <span class="n">right_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+      <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Obviously you can choose whichever form you find more convenient. For
+many-to-one joins (where one of the DataFrame&#8217;s is already indexed by the join
+key), using <code class="docutils literal"><span class="pre">join</span></code> may be more convenient. Here is a simple example:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [85]: </span><span class="n">left</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;A0&#39;</span><span class="p">,</span> <span class="s1">&#39;A1&#39;</span><span class="p">,</span> <span class="s1">&#39;A2&#39;</span><span class="p">,</span> <span class="s1">&#39;A3&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                     <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;B0&#39;</span><span class="p">,</span> <span class="s1">&#39;B1&#39;</span><span class="p">,</span> <span class="s1">&#39;B2&#39;</span><span class="p">,</span> <span class="s1">&#39;B3&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                     <span class="s1">&#39;key&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K1&#39;</span><span class="p">,</span> <span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K1&#39;</span><span class="p">]})</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [86]: </span><span class="n">right</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;C0&#39;</span><span class="p">,</span> <span class="s1">&#39;C1&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                      <span class="s1">&#39;D&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;D0&#39;</span><span class="p">,</span> <span class="s1">&#39;D1&#39;</span><span class="p">]},</span>
+<span class="gp">   ....: </span>                      <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K1&#39;</span><span class="p">])</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [87]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">right</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;key&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_join_key_columns.png" src="_images/merging_join_key_columns.png" />
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [88]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s1">&#39;key&#39;</span><span class="p">,</span> <span class="n">right_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">   ....: </span>                  <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="bp">False</span><span class="p">);</span>
+<span class="gp">   ....: </span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_merge_key_columns.png" src="_images/merging_merge_key_columns.png" />
+<p id="merging-multikey-join">To join on multiple keys, the passed DataFrame must have a <code class="docutils literal"><span class="pre">MultiIndex</span></code>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [89]: </span><span class="n">left</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;A0&#39;</span><span class="p">,</span> <span class="s1">&#39;A1&#39;</span><span class="p">,</span> <span class="s1">&#39;A2&#39;</span><span class="p">,</span> <span class="s1">&#39;A3&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                     <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;B0&#39;</span><span class="p">,</span> <span class="s1">&#39;B1&#39;</span><span class="p">,</span> <span class="s1">&#39;B2&#39;</span><span class="p">,</span> <span class="s1">&#39;B3&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                     <span class="s1">&#39;key1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K1&#39;</span><span class="p">,</span> <span class="s1">&#39;K2&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                     <span class="s1">&#39;key2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K1&#39;</span><span class="p">,</span> <span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K1&#39;</span><span class="p">]})</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [90]: </span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">MultiIndex</span><span class="o">.</span><span class="n">from_tuples</span><span class="p">([(</span><span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K0&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;K1&#39;</span><span class="p">,</span> <span class="s1">&#39;K0&#39;</span><span class="p">),</span>
+<span class="gp">   ....: </span>                                  <span class="p">(</span><span class="s1">&#39;K2&#39;</span><span class="p">,</span> <span class="s1">&#39;K0&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;K2&#39;</span><span class="p">,</span> <span class="s1">&#39;K1&#39;</span><span class="p">)])</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [91]: </span><span class="n">right</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;C0&#39;</span><span class="p">,</span> <span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="s1">&#39;C2&#39;</span><span class="p">,</span> <span class="s1">&#39;C3&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                   <span class="s1">&#39;D&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;D0&#39;</span><span class="p">,</span> <span class="s1">&#39;D1&#39;</span><span class="p">,</span> <span class="s1">&#39;D2&#39;</span><span class="p">,</span> <span class="s1">&#39;D3&#39;</span><span class="p">]},</span>
+<span class="gp">   ....: </span>                  <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">)</span>
+<span class="gp">   ....: </span>
+</pre></div>
+</div>
+<p>Now this can be joined by passing the two key column names:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [92]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">right</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;key1&#39;</span><span class="p">,</span> <span class="s1">&#39;key2&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_join_multikeys.png" src="_images/merging_join_multikeys.png" />
+<p id="merging-df-inner-join">The default for <code class="docutils literal"><span class="pre">DataFrame.join</span></code> is to perform a left join (essentially a
+&#8220;VLOOKUP&#8221; operation, for Excel users), which uses only the keys found in the
+calling DataFrame. Other join types, for example inner join, can be just as
+easily performed:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [93]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">right</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;key1&#39;</span><span class="p">,</span> <span class="s1">&#39;key2&#39;</span><span class="p">],</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_join_multikeys_inner.png" src="_images/merging_join_multikeys_inner.png" />
+<p>As you can see, this drops any rows where there was no match.</p>
+</div>
+<div class="section" id="joining-a-single-index-to-a-multi-index">
+<span id="merging-join-on-mi"></span><h3>Joining a single Index to a Multi-index<a class="headerlink" href="#joining-a-single-index-to-a-multi-index" title="Permalink to this headline">¶</a></h3>
+<p>You can join a singly-indexed <code class="docutils literal"><span class="pre">DataFrame</span></code> with a level of a multi-indexed <code class="docutils literal"><span class="pre">DataFrame</span></code>.
+The level will match on the name of the index of the singly-indexed frame against
+a level name of the multi-indexed frame.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [94]: </span><span class="n">left</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;A0&#39;</span><span class="p">,</span> <span class="s1">&#39;A1&#39;</span><span class="p">,</span> <span class="s1">&#39;A2&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                     <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;B0&#39;</span><span class="p">,</span> <span class="s1">&#39;B1&#39;</span><span class="p">,</span> <span class="s1">&#39;B2&#39;</span><span class="p">]},</span>
+<span class="gp">   ....: </span>                     <span class="n">index</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">([</span><span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K1&#39;</span><span class="p">,</span> <span class="s1">&#39;K2&#39;</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;key&#39;</span><span class="p">))</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [95]: </span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">MultiIndex</span><span class="o">.</span><span class="n">from_tuples</span><span class="p">([(</span><span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;Y0&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;K1&#39;</span><span class="p">,</span> <span class="s1">&#39;Y1&#39;</span><span class="p">),</span>
+<span class="gp">   ....: </span>                                  <span class="p">(</span><span class="s1">&#39;K2&#39;</span><span class="p">,</span> <span class="s1">&#39;Y2&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;K2&#39;</span><span class="p">,</span> <span class="s1">&#39;Y3&#39;</span><span class="p">)],</span>
+<span class="gp">   ....: </span>                                   <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">])</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [96]: </span><span class="n">right</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;C0&#39;</span><span class="p">,</span> <span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="s1">&#39;C2&#39;</span><span class="p">,</span> <span class="s1">&#39;C3&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                      <span class="s1">&#39;D&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;D0&#39;</span><span class="p">,</span> <span class="s1">&#39;D1&#39;</span><span class="p">,</span> <span class="s1">&#39;D2&#39;</span><span class="p">,</span> <span class="s1">&#39;D3&#39;</span><span class="p">]},</span>
+<span class="gp">   ....: </span>                      <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">)</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [97]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">right</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_join_multiindex_inner.png" src="_images/merging_join_multiindex_inner.png" />
+<p>This is equivalent but less verbose and more memory efficient / faster than this.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [98]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">left</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(),</span> <span class="n">right</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(),</span>
+<span class="gp">   ....: </span>      <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">],</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s1">&#39;key&#39;</span><span class="p">,</span><span class="s1">&#39;Y&#39;</span><span class="p">])</span>
+<span class="gp">   ....: </span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_merge_multiindex_alternative.png" src="_images/merging_merge_multiindex_alternative.png" />
+</div>
+<div class="section" id="joining-with-two-multi-indexes">
+<h3>Joining with two multi-indexes<a class="headerlink" href="#joining-with-two-multi-indexes" title="Permalink to this headline">¶</a></h3>
+<p>This is not Implemented via <code class="docutils literal"><span class="pre">join</span></code> at-the-moment, however it can be done using the following.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [99]: </span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">MultiIndex</span><span class="o">.</span><span class="n">from_tuples</span><span class="p">([(</span><span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;X0&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;X1&#39;</span><span class="p">),</span>
+<span class="gp">   ....: </span>                                   <span class="p">(</span><span class="s1">&#39;K1&#39;</span><span class="p">,</span> <span class="s1">&#39;X2&#39;</span><span class="p">)],</span>
+<span class="gp">   ....: </span>                                    <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">,</span> <span class="s1">&#39;X&#39;</span><span class="p">])</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [100]: </span><span class="n">left</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;A0&#39;</span><span class="p">,</span> <span class="s1">&#39;A1&#39;</span><span class="p">,</span> <span class="s1">&#39;A2&#39;</span><span class="p">],</span>
+<span class="gp">   .....: </span>                     <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;B0&#39;</span><span class="p">,</span> <span class="s1">&#39;B1&#39;</span><span class="p">,</span> <span class="s1">&#39;B2&#39;</span><span class="p">]},</span>
+<span class="gp">   .....: </span>                      <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">)</span>
+<span class="gp">   .....: </span>
+
+<span class="gp">In [101]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">left</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(),</span> <span class="n">right</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(),</span>
+<span class="gp">   .....: </span>                  <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">],</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s1">&#39;key&#39;</span><span class="p">,</span><span class="s1">&#39;X&#39;</span><span class="p">,</span><span class="s1">&#39;Y&#39;</span><span class="p">])</span>
+<span class="gp">   .....: </span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_merge_two_multiindex.png" src="_images/merging_merge_two_multiindex.png" />
+</div>
+<div class="section" id="overlapping-value-columns">
+<h3>Overlapping value columns<a class="headerlink" href="#overlapping-value-columns" title="Permalink to this headline">¶</a></h3>
+<p>The merge <code class="docutils literal"><span class="pre">suffixes</span></code> argument takes a tuple of list of strings to append to
+overlapping column names in the input DataFrames to disambiguate the result
+columns:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [102]: </span><span class="n">left</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;k&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K1&#39;</span><span class="p">,</span> <span class="s1">&#39;K2&#39;</span><span class="p">],</span> <span class="s1">&#39;v&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]})</span>
+
+<span class="gp">In [103]: </span><span class="n">right</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;k&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K3&#39;</span><span class="p">],</span> <span class="s1">&#39;v&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]})</span>
+
+<span class="gp">In [104]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_merge_overlapped.png" src="_images/merging_merge_overlapped.png" />
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [105]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">suffixes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;_l&#39;</span><span class="p">,</span> <span class="s1">&#39;_r&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_merge_overlapped_suffix.png" src="_images/merging_merge_overlapped_suffix.png" />
+<p><code class="docutils literal"><span class="pre">DataFrame.join</span></code> has <code class="docutils literal"><span class="pre">lsuffix</span></code> and <code class="docutils literal"><span class="pre">rsuffix</span></code> arguments which behave
+similarly.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [106]: </span><span class="n">left</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+
+<span class="gp">In [107]: </span><span class="n">right</span> <span class="o">=</span> <span class="n">right</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+
+<span class="gp">In [108]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">right</span><span class="p">,</span> <span class="n">lsuffix</span><span class="o">=</span><span class="s1">&#39;_l&#39;</span><span class="p">,</span> <span class="n">rsuffix</span><span class="o">=</span><span class="s1">&#39;_r&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_merge_overlapped_multi_suffix.png" src="_images/merging_merge_overlapped_multi_suffix.png" />
+</div>
+<div class="section" id="joining-multiple-dataframe-or-panel-objects">
+<span id="merging-multiple-join"></span><h3>Joining multiple DataFrame or Panel objects<a class="headerlink" href="#joining-multiple-dataframe-or-panel-objects" title="Permalink to this headline">¶</a></h3>
+<p>A list or tuple of DataFrames can also be passed to <code class="docutils literal"><span class="pre">DataFrame.join</span></code> to join
+them together on their indexes. The same is true for <code class="docutils literal"><span class="pre">Panel.join</span></code>.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [109]: </span><span class="n">right2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;v&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]},</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;K1&#39;</span><span class="p">,</span> <span class="s1">&#39;K1&#39;</span><span class="p">,</span> <span class="s1">&#39;K2&#39;</span><span class="p">])</span>
+
+<span class="gp">In [110]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">right</span><span class="p">,</span> <span class="n">right2</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_join_multi_df.png" src="_images/merging_join_multi_df.png" />
+</div>
+<div class="section" id="merging-together-values-within-series-or-dataframe-columns">
+<span id="merging-combine-first-update"></span><h3>Merging together values within Series or DataFrame columns<a class="headerlink" href="#merging-together-values-within-series-or-dataframe-columns" title="Permalink to this headline">¶</a></h3>
+<p>Another fairly common situation is to have two like-indexed (or similarly
+indexed) Series or DataFrame objects and wanting to &#8220;patch&#8221; values in one
+object from values for matching indices in the other. Here is an example:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [111]: </span><span class="n">df1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mf">3.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">4.6</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">],</span>
+<span class="gp">   .....: </span>                   <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mf">7.</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]])</span>
+<span class="gp">   .....: </span>
+
+<span class="gp">In [112]: </span><span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([[</span><span class="o">-</span><span class="mf">42.6</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="o">-</span><span class="mf">8.2</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">5.</span><span class="p">,</span> <span class="mf">1.6</span><span class="p">,</span> <span class="mi">4</span><span class="p">]],</span>
+<span class="gp">   .....: </span>                   <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="gp">   .....: </span>
+</pre></div>
+</div>
+<p>For this, use the <code class="docutils literal"><span class="pre">combine_first</span></code> method:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [113]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">df1</span><span class="o">.</span><span class="n">combine_first</span><span class="p">(</span><span class="n">df2</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_combine_first.png" src="_images/merging_combine_first.png" />
+<p>Note that this method only takes values from the right DataFrame if they are
+missing in the left DataFrame. A related method, <code class="docutils literal"><span class="pre">update</span></code>, alters non-NA
+values inplace:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [114]: </span><span class="n">df1</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">df2</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/merging_update.png" src="_images/merging_update.png" />
+</div>
+</div>
+<div class="section" id="timeseries-friendly-merging">
+<span id="merging-time-series"></span><h2>Timeseries friendly merging<a class="headerlink" href="#timeseries-friendly-merging" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="merging-ordered-data">
+<span id="merging-merge-ordered"></span><h3>Merging Ordered Data<a class="headerlink" href="#merging-ordered-data" title="Permalink to this headline">¶</a></h3>
+<p>A <a class="reference internal" href="generated/pandas.merge_ordered.html#pandas.merge_ordered" title="pandas.merge_ordered"><code class="xref py py-func docutils literal"><span class="pre">merge_ordered()</span></code></a> function allows combining time series and other
+ordered data. In particular it has an optional <code class="docutils literal"><span class="pre">fill_method</span></code> keyword to
+fill/interpolate missing data:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [115]: </span><span class="n">left</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;k&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;K0&#39;</span><span class="p">,</span> <span class="s1">&#39;K1&#39;</span><span class="p">,</span> <span class="s1">&#39;K1&#39;</span><span class="p">,</span> <span class="s1">&#39;K2&#39;</span><span class="p">],</span>
+<span class="gp">   .....: </span>                     <span class="s1">&#39;lv&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+<span class="gp">   .....: </span>                     <span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">]})</span>
+<span class="gp">   .....: </span>
+
+<span class="gp">In [116]: </span><span class="n">right</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;k&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;K1&#39;</span><span class="p">,</span> <span class="s1">&#39;K2&#39;</span><span class="p">,</span> <span class="s1">&#39;K4&#39;</span><span class="p">],</span>
+<span class="gp">   .....: </span>                      <span class="s1">&#39;rv&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]})</span>
+<span class="gp">   .....: </span>
+
+<span class="gp">In [117]: </span><span class="n">pd</span><span class="o">.</span><span class="n">merge_ordered</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">fill_method</span><span class="o">=</span><span class="s1">&#39;ffill&#39;</span><span class="p">,</span> <span class="n">left_by</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+<span class="gh">Out[117]: </span><span class="go"></span>
+<span class="go">     k   lv  s   rv</span>
+<span class="go">0   K0  1.0  a  NaN</span>
+<span class="go">1   K1  1.0  a  1.0</span>
+<span class="go">2   K2  1.0  a  2.0</span>
+<span class="go">3   K4  1.0  a  3.0</span>
+<span class="go">4   K1  2.0  b  1.0</span>
+<span class="go">5   K2  2.0  b  2.0</span>
+<span class="go">6   K4  2.0  b  3.0</span>
+<span class="go">7   K1  3.0  c  1.0</span>
+<span class="go">8   K2  3.0  c  2.0</span>
+<span class="go">9   K4  3.0  c  3.0</span>
+<span class="go">10  K1  NaN  d  1.0</span>
+<span class="go">11  K2  4.0  d  2.0</span>
+<span class="go">12  K4  4.0  d  3.0</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="merging-asof">
+<span id="merging-merge-asof"></span><h3>Merging AsOf<a class="headerlink" href="#merging-asof" title="Permalink to this headline">¶</a></h3>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.19.0.</span></p>
+</div>
+<p>A <a class="reference internal" href="generated/pandas.merge_asof.html#pandas.merge_asof" title="pandas.merge_asof"><code class="xref py py-func docutils literal"><span class="pre">merge_asof()</span></code></a> is similar to an ordered left-join except that we match on nearest key rather than equal keys. For each row in the <code class="docutils literal"><span class="pre">left</span></code> DataFrame, we select the last row in the <code class="docutils literal"><span class="pre">right</span></code> DataFrame whose <code class="docutils literal"><span class="pre">on</span></code> key is less than the left&#8217;s key. Both DataFrames must be sorted by the key.</p>
+<p>Optionally an asof merge can perform a group-wise merge. This matches the <code class="docutils literal"><span class="pre">by</span></code> key equally,
+in addition to the nearest match on the <code class="docutils literal"><span class="pre">on</span></code> key.</p>
+<p>For example; we might have <code class="docutils literal"><span class="pre">trades</span></code> and <code class="docutils literal"><span class="pre">quotes</span></code> and we want to <code class="docutils literal"><span class="pre">asof</span></code> merge them.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [118]: </span><span class="n">trades</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">   .....: </span>    <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">([</span><span class="s1">&#39;20160525 13:30:00.023&#39;</span><span class="p">,</span>
+<span class="gp">   .....: </span>                            <span class="s1">&#39;20160525 13:30:00.038&#39;</span><span class="p">,</span>
+<span class="gp">   .....: </span>                            <span class="s1">&#39;20160525 13:30:00.048&#39;</span><span class="p">,</span>
+<span class="gp">   .....: </span>                            <span class="s1">&#39;20160525 13:30:00.048&#39;</span><span class="p">,</span>
+<span class="gp">   .....: </span>                            <span class="s1">&#39;20160525 13:30:00.048&#39;</span><span class="p">]),</span>
+<span class="gp">   .....: </span>    <span class="s1">&#39;ticker&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;MSFT&#39;</span><span class="p">,</span> <span class="s1">&#39;MSFT&#39;</span><span class="p">,</span>
+<span class="gp">   .....: </span>               <span class="s1">&#39;GOOG&#39;</span><span class="p">,</span> <span class="s1">&#39;GOOG&#39;</span><span class="p">,</span> <span class="s1">&#39;AAPL&#39;</span><span class="p">],</span>
+<span class="gp">   .....: </span>    <span class="s1">&#39;price&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">51.95</span><span class="p">,</span> <span class="mf">51.95</span><span class="p">,</span>
+<span class="gp">   .....: </span>              <span class="mf">720.77</span><span class="p">,</span> <span class="mf">720.92</span><span class="p">,</span> <span class="mf">98.00</span><span class="p">],</span>
+<span class="gp">   .....: </span>    <span class="s1">&#39;quantity&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">75</span><span class="p">,</span> <span class="mi">155</span><span class="p">,</span>
+<span class="gp">   .....: </span>                 <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">]},</span>
+<span class="gp">   .....: </span>    <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="s1">&#39;ticker&#39;</span><span class="p">,</span> <span class="s1">&#39;price&#39;</span><span class="p">,</span> <span class="s1">&#39;quantity&#39;</span><span class="p">])</span>
+<span class="gp">   .....: </span>
+
+<span class="gp">In [119]: </span><span class="n">quotes</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">   .....: </span>    <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">([</span><span class="s1">&#39;20160525 13:30:00.023&#39;</span><span class="p">,</span>
+<span class="gp">   .....: </span>                            <span class="s1">&#39;20160525 13:30:00.023&#39;</span><span class="p">,</span>
+<span class="gp">   .....: </span>                            <span class="s1">&#39;20160525 13:30:00.030&#39;</span><span class="p">,</span>
+<span class="gp">   .....: </span>                            <span class="s1">&#39;20160525 13:30:00.041&#39;</span><span class="p">,</span>
+<span class="gp">   .....: </span>                            <span class="s1">&#39;20160525 13:30:00.048&#39;</span><span class="p">,</span>
+<span class="gp">   .....: </span>                            <span class="s1">&#39;20160525 13:30:00.049&#39;</span><span class="p">,</span>
+<span class="gp">   .....: </span>                            <span class="s1">&#39;20160525 13:30:00.072&#39;</span><span class="p">,</span>
+<span class="gp">   .....: </span>                            <span class="s1">&#39;20160525 13:30:00.075&#39;</span><span class="p">]),</span>
+<span class="gp">   .....: </span>    <span class="s1">&#39;ticker&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;GOOG&#39;</span><span class="p">,</span> <span class="s1">&#39;MSFT&#39;</span><span class="p">,</span> <span class="s1">&#39;MSFT&#39;</span><span class="p">,</span>
+<span class="gp">   .....: </span>               <span class="s1">&#39;MSFT&#39;</span><span class="p">,</span> <span class="s1">&#39;GOOG&#39;</span><span class="p">,</span> <span class="s1">&#39;AAPL&#39;</span><span class="p">,</span> <span class="s1">&#39;GOOG&#39;</span><span class="p">,</span>
+<span class="gp">   .....: </span>               <span class="s1">&#39;MSFT&#39;</span><span class="p">],</span>
+<span class="gp">   .....: </span>    <span class="s1">&#39;bid&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">720.50</span><span class="p">,</span> <span class="mf">51.95</span><span class="p">,</span> <span class="mf">51.97</span><span class="p">,</span> <span class="mf">51.99</span><span class="p">,</span>
+<span class="gp">   .....: </span>            <span class="mf">720.50</span><span class="p">,</span> <span class="mf">97.99</span><span class="p">,</span> <span class="mf">720.50</span><span class="p">,</span> <span class="mf">52.01</span><span class="p">],</span>
+<span class="gp">   .....: </span>    <span class="s1">&#39;ask&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">720.93</span><span class="p">,</span> <span class="mf">51.96</span><span class="p">,</span> <span class="mf">51.98</span><span class="p">,</span> <span class="mf">52.00</span><span class="p">,</span>
+<span class="gp">   .....: </span>            <span class="mf">720.93</span><span class="p">,</span> <span class="mf">98.01</span><span class="p">,</span> <span class="mf">720.88</span><span class="p">,</span> <span class="mf">52.03</span><span class="p">]},</span>
+<span class="gp">   .....: </span>    <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="s1">&#39;ticker&#39;</span><span class="p">,</span> <span class="s1">&#39;bid&#39;</span><span class="p">,</span> <span class="s1">&#39;ask&#39;</span><span class="p">])</span>
+<span class="gp">   .....: </span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [120]: </span><span class="n">trades</span>
+<span class="gh">Out[120]: </span><span class="go"></span>
+<span class="go">                     time ticker   price  quantity</span>
+<span class="go">0 2016-05-25 13:30:00.023   MSFT   51.95        75</span>
+<span class="go">1 2016-05-25 13:30:00.038   MSFT   51.95       155</span>
+<span class="go">2 2016-05-25 13:30:00.048   GOOG  720.77       100</span>
+<span class="go">3 2016-05-25 13:30:00.048   GOOG  720.92       100</span>
+<span class="go">4 2016-05-25 13:30:00.048   AAPL   98.00       100</span>
+
+<span class="gp">In [121]: </span><span class="n">quotes</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                             Out[121]: </span>
+<span class="go">                     time ticker     bid     ask</span>
+<span class="go">0 2016-05-25 13:30:00.023   GOOG  720.50  720.93</span>
+<span class="go">1 2016-05-25 13:30:00.023   MSFT   51.95   51.96</span>
+<span class="go">2 2016-05-25 13:30:00.030   MSFT   51.97   51.98</span>
+<span class="go">3 2016-05-25 13:30:00.041   MSFT   51.99   52.00</span>
+<span class="go">4 2016-05-25 13:30:00.048   GOOG  720.50  720.93</span>
+<span class="go">5 2016-05-25 13:30:00.049   AAPL   97.99   98.01</span>
+<span class="go">6 2016-05-25 13:30:00.072   GOOG  720.50  720.88</span>
+<span class="go">7 2016-05-25 13:30:00.075   MSFT   52.01   52.03</span>
+</pre></div>
+</div>
+<p>By default we are taking the asof of the quotes.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [122]: </span><span class="n">pd</span><span class="o">.</span><span class="n">merge_asof</span><span class="p">(</span><span class="n">trades</span><span class="p">,</span> <span class="n">quotes</span><span class="p">,</span>
+<span class="gp">   .....: </span>              <span class="n">on</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">,</span>
+<span class="gp">   .....: </span>              <span class="n">by</span><span class="o">=</span><span class="s1">&#39;ticker&#39;</span><span class="p">)</span>
+<span class="gp">   .....: </span>
+<span class="gh">Out[122]: </span><span class="go"></span>
+<span class="go">                     time ticker   price  quantity     bid     ask</span>
+<span class="go">0 2016-05-25 13:30:00.023   MSFT   51.95        75   51.95   51.96</span>
+<span class="go">1 2016-05-25 13:30:00.038   MSFT   51.95       155   51.97   51.98</span>
+<span class="go">2 2016-05-25 13:30:00.048   GOOG  720.77       100  720.50  720.93</span>
+<span class="go">3 2016-05-25 13:30:00.048   GOOG  720.92       100  720.50  720.93</span>
+<span class="go">4 2016-05-25 13:30:00.048   AAPL   98.00       100     NaN     NaN</span>
+</pre></div>
+</div>
+<p>We only asof within <code class="docutils literal"><span class="pre">2ms</span></code> between the quote time and the trade time.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [123]: </span><span class="n">pd</span><span class="o">.</span><span class="n">merge_asof</span><span class="p">(</span><span class="n">trades</span><span class="p">,</span> <span class="n">quotes</span><span class="p">,</span>
+<span class="gp">   .....: </span>              <span class="n">on</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">,</span>
+<span class="gp">   .....: </span>              <span class="n">by</span><span class="o">=</span><span class="s1">&#39;ticker&#39;</span><span class="p">,</span>
+<span class="gp">   .....: </span>              <span class="n">tolerance</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="s1">&#39;2ms&#39;</span><span class="p">))</span>
+<span class="gp">   .....: </span>
+<span class="gh">Out[123]: </span><span class="go"></span>
+<span class="go">                     time ticker   price  quantity     bid     ask</span>
+<span class="go">0 2016-05-25 13:30:00.023   MSFT   51.95        75   51.95   51.96</span>
+<span class="go">1 2016-05-25 13:30:00.038   MSFT   51.95       155     NaN     NaN</span>
+<span class="go">2 2016-05-25 13:30:00.048   GOOG  720.77       100  720.50  720.93</span>
+<span class="go">3 2016-05-25 13:30:00.048   GOOG  720.92       100  720.50  720.93</span>
+<span class="go">4 2016-05-25 13:30:00.048   AAPL   98.00       100     NaN     NaN</span>
+</pre></div>
+</div>
+<p>We only asof within <code class="docutils literal"><span class="pre">10ms</span></code> between the quote time and the trade time and we exclude exact matches on time.
+Note that though we exclude the exact matches (of the quotes), prior quotes DO propagate to that point
+in time.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [124]: </span><span class="n">pd</span><span class="o">.</span><span class="n">merge_asof</span><span class="p">(</span><span class="n">trades</span><span class="p">,</span> <span class="n">quotes</span><span class="p">,</span>
+<span class="gp">   .....: </span>              <span class="n">on</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">,</span>
+<span class="gp">   .....: </span>              <span class="n">by</span><span class="o">=</span><span class="s1">&#39;ticker&#39;</span><span class="p">,</span>
+<span class="gp">   .....: </span>              <span class="n">tolerance</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="s1">&#39;10ms&#39;</span><span class="p">),</span>
+<span class="gp">   .....: </span>              <span class="n">allow_exact_matches</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">   .....: </span>
+<span class="gh">Out[124]: </span><span class="go"></span>
+<span class="go">                     time ticker   price  quantity    bid    ask</span>
+<span class="go">0 2016-05-25 13:30:00.023   MSFT   51.95        75    NaN    NaN</span>
+<span class="go">1 2016-05-25 13:30:00.038   MSFT   51.95       155  51.97  51.98</span>
+<span class="go">2 2016-05-25 13:30:00.048   GOOG  720.77       100    NaN    NaN</span>
+<span class="go">3 2016-05-25 13:30:00.048   GOOG  720.92       100    NaN    NaN</span>
+<span class="go">4 2016-05-25 13:30:00.048   AAPL   98.00       100    NaN    NaN</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="clearer"></div>
+        </div>
+    </div>
+</div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="reshaping.html" title="Reshaping and Pivot Tables"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="groupby.html" title="Group By: split-apply-combine"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pandas 0.22.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+<style type="text/css">
+    .scrollToTop {
+        text-align: center;
+        font-weight: bold;
+        position: fixed;
+        bottom: 60px;
+        right: 40px;
+        display: none;
+    }
+</style>
+<a href="#" class="scrollToTop">Scroll To Top</a>
+<script type="text/javascript">
+$(document).ready(function() {
+    //Check to see if the window is top if not then display button
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 200) {
+            $('.scrollToTop').fadeIn();
+        } else {
+            $('.scrollToTop').fadeOut();
+        }
+    });
+
+    //Click event to scroll to top
+    $('.scrollToTop').click(function() {
+        $('html, body').animate({
+            scrollTop: 0
+        }, 500);
+        return false;
+    });
+});
+</script>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27880019-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </body>
+</html>

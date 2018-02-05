@@ -1,0 +1,6 @@
+pandas\.Timestamp\.to\_datetime
+===============================
+
+.. currentmodule:: pandas
+
+.. automethod:: Timestamp.to_datetime

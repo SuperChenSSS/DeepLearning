@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Financial functions &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" >
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../index.html" >
+    <link rel="up" title="Routines" href="routines.html" >
+    <link rel="next" title="numpy.fv" href="generated/numpy.fv.html" >
+    <link rel="prev" title="numpy.fft.ifftshift" href="generated/numpy.fft.ifftshift.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="routines.html" accesskey="U">Routines</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="generated/numpy.fv.html" title="numpy.fv"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="generated/numpy.fft.ifftshift.html" title="numpy.fft.ifftshift"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Financial functions</a><ul>
+<li><a class="reference internal" href="#simple-financial-functions">Simple financial functions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="generated/numpy.fft.ifftshift.html"
+                        title="previous chapter">numpy.fft.ifftshift</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="generated/numpy.fv.html"
+                        title="next chapter">numpy.fv</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="financial-functions">
+<h1>Financial functions<a class="headerlink" href="#financial-functions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="simple-financial-functions">
+<h2>Simple financial functions<a class="headerlink" href="#simple-financial-functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.fv.html#numpy.fv" title="numpy.fv"><code class="xref py py-obj docutils literal"><span class="pre">fv</span></code></a>(rate,&nbsp;nper,&nbsp;pmt,&nbsp;pv[,&nbsp;when])</td>
+<td>Compute the future value.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.pv.html#numpy.pv" title="numpy.pv"><code class="xref py py-obj docutils literal"><span class="pre">pv</span></code></a>(rate,&nbsp;nper,&nbsp;pmt[,&nbsp;fv,&nbsp;when])</td>
+<td>Compute the present value.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.npv.html#numpy.npv" title="numpy.npv"><code class="xref py py-obj docutils literal"><span class="pre">npv</span></code></a>(rate,&nbsp;values)</td>
+<td>Returns the NPV (Net Present Value) of a cash flow series.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.pmt.html#numpy.pmt" title="numpy.pmt"><code class="xref py py-obj docutils literal"><span class="pre">pmt</span></code></a>(rate,&nbsp;nper,&nbsp;pv[,&nbsp;fv,&nbsp;when])</td>
+<td>Compute the payment against loan principal plus interest.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.ppmt.html#numpy.ppmt" title="numpy.ppmt"><code class="xref py py-obj docutils literal"><span class="pre">ppmt</span></code></a>(rate,&nbsp;per,&nbsp;nper,&nbsp;pv[,&nbsp;fv,&nbsp;when])</td>
+<td>Compute the payment against loan principal.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.ipmt.html#numpy.ipmt" title="numpy.ipmt"><code class="xref py py-obj docutils literal"><span class="pre">ipmt</span></code></a>(rate,&nbsp;per,&nbsp;nper,&nbsp;pv[,&nbsp;fv,&nbsp;when])</td>
+<td>Compute the interest portion of a payment.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.irr.html#numpy.irr" title="numpy.irr"><code class="xref py py-obj docutils literal"><span class="pre">irr</span></code></a>(values)</td>
+<td>Return the Internal Rate of Return (IRR).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.mirr.html#numpy.mirr" title="numpy.mirr"><code class="xref py py-obj docutils literal"><span class="pre">mirr</span></code></a>(values,&nbsp;finance_rate,&nbsp;reinvest_rate)</td>
+<td>Modified internal rate of return.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.nper.html#numpy.nper" title="numpy.nper"><code class="xref py py-obj docutils literal"><span class="pre">nper</span></code></a>(rate,&nbsp;pmt,&nbsp;pv[,&nbsp;fv,&nbsp;when])</td>
+<td>Compute the number of periodic payments.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.rate.html#numpy.rate" title="numpy.rate"><code class="xref py py-obj docutils literal"><span class="pre">rate</span></code></a>(nper,&nbsp;pmt,&nbsp;pv,&nbsp;fv[,&nbsp;when,&nbsp;guess,&nbsp;tol,&nbsp;...])</td>
+<td>Compute the rate of interest per period.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

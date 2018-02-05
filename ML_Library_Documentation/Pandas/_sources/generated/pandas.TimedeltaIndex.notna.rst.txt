@@ -1,0 +1,6 @@
+pandas\.TimedeltaIndex\.notna
+=============================
+
+.. currentmodule:: pandas
+
+.. automethod:: TimedeltaIndex.notna

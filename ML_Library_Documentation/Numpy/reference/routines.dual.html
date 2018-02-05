@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Optionally Scipy-accelerated routines (numpy.dual) &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" >
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../index.html" >
+    <link rel="up" title="Routines" href="routines.html" >
+    <link rel="next" title="Mathematical functions with automatic domain (numpy.emath)" href="routines.emath.html" >
+    <link rel="prev" title="numpy.mintypecode" href="generated/numpy.mintypecode.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="routines.html" accesskey="U">Routines</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="routines.emath.html" title="Mathematical functions with automatic domain (numpy.emath)"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="generated/numpy.mintypecode.html" title="numpy.mintypecode"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Optionally Scipy-accelerated routines (<code class="docutils literal"><span class="pre">numpy.dual</span></code>)</a><ul>
+<li><a class="reference internal" href="#linear-algebra">Linear algebra</a></li>
+<li><a class="reference internal" href="#fft">FFT</a></li>
+<li><a class="reference internal" href="#other">Other</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="generated/numpy.mintypecode.html"
+                        title="previous chapter">numpy.mintypecode</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="routines.emath.html"
+                        title="next chapter">Mathematical functions with automatic domain (<code class="docutils literal"><span class="pre">numpy.emath</span></code>)</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-numpy.dual">
+<span id="optionally-scipy-accelerated-routines-numpy-dual"></span><h1>Optionally Scipy-accelerated routines (<a class="reference internal" href="#module-numpy.dual" title="numpy.dual"><code class="xref py py-mod docutils literal"><span class="pre">numpy.dual</span></code></a>)<a class="headerlink" href="#module-numpy.dual" title="Permalink to this headline">¶</a></h1>
+<p>Aliases for functions which may be accelerated by Scipy.</p>
+<p><a class="reference external" href="http://www.scipy.org">Scipy</a> can be built to use accelerated or otherwise improved libraries
+for FFTs, linear algebra, and special functions. This module allows
+developers to transparently support these accelerated functions when
+scipy is available but still support users who have only installed
+NumPy.</p>
+<div class="section" id="linear-algebra">
+<h2>Linear algebra<a class="headerlink" href="#linear-algebra" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.linalg.cholesky.html#numpy.linalg.cholesky" title="numpy.linalg.cholesky"><code class="xref py py-obj docutils literal"><span class="pre">cholesky</span></code></a>(a)</td>
+<td>Cholesky decomposition.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.linalg.det.html#numpy.linalg.det" title="numpy.linalg.det"><code class="xref py py-obj docutils literal"><span class="pre">det</span></code></a>(a)</td>
+<td>Compute the determinant of an array.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.linalg.eig.html#numpy.linalg.eig" title="numpy.linalg.eig"><code class="xref py py-obj docutils literal"><span class="pre">eig</span></code></a>(a)</td>
+<td>Compute the eigenvalues and right eigenvectors of a square array.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.linalg.eigh.html#numpy.linalg.eigh" title="numpy.linalg.eigh"><code class="xref py py-obj docutils literal"><span class="pre">eigh</span></code></a>(a[,&nbsp;UPLO])</td>
+<td>Return the eigenvalues and eigenvectors of a Hermitian or symmetric matrix.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.linalg.eigvals.html#numpy.linalg.eigvals" title="numpy.linalg.eigvals"><code class="xref py py-obj docutils literal"><span class="pre">eigvals</span></code></a>(a)</td>
+<td>Compute the eigenvalues of a general matrix.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.linalg.eigvalsh.html#numpy.linalg.eigvalsh" title="numpy.linalg.eigvalsh"><code class="xref py py-obj docutils literal"><span class="pre">eigvalsh</span></code></a>(a[,&nbsp;UPLO])</td>
+<td>Compute the eigenvalues of a Hermitian or real symmetric matrix.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.linalg.inv.html#numpy.linalg.inv" title="numpy.linalg.inv"><code class="xref py py-obj docutils literal"><span class="pre">inv</span></code></a>(a)</td>
+<td>Compute the (multiplicative) inverse of a matrix.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.linalg.lstsq.html#numpy.linalg.lstsq" title="numpy.linalg.lstsq"><code class="xref py py-obj docutils literal"><span class="pre">lstsq</span></code></a>(a,&nbsp;b[,&nbsp;rcond])</td>
+<td>Return the least-squares solution to a linear matrix equation.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.linalg.norm.html#numpy.linalg.norm" title="numpy.linalg.norm"><code class="xref py py-obj docutils literal"><span class="pre">norm</span></code></a>(x[,&nbsp;ord,&nbsp;axis,&nbsp;keepdims])</td>
+<td>Matrix or vector norm.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.linalg.pinv.html#numpy.linalg.pinv" title="numpy.linalg.pinv"><code class="xref py py-obj docutils literal"><span class="pre">pinv</span></code></a>(a[,&nbsp;rcond])</td>
+<td>Compute the (Moore-Penrose) pseudo-inverse of a matrix.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.linalg.solve.html#numpy.linalg.solve" title="numpy.linalg.solve"><code class="xref py py-obj docutils literal"><span class="pre">solve</span></code></a>(a,&nbsp;b)</td>
+<td>Solve a linear matrix equation, or system of linear scalar equations.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.linalg.svd.html#numpy.linalg.svd" title="numpy.linalg.svd"><code class="xref py py-obj docutils literal"><span class="pre">svd</span></code></a>(a[,&nbsp;full_matrices,&nbsp;compute_uv])</td>
+<td>Singular Value Decomposition.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="fft">
+<h2>FFT<a class="headerlink" href="#fft" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.fft.fft.html#numpy.fft.fft" title="numpy.fft.fft"><code class="xref py py-obj docutils literal"><span class="pre">fft</span></code></a>(a[,&nbsp;n,&nbsp;axis,&nbsp;norm])</td>
+<td>Compute the one-dimensional discrete Fourier Transform.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.fft.fft2.html#numpy.fft.fft2" title="numpy.fft.fft2"><code class="xref py py-obj docutils literal"><span class="pre">fft2</span></code></a>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
+<td>Compute the 2-dimensional discrete Fourier Transform</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.fft.fftn.html#numpy.fft.fftn" title="numpy.fft.fftn"><code class="xref py py-obj docutils literal"><span class="pre">fftn</span></code></a>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
+<td>Compute the N-dimensional discrete Fourier Transform.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.fft.ifft.html#numpy.fft.ifft" title="numpy.fft.ifft"><code class="xref py py-obj docutils literal"><span class="pre">ifft</span></code></a>(a[,&nbsp;n,&nbsp;axis,&nbsp;norm])</td>
+<td>Compute the one-dimensional inverse discrete Fourier Transform.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.fft.ifft2.html#numpy.fft.ifft2" title="numpy.fft.ifft2"><code class="xref py py-obj docutils literal"><span class="pre">ifft2</span></code></a>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
+<td>Compute the 2-dimensional inverse discrete Fourier Transform.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.fft.ifftn.html#numpy.fft.ifftn" title="numpy.fft.ifftn"><code class="xref py py-obj docutils literal"><span class="pre">ifftn</span></code></a>(a[,&nbsp;s,&nbsp;axes,&nbsp;norm])</td>
+<td>Compute the N-dimensional inverse discrete Fourier Transform.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="other">
+<h2>Other<a class="headerlink" href="#other" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.i0.html#numpy.i0" title="numpy.i0"><code class="xref py py-obj docutils literal"><span class="pre">i0</span></code></a>(x)</td>
+<td>Modified Bessel function of the first kind, order 0.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,360 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pandas.eval &#8212; pandas 0.22.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.22.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pandas.test" href="pandas.test.html" />
+    <link rel="prev" title="pandas.interval_range" href="pandas.interval_range.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pandas.test.html" title="pandas.test"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pandas.interval_range.html" title="pandas.interval_range"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pandas 0.22.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" accesskey="U">API Reference</a> &#187;</li> 
+      </ul>
+    </div>
+<div class="content-wrapper">
+    <div class="content">
+        <div class="document">
+            <div class="sphinxsidebar">
+                <h3>Table Of Contents</h3>
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew.html">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Package overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../10min.html">10 Minutes to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dsintro.html">Intro to Data Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basics.html">Essential Basic Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text.html">Working with Text Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../options.html">Options and Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indexing.html">Indexing and Selecting Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced.html">MultiIndex / Advanced Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../computation.html">Computational tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../missing_data.html">Working with missing data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../groupby.html">Group By: split-apply-combine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../merging.html">Merge, join, and concatenate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reshaping.html">Reshaping and Pivot Tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timeseries.html">Time Series / Date functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timedeltas.html">Time Deltas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../categorical.html">Categorical Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../style.html">Styling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io.html">IO Tools (Text, CSV, HDF5, ...)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../remote_data.html">Remote Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enhancingperf.html">Enhancing Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sparse.html">Sparse data structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gotchas.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../r_interface.html">rpy2 / R interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ecosystem.html">pandas Ecosystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_r.html">Comparison with R / R libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_sql.html">Comparison with SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_sas.html">Comparison with SAS</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#input-output">Input/Output</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#general-functions">General functions</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../api.html#data-manipulations">Data manipulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#top-level-missing-data">Top-level missing data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#top-level-conversions">Top-level conversions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#top-level-dealing-with-datetimelike">Top-level dealing with datetimelike</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#top-level-dealing-with-intervals">Top-level dealing with intervals</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../api.html#top-level-evaluation">Top-level evaluation</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pandas.eval</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#series">Series</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#dataframe">DataFrame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#panel">Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#index">Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#numeric-index">Numeric Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#categoricalindex">CategoricalIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#intervalindex">IntervalIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#multiindex">MultiIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#datetimeindex">DatetimeIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#timedeltaindex">TimedeltaIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#periodindex">PeriodIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#scalars">Scalars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#window">Window</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#groupby">GroupBy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#resampling">Resampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#style">Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#general-utility-functions">General utility functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developer.html">Developer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../internals.html">Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release Notes</a></li>
+</ul>
+
+                <h3 style="margin-top: 1.5em;">Search</h3>
+
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18"/>
+                    <input type="submit" value="Go"/>
+                    <input type="hidden" name="check_keywords" value="yes"/>
+                    <input type="hidden" name="area" value="default"/>
+                </form>
+                <p class="searchtip" style="font-size: 90%">
+                    Enter search terms or a module, class or function name.
+                </p>
+
+            </div>
+             
+            <div class="documentwrapper">
+                <div class="bodywrapper">
+                    <div class="body">
+                        
+  <div class="section" id="pandas-eval">
+<h1>pandas.eval<a class="headerlink" href="#pandas-eval" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pandas.eval">
+<code class="descclassname">pandas.</code><code class="descname">eval</code><span class="sig-paren">(</span><em>expr</em>, <em>parser='pandas'</em>, <em>engine=None</em>, <em>truediv=True</em>, <em>local_dict=None</em>, <em>global_dict=None</em>, <em>resolvers=()</em>, <em>level=0</em>, <em>target=None</em>, <em>inplace=False</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/pandas-dev/pandas/blob/v0.22.0/pandas/core/computation/eval.py#L152-L342"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pandas.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a Python expression as a string using various backends.</p>
+<p>The following arithmetic operations are supported: <code class="docutils literal"><span class="pre">+</span></code>, <code class="docutils literal"><span class="pre">-</span></code>, <code class="docutils literal"><span class="pre">*</span></code>,
+<code class="docutils literal"><span class="pre">/</span></code>, <code class="docutils literal"><span class="pre">**</span></code>, <code class="docutils literal"><span class="pre">%</span></code>, <code class="docutils literal"><span class="pre">//</span></code> (python engine only) along with the following
+boolean operations: <code class="docutils literal"><span class="pre">|</span></code> (or), <code class="docutils literal"><span class="pre">&amp;</span></code> (and), and <code class="docutils literal"><span class="pre">~</span></code> (not).
+Additionally, the <code class="docutils literal"><span class="pre">'pandas'</span></code> parser allows the use of <a class="reference external" href="https://docs.python.org/3/reference/expressions.html#and" title="(in Python v3.6)"><code class="xref std std-keyword docutils literal"><span class="pre">and</span></code></a>,
+<a class="reference external" href="https://docs.python.org/3/reference/expressions.html#or" title="(in Python v3.6)"><code class="xref std std-keyword docutils literal"><span class="pre">or</span></code></a>, and <a class="reference external" href="https://docs.python.org/3/reference/expressions.html#not" title="(in Python v3.6)"><code class="xref std std-keyword docutils literal"><span class="pre">not</span></code></a> with the same semantics as the
+corresponding bitwise operators.  <a class="reference internal" href="pandas.Series.html#pandas.Series" title="pandas.Series"><code class="xref py py-class docutils literal"><span class="pre">Series</span></code></a> and
+<a class="reference internal" href="pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><code class="xref py py-class docutils literal"><span class="pre">DataFrame</span></code></a> objects are supported and behave as they would
+with plain ol&#8217; Python evaluation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>expr</strong> : str or unicode</p>
+<blockquote>
+<div><p>The expression to evaluate. This string cannot contain any Python
+<a class="reference external" href="http://docs.python.org/2/reference/simple_stmts.html#simple-statements">statements</a>,
+only Python <a class="reference external" href="http://docs.python.org/2/reference/simple_stmts.html#expression-statements">expressions</a>.</p>
+</div></blockquote>
+<p><strong>parser</strong> : string, default &#8216;pandas&#8217;, {&#8216;pandas&#8217;, &#8216;python&#8217;}</p>
+<blockquote>
+<div><p>The parser to use to construct the syntax tree from the expression. The
+default of <code class="docutils literal"><span class="pre">'pandas'</span></code> parses code slightly different than standard
+Python. Alternatively, you can parse an expression using the
+<code class="docutils literal"><span class="pre">'python'</span></code> parser to retain strict Python semantics.  See the
+<a class="reference internal" href="../enhancingperf.html#enhancingperf-eval"><span class="std std-ref">enhancing performance</span></a> documentation for
+more details.</p>
+</div></blockquote>
+<p><strong>engine</strong> : string or None, default &#8216;numexpr&#8217;, {&#8216;python&#8217;, &#8216;numexpr&#8217;}</p>
+<blockquote>
+<div><p>The engine used to evaluate the expression. Supported engines are</p>
+<ul class="simple">
+<li>None         : tries to use <code class="docutils literal"><span class="pre">numexpr</span></code>, falls back to <code class="docutils literal"><span class="pre">python</span></code></li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">'numexpr'</span></code>: This default engine evaluates pandas objects using</dt>
+<dd>numexpr for large speed ups in complex expressions
+with large frames.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">'python'</span></code>: Performs operations as if you had <code class="docutils literal"><span class="pre">eval</span></code>&#8216;d in top</dt>
+<dd>level python. This engine is generally not that useful.</dd>
+</dl>
+</li>
+</ul>
+<p>More backends may be available in the future.</p>
+</div></blockquote>
+<p><strong>truediv</strong> : bool, optional</p>
+<blockquote>
+<div><p>Whether to use true division, like in Python &gt;= 3</p>
+</div></blockquote>
+<p><strong>local_dict</strong> : dict or None, optional</p>
+<blockquote>
+<div><p>A dictionary of local variables, taken from locals() by default.</p>
+</div></blockquote>
+<p><strong>global_dict</strong> : dict or None, optional</p>
+<blockquote>
+<div><p>A dictionary of global variables, taken from globals() by default.</p>
+</div></blockquote>
+<p><strong>resolvers</strong> : list of dict-like or None, optional</p>
+<blockquote>
+<div><p>A list of objects implementing the <code class="docutils literal"><span class="pre">__getitem__</span></code> special method that
+you can use to inject an additional collection of namespaces to use for
+variable lookup. For example, this is used in the
+<a class="reference internal" href="pandas.DataFrame.query.html#pandas.DataFrame.query" title="pandas.DataFrame.query"><code class="xref py py-meth docutils literal"><span class="pre">query()</span></code></a> method to inject the
+<code class="xref py py-attr docutils literal"><span class="pre">index</span></code> and <code class="xref py py-attr docutils literal"><span class="pre">columns</span></code>
+variables that refer to their respective <a class="reference internal" href="pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><code class="xref py py-class docutils literal"><span class="pre">DataFrame</span></code></a>
+instance attributes.</p>
+</div></blockquote>
+<p><strong>level</strong> : int, optional</p>
+<blockquote>
+<div><p>The number of prior stack frames to traverse and add to the current
+scope. Most users will <strong>not</strong> need to change this parameter.</p>
+</div></blockquote>
+<p><strong>target</strong> : object, optional, default None</p>
+<blockquote>
+<div><p>This is the target object for assignment. It is used when there is
+variable assignment in the expression. If so, then <cite>target</cite> must
+support item assignment with string keys, and if a copy is being
+returned, it must also support <cite>.copy()</cite>.</p>
+</div></blockquote>
+<p><strong>inplace</strong> : bool, default False</p>
+<blockquote>
+<div><p>If <cite>target</cite> is provided, and the expression mutates <cite>target</cite>, whether
+to modify <cite>target</cite> inplace. Otherwise, return a copy of <cite>target</cite> with
+the mutation.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">ndarray, numeric scalar, DataFrame, Series</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
+<blockquote class="last">
+<div><p>There are many instances where such an error can be raised:</p>
+<ul>
+<li><p class="first"><cite>target=None</cite>, but the expression is multiline.</p>
+</li>
+<li><p class="first">The expression is multiline, but not all them have item assignment.
+An example of such an arrangement is this:</p>
+<p>a = b + 1
+a + 2</p>
+<p>Here, there are expressions on different lines, making it multiline,
+but the last line has no variable assigned to the output of <cite>a + 2</cite>.</p>
+</li>
+<li><p class="first"><cite>inplace=True</cite>, but the expression is missing item assignment.</p>
+</li>
+<li><p class="first">Item assignment is provided, but the <cite>target</cite> does not support
+string item assignment.</p>
+</li>
+<li><p class="first">Item assignment is provided and <cite>inplace=False</cite>, but the <cite>target</cite>
+does not support the <cite>.copy()</cite> method</p>
+</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="pandas.DataFrame.query.html#pandas.DataFrame.query" title="pandas.DataFrame.query"><code class="xref py py-obj docutils literal"><span class="pre">pandas.DataFrame.query</span></code></a>, <a class="reference internal" href="pandas.DataFrame.eval.html#pandas.DataFrame.eval" title="pandas.DataFrame.eval"><code class="xref py py-obj docutils literal"><span class="pre">pandas.DataFrame.eval</span></code></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p>The <code class="docutils literal"><span class="pre">dtype</span></code> of any objects involved in an arithmetic <code class="docutils literal"><span class="pre">%</span></code> operation are
+recursively cast to <code class="docutils literal"><span class="pre">float64</span></code>.</p>
+<p>See the <a class="reference internal" href="../enhancingperf.html#enhancingperf-eval"><span class="std std-ref">enhancing performance</span></a> documentation for
+more details.</p>
+</dd></dl>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="clearer"></div>
+        </div>
+    </div>
+</div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pandas.test.html" title="pandas.test"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pandas.interval_range.html" title="pandas.interval_range"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pandas 0.22.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API Reference</a> &#187;</li> 
+      </ul>
+    </div>
+<style type="text/css">
+    .scrollToTop {
+        text-align: center;
+        font-weight: bold;
+        position: fixed;
+        bottom: 60px;
+        right: 40px;
+        display: none;
+    }
+</style>
+<a href="#" class="scrollToTop">Scroll To Top</a>
+<script type="text/javascript">
+$(document).ready(function() {
+    //Check to see if the window is top if not then display button
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 200) {
+            $('.scrollToTop').fadeIn();
+        } else {
+            $('.scrollToTop').fadeOut();
+        }
+    });
+
+    //Click event to scroll to top
+    $('.scrollToTop').click(function() {
+        $('html, body').animate({
+            scrollTop: 0
+        }, 500);
+        return false;
+    });
+});
+</script>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27880019-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </body>
+</html>

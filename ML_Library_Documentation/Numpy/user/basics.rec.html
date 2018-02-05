@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Structured arrays &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" >
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../index.html" >
+    <link rel="up" title="NumPy basics" href="basics.html" >
+    <link rel="next" title="Subclassing ndarray" href="basics.subclassing.html" >
+    <link rel="prev" title="Byte-swapping" href="basics.byteswapping.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="index.html" >NumPy User Guide</a></li>
+          <li class="active"><a href="basics.html" accesskey="U">NumPy basics</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="basics.subclassing.html" title="Subclassing ndarray"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="basics.byteswapping.html" title="Byte-swapping"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Structured arrays</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#structured-datatypes">Structured Datatypes</a><ul>
+<li><a class="reference internal" href="#structured-datatype-creation">Structured Datatype Creation</a></li>
+<li><a class="reference internal" href="#manipulating-and-displaying-structured-datatypes">Manipulating and Displaying Structured Datatypes</a></li>
+<li><a class="reference internal" href="#automatic-byte-offsets-and-alignment">Automatic Byte Offsets and Alignment</a></li>
+<li><a class="reference internal" href="#field-titles">Field Titles</a></li>
+<li><a class="reference internal" href="#union-types">Union types</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indexing-and-assignment-to-structured-arrays">Indexing and Assignment to Structured arrays</a><ul>
+<li><a class="reference internal" href="#assigning-data-to-a-structured-array">Assigning data to a Structured Array</a><ul>
+<li><a class="reference internal" href="#assignment-from-python-native-types-tuples">Assignment from Python Native Types (Tuples)</a></li>
+<li><a class="reference internal" href="#assignment-from-scalars">Assignment from Scalars</a></li>
+<li><a class="reference internal" href="#assignment-from-other-structured-arrays">Assignment from other Structured Arrays</a></li>
+<li><a class="reference internal" href="#assignment-involving-subarrays">Assignment involving subarrays</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indexing-structured-arrays">Indexing Structured Arrays</a><ul>
+<li><a class="reference internal" href="#accessing-individual-fields">Accessing Individual Fields</a></li>
+<li><a class="reference internal" href="#accessing-multiple-fields">Accessing Multiple Fields</a></li>
+<li><a class="reference internal" href="#indexing-with-an-integer-to-get-a-structured-scalar">Indexing with an Integer to get a Structured Scalar</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#viewing-structured-arrays-containing-objects">Viewing Structured Arrays Containing Objects</a></li>
+<li><a class="reference internal" href="#structure-comparison">Structure Comparison</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#record-arrays">Record Arrays</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="basics.byteswapping.html"
+                        title="previous chapter">Byte-swapping</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="basics.subclassing.html"
+                        title="next chapter">Subclassing ndarray</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-numpy.doc.structured_arrays">
+<span id="id1"></span><span id="structured-arrays"></span><h1>Structured arrays<a class="headerlink" href="#module-numpy.doc.structured_arrays" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Structured arrays are ndarrays whose datatype is a composition of simpler
+datatypes organized as a sequence of named <span class="xref std std-term">fields</span>. For example,</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="s1">&#39;Rex&#39;</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mf">81.0</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Fido&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mf">27.0</span><span class="p">)],</span>
+<span class="gp">... </span>             <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;U10&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;i4&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;weight&#39;</span><span class="p">,</span> <span class="s1">&#39;f4&#39;</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+<span class="go">array([(&#39;Rex&#39;, 9, 81.0), (&#39;Fido&#39;, 3, 27.0)],</span>
+<span class="go">      dtype=[(&#39;name&#39;, &#39;S10&#39;), (&#39;age&#39;, &#39;&lt;i4&#39;), (&#39;weight&#39;, &#39;&lt;f4&#39;)])</span>
+</pre></div>
+</div>
+<p>Here <code class="docutils literal"><span class="pre">x</span></code> is a one-dimensional array of length two whose datatype is a
+structure with three fields: 1. A string of length 10 or less named &#8216;name&#8217;, 2.
+a 32-bit integer named &#8216;age&#8217;, and 3. a 32-bit float named &#8216;weight&#8217;.</p>
+<p>If you index <code class="docutils literal"><span class="pre">x</span></code> at position 1 you get a structure:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">(&#39;Fido&#39;, 3, 27.0)</span>
+</pre></div>
+</div>
+<p>You can access and modify individual fields of a structured array by indexing
+with the field name:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span>
+<span class="go">array([9, 3], dtype=int32)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+<span class="go">array([(&#39;Rex&#39;, 5, 81.0), (&#39;Fido&#39;, 5, 27.0)],</span>
+<span class="go">      dtype=[(&#39;name&#39;, &#39;S10&#39;), (&#39;age&#39;, &#39;&lt;i4&#39;), (&#39;weight&#39;, &#39;&lt;f4&#39;)])</span>
+</pre></div>
+</div>
+<p>Structured arrays are designed for low-level manipulation of structured data,
+for example, for interpreting binary blobs. Structured datatypes are
+designed to mimic &#8216;structs&#8217; in the C language, making them also useful for
+interfacing with C code. For these purposes, numpy supports specialized
+features such as subarrays and nested datatypes, and allows manual control over
+the memory layout of the structure.</p>
+<p>For simple manipulation of tabular data other pydata projects, such as pandas,
+xarray, or DataArray, provide higher-level interfaces that may be more
+suitable. These projects may also give better performance for tabular data
+analysis because the C-struct-like memory layout of structured arrays can lead
+to poor cache behavior.</p>
+</div>
+<div class="section" id="structured-datatypes">
+<span id="defining-structured-types"></span><h2>Structured Datatypes<a class="headerlink" href="#structured-datatypes" title="Permalink to this headline">¶</a></h2>
+<p>To use structured arrays one first needs to define a structured datatype.</p>
+<p>A structured datatype can be thought of as a sequence of bytes of a certain
+length (the structure&#8217;s <span class="xref std std-term">itemsize</span>) which is interpreted as a collection
+of fields. Each field has a name, a datatype, and a byte offset within the
+structure. The datatype of a field may be any numpy datatype including other
+structured datatypes, and it may also be a <span class="xref std std-term">sub-array</span> which behaves like
+an ndarray of a specified shape. The offsets of the fields are arbitrary, and
+fields may even overlap. These offsets are usually determined automatically by
+numpy, but can also be specified.</p>
+<div class="section" id="structured-datatype-creation">
+<h3>Structured Datatype Creation<a class="headerlink" href="#structured-datatype-creation" title="Permalink to this headline">¶</a></h3>
+<p>Structured datatypes may be created using the function <a class="reference internal" href="../reference/generated/numpy.dtype.html#numpy.dtype" title="numpy.dtype"><code class="xref py py-func docutils literal"><span class="pre">numpy.dtype</span></code></a>.
+There are 4 alternative forms of specification which vary in flexibility and
+conciseness. These are further documented in the
+<a class="reference internal" href="../reference/arrays.dtypes.html#arrays-dtypes-constructing"><span class="std std-ref">Data Type Objects</span></a> reference page, and in
+summary they are:</p>
+<ol class="arabic">
+<li><p class="first">A list of tuples, one tuple per field</p>
+<p>Each tuple has the form <code class="docutils literal"><span class="pre">(fieldname,</span> <span class="pre">datatype,</span> <span class="pre">shape)</span></code> where shape is
+optional. <code class="docutils literal"><span class="pre">fieldname</span></code> is a string (or tuple if titles are used, see
+<a class="reference internal" href="#titles"><span class="std std-ref">Field Titles</span></a> below), <code class="docutils literal"><span class="pre">datatype</span></code> may be any object
+convertible to a datatype, and <code class="docutils literal"><span class="pre">shape</span></code> is a tuple of integers specifying
+subarray shape.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;f4&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="s1">&#39;f4&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">))])</span>
+<span class="go">dtype=[(&#39;x&#39;, &#39;&lt;f4&#39;), (&#39;y&#39;, &#39;&lt;f4&#39;), (&#39;z&#39;, &#39;&lt;f4&#39;, (2, 2))])</span>
+</pre></div>
+</div>
+<p>If <code class="docutils literal"><span class="pre">fieldname</span></code> is the empty string <code class="docutils literal"><span class="pre">''</span></code>, the field will be given a
+default name of the form <code class="docutils literal"><span class="pre">f#</span></code>, where <code class="docutils literal"><span class="pre">#</span></code> is the integer index of the
+field, counting from 0 from the left:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;f4&#39;</span><span class="p">),(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;i4&#39;</span><span class="p">),(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="s1">&#39;i8&#39;</span><span class="p">)])</span>
+<span class="go">dtype([(&#39;x&#39;, &#39;&lt;f4&#39;), (&#39;f1&#39;, &#39;&lt;i4&#39;), (&#39;z&#39;, &#39;&lt;i8&#39;)])</span>
+</pre></div>
+</div>
+<p>The byte offsets of the fields within the structure and the total
+structure itemsize are determined automatically.</p>
+</li>
+<li><p class="first">A string of comma-separated dtype specifications</p>
+<p>In this shorthand notation any of the <a class="reference internal" href="../reference/arrays.dtypes.html#arrays-dtypes-constructing"><span class="std std-ref">string dtype specifications</span></a> may be used in a string and separated by
+commas. The itemsize and byte offsets of the fields are determined
+automatically, and the field names are given the default names <code class="docutils literal"><span class="pre">f0</span></code>,
+<code class="docutils literal"><span class="pre">f1</span></code>, etc.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;i8,f4,S3&#39;</span><span class="p">)</span>
+<span class="go">dtype([(&#39;f0&#39;, &#39;&lt;i8&#39;), (&#39;f1&#39;, &#39;&lt;f4&#39;), (&#39;f2&#39;, &#39;S3&#39;)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;3int8, float32, (2,3)float64&#39;</span><span class="p">)</span>
+<span class="go">dtype([(&#39;f0&#39;, &#39;i1&#39;, 3), (&#39;f1&#39;, &#39;&lt;f4&#39;), (&#39;f2&#39;, &#39;&lt;f8&#39;, (2, 3))])</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">A dictionary of field parameter arrays</p>
+<p>This is the most flexible form of specification since it allows control
+over the byte-offsets of the fields and the itemsize of the structure.</p>
+<p>The dictionary has two required keys, &#8216;names&#8217; and &#8216;formats&#8217;, and four
+optional keys, &#8216;offsets&#8217;, &#8216;itemsize&#8217;, &#8216;aligned&#8217; and &#8216;titles&#8217;. The values
+for &#8216;names&#8217; and &#8216;formats&#8217; should respectively be a list of field names and
+a list of dtype specifications, of the same length. The optional &#8216;offsets&#8217;
+value should be a list of integer byte-offsets, one for each field within
+the structure. If &#8216;offsets&#8217; is not given the offsets are determined
+automatically. The optional &#8216;itemsize&#8217; value should be an integer
+describing the total size in bytes of the dtype, which must be large
+enough to contain all the fields.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">({</span><span class="s1">&#39;names&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;col1&#39;</span><span class="p">,</span> <span class="s1">&#39;col2&#39;</span><span class="p">],</span> <span class="s1">&#39;formats&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;i4&#39;</span><span class="p">,</span><span class="s1">&#39;f4&#39;</span><span class="p">]})</span>
+<span class="go">dtype([(&#39;col1&#39;, &#39;&lt;i4&#39;), (&#39;col2&#39;, &#39;&lt;f4&#39;)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">({</span><span class="s1">&#39;names&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;col1&#39;</span><span class="p">,</span> <span class="s1">&#39;col2&#39;</span><span class="p">],</span>
+<span class="gp">... </span>          <span class="s1">&#39;formats&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;i4&#39;</span><span class="p">,</span><span class="s1">&#39;f4&#39;</span><span class="p">],</span>
+<span class="gp">... </span>          <span class="s1">&#39;offsets&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+<span class="gp">... </span>          <span class="s1">&#39;itemsize&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">})</span>
+<span class="go">dtype({&#39;names&#39;:[&#39;col1&#39;,&#39;col2&#39;], &#39;formats&#39;:[&#39;&lt;i4&#39;,&#39;&lt;f4&#39;], &#39;offsets&#39;:[0,4], &#39;itemsize&#39;:12})</span>
+</pre></div>
+</div>
+<p>Offsets may be chosen such that the fields overlap, though this will mean
+that assigning to one field may clobber any overlapping field&#8217;s data. As
+an exception, fields of <code class="xref py py-class docutils literal"><span class="pre">numpy.object</span></code> type .. (see 
+<span class="xref std std-ref">object arrays</span>) cannot overlap with other fields,
+because of the risk of clobbering the internal object pointer and then
+dereferencing it.</p>
+<p>The optional &#8216;aligned&#8217; value can be set to <code class="docutils literal"><span class="pre">True</span></code> to make the automatic
+offset computation use aligned offsets (see <a class="reference internal" href="#offsets-and-alignment"><span class="std std-ref">Automatic Byte Offsets and Alignment</span></a>),
+as if the &#8216;align&#8217; keyword argument of <a class="reference internal" href="../reference/generated/numpy.dtype.html#numpy.dtype" title="numpy.dtype"><code class="xref py py-func docutils literal"><span class="pre">numpy.dtype</span></code></a> had been set to
+True.</p>
+<p>The optional &#8216;titles&#8217; value should be a list of titles of the same length
+as &#8216;names&#8217;, see <a class="reference internal" href="#titles"><span class="std std-ref">Field Titles</span></a> below.</p>
+</li>
+<li><p class="first">A dictionary of field names</p>
+<p>The use of this form of specification is discouraged, but documented here
+because older numpy code may use it. The keys of the dictionary are the
+field names and the values are tuples specifying type and offset:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="o">=</span><span class="p">({</span><span class="s1">&#39;col1&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;i1&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;col2&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;f4&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)})</span>
+<span class="go">dtype([((&#39;col1&#39;), &#39;i1&#39;), ((&#39;col2&#39;), &#39;&gt;f4&#39;)])</span>
+</pre></div>
+</div>
+<p>This form is discouraged because Python dictionaries do not preserve order
+in Python versions before Python 3.6, and the order of the fields in a
+structured dtype has meaning. <a class="reference internal" href="#titles"><span class="std std-ref">Field Titles</span></a> may be
+specified by using a 3-tuple, see below.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="manipulating-and-displaying-structured-datatypes">
+<h3>Manipulating and Displaying Structured Datatypes<a class="headerlink" href="#manipulating-and-displaying-structured-datatypes" title="Permalink to this headline">¶</a></h3>
+<p>The list of field names of a structured datatype can be found in the <code class="docutils literal"><span class="pre">names</span></code>
+attribute of the dtype object:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;i8&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;f4&#39;</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">names</span>
+<span class="go">(&#39;x&#39;, &#39;y&#39;)</span>
+</pre></div>
+</div>
+<p>The field names may be modified by assigning to the <code class="docutils literal"><span class="pre">names</span></code> attribute using a
+sequence of strings of the same length.</p>
+<p>The dtype object also has a dictionary-like attribute, <code class="docutils literal"><span class="pre">fields</span></code>, whose keys
+are the field names (and <a class="reference internal" href="#titles"><span class="std std-ref">Field Titles</span></a>, see below) and whose
+values are tuples containing the dtype and byte offset of each field.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">fields</span>
+<span class="go">mappingproxy({&#39;x&#39;: (dtype(&#39;int64&#39;), 0), &#39;y&#39;: (dtype(&#39;float32&#39;), 8)})</span>
+</pre></div>
+</div>
+<p>Both the <code class="docutils literal"><span class="pre">names</span></code> and <code class="docutils literal"><span class="pre">fields</span></code> attributes will equal <code class="docutils literal"><span class="pre">None</span></code> for
+unstructured arrays.</p>
+<p>The string representation of a structured datatype is shown in the &#8220;list of
+tuples&#8221; form if possible, otherwise numpy falls back to using the more general
+dictionary form.</p>
+</div>
+<div class="section" id="automatic-byte-offsets-and-alignment">
+<span id="offsets-and-alignment"></span><h3>Automatic Byte Offsets and Alignment<a class="headerlink" href="#automatic-byte-offsets-and-alignment" title="Permalink to this headline">¶</a></h3>
+<p>Numpy uses one of two methods to automatically determine the field byte offsets
+and the overall itemsize of a structured datatype, depending on whether
+<code class="docutils literal"><span class="pre">align=True</span></code> was specified as a keyword argument to <a class="reference internal" href="../reference/generated/numpy.dtype.html#numpy.dtype" title="numpy.dtype"><code class="xref py py-func docutils literal"><span class="pre">numpy.dtype</span></code></a>.</p>
+<p>By default (<code class="docutils literal"><span class="pre">align=False</span></code>), numpy will pack the fields together such that
+each field starts at the byte offset the previous field ended, and the fields
+are contiguous in memory.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">print_offsets</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;offsets:&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">names</span><span class="p">])</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;itemsize:&quot;</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">itemsize</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">print_offsets</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;u1,u1,i4,u1,i8,u2&#39;</span><span class="p">))</span>
+<span class="go">offsets: [0, 1, 2, 6, 7, 15]</span>
+<span class="go">itemsize: 17</span>
+</pre></div>
+</div>
+<p>If <code class="docutils literal"><span class="pre">align=True</span></code> is set, numpy will pad the structure in the same way many C
+compilers would pad a C-struct. Aligned structures can give a performance
+improvement in some cases, at the cost of increased datatype size. Padding
+bytes are inserted between fields such that each field&#8217;s byte offset will be a
+multiple of that field&#8217;s alignment, which is usually equal to the field&#8217;s size
+in bytes for simple datatypes, see <a class="reference internal" href="../reference/c-api.types-and-structures.html#c.PyArray_Descr.alignment" title="PyArray_Descr.alignment"><code class="xref c c-member docutils literal"><span class="pre">PyArray_Descr.alignment</span></code></a>.  The
+structure will also have trailing padding added so that its itemsize is a
+multiple of the largest field&#8217;s alignment.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_offsets</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;u1,u1,i4,u1,i8,u2&#39;</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="go">offsets: [0, 1, 4, 8, 16, 24]</span>
+<span class="go">itemsize: 32</span>
+</pre></div>
+</div>
+<p>Note that although almost all modern C compilers pad in this way by default,
+padding in C structs is C-implementation-dependent so this memory layout is not
+guaranteed to exactly match that of a corresponding struct in a C program. Some
+work may be needed, either on the numpy side or the C side, to obtain exact
+correspondence.</p>
+<p>If offsets were specified using the optional <code class="docutils literal"><span class="pre">offsets</span></code> key in the
+dictionary-based dtype specification, setting <code class="docutils literal"><span class="pre">align=True</span></code> will check that
+each field&#8217;s offset is a multiple of its size and that the itemsize is a
+multiple of the largest field size, and raise an exception if not.</p>
+<p>If the offsets of the fields and itemsize of a structured array satisfy the
+alignment conditions, the array will have the <code class="docutils literal"><span class="pre">ALIGNED</span></code> <span class="xref std std-ref">flag</span> set.</p>
+</div>
+<div class="section" id="field-titles">
+<span id="titles"></span><h3>Field Titles<a class="headerlink" href="#field-titles" title="Permalink to this headline">¶</a></h3>
+<p>In addition to field names, fields may also have an associated <span class="xref std std-term">title</span>,
+an alternate name, which is sometimes used as an additional description or
+alias for the field. The title may be used to index an array, just like a
+field name.</p>
+<p>To add titles when using the list-of-tuples form of dtype specification, the
+field name may be be specified as a tuple of two strings instead of a single
+string, which will be the field&#8217;s title and field name respectively. For
+example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([((</span><span class="s1">&#39;my title&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">),</span> <span class="s1">&#39;f4&#39;</span><span class="p">)])</span>
+</pre></div>
+</div>
+<p>When using the first form of dictionary-based specification, the titles may be
+supplied as an extra <code class="docutils literal"><span class="pre">'titles'</span></code> key as described above. When using the second
+(discouraged) dictionary-based specification, the title can be supplied by
+providing a 3-element tuple <code class="docutils literal"><span class="pre">(datatype,</span> <span class="pre">offset,</span> <span class="pre">title)</span></code> instead of the usual
+2-element tuple:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;i4&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;my title&#39;</span><span class="p">)})</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">dtype.fields</span></code> dictionary will contain <span class="xref std std-term">titles</span> as keys, if any
+titles are used.  This means effectively that a field with a title will be
+represented twice in the fields dictionary. The tuple values for these fields
+will also have a third element, the field title. Because of this, and because
+the <code class="docutils literal"><span class="pre">names</span></code> attribute preserves the field order while the <code class="docutils literal"><span class="pre">fields</span></code>
+attribute may not, it is recommended to iterate through the fields of a dtype
+using the <code class="docutils literal"><span class="pre">names</span></code> attribute of the dtype, which will not list titles, as
+in:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">name</span><span class="p">][:</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="union-types">
+<h3>Union types<a class="headerlink" href="#union-types" title="Permalink to this headline">¶</a></h3>
+<p>Structured datatypes are implemented in numpy to have base type
+<code class="xref py py-class docutils literal"><span class="pre">numpy.void</span></code> by default, but it is possible to interpret other numpy
+types as structured types using the <code class="docutils literal"><span class="pre">(base_dtype,</span> <span class="pre">dtype)</span></code> form of dtype
+specification described in
+<a class="reference internal" href="../reference/arrays.dtypes.html#arrays-dtypes-constructing"><span class="std std-ref">Data Type Objects</span></a>.  Here, <code class="docutils literal"><span class="pre">base_dtype</span></code> is
+the desired underlying dtype, and fields and flags will be copied from
+<code class="docutils literal"><span class="pre">dtype</span></code>. This dtype is similar to a &#8216;union&#8217; in C.</p>
+</div>
+</div>
+<div class="section" id="indexing-and-assignment-to-structured-arrays">
+<h2>Indexing and Assignment to Structured arrays<a class="headerlink" href="#indexing-and-assignment-to-structured-arrays" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="assigning-data-to-a-structured-array">
+<h3>Assigning data to a Structured Array<a class="headerlink" href="#assigning-data-to-a-structured-array" title="Permalink to this headline">¶</a></h3>
+<p>There are a number of ways to assign values to a structured array: Using python
+tuples, using scalar values, or using other structured arrays.</p>
+<div class="section" id="assignment-from-python-native-types-tuples">
+<h4>Assignment from Python Native Types (Tuples)<a class="headerlink" href="#assignment-from-python-native-types-tuples" title="Permalink to this headline">¶</a></h4>
+<p>The simplest way to assign values to a structured array is using python tuples.
+Each assigned value should be a tuple of length equal to the number of fields
+in the array, and not a list or array as these will trigger numpy&#8217;s
+broadcasting rules. The tuple&#8217;s elements are assigned to the successive fields
+of the array, from left to right:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),(</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;i8,f4,f8&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+<span class="go">array([(1, 2., 3.), (7, 8., 9.)],</span>
+<span class="go">     dtype=[(&#39;f0&#39;, &#39;&lt;i8&#39;), (&#39;f1&#39;, &#39;&lt;f4&#39;), (&#39;f2&#39;, &#39;&lt;f8&#39;)])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="assignment-from-scalars">
+<h4>Assignment from Scalars<a class="headerlink" href="#assignment-from-scalars" title="Permalink to this headline">¶</a></h4>
+<p>A scalar assigned to a structured element will be assigned to all fields. This
+happens when a scalar is assigned to a structured array, or when an
+unstructured array is assigned to a structured array:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;i8,f4,?,S1&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">[:]</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+<span class="go">array([(3, 3.0, True, b&#39;3&#39;), (3, 3.0, True, b&#39;3&#39;)],</span>
+<span class="go">      dtype=[(&#39;f0&#39;, &#39;&lt;i8&#39;), (&#39;f1&#39;, &#39;&lt;f4&#39;), (&#39;f2&#39;, &#39;?&#39;), (&#39;f3&#39;, &#39;S1&#39;)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+<span class="go">array([(0, 0.0, False, b&#39;0&#39;), (1, 1.0, True, b&#39;1&#39;)],</span>
+<span class="go">      dtype=[(&#39;f0&#39;, &#39;&lt;i8&#39;), (&#39;f1&#39;, &#39;&lt;f4&#39;), (&#39;f2&#39;, &#39;?&#39;), (&#39;f3&#39;, &#39;S1&#39;)])</span>
+</pre></div>
+</div>
+<p>Structured arrays can also be assigned to unstructured arrays, but only if the
+structured datatype has just a single field:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">twofield</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;i4&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;i4&#39;</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">onefield</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;i4&#39;</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nostruct</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;i4&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nostruct</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">twofield</span>
+<span class="go">ValueError: Can&#39;t cast from structure to non-structure, except if the structure only has a single field.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nostruct</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">onefield</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nostruct</span>
+<span class="go">array([0, 0], dtype=int32)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="assignment-from-other-structured-arrays">
+<h4>Assignment from other Structured Arrays<a class="headerlink" href="#assignment-from-other-structured-arrays" title="Permalink to this headline">¶</a></h4>
+<p>Assignment between two structured arrays occurs as if the source elements had
+been converted to tuples and then assigned to the destination elements. That
+is, the first field of the source array is assigned to the first field of the
+destination array, and the second field likewise, and so on, regardless of
+field names. Structured arrays with a different number of fields cannot be
+assigned to each other. Bytes of the destination structure which are not
+included in any of the fields are unaffected.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;i8&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;f4&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;S3&#39;</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;f4&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;S3&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">a</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span>
+<span class="go">array([(0.0, b&#39;0.0&#39;, b&#39;&#39;), (0.0, b&#39;0.0&#39;, b&#39;&#39;), (0.0, b&#39;0.0&#39;, b&#39;&#39;)],</span>
+<span class="go">      dtype=[(&#39;x&#39;, &#39;&lt;f4&#39;), (&#39;y&#39;, &#39;S3&#39;), (&#39;z&#39;, &#39;O&#39;)])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="assignment-involving-subarrays">
+<h4>Assignment involving subarrays<a class="headerlink" href="#assignment-involving-subarrays" title="Permalink to this headline">¶</a></h4>
+<p>When assigning to fields which are subarrays, the assigned value will first be
+broadcast to the shape of the subarray.</p>
+</div>
+</div>
+<div class="section" id="indexing-structured-arrays">
+<h3>Indexing Structured Arrays<a class="headerlink" href="#indexing-structured-arrays" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="accessing-individual-fields">
+<h4>Accessing Individual Fields<a class="headerlink" href="#accessing-individual-fields" title="Permalink to this headline">¶</a></h4>
+<p>Individual fields of a structured array may be accessed and modified by indexing
+the array with the field name.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;i8&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="s1">&#39;f4&#39;</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;foo&#39;</span><span class="p">]</span>
+<span class="go">array([1, 3])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;foo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+<span class="go">array([(10, 2.), (10, 4.)],</span>
+<span class="go">      dtype=[(&#39;foo&#39;, &#39;&lt;i8&#39;), (&#39;bar&#39;, &#39;&lt;f4&#39;)])</span>
+</pre></div>
+</div>
+<p>The resulting array is a view into the original array. It shares the same
+memory locations and writing to the view will modify the original array.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;bar&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span><span class="p">[:]</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+<span class="go">array([(10, 5.), (10, 5.)],</span>
+<span class="go">      dtype=[(&#39;foo&#39;, &#39;&lt;i8&#39;), (&#39;bar&#39;, &#39;&lt;f4&#39;)])</span>
+</pre></div>
+</div>
+<p>This view has the same dtype and itemsize as the indexed field, so it is
+typically a non-structured array, except in the case of nested structures.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">y</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">strides</span>
+<span class="go">(dtype(&#39;float32&#39;), (2,), (12,))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="accessing-multiple-fields">
+<h4>Accessing Multiple Fields<a class="headerlink" href="#accessing-multiple-fields" title="Permalink to this headline">¶</a></h4>
+<p>One can index a structured array with a multi-field index, where the index is a
+list of field names:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;i8&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;i4&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;f8&#39;</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">[[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">]]</span>
+<span class="go">array([(0, 0.0), (0, 0.0), (0, 0.0)],</span>
+<span class="go">      dtype={&#39;names&#39;:[&#39;a&#39;,&#39;c&#39;], &#39;formats&#39;:[&#39;&lt;i8&#39;,&#39;&lt;f8&#39;], &#39;offsets&#39;:[0,11], &#39;itemsize&#39;:19})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">[[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
+<span class="go">array([(2, 0, 3.0), (2, 0, 3.0), (2, 0, 3.0)],</span>
+<span class="go">      dtype=[(&#39;a&#39;, &#39;&lt;i8&#39;), (&#39;b&#39;, &#39;&lt;i4&#39;), (&#39;c&#39;, &#39;&lt;f8&#39;)])</span>
+</pre></div>
+</div>
+<p>The resulting array is a view into the original array, such that assignment to
+the view modifies the original array. The view&#8217;s fields will be in the order
+they were indexed. Note that unlike for single-field indexing, the view&#8217;s dtype
+has the same itemsize as the original array, and has fields at the same offsets
+as in the original array, and unindexed fields are merely missing.</p>
+<p>Since the view is a structured array itself, it obeys the assignment rules
+described above. For example, this means that one can swap the values of two
+fields using appropriate multi-field indexes:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">[[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[[</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">]]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="indexing-with-an-integer-to-get-a-structured-scalar">
+<h4>Indexing with an Integer to get a Structured Scalar<a class="headerlink" href="#indexing-with-an-integer-to-get-a-structured-scalar" title="Permalink to this headline">¶</a></h4>
+<p>Indexing a single element of a structured array (with an integer index) returns
+a structured scalar:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;i,f,f&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scalar</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scalar</span>
+<span class="go">(1, 2., 3.)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">scalar</span><span class="p">)</span>
+<span class="go">numpy.void</span>
+</pre></div>
+</div>
+<p>Unlike other numpy scalars, structured scalars are mutable and act like views
+into the original array, such that modifying the scalar will modify the
+original array. Structured scalars also support access and assignment by field
+name:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;i8&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="s1">&#39;f4&#39;</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;bar&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+<span class="go">array([(1, 100.), (3, 4.)],</span>
+<span class="go">      dtype=[(&#39;foo&#39;, &#39;&lt;i8&#39;), (&#39;bar&#39;, &#39;&lt;f4&#39;)])</span>
+</pre></div>
+</div>
+<p>Similarly to tuples, structured scalars can also be indexed with an integer:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">scalar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;i,f,f&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scalar</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scalar</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
+</pre></div>
+</div>
+<p>Thus, tuples might be thought of as the native Python equivalent to numpy&#8217;s
+structured types, much like native python integers are the equivalent to
+numpy&#8217;s integer types. Structured scalars may be converted to a tuple by
+calling <code class="xref py py-func docutils literal"><span class="pre">ndarray.item</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">scalar</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="nb">type</span><span class="p">(</span><span class="n">scalar</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+<span class="go">((1, 2.0, 3.0), tuple)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="viewing-structured-arrays-containing-objects">
+<h3>Viewing Structured Arrays Containing Objects<a class="headerlink" href="#viewing-structured-arrays-containing-objects" title="Permalink to this headline">¶</a></h3>
+<p>In order to prevent clobbering object pointers in fields of
+<code class="xref py py-class docutils literal"><span class="pre">numpy.object</span></code> type, numpy currently does not allow views of structured
+arrays containing objects.</p>
+</div>
+<div class="section" id="structure-comparison">
+<h3>Structure Comparison<a class="headerlink" href="#structure-comparison" title="Permalink to this headline">¶</a></h3>
+<p>If the dtypes of two void structured arrays are equal, testing the equality of
+the arrays will result in a boolean array with the dimensions of the original
+arrays, with elements set to <code class="docutils literal"><span class="pre">True</span></code> where all fields of the corresponding
+structures are equal. Structured dtypes are equal if the field names,
+dtypes and titles are the same, ignoring endianness, and the fields are in
+the same order:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;i4&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;i4&#39;</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;i4&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;i4&#39;</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span>
+<span class="go">array([False, False])</span>
+</pre></div>
+</div>
+<p>Currently, if the dtypes of two void structured arrays are not equivalent the
+comparison fails, returning the scalar value <code class="docutils literal"><span class="pre">False</span></code>. This behavior is
+deprecated as of numpy 1.10 and will raise an error or perform elementwise
+comparison in the future.</p>
+<p>The <code class="docutils literal"><span class="pre">&lt;</span></code> and <code class="docutils literal"><span class="pre">&gt;</span></code> operators always return <code class="docutils literal"><span class="pre">False</span></code> when comparing void
+structured arrays, and arithmetic and bitwise operations are not supported.</p>
+</div>
+</div>
+<div class="section" id="record-arrays">
+<h2>Record Arrays<a class="headerlink" href="#record-arrays" title="Permalink to this headline">¶</a></h2>
+<p>As an optional convenience numpy provides an ndarray subclass,
+<a class="reference internal" href="../reference/generated/numpy.recarray.html#numpy.recarray" title="numpy.recarray"><code class="xref py py-class docutils literal"><span class="pre">numpy.recarray</span></code></a>, and associated helper functions in the
+<code class="xref py py-mod docutils literal"><span class="pre">numpy.rec</span></code> submodule, that allows access to fields of structured arrays
+by attribute instead of only by index. Record arrays also use a special
+datatype, <a class="reference internal" href="../reference/generated/numpy.record.html#numpy.record" title="numpy.record"><code class="xref py py-class docutils literal"><span class="pre">numpy.record</span></code></a>, that allows field access by attribute on the
+structured scalars obtained from the array.</p>
+<p>The simplest way to create a record array is with <code class="xref py py-func docutils literal"><span class="pre">numpy.rec.array</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">recordarr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rec</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span><span class="mf">2.</span><span class="p">,</span><span class="s1">&#39;Hello&#39;</span><span class="p">),(</span><span class="mi">2</span><span class="p">,</span><span class="mf">3.</span><span class="p">,</span><span class="s2">&quot;World&quot;</span><span class="p">)],</span>
+<span class="gp">... </span>                   <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;i4&#39;</span><span class="p">),(</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="s1">&#39;f4&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;baz&#39;</span><span class="p">,</span> <span class="s1">&#39;S10&#39;</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">recordarr</span><span class="o">.</span><span class="n">bar</span>
+<span class="go">array([ 2.,  3.], dtype=float32)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">recordarr</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+<span class="go">rec.array([(2, 3.0, &#39;World&#39;)],</span>
+<span class="go">      dtype=[(&#39;foo&#39;, &#39;&lt;i4&#39;), (&#39;bar&#39;, &#39;&lt;f4&#39;), (&#39;baz&#39;, &#39;S10&#39;)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">recordarr</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">foo</span>
+<span class="go">array([2], dtype=int32)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">recordarr</span><span class="o">.</span><span class="n">foo</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+<span class="go">array([2], dtype=int32)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">recordarr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">baz</span>
+<span class="go">&#39;World&#39;</span>
+</pre></div>
+</div>
+<p><code class="xref py py-func docutils literal"><span class="pre">numpy.rec.array</span></code> can convert a wide variety of arguments into record
+arrays, including structured arrays:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">arr</span> <span class="o">=</span> <span class="n">array</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span><span class="mf">2.</span><span class="p">,</span><span class="s1">&#39;Hello&#39;</span><span class="p">),(</span><span class="mi">2</span><span class="p">,</span><span class="mf">3.</span><span class="p">,</span><span class="s2">&quot;World&quot;</span><span class="p">)],</span>
+<span class="gp">... </span>            <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;i4&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="s1">&#39;f4&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;baz&#39;</span><span class="p">,</span> <span class="s1">&#39;S10&#39;</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">recordarr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rec</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="xref py py-mod docutils literal"><span class="pre">numpy.rec</span></code> module provides a number of other convenience functions for
+creating record arrays, see <a class="reference internal" href="../reference/routines.array-creation.html#routines-array-creation-rec"><span class="std std-ref">record array creation routines</span></a>.</p>
+<p>A record array representation of a structured array can be obtained using the
+appropriate <span class="xref std std-ref">view</span>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span><span class="mf">2.</span><span class="p">,</span><span class="s1">&#39;Hello&#39;</span><span class="p">),(</span><span class="mi">2</span><span class="p">,</span><span class="mf">3.</span><span class="p">,</span><span class="s2">&quot;World&quot;</span><span class="p">)],</span>
+<span class="gp">... </span>               <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;i4&#39;</span><span class="p">),(</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="s1">&#39;f4&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;baz&#39;</span><span class="p">,</span> <span class="s1">&#39;a10&#39;</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">recordarr</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">record</span><span class="p">,</span> <span class="n">arr</span><span class="o">.</span><span class="n">dtype</span><span class="p">)),</span>
+<span class="gp">... </span>                     <span class="nb">type</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">recarray</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For convenience, viewing an ndarray as type <code class="xref py py-class docutils literal"><span class="pre">np.recarray</span></code> will
+automatically convert to <code class="xref py py-class docutils literal"><span class="pre">np.record</span></code> datatype, so the dtype can be left
+out of the view:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">recordarr</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">recarray</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">recordarr</span><span class="o">.</span><span class="n">dtype</span>
+<span class="go">dtype((numpy.record, [(&#39;foo&#39;, &#39;&lt;i4&#39;), (&#39;bar&#39;, &#39;&lt;f4&#39;), (&#39;baz&#39;, &#39;S10&#39;)]))</span>
+</pre></div>
+</div>
+<p>To get back to a plain ndarray both the dtype and type must be reset. The
+following view does so, taking into account the unusual case that the
+recordarr was not a structured type:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">arr2</span> <span class="o">=</span> <span class="n">recordarr</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">recordarr</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">fields</span> <span class="ow">or</span> <span class="n">recordarr</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Record array fields accessed by index or by attribute are returned as a record
+array if the field has a structured type but as a plain ndarray otherwise.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">recordarr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rec</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="s1">&#39;Hello&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)),(</span><span class="s2">&quot;World&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">))],</span>
+<span class="gp">... </span>                <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;S6&#39;</span><span class="p">),(</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">)])])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">recordarr</span><span class="o">.</span><span class="n">foo</span><span class="p">)</span>
+<span class="go">&lt;type &#39;numpy.ndarray&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">recordarr</span><span class="o">.</span><span class="n">bar</span><span class="p">)</span>
+<span class="go">&lt;class &#39;numpy.core.records.recarray&#39;&gt;</span>
+</pre></div>
+</div>
+<p>Note that if a field has the same name as an ndarray attribute, the ndarray
+attribute takes precedence. Such fields will be inaccessible by attribute but
+will still be accessible by index.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>NumPy core libraries &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" >
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../index.html" >
+    <link rel="up" title="NumPy C-API" href="c-api.html" >
+    <link rel="next" title="C API Deprecations" href="c-api.deprecations.html" >
+    <link rel="prev" title="Generalized Universal Function API" href="c-api.generalized-ufuncs.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="c-api.html" accesskey="U">NumPy C-API</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="c-api.deprecations.html" title="C API Deprecations"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="c-api.generalized-ufuncs.html" title="Generalized Universal Function API"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">NumPy core libraries</a><ul>
+<li><a class="reference internal" href="#numpy-core-math-library">NumPy core math library</a><ul>
+<li><a class="reference internal" href="#floating-point-classification">Floating point classification</a></li>
+<li><a class="reference internal" href="#useful-math-constants">Useful math constants</a></li>
+<li><a class="reference internal" href="#low-level-floating-point-manipulation">Low-level floating point manipulation</a></li>
+<li><a class="reference internal" href="#complex-functions">Complex functions</a></li>
+<li><a class="reference internal" href="#linking-against-the-core-math-library-in-an-extension">Linking against the core math library in an extension</a></li>
+<li><a class="reference internal" href="#half-precision-functions">Half-precision functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="c-api.generalized-ufuncs.html"
+                        title="previous chapter">Generalized Universal Function API</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="c-api.deprecations.html"
+                        title="next chapter">C API Deprecations</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-core-libraries">
+<h1>NumPy core libraries<a class="headerlink" href="#numpy-core-libraries" title="Permalink to this headline">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.3.0.</span></p>
+</div>
+<p>Starting from numpy 1.3.0, we are working on separating the pure C,
+&#8220;computational&#8221; code from the python dependent code. The goal is twofolds:
+making the code cleaner, and enabling code reuse by other extensions outside
+numpy (scipy, etc...).</p>
+<div class="section" id="numpy-core-math-library">
+<h2>NumPy core math library<a class="headerlink" href="#numpy-core-math-library" title="Permalink to this headline">¶</a></h2>
+<p>The numpy core math library (&#8216;npymath&#8217;) is a first step in this direction. This
+library contains most math-related C99 functionality, which can be used on
+platforms where C99 is not well supported. The core math functions have the
+same API as the C99 ones, except for the npy_* prefix.</p>
+<p>The available functions are defined in &lt;numpy/npy_math.h&gt; - please refer to this header when
+in doubt.</p>
+<div class="section" id="floating-point-classification">
+<h3>Floating point classification<a class="headerlink" href="#floating-point-classification" title="Permalink to this headline">¶</a></h3>
+<dl class="var">
+<dt id="c.NPY_NAN">
+<code class="descname">NPY_NAN</code><a class="headerlink" href="#c.NPY_NAN" title="Permalink to this definition">¶</a></dt>
+<dd><p>This macro is defined to a NaN (Not a Number), and is guaranteed to have
+the signbit unset (&#8216;positive&#8217; NaN). The corresponding single and extension
+precision macro are available with the suffix F and L.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.NPY_INFINITY">
+<code class="descname">NPY_INFINITY</code><a class="headerlink" href="#c.NPY_INFINITY" title="Permalink to this definition">¶</a></dt>
+<dd><p>This macro is defined to a positive inf. The corresponding single and
+extension precision macro are available with the suffix F and L.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.NPY_PZERO">
+<code class="descname">NPY_PZERO</code><a class="headerlink" href="#c.NPY_PZERO" title="Permalink to this definition">¶</a></dt>
+<dd><p>This macro is defined to positive zero. The corresponding single and
+extension precision macro are available with the suffix F and L.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.NPY_NZERO">
+<code class="descname">NPY_NZERO</code><a class="headerlink" href="#c.NPY_NZERO" title="Permalink to this definition">¶</a></dt>
+<dd><p>This macro is defined to negative zero (that is with the sign bit set). The
+corresponding single and extension precision macro are available with the
+suffix F and L.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_isnan">
+int <code class="descname">npy_isnan</code><span class="sig-paren">(</span>x<span class="sig-paren">)</span><a class="headerlink" href="#c.npy_isnan" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a macro, and is equivalent to C99 isnan: works for single, double
+and extended precision, and return a non 0 value is x is a NaN.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_isfinite">
+int <code class="descname">npy_isfinite</code><span class="sig-paren">(</span>x<span class="sig-paren">)</span><a class="headerlink" href="#c.npy_isfinite" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a macro, and is equivalent to C99 isfinite: works for single,
+double and extended precision, and return a non 0 value is x is neither a
+NaN nor an infinity.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_isinf">
+int <code class="descname">npy_isinf</code><span class="sig-paren">(</span>x<span class="sig-paren">)</span><a class="headerlink" href="#c.npy_isinf" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a macro, and is equivalent to C99 isinf: works for single, double
+and extended precision, and return a non 0 value is x is infinite (positive
+and negative).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_signbit">
+int <code class="descname">npy_signbit</code><span class="sig-paren">(</span>x<span class="sig-paren">)</span><a class="headerlink" href="#c.npy_signbit" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a macro, and is equivalent to C99 signbit: works for single, double
+and extended precision, and return a non 0 value is x has the signbit set
+(that is the number is negative).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_copysign">
+double <code class="descname">npy_copysign</code><span class="sig-paren">(</span>double<em>&nbsp;x</em>, double<em>&nbsp;y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_copysign" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a function equivalent to C99 copysign: return x with the same sign
+as y. Works for any value, including inf and nan. Single and extended
+precisions are available with suffix f and l.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.4.0.</span></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="useful-math-constants">
+<h3>Useful math constants<a class="headerlink" href="#useful-math-constants" title="Permalink to this headline">¶</a></h3>
+<p>The following math constants are available in npy_math.h. Single and extended
+precision are also available by adding the F and L suffixes respectively.</p>
+<dl class="var">
+<dt id="c.NPY_E">
+<code class="descname">NPY_E</code><a class="headerlink" href="#c.NPY_E" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base of natural logarithm (<img class="math" src="../_images/math/78a06cf7a34f39fde71fbba0d5539baae7c72d4e.svg" alt="e"/>)</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.NPY_LOG2E">
+<code class="descname">NPY_LOG2E</code><a class="headerlink" href="#c.NPY_LOG2E" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithm to base 2 of the Euler constant (<img class="math" src="../_images/math/e923cda98ea82f4bc45289e31e4e87265d9a9eaf.svg" alt="\frac{\ln(e)}{\ln(2)}"/>)</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.NPY_LOG10E">
+<code class="descname">NPY_LOG10E</code><a class="headerlink" href="#c.NPY_LOG10E" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithm to base 10 of the Euler constant (<img class="math" src="../_images/math/bb13edbff6405ccc0dfb4922312b342b1694b12b.svg" alt="\frac{\ln(e)}{\ln(10)}"/>)</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.NPY_LOGE2">
+<code class="descname">NPY_LOGE2</code><a class="headerlink" href="#c.NPY_LOGE2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Natural logarithm of 2 (<img class="math" src="../_images/math/2adfadeeaf9c0c680c44dbfdc96a59f8ba291497.svg" alt="\ln(2)"/>)</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.NPY_LOGE10">
+<code class="descname">NPY_LOGE10</code><a class="headerlink" href="#c.NPY_LOGE10" title="Permalink to this definition">¶</a></dt>
+<dd><p>Natural logarithm of 10 (<img class="math" src="../_images/math/0e6561edc6f9f429bcfc210ff5b886b5f8164b38.svg" alt="\ln(10)"/>)</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.NPY_PI">
+<code class="descname">NPY_PI</code><a class="headerlink" href="#c.NPY_PI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pi (<img class="math" src="../_images/math/b7793e4f08d00aca47e272dcdfeb70f933dac222.svg" alt="\pi"/>)</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.NPY_PI_2">
+<code class="descname">NPY_PI_2</code><a class="headerlink" href="#c.NPY_PI_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pi divided by 2 (<img class="math" src="../_images/math/8682efc566ec991e274a96086f79643e45fc5cab.svg" alt="\frac{\pi}{2}"/>)</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.NPY_PI_4">
+<code class="descname">NPY_PI_4</code><a class="headerlink" href="#c.NPY_PI_4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pi divided by 4 (<img class="math" src="../_images/math/fb7f188c45278a5bed905995588f97b1e90850d6.svg" alt="\frac{\pi}{4}"/>)</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.NPY_1_PI">
+<code class="descname">NPY_1_PI</code><a class="headerlink" href="#c.NPY_1_PI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reciprocal of pi (<img class="math" src="../_images/math/e7808cd312bbbb9a211ca155411a031b255ba163.svg" alt="\frac{1}{\pi}"/>)</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.NPY_2_PI">
+<code class="descname">NPY_2_PI</code><a class="headerlink" href="#c.NPY_2_PI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Two times the reciprocal of pi (<img class="math" src="../_images/math/2a78bc1b3a6081b73d6e6cb9b71963cccc45edf6.svg" alt="\frac{2}{\pi}"/>)</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.NPY_EULER">
+<code class="descname">NPY_EULER</code><a class="headerlink" href="#c.NPY_EULER" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>The Euler constant</dt>
+<dd><img class="math" src="../_images/math/b699d8db47b4d7757055abc9f431b25847669eec.svg" alt="\lim_{n\rightarrow\infty}({\sum_{k=1}^n{\frac{1}{k}}-\ln n})"/></dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="low-level-floating-point-manipulation">
+<h3>Low-level floating point manipulation<a class="headerlink" href="#low-level-floating-point-manipulation" title="Permalink to this headline">¶</a></h3>
+<p>Those can be useful for precise floating point comparison.</p>
+<dl class="function">
+<dt id="c.npy_nextafter">
+double <code class="descname">npy_nextafter</code><span class="sig-paren">(</span>double<em>&nbsp;x</em>, double<em>&nbsp;y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_nextafter" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a function equivalent to C99 nextafter: return next representable
+floating point value from x in the direction of y. Single and extended
+precisions are available with suffix f and l.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.4.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_spacing">
+double <code class="descname">npy_spacing</code><span class="sig-paren">(</span>double<em>&nbsp;x</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_spacing" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a function equivalent to Fortran intrinsic. Return distance between
+x and next representable floating point value from x, e.g. spacing(1) ==
+eps. spacing of nan and +/- inf return nan. Single and extended precisions
+are available with suffix f and l.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.4.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_set_floatstatus_divbyzero">
+void <code class="descname">npy_set_floatstatus_divbyzero</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_set_floatstatus_divbyzero" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the divide by zero floating point exception</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.6.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_set_floatstatus_overflow">
+void <code class="descname">npy_set_floatstatus_overflow</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_set_floatstatus_overflow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the overflow floating point exception</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.6.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_set_floatstatus_underflow">
+void <code class="descname">npy_set_floatstatus_underflow</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_set_floatstatus_underflow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the underflow floating point exception</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.6.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_set_floatstatus_invalid">
+void <code class="descname">npy_set_floatstatus_invalid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_set_floatstatus_invalid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the invalid floating point exception</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.6.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_get_floatstatus">
+int <code class="descname">npy_get_floatstatus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_get_floatstatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get floating point status. Returns a bitmask with following possible flags:</p>
+<ul class="simple">
+<li>NPY_FPE_DIVIDEBYZERO</li>
+<li>NPY_FPE_OVERFLOW</li>
+<li>NPY_FPE_UNDERFLOW</li>
+<li>NPY_FPE_INVALID</li>
+</ul>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.9.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_clear_floatstatus">
+int <code class="descname">npy_clear_floatstatus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_clear_floatstatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears the floating point status. Returns the previous status mask.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.9.0.</span></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="complex-functions">
+<h3>Complex functions<a class="headerlink" href="#complex-functions" title="Permalink to this headline">¶</a></h3>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.4.0.</span></p>
+</div>
+<p>C99-like complex functions have been added. Those can be used if you wish to
+implement portable C extensions. Since we still support platforms without C99
+complex type, you need to restrict to C90-compatible syntax, e.g.:</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="cm">/* a = 1 + 2i \*/</span>
+<span class="n">npy_complex</span> <span class="n">a</span> <span class="o">=</span> <span class="n">npy_cpack</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+<span class="n">npy_complex</span> <span class="n">b</span><span class="p">;</span>
+
+<span class="n">b</span> <span class="o">=</span> <span class="n">npy_log</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="linking-against-the-core-math-library-in-an-extension">
+<h3>Linking against the core math library in an extension<a class="headerlink" href="#linking-against-the-core-math-library-in-an-extension" title="Permalink to this headline">¶</a></h3>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.4.0.</span></p>
+</div>
+<p>To use the core math library in your own extension, you need to add the npymath
+compile and link options to your extension in your setup.py:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy.distutils.misc_util</span> <span class="k">import</span> <span class="n">get_info</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">info</span> <span class="o">=</span> <span class="n">get_info</span><span class="p">(</span><span class="s1">&#39;npymath&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">config</span><span class="o">.</span><span class="n">add_extension</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="n">sources</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;foo.c&#39;</span><span class="p">],</span> <span class="n">extra_info</span><span class="o">=</span><span class="n">info</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In other words, the usage of info is exactly the same as when using blas_info
+and co.</p>
+</div>
+<div class="section" id="half-precision-functions">
+<h3>Half-precision functions<a class="headerlink" href="#half-precision-functions" title="Permalink to this headline">¶</a></h3>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 2.0.0.</span></p>
+</div>
+<p>The header file &lt;numpy/halffloat.h&gt; provides functions to work with
+IEEE 754-2008 16-bit floating point values. While this format is
+not typically used for numerical computations, it is useful for
+storing values which require floating point but do not need much precision.
+It can also be used as an educational tool to understand the nature
+of floating point round-off error.</p>
+<p>Like for other types, NumPy includes a typedef npy_half for the 16 bit
+float.  Unlike for most of the other types, you cannot use this as a
+normal type in C, since is is a typedef for npy_uint16.  For example,
+1.0 looks like 0x3c00 to C, and if you do an equality comparison
+between the different signed zeros, you will get -0.0 != 0.0
+(0x8000 != 0x0000), which is incorrect.</p>
+<p>For these reasons, NumPy provides an API to work with npy_half values
+accessible by including &lt;numpy/halffloat.h&gt; and linking to &#8216;npymath&#8217;.
+For functions that are not provided directly, such as the arithmetic
+operations, the preferred method is to convert to float
+or double and back again, as in the following example.</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">npy_half</span> <span class="nf">sum</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">npy_half</span> <span class="o">*</span><span class="n">array</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">float</span> <span class="n">ret</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">n</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">ret</span> <span class="o">+=</span> <span class="n">npy_half_to_float</span><span class="p">(</span><span class="o">*</span><span class="n">array</span><span class="o">++</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">npy_float_to_half</span><span class="p">(</span><span class="n">ret</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>External Links:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://ieeexplore.ieee.org/servlet/opac?punumber=4610933">754-2008 IEEE Standard for Floating-Point Arithmetic</a></li>
+<li><a class="reference external" href="http://en.wikipedia.org/wiki/Half_precision_floating-point_format">Half-precision Float Wikipedia Article</a>.</li>
+<li><a class="reference external" href="http://www.opengl.org/registry/specs/ARB/half_float_pixel.txt">OpenGL Half Float Pixel Support</a></li>
+<li><a class="reference external" href="http://www.openexr.com/about.html">The OpenEXR image format</a>.</li>
+</ul>
+<dl class="var">
+<dt id="c.NPY_HALF_ZERO">
+<code class="descname">NPY_HALF_ZERO</code><a class="headerlink" href="#c.NPY_HALF_ZERO" title="Permalink to this definition">¶</a></dt>
+<dd><p>This macro is defined to positive zero.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.NPY_HALF_PZERO">
+<code class="descname">NPY_HALF_PZERO</code><a class="headerlink" href="#c.NPY_HALF_PZERO" title="Permalink to this definition">¶</a></dt>
+<dd><p>This macro is defined to positive zero.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.NPY_HALF_NZERO">
+<code class="descname">NPY_HALF_NZERO</code><a class="headerlink" href="#c.NPY_HALF_NZERO" title="Permalink to this definition">¶</a></dt>
+<dd><p>This macro is defined to negative zero.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.NPY_HALF_ONE">
+<code class="descname">NPY_HALF_ONE</code><a class="headerlink" href="#c.NPY_HALF_ONE" title="Permalink to this definition">¶</a></dt>
+<dd><p>This macro is defined to 1.0.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.NPY_HALF_NEGONE">
+<code class="descname">NPY_HALF_NEGONE</code><a class="headerlink" href="#c.NPY_HALF_NEGONE" title="Permalink to this definition">¶</a></dt>
+<dd><p>This macro is defined to -1.0.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.NPY_HALF_PINF">
+<code class="descname">NPY_HALF_PINF</code><a class="headerlink" href="#c.NPY_HALF_PINF" title="Permalink to this definition">¶</a></dt>
+<dd><p>This macro is defined to +inf.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.NPY_HALF_NINF">
+<code class="descname">NPY_HALF_NINF</code><a class="headerlink" href="#c.NPY_HALF_NINF" title="Permalink to this definition">¶</a></dt>
+<dd><p>This macro is defined to -inf.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.NPY_HALF_NAN">
+<code class="descname">NPY_HALF_NAN</code><a class="headerlink" href="#c.NPY_HALF_NAN" title="Permalink to this definition">¶</a></dt>
+<dd><p>This macro is defined to a NaN value, guaranteed to have its sign bit unset.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_half_to_float">
+float <code class="descname">npy_half_to_float</code><span class="sig-paren">(</span>npy_half<em>&nbsp;h</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_half_to_float" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a half-precision float to a single-precision float.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_half_to_double">
+double <code class="descname">npy_half_to_double</code><span class="sig-paren">(</span>npy_half<em>&nbsp;h</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_half_to_double" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a half-precision float to a double-precision float.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_float_to_half">
+npy_half <code class="descname">npy_float_to_half</code><span class="sig-paren">(</span>float<em>&nbsp;f</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_float_to_half" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a single-precision float to a half-precision float.  The
+value is rounded to the nearest representable half, with ties going
+to the nearest even.  If the value is too small or too big, the
+system&#8217;s floating point underflow or overflow bit will be set.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_double_to_half">
+npy_half <code class="descname">npy_double_to_half</code><span class="sig-paren">(</span>double<em>&nbsp;d</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_double_to_half" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a double-precision float to a half-precision float.  The
+value is rounded to the nearest representable half, with ties going
+to the nearest even.  If the value is too small or too big, the
+system&#8217;s floating point underflow or overflow bit will be set.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_half_eq">
+int <code class="descname">npy_half_eq</code><span class="sig-paren">(</span>npy_half<em>&nbsp;h1</em>, npy_half<em>&nbsp;h2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_half_eq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares two half-precision floats (h1 == h2).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_half_ne">
+int <code class="descname">npy_half_ne</code><span class="sig-paren">(</span>npy_half<em>&nbsp;h1</em>, npy_half<em>&nbsp;h2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_half_ne" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares two half-precision floats (h1 != h2).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_half_le">
+int <code class="descname">npy_half_le</code><span class="sig-paren">(</span>npy_half<em>&nbsp;h1</em>, npy_half<em>&nbsp;h2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_half_le" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares two half-precision floats (h1 &lt;= h2).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_half_lt">
+int <code class="descname">npy_half_lt</code><span class="sig-paren">(</span>npy_half<em>&nbsp;h1</em>, npy_half<em>&nbsp;h2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_half_lt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares two half-precision floats (h1 &lt; h2).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_half_ge">
+int <code class="descname">npy_half_ge</code><span class="sig-paren">(</span>npy_half<em>&nbsp;h1</em>, npy_half<em>&nbsp;h2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_half_ge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares two half-precision floats (h1 &gt;= h2).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_half_gt">
+int <code class="descname">npy_half_gt</code><span class="sig-paren">(</span>npy_half<em>&nbsp;h1</em>, npy_half<em>&nbsp;h2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_half_gt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares two half-precision floats (h1 &gt; h2).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_half_eq_nonan">
+int <code class="descname">npy_half_eq_nonan</code><span class="sig-paren">(</span>npy_half<em>&nbsp;h1</em>, npy_half<em>&nbsp;h2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_half_eq_nonan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares two half-precision floats that are known to not be NaN (h1 == h2).  If
+a value is NaN, the result is undefined.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_half_lt_nonan">
+int <code class="descname">npy_half_lt_nonan</code><span class="sig-paren">(</span>npy_half<em>&nbsp;h1</em>, npy_half<em>&nbsp;h2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_half_lt_nonan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares two half-precision floats that are known to not be NaN (h1 &lt; h2).  If
+a value is NaN, the result is undefined.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_half_le_nonan">
+int <code class="descname">npy_half_le_nonan</code><span class="sig-paren">(</span>npy_half<em>&nbsp;h1</em>, npy_half<em>&nbsp;h2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_half_le_nonan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares two half-precision floats that are known to not be NaN (h1 &lt;= h2).  If
+a value is NaN, the result is undefined.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_half_iszero">
+int <code class="descname">npy_half_iszero</code><span class="sig-paren">(</span>npy_half<em>&nbsp;h</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_half_iszero" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests whether the half-precision float has a value equal to zero.  This may be slightly
+faster than calling npy_half_eq(h, NPY_ZERO).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_half_isnan">
+int <code class="descname">npy_half_isnan</code><span class="sig-paren">(</span>npy_half<em>&nbsp;h</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_half_isnan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests whether the half-precision float is a NaN.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_half_isinf">
+int <code class="descname">npy_half_isinf</code><span class="sig-paren">(</span>npy_half<em>&nbsp;h</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_half_isinf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests whether the half-precision float is plus or minus Inf.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_half_isfinite">
+int <code class="descname">npy_half_isfinite</code><span class="sig-paren">(</span>npy_half<em>&nbsp;h</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_half_isfinite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests whether the half-precision float is finite (not NaN or Inf).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_half_signbit">
+int <code class="descname">npy_half_signbit</code><span class="sig-paren">(</span>npy_half<em>&nbsp;h</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_half_signbit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 1 is h is negative, 0 otherwise.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_half_copysign">
+npy_half <code class="descname">npy_half_copysign</code><span class="sig-paren">(</span>npy_half<em>&nbsp;x</em>, npy_half<em>&nbsp;y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_half_copysign" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the value of x with the sign bit copied from y.  Works for any value,
+including Inf and NaN.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_half_spacing">
+npy_half <code class="descname">npy_half_spacing</code><span class="sig-paren">(</span>npy_half<em>&nbsp;h</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_half_spacing" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the same for half-precision float as npy_spacing and npy_spacingf
+described in the low-level floating point section.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_half_nextafter">
+npy_half <code class="descname">npy_half_nextafter</code><span class="sig-paren">(</span>npy_half<em>&nbsp;x</em>, npy_half<em>&nbsp;y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_half_nextafter" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the same for half-precision float as npy_nextafter and npy_nextafterf
+described in the low-level floating point section.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_floatbits_to_halfbits">
+npy_uint16 <code class="descname">npy_floatbits_to_halfbits</code><span class="sig-paren">(</span>npy_uint32<em>&nbsp;f</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_floatbits_to_halfbits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Low-level function which converts a 32-bit single-precision float, stored
+as a uint32, into a 16-bit half-precision float.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_doublebits_to_halfbits">
+npy_uint16 <code class="descname">npy_doublebits_to_halfbits</code><span class="sig-paren">(</span>npy_uint64<em>&nbsp;d</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_doublebits_to_halfbits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Low-level function which converts a 64-bit double-precision float, stored
+as a uint64, into a 16-bit half-precision float.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_halfbits_to_floatbits">
+npy_uint32 <code class="descname">npy_halfbits_to_floatbits</code><span class="sig-paren">(</span>npy_uint16<em>&nbsp;h</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_halfbits_to_floatbits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Low-level function which converts a 16-bit half-precision float
+into a 32-bit single-precision float, stored as a uint32.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.npy_halfbits_to_doublebits">
+npy_uint64 <code class="descname">npy_halfbits_to_doublebits</code><span class="sig-paren">(</span>npy_uint16<em>&nbsp;h</em><span class="sig-paren">)</span><a class="headerlink" href="#c.npy_halfbits_to_doublebits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Low-level function which converts a 16-bit half-precision float
+into a 64-bit double-precision float, stored as a uint64.</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

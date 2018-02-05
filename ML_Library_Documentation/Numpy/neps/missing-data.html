@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Missing Data Functionality in NumPy &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" >
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../index.html" >
+    <link rel="up" title="NumPy Enhancement Proposals" href="index.html" >
+    <link rel="next" title="Cleaning the math configuration of numpy.core" href="math_config_clean.html" >
+    <link rel="prev" title="A Simple File Format for NumPy Arrays" href="npy-format.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="index.html" accesskey="U">NumPy Enhancement Proposals</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="math_config_clean.html" title="Cleaning the math configuration of numpy.core"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="npy-format.html" title="A Simple File Format for NumPy Arrays"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Missing Data Functionality in NumPy</a><ul>
+<li><a class="reference internal" href="#table-of-contents">Table of Contents</a></li>
+<li><a class="reference internal" href="#abstract">Abstract</a></li>
+<li><a class="reference internal" href="#definition-of-missing-data">Definition of Missing Data</a><ul>
+<li><a class="reference internal" href="#unknown-yet-existing-data-na">Unknown Yet Existing Data (NA)</a></li>
+<li><a class="reference internal" href="#data-that-doesn-t-exist-or-is-being-skipped-ignore">Data That Doesn&#8217;t Exist Or Is Being Skipped (IGNORE)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#implementation-techniques-for-missing-values">Implementation Techniques For Missing Values</a><ul>
+<li><a class="reference internal" href="#bit-patterns-signalling-missing-values-bitpattern">Bit Patterns Signalling Missing Values (bitpattern)</a></li>
+<li><a class="reference internal" href="#boolean-masks-signalling-missing-values-mask">Boolean Masks Signalling Missing Values (mask)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#glossary-of-terms">Glossary of Terms</a></li>
+<li><a class="reference internal" href="#missing-values-as-seen-in-python">Missing Values as Seen in Python</a><ul>
+<li><a class="reference internal" href="#working-with-missing-values">Working With Missing Values</a></li>
+<li><a class="reference internal" href="#accessing-a-boolean-mask">Accessing a Boolean Mask</a></li>
+<li><a class="reference internal" href="#creating-na-masked-arrays">Creating NA-Masked Arrays</a></li>
+<li><a class="reference internal" href="#na-masks-when-constructing-from-lists">NA-Masks When Constructing From Lists</a></li>
+<li><a class="reference internal" href="#mask-implementation-details">Mask Implementation Details</a></li>
+<li><a class="reference internal" href="#new-ndarray-methods">New ndarray Methods</a></li>
+<li><a class="reference internal" href="#element-wise-ufuncs-with-missing-values">Element-wise UFuncs With Missing Values</a></li>
+<li><a class="reference internal" href="#reduction-ufuncs-with-missing-values">Reduction UFuncs With Missing Values</a></li>
+<li><a class="reference internal" href="#parameterized-na-data-types">Parameterized NA Data Types</a></li>
+<li><a class="reference internal" href="#future-expansion-to-multi-na-payloads">Future Expansion to multi-NA Payloads</a></li>
+<li><a class="reference internal" href="#differences-with-numpy-ma">Differences with numpy.ma</a></li>
+<li><a class="reference internal" href="#boolean-indexing">Boolean Indexing</a></li>
+<li><a class="reference internal" href="#pep-3118">PEP 3118</a></li>
+<li><a class="reference internal" href="#cython">Cython</a></li>
+<li><a class="reference internal" href="#hard-masks">Hard Masks</a></li>
+<li><a class="reference internal" href="#shared-masks">Shared Masks</a></li>
+<li><a class="reference internal" href="#interaction-with-pre-existing-c-api-usage">Interaction With Pre-existing C API Usage</a><ul>
+<li><a class="reference internal" href="#numpy-documentation-how-to-extend-numpy">NumPy Documentation - How to extend NumPy</a></li>
+<li><a class="reference internal" href="#tutorial-from-cython-website">Tutorial From Cython Website</a></li>
+<li><a class="reference internal" href="#numerical-python-jpl-website">Numerical Python - JPL website</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#c-implementation-details">C Implementation Details</a><ul>
+<li><a class="reference internal" href="#mask-binary-format">Mask Binary Format</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#c-iterator-api-changes-iteration-with-masks">C Iterator API Changes: Iteration With Masks</a><ul>
+<li><a class="reference internal" href="#iterator-mask-features">Iterator Mask Features</a></li>
+<li><a class="reference internal" href="#iterator-na-array-features">Iterator NA-array Features</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#rejected-alternative">Rejected Alternative</a><ul>
+<li><a class="reference internal" href="#parameterized-data-type-which-adds-additional-memory-for-the-na-flag">Parameterized Data Type Which Adds Additional Memory for the NA Flag</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#acknowledgments">Acknowledgments</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="npy-format.html"
+                        title="previous chapter">A Simple File Format for NumPy Arrays</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="math_config_clean.html"
+                        title="next chapter">Cleaning the math configuration of numpy.core</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="missing-data-functionality-in-numpy">
+<h1><a class="toc-backref" href="#id1">Missing Data Functionality in NumPy</a><a class="headerlink" href="#missing-data-functionality-in-numpy" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Mark Wiebe &lt;<a class="reference external" href="mailto:mwwiebe&#37;&#52;&#48;gmail&#46;com">mwwiebe<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Copyright:</th><td class="field-body">Copyright 2011 by Enthought, Inc</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">License:</th><td class="field-body">CC By-SA 3.0 (<a class="reference external" href="http://creativecommons.org/licenses/by-sa/3.0/">http://creativecommons.org/licenses/by-sa/3.0/</a>)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">2011-06-23</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="table-of-contents">
+<h2><a class="toc-backref" href="#id2">Table of Contents</a><a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#missing-data-functionality-in-numpy" id="id1">Missing Data Functionality in NumPy</a><ul>
+<li><a class="reference internal" href="#table-of-contents" id="id2">Table of Contents</a></li>
+<li><a class="reference internal" href="#abstract" id="id3">Abstract</a></li>
+<li><a class="reference internal" href="#definition-of-missing-data" id="id4">Definition of Missing Data</a><ul>
+<li><a class="reference internal" href="#unknown-yet-existing-data-na" id="id5">Unknown Yet Existing Data (NA)</a></li>
+<li><a class="reference internal" href="#data-that-doesn-t-exist-or-is-being-skipped-ignore" id="id6">Data That Doesn&#8217;t Exist Or Is Being Skipped (IGNORE)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#implementation-techniques-for-missing-values" id="id7">Implementation Techniques For Missing Values</a><ul>
+<li><a class="reference internal" href="#bit-patterns-signalling-missing-values-bitpattern" id="id8">Bit Patterns Signalling Missing Values (bitpattern)</a></li>
+<li><a class="reference internal" href="#boolean-masks-signalling-missing-values-mask" id="id9">Boolean Masks Signalling Missing Values (mask)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#glossary-of-terms" id="id10">Glossary of Terms</a></li>
+<li><a class="reference internal" href="#missing-values-as-seen-in-python" id="id11">Missing Values as Seen in Python</a><ul>
+<li><a class="reference internal" href="#working-with-missing-values" id="id12">Working With Missing Values</a></li>
+<li><a class="reference internal" href="#accessing-a-boolean-mask" id="id13">Accessing a Boolean Mask</a></li>
+<li><a class="reference internal" href="#creating-na-masked-arrays" id="id14">Creating NA-Masked Arrays</a></li>
+<li><a class="reference internal" href="#na-masks-when-constructing-from-lists" id="id15">NA-Masks When Constructing From Lists</a></li>
+<li><a class="reference internal" href="#mask-implementation-details" id="id16">Mask Implementation Details</a></li>
+<li><a class="reference internal" href="#new-ndarray-methods" id="id17">New ndarray Methods</a></li>
+<li><a class="reference internal" href="#element-wise-ufuncs-with-missing-values" id="id18">Element-wise UFuncs With Missing Values</a></li>
+<li><a class="reference internal" href="#reduction-ufuncs-with-missing-values" id="id19">Reduction UFuncs With Missing Values</a></li>
+<li><a class="reference internal" href="#parameterized-na-data-types" id="id20">Parameterized NA Data Types</a></li>
+<li><a class="reference internal" href="#future-expansion-to-multi-na-payloads" id="id21">Future Expansion to multi-NA Payloads</a></li>
+<li><a class="reference internal" href="#differences-with-numpy-ma" id="id22">Differences with numpy.ma</a></li>
+<li><a class="reference internal" href="#boolean-indexing" id="id23">Boolean Indexing</a></li>
+<li><a class="reference internal" href="#pep-3118" id="id24">PEP 3118</a></li>
+<li><a class="reference internal" href="#cython" id="id25">Cython</a></li>
+<li><a class="reference internal" href="#hard-masks" id="id26">Hard Masks</a></li>
+<li><a class="reference internal" href="#shared-masks" id="id27">Shared Masks</a></li>
+<li><a class="reference internal" href="#interaction-with-pre-existing-c-api-usage" id="id28">Interaction With Pre-existing C API Usage</a><ul>
+<li><a class="reference internal" href="#numpy-documentation-how-to-extend-numpy" id="id29">NumPy Documentation - How to extend NumPy</a></li>
+<li><a class="reference internal" href="#tutorial-from-cython-website" id="id30">Tutorial From Cython Website</a></li>
+<li><a class="reference internal" href="#numerical-python-jpl-website" id="id31">Numerical Python - JPL website</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#c-implementation-details" id="id32">C Implementation Details</a><ul>
+<li><a class="reference internal" href="#mask-binary-format" id="id33">Mask Binary Format</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#c-iterator-api-changes-iteration-with-masks" id="id34">C Iterator API Changes: Iteration With Masks</a><ul>
+<li><a class="reference internal" href="#iterator-mask-features" id="id35">Iterator Mask Features</a></li>
+<li><a class="reference internal" href="#iterator-na-array-features" id="id36">Iterator NA-array Features</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#rejected-alternative" id="id37">Rejected Alternative</a><ul>
+<li><a class="reference internal" href="#parameterized-data-type-which-adds-additional-memory-for-the-na-flag" id="id38">Parameterized Data Type Which Adds Additional Memory for the NA Flag</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#acknowledgments" id="id39">Acknowledgments</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="abstract">
+<h2><a class="toc-backref" href="#id3">Abstract</a><a class="headerlink" href="#abstract" title="Permalink to this headline">¶</a></h2>
+<p>Users interested in dealing with missing data within NumPy are generally
+pointed to the masked array subclass of the ndarray, known
+as &#8216;numpy.ma&#8217;. This class has a number of users who depend strongly
+on its capabilities, but people who are accustomed to the deep integration
+of the missing data placeholder &#8220;NA&#8221; in the R project and others who
+find the programming interface challenging or inconsistent tend not
+to use it.</p>
+<p>This NEP proposes to integrate a mask-based missing data solution
+into NumPy, with an additional bitpattern-based missing data solution
+that can be implemented  concurrently or later integrating seamlessly
+with the mask-based solution.</p>
+<p>The mask-based solution and the bitpattern-based solutions in this
+proposal offer the exact same missing value abstraction, with several
+differences in performance, memory overhead, and flexibility.</p>
+<p>The mask-based solution is more flexible, supporting all behaviors of the
+bitpattern-based solution, but leaving the hidden values untouched
+whenever an element is masked.</p>
+<p>The bitpattern-based solution requires less memory, is bit-level
+compatible with the 64-bit floating point representation used in R, but
+does not preserve the hidden values and in fact requires stealing at
+least one bit pattern from the underlying dtype to represent the missing
+value NA.</p>
+<p>Both solutions are generic in the sense that they can be used with
+custom data types very easily, with no effort in the case of the masked
+solution, and with the requirement that a bit pattern to sacrifice be
+chosen in the case of the bitpattern solution.</p>
+</div>
+<div class="section" id="definition-of-missing-data">
+<h2><a class="toc-backref" href="#id4">Definition of Missing Data</a><a class="headerlink" href="#definition-of-missing-data" title="Permalink to this headline">¶</a></h2>
+<p>In order to be able to develop an intuition about what computation
+will be done by various NumPy functions, a consistent conceptual
+model of what a missing element means must be applied.
+Ferreting out the behaviors people need or want when they are working
+with &#8220;missing data&#8221; seems to be tricky, but I believe that it boils
+down to two different ideas, each of which is internally self-consistent.</p>
+<p>One of them, the &#8220;unknown yet existing data&#8221; interpretation, can be applied
+rigorously to all computations, while the other makes sense for
+some statistical operations like standard deviation but not for
+linear algebra operations like matrix product.
+Thus, making &#8220;unknown yet existing data&#8221; be the default interpretation
+is superior, providing a consistent model across all computations,
+and for those operations where the other interpretation makes sense,
+an optional parameter &#8220;skipna=&#8221; can be added.</p>
+<p>For people who want the other interpretation to be default, a mechanism
+proposed elsewhere for customizing subclass ufunc behavior with a
+_numpy_ufunc_ member function would allow a subclass with a different
+default to be created.</p>
+<div class="section" id="unknown-yet-existing-data-na">
+<h3><a class="toc-backref" href="#id5">Unknown Yet Existing Data (NA)</a><a class="headerlink" href="#unknown-yet-existing-data-na" title="Permalink to this headline">¶</a></h3>
+<p>This is the approach taken in the R project, defining a missing element
+as something which does have a valid value which isn&#8217;t known, or is
+NA (not available). This proposal adopts this behavior as the
+default for all operations involving missing values.</p>
+<p>In this interpretation, nearly any computation with a missing input produces
+a missing output. For example, &#8216;sum(a)&#8217; would produce a missing value
+if &#8216;a&#8217; contained just one missing element. When the output value does
+not depend on one of the inputs, it is reasonable to output a value
+that is not NA, such as logical_and(NA, False) == False.</p>
+<p>Some more complex arithmetic operations, such as matrix products, are
+well defined with this interpretation, and the result should be
+the same as if the missing values were NaNs. Actually implementing
+such things to the theoretical limit is probably not worth it,
+and in many cases either raising an exception or returning all
+missing values may be preferred to doing precise calculations.</p>
+</div>
+<div class="section" id="data-that-doesn-t-exist-or-is-being-skipped-ignore">
+<h3><a class="toc-backref" href="#id6">Data That Doesn&#8217;t Exist Or Is Being Skipped (IGNORE)</a><a class="headerlink" href="#data-that-doesn-t-exist-or-is-being-skipped-ignore" title="Permalink to this headline">¶</a></h3>
+<p>Another useful interpretation is that the missing elements should be
+treated as if they didn&#8217;t exist in the array, and the operation should
+do its best to interpret what that means according to the data
+that&#8217;s left. In this case, &#8216;mean(a)&#8217; would compute the mean of just
+the values that are available, adjusting both the sum and count it
+uses based on which values are missing. To be consistent, the mean of
+an array of all missing values must produce the same result as the
+mean of a zero-sized array without missing value support.</p>
+<p>This kind of data can arise when conforming sparsely sampled data
+into a regular sampling pattern, and is a useful interpretation to
+use when attempting to get best-guess answers for many statistical queries.</p>
+<p>In R, many functions take a parameter &#8220;na.rm=T&#8221; which means to treat
+the data as if the NA values are not part of the data set. This proposal
+defines a standard parameter &#8220;skipna=True&#8221; for this same purpose.</p>
+</div>
+</div>
+<div class="section" id="implementation-techniques-for-missing-values">
+<h2><a class="toc-backref" href="#id7">Implementation Techniques For Missing Values</a><a class="headerlink" href="#implementation-techniques-for-missing-values" title="Permalink to this headline">¶</a></h2>
+<p>In addition to there being two different interpretations of missing values,
+there are two different commonly used implementation techniques for
+missing values. While there are some differing default behaviors between
+existing implementations of the techniques, I believe that the design
+choices made in a new implementation must be made based on their merits,
+not by rote copying of previous designs.</p>
+<p>Both masks and bitpatterns have different strong and weak points,
+depending on the application context. This NEP thus proposes to implement
+both. To enable the writing of generic &#8220;missing value&#8221; code which does
+not have to worry about whether the arrays it is using have taken one
+or the other approach, the missing value semantics will be identical
+for the two implementations.</p>
+<div class="section" id="bit-patterns-signalling-missing-values-bitpattern">
+<h3><a class="toc-backref" href="#id8">Bit Patterns Signalling Missing Values (bitpattern)</a><a class="headerlink" href="#bit-patterns-signalling-missing-values-bitpattern" title="Permalink to this headline">¶</a></h3>
+<p>One or more patterns of bits, for example a NaN with
+a particular payload, are chosen to represent the missing value
+placeholder NA.</p>
+<p>A consequence of this approach is that assigning NA changes the bits
+holding the value, so that value is gone.</p>
+<p>Additionally, for some types such as integers, a good and proper value
+must be sacrificed to enable this functionality.</p>
+</div>
+<div class="section" id="boolean-masks-signalling-missing-values-mask">
+<h3><a class="toc-backref" href="#id9">Boolean Masks Signalling Missing Values (mask)</a><a class="headerlink" href="#boolean-masks-signalling-missing-values-mask" title="Permalink to this headline">¶</a></h3>
+<p>A mask is a parallel array of booleans, either one byte per element or
+one bit per element, allocated alongside the existing array data. In this
+NEP, the convention is chosen that True means the element is valid
+(unmasked), and False means the element is NA.</p>
+<p>By taking care when writing any C algorithm that works with values
+and masks together, it is possible to have the memory for a value
+that is masked never be written to. This feature allows multiple
+simultaneous views of the same data with different choices of what
+is missing, a feature requested by many people on the mailing list.</p>
+<p>This approach places no limitations on the values of the underlying
+data type, it may take on any binary pattern without affecting the
+NA behavior.</p>
+</div>
+</div>
+<div class="section" id="glossary-of-terms">
+<h2><a class="toc-backref" href="#id10">Glossary of Terms</a><a class="headerlink" href="#glossary-of-terms" title="Permalink to this headline">¶</a></h2>
+<p>Because the above discussions of the different concepts and their
+relationships are tricky to understand, here are more succinct
+definitions of the terms used in this NEP.</p>
+<dl class="docutils">
+<dt>NA (Not Available/Propagate)</dt>
+<dd>A placeholder for a value which is unknown to computations. That
+value may be temporarily hidden with a mask, may have been lost
+due to hard drive corruption, or gone for any number of reasons.
+For sums and products this means to produce NA if any of the inputs
+are NA. This is the same as NA in the R project.</dd>
+<dt>IGNORE (Ignore/Skip)</dt>
+<dd>A placeholder which should be treated by computations as if no value does
+or could exist there. For sums, this means act as if the value
+were zero, and for products, this means act as if the value were one.
+It&#8217;s as if the array were compressed in some fashion to not include
+that element.</dd>
+<dt>bitpattern</dt>
+<dd>A technique for implementing either NA or IGNORE, where a particular
+set of bit patterns are chosen from all the possible bit patterns of the
+value&#8217;s data type to signal that the element is NA or IGNORE.</dd>
+<dt>mask</dt>
+<dd>A technique for implementing either NA or IGNORE, where a
+boolean or enum array parallel to the data array is used to signal
+which elements are NA or IGNORE.</dd>
+<dt>numpy.ma</dt>
+<dd>The existing implementation of a particular form of masked arrays,
+which is part of the NumPy codebase.</dd>
+<dt>Python API</dt>
+<dd>All the interface mechanisms that are exposed to Python code
+for using missing values in NumPy. This API is designed to be
+Pythonic and fit into the way NumPy works as much as possible.</dd>
+<dt>C API</dt>
+<dd>All the implementation mechanisms exposed for CPython extensions
+written in C that want to support NumPy missing value support.
+This API is designed to be as natural as possible in C, and
+is usually prioritizes flexibility and high performance.</dd>
+</dl>
+</div>
+<div class="section" id="missing-values-as-seen-in-python">
+<h2><a class="toc-backref" href="#id11">Missing Values as Seen in Python</a><a class="headerlink" href="#missing-values-as-seen-in-python" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="working-with-missing-values">
+<h3><a class="toc-backref" href="#id12">Working With Missing Values</a><a class="headerlink" href="#working-with-missing-values" title="Permalink to this headline">¶</a></h3>
+<p>NumPy will gain a global singleton called numpy.NA, similar to None,
+but with semantics reflecting its status as a missing value. In particular,
+trying to treat it as a boolean will raise an exception, and comparisons
+with it will produce numpy.NA instead of True or False. These basics are
+adopted from the behavior of the NA value in the R project. To dig
+deeper into the ideas, <a class="reference external" href="http://en.wikipedia.org/wiki/Ternary_logic#Kleene_logic">http://en.wikipedia.org/wiki/Ternary_logic#Kleene_logic</a>
+provides a starting point.</p>
+<p>For example,:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">],</span> <span class="n">maskna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">array([1., 2., NA, 7.], maskna=True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;NA&#39;</span><span class="p">)</span>
+<span class="go">array([1., 2., NA, 7.], dtype=&#39;NA[&lt;f8]&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;NA[f4]&#39;</span><span class="p">)</span>
+<span class="go">array([1., 2., NA, 7.], dtype=&#39;NA[&lt;f4]&#39;)</span>
+</pre></div>
+</div>
+<p>produce arrays with values [1.0, 2.0, &lt;inaccessible&gt;, 7.0] /
+mask [Exposed, Exposed, Hidden, Exposed], and
+values [1.0, 2.0, &lt;NA bitpattern&gt;, 7.0] for the masked and
+NA dtype versions respectively.</p>
+<p>The np.NA singleton may accept a dtype= keyword parameter, indicating
+that it should be treated as an NA of a particular data type. This is also
+a mechanism for preserving the dtype in a NumPy scalar-like fashion.
+Here&#8217;s what this looks like:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">],</span> <span class="n">maskna</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="go">NA(dtype=&#39;&lt;f8&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;NA[f8]&#39;</span><span class="p">))</span>
+<span class="go">NA(dtype=&#39;NA[&lt;f8]&#39;)</span>
+</pre></div>
+</div>
+<p>Assigning a value to an array always causes that element to not be NA,
+transparently unmasking it if necessary. Assigning numpy.NA to the array
+masks that element or assigns the NA bitpattern for the particular dtype.
+In the mask-based implementation, the storage behind a missing value may never
+be accessed in any way, other than to unmask it by assigning its value.</p>
+<p>To test if a value is missing, the function &#8220;np.isna(arr[0])&#8221; will
+be provided. One of the key reasons for the NumPy scalars is to allow
+their values into dictionaries.</p>
+<p>All operations which write to masked arrays will not affect the value
+unless they also unmask that value. This allows the storage behind
+masked elements to still be relied on if they are still accessible
+from another view which doesn&#8217;t have them masked. For example, the
+following was run on the missingdata work-in-progress branch:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">maskna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span>
+<span class="go">array([1, 2], maskna=True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">NA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span>
+<span class="go">array([NA, 2], maskna=True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
+<span class="go">array([1, 2])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># The underlying number 1 value in &#39;a[0]&#39; was untouched</span>
+</pre></div>
+</div>
+<p>Copying values between the mask-based implementation and the
+bitpattern implementation will transparently do the correct thing,
+turning the bitpattern into a masked value, or a masked value
+into the bitpattern where appropriate. The one exception is
+if a valid value in a masked array happens to have the NA bitpattern,
+copying this value to the NA form of the dtype will cause it to
+become NA as well.</p>
+<p>When operations are done between arrays with NA dtypes and masked arrays,
+the result will be masked arrays. This is because in some cases the
+NA dtypes cannot represent all the values in the masked array, so
+going to masked arrays is the only way to preserve all aspects of the data.</p>
+<p>If np.NA or masked values are copied to an array without support for
+missing values enabled, an exception will be raised. Adding a mask to
+the target array would be problematic, because then having a mask
+would be a &#8220;viral&#8221; property consuming extra memory and reducing
+performance in unexpected ways.</p>
+<p>By default, the string &#8220;NA&#8221; will be used to represent missing values
+in str and repr outputs. A global configuration will allow
+this to be changed, exactly extending the way nan and inf are treated.
+The following works in the current draft implementation:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="n">maskna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">NA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
+<span class="go">array([0, 1, 2, NA, 4, 5], maskna=True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">nastr</span><span class="o">=</span><span class="s1">&#39;blah&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
+<span class="go">array([0, 1, 2, blah, 4, 5], maskna=True)</span>
+</pre></div>
+</div>
+<p>For floating point numbers, Inf and NaN are separate concepts from
+missing values. If a division by zero occurs in an array with default
+missing value support, an unmasked Inf or NaN will be produced. To
+mask those values, a further &#8216;a[np.logical_not(a.isfinite(a)] = np.NA&#8217;
+can achieve that. For the bitpattern approach, the parameterized
+dtype(&#8216;NA[f8,InfNan]&#8217;) described in a later section can be used to get
+these semantics without the extra manipulation.</p>
+<p>A manual loop through a masked array like:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">5.</span><span class="p">,</span> <span class="n">maskna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">NA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
+<span class="go">array([ 0.,  1.,  2., NA,  4.], maskna=True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)):</span>
+<span class="gp">... </span>    <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="gp">...</span>
+<span class="go">__main__:2: RuntimeWarning: divide by zero encountered in log</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
+<span class="go">array([       -inf,  0.        ,  0.69314718, NA,  1.38629436], maskna=True)</span>
+</pre></div>
+</div>
+<p>works even with masked values, because &#8216;a[i]&#8217; returns an NA object
+with a data type associated, that can be treated properly by the ufuncs.</p>
+</div>
+<div class="section" id="accessing-a-boolean-mask">
+<h3><a class="toc-backref" href="#id13">Accessing a Boolean Mask</a><a class="headerlink" href="#accessing-a-boolean-mask" title="Permalink to this headline">¶</a></h3>
+<p>The mask used to implement missing data in the masked approach is not
+accessible from Python directly. This is partially due to differing
+opinions on whether True in the mask should mean &#8220;missing&#8221; or &#8220;not missing&#8221;
+Additionally, exposing the mask directly would preclude a potential
+space optimization, where a bit-level instead of a byte-level mask
+is used to get a factor of eight memory usage improvement.</p>
+<p>To access a mask directly, there are two functions provided. They
+work equivalently for both arrays with masks and NA bit
+patterns, so they are specified in terms of NA and available values
+instead of masked and unmasked values. The functions are
+&#8216;np.isna&#8217; and &#8216;np.isavail&#8217;, which test for NA or available values
+respectively.</p>
+</div>
+<div class="section" id="creating-na-masked-arrays">
+<h3><a class="toc-backref" href="#id14">Creating NA-Masked Arrays</a><a class="headerlink" href="#creating-na-masked-arrays" title="Permalink to this headline">¶</a></h3>
+<p>The usual way to create an array with an NA mask is to pass the keyword
+parameter maskna=True to one of the constructors. Most functions that
+create a new array take this parameter, and produce an NA-masked
+array with all its elements exposed when the parameter is set to True.</p>
+<p>There are also two flags which indicate and control the nature of the mask
+used in masked arrays. These flags can be used to add a mask, or ensure
+the mask isn&#8217;t a view into another array&#8217;s mask.</p>
+<p>First is &#8216;arr.flags.maskna&#8217;, which is True for all masked arrays and
+may be set to True to add a mask to an array which does not have one.</p>
+<p>Second is &#8216;arr.flags.ownmaskna&#8217;, which is True if the array owns the
+memory to the mask, and False if the array has no mask, or has a view
+into the mask of another array. If this is set to True in a masked
+array, the array will create a copy of the mask so that further modifications
+to the mask will not affect the original mask from which the view was taken.</p>
+</div>
+<div class="section" id="na-masks-when-constructing-from-lists">
+<h3><a class="toc-backref" href="#id15">NA-Masks When Constructing From Lists</a><a class="headerlink" href="#na-masks-when-constructing-from-lists" title="Permalink to this headline">¶</a></h3>
+<p>The initial design of NA-mask construction was to make all construction
+fully explicit. This turns out to be unwieldy when working interactively
+with NA-masked arrays, and having an object array be created instead of
+an NA-masked array can be very surprising.</p>
+<p>Because of this, the design has been changed to enable an NA-mask whenever
+creating an array from lists which have an NA object in them. There could
+be some debate of whether one should create NA-masks or NA-bitpatterns
+by default, but due to the time constraints it was only feasible to tackle
+NA-masks, and extending the NA-mask support more fully throughout NumPy seems
+much more reasonable than starting another system and ending up with two
+incomplete systems.</p>
+</div>
+<div class="section" id="mask-implementation-details">
+<h3><a class="toc-backref" href="#id16">Mask Implementation Details</a><a class="headerlink" href="#mask-implementation-details" title="Permalink to this headline">¶</a></h3>
+<p>The memory ordering of the mask will always match the ordering of
+the array it is associated with. A Fortran-style array will have a
+Fortran-style mask, etc.</p>
+<p>When a view of an array with a mask is taken, the view will have
+a mask which is also a view of the mask in the original
+array. This means unmasking values in views will also unmask them
+in the original array, and if a mask is added to an array, it will
+not be possible to ever remove that mask except to create a new array
+copying the data but not the mask.</p>
+<p>It is still possible to temporarily treat an array with a mask without
+giving it one, by first creating a view of the array and then adding a
+mask to that view. A data set can be viewed with multiple different
+masks simultaneously, by creating multiple views, and giving each view
+a mask.</p>
+</div>
+<div class="section" id="new-ndarray-methods">
+<h3><a class="toc-backref" href="#id17">New ndarray Methods</a><a class="headerlink" href="#new-ndarray-methods" title="Permalink to this headline">¶</a></h3>
+<p>New functions added to the numpy namespace are:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="p">[</span><span class="n">IMPLEMENTED</span><span class="p">]</span>
+    <span class="n">Returns</span> <span class="n">a</span> <span class="n">boolean</span> <span class="n">array</span> <span class="k">with</span> <span class="kc">True</span> <span class="n">wherever</span> <span class="n">the</span> <span class="n">array</span> <span class="ow">is</span> <span class="n">masked</span>
+    <span class="ow">or</span> <span class="n">matches</span> <span class="n">the</span> <span class="n">NA</span> <span class="n">bitpattern</span><span class="p">,</span> <span class="ow">and</span> <span class="kc">False</span> <span class="n">elsewhere</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">isavail</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+    <span class="n">Returns</span> <span class="n">a</span> <span class="n">boolean</span> <span class="n">array</span> <span class="k">with</span> <span class="kc">False</span> <span class="n">wherever</span> <span class="n">the</span> <span class="n">array</span> <span class="ow">is</span> <span class="n">masked</span>
+    <span class="ow">or</span> <span class="n">matches</span> <span class="n">the</span> <span class="n">NA</span> <span class="n">bitpattern</span><span class="p">,</span> <span class="ow">and</span> <span class="kc">True</span> <span class="n">elsewhere</span>
+</pre></div>
+</div>
+<p>New functions added to the ndarray are:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">arr</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">replacena</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">NA</span><span class="p">)</span>
+    <span class="n">Modification</span> <span class="n">to</span> <span class="n">the</span> <span class="n">copy</span> <span class="n">function</span> <span class="n">which</span> <span class="n">replaces</span> <span class="n">NA</span> <span class="n">values</span><span class="p">,</span>
+    <span class="n">either</span> <span class="n">masked</span> <span class="ow">or</span> <span class="k">with</span> <span class="n">the</span> <span class="n">NA</span> <span class="n">bitpattern</span><span class="p">,</span> <span class="k">with</span> <span class="n">the</span> <span class="s1">&#39;replacena=&#39;</span>
+    <span class="n">parameter</span> <span class="n">suppled</span><span class="o">.</span> <span class="n">When</span> <span class="s1">&#39;replacena&#39;</span> <span class="n">isn</span><span class="s1">&#39;t NA, the copied</span>
+    <span class="n">array</span> <span class="ow">is</span> <span class="n">unmasked</span> <span class="ow">and</span> <span class="n">has</span> <span class="n">the</span> <span class="s1">&#39;NA&#39;</span> <span class="n">part</span> <span class="n">stripped</span> <span class="kn">from</span> <span class="nn">the</span>
+    <span class="n">parameterized</span> <span class="n">dtype</span> <span class="p">(</span><span class="s1">&#39;NA[f8]&#39;</span> <span class="n">becomes</span> <span class="n">just</span> <span class="s1">&#39;f8&#39;</span><span class="p">)</span><span class="o">.</span>
+
+    <span class="n">The</span> <span class="n">default</span> <span class="k">for</span> <span class="n">replacena</span> <span class="ow">is</span> <span class="n">chosen</span> <span class="n">to</span> <span class="n">be</span> <span class="n">np</span><span class="o">.</span><span class="n">NA</span> <span class="n">instead</span> <span class="n">of</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">because</span> <span class="n">it</span> <span class="n">may</span> <span class="n">be</span> <span class="n">desirable</span> <span class="n">to</span> <span class="n">replace</span> <span class="n">NA</span> <span class="k">with</span> <span class="kc">None</span> <span class="ow">in</span> <span class="n">an</span>
+    <span class="n">NA</span><span class="o">-</span><span class="n">masked</span> <span class="nb">object</span> <span class="n">array</span><span class="o">.</span>
+
+    <span class="n">For</span> <span class="n">future</span> <span class="n">multi</span><span class="o">-</span><span class="n">NA</span> <span class="n">support</span><span class="p">,</span> <span class="s1">&#39;replacena&#39;</span> <span class="n">could</span> <span class="n">accept</span> <span class="n">a</span> <span class="n">dictionary</span>
+    <span class="n">mapping</span> <span class="n">the</span> <span class="n">NA</span> <span class="n">payload</span> <span class="n">to</span> <span class="n">the</span> <span class="n">value</span> <span class="n">to</span> <span class="n">substitute</span> <span class="k">for</span> <span class="n">that</span>
+    <span class="n">particular</span> <span class="n">NA</span><span class="o">.</span> <span class="n">NAs</span> <span class="k">with</span> <span class="n">payloads</span> <span class="ow">not</span> <span class="n">appearing</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">dictionary</span>
+    <span class="n">would</span> <span class="n">remain</span> <span class="k">as</span> <span class="n">NA</span> <span class="n">unless</span> <span class="n">a</span> <span class="s1">&#39;default&#39;</span> <span class="n">key</span> <span class="n">was</span> <span class="n">also</span> <span class="n">supplied</span><span class="o">.</span>
+
+    <span class="n">Both</span> <span class="n">the</span> <span class="n">parameter</span> <span class="n">to</span> <span class="n">replacena</span> <span class="ow">and</span> <span class="n">the</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">dictionaries</span>
+    <span class="n">can</span> <span class="n">be</span> <span class="n">either</span> <span class="n">scalars</span> <span class="ow">or</span> <span class="n">arrays</span> <span class="n">which</span> <span class="n">get</span> <span class="n">broadcast</span> <span class="n">onto</span> <span class="s1">&#39;arr&#39;</span><span class="o">.</span>
+
+<span class="n">arr</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">maskna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="p">[</span><span class="n">IMPLEMENTED</span><span class="p">]</span>
+    <span class="n">This</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">shortcut</span> <span class="k">for</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="n">a</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">view</span><span class="p">()</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="n">a</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">maskna</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="n">arr</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">ownmaskna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="p">[</span><span class="n">IMPLEMENTED</span><span class="p">]</span>
+    <span class="n">This</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">shortcut</span> <span class="k">for</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="n">a</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">view</span><span class="p">()</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="n">a</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">maskna</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="n">a</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">ownmaskna</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="element-wise-ufuncs-with-missing-values">
+<h3><a class="toc-backref" href="#id18">Element-wise UFuncs With Missing Values</a><a class="headerlink" href="#element-wise-ufuncs-with-missing-values" title="Permalink to this headline">¶</a></h3>
+<p>As part of the implementation, ufuncs and other operations will
+have to be extended to support masked computation. Because this
+is a useful feature in general, even outside the context of
+a masked array, in addition to working with masked arrays ufuncs
+will take an optional &#8216;where=&#8217; parameter which allows the use
+of boolean arrays to choose where a computation should be done.:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="p">(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>A benefit of having this &#8216;where=&#8217; parameter is that it provides a way
+to temporarily treat an object with a mask without ever creating a
+masked array object. In the example above, this would only do the
+add for the array elements with True in the &#8216;where&#8217; clause, and neither
+&#8216;a&#8217; nor &#8216;b&#8217; need to be masked arrays.</p>
+<p>If the &#8216;out&#8217; parameter isn&#8217;t specified, use of the &#8216;where=&#8217; parameter
+will produce an array with a mask as the result, with missing values
+for everywhere the &#8216;where&#8217; clause had the value False.</p>
+<p>For boolean operations, the R project special cases logical_and and
+logical_or so that logical_and(NA, False) is False, and
+logical_or(NA, True) is True. On the other hand, 0 * NA isn&#8217;t 0, but
+here the NA could represent Inf or NaN, in which case 0 * the backing
+value wouldn&#8217;t be 0 anyway.</p>
+<p>For NumPy element-wise ufuncs, the design won&#8217;t support this ability
+for the mask of the output to depend simultaneously on the mask and
+the value of the inputs. The NumPy 1.6 nditer, however, makes it
+fairly easy to write standalone functions which look and feel just
+like ufuncs, but deviate from their behavior. The functions logical_and
+and logical_or can be moved into standalone function objects which are
+backwards compatible with the current ufuncs.</p>
+</div>
+<div class="section" id="reduction-ufuncs-with-missing-values">
+<h3><a class="toc-backref" href="#id19">Reduction UFuncs With Missing Values</a><a class="headerlink" href="#reduction-ufuncs-with-missing-values" title="Permalink to this headline">¶</a></h3>
+<p>Reduction operations like &#8216;sum&#8217;, &#8216;prod&#8217;, &#8216;min&#8217;, and &#8216;max&#8217; will operate
+consistently with the idea that a masked value exists, but its value
+is unknown.</p>
+<p>An optional parameter &#8216;skipna=&#8217; will be added to those functions
+which can interpret it appropriately to do the operation as if just
+the unmasked values existed.</p>
+<p>With &#8216;skipna=True&#8217;, when all the input values are masked,
+&#8216;sum&#8217; and &#8216;prod&#8217; will produce the additive and multiplicative identities
+respectively, while &#8216;min&#8217; and &#8216;max&#8217; will produce masked values.
+Statistics operations which require a count, like &#8216;mean&#8217; and &#8216;std&#8217;
+will also use the unmasked value counts for their calculations if
+&#8216;skipna=True&#8217;, and produce masked values when all the inputs are masked.</p>
+<p>Some examples:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span> <span class="mf">7.</span><span class="p">],</span> <span class="n">maskna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">array(NA, dtype=&#39;&lt;f8&#39;, maskna=True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">11.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">NA(dtype=&#39;&lt;f8&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">3.6666666666666665</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">NA</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;f8&#39;</span><span class="p">,</span> <span class="n">maskna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">0.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">array(NA, dtype=&#39;&lt;f8&#39;, maskna=True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">NA(dtype=&#39;&lt;f8&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">/home/mwiebe/virtualenvs/dev/lib/python2.7/site-packages/numpy/core/fromnumeric.py:2374: RuntimeWarning: invalid value encountered in double_scalars</span>
+<span class="go">  return mean(axis, dtype, out)</span>
+<span class="go">nan</span>
+</pre></div>
+</div>
+<p>The functions &#8216;np.any&#8217; and &#8216;np.all&#8217; require some special consideration,
+just as logical_and and logical_or do. Maybe the best way to describe
+their behavior is through a series of examples:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">],</span> <span class="n">maskna</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="kc">False</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span> <span class="kc">False</span><span class="p">],</span> <span class="n">maskna</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="go">NA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="kc">False</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span> <span class="kc">True</span><span class="p">],</span> <span class="n">maskna</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="go">True</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">],</span> <span class="n">maskna</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="kc">True</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span> <span class="kc">True</span><span class="p">],</span> <span class="n">maskna</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="go">NA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="kc">False</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span> <span class="kc">True</span><span class="p">],</span> <span class="n">maskna</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>Since &#8216;np.any&#8217; is the reduction for &#8216;np.logical_or&#8217;, and &#8216;np.all&#8217;
+is the reduction for &#8216;np.logical_and&#8217;, it makes sense for them to
+have a &#8216;skipna=&#8217; parameter like the other similar reduction functions.</p>
+</div>
+<div class="section" id="parameterized-na-data-types">
+<h3><a class="toc-backref" href="#id20">Parameterized NA Data Types</a><a class="headerlink" href="#parameterized-na-data-types" title="Permalink to this headline">¶</a></h3>
+<p>A masked array isn&#8217;t the only way to deal with missing data, and
+some systems deal with the problem by defining a special &#8220;NA&#8221; value,
+for data which is missing. This is distinct from NaN floating point
+values, which are the result of bad floating point calculation values,
+but many people use NaNs for this purpose.</p>
+<p>In the case of IEEE floating point values, it is possible to use a
+particular NaN value, of which there are many, for &#8220;NA&#8221;, distinct
+from NaN. For signed integers, a reasonable approach would be to use
+the minimum storable value, which doesn&#8217;t have a corresponding positive
+value. For unsigned integers, the maximum storage value seems most
+reasonable.</p>
+<p>With the goal of providing a general mechanism, a parameterized type
+mechanism for this is much more attractive than creating separate
+nafloat32, nafloat64, naint64, nauint64, etc dtypes. If this is viewed
+as an alternative way of treating the mask except without value preservation,
+this parameterized type can work together with the mask in a special
+way to produce a value + mask combination on the fly, and use the
+exact same computational infrastructure as the masked array system.
+This allows one to avoid the need to write special case code for each
+ufunc and for each na* dtype, something that is hard to avoid when
+building a separate independent dtype implementation for each na* dtype.</p>
+<p>Reliable conversions with the NA bitpattern preserved across primitive
+types requires consideration as well. Even in the simple case of
+double -&gt; float, where this is supported by hardware, the NA value
+will get lost because the NaN payload is typically not preserved.
+The ability to have different bit masks specified for the same underlying
+type also needs to convert properly. With a well-defined interface
+converting to/from a (value,flag) pair, this becomes straightforward
+to support generically.</p>
+<p>This approach also provides some opportunities for some subtle variations
+with IEEE floats. By default, one exact bit-pattern, a silent NaN with
+a payload that won&#8217;t be generated by hardware floating point operations,
+would be used. The choice R has made could be this default.</p>
+<p>Additionally, it might be nice to sometimes treat all NaNs as missing values.
+This requires a slightly more complex mapping to convert the floating point
+values into mask/value combinations, and converting back would always
+produce the default NaN used by NumPy. Finally, treating both NaNs
+and Infs as missing values would be just a slight variation of the NaN
+version.</p>
+<p>Strings require a slightly different handling, because they
+may be any size. One approach is to use a one-character signal consisting
+of one of the first 32 ASCII/unicode values. There are many possible values
+to use here, like 0x15 &#8216;Negative Acknowledgement&#8217; or 0x10 &#8216;Data Link Escape&#8217;.</p>
+<p>The Object dtype has an obvious signal, the np.NA singleton itself. Any
+dtype with object semantics won&#8217;t be able to have this customized, since
+specifying bit patterns applies only to plain binary data, not data
+with object semantics of construction and destructions.</p>
+<p>Struct dtypes are more of a core primitive dtype, in the same fashion that
+this parameterized NA-capable dtype is. It won&#8217;t be possible to put
+these as the parameter for the parameterized NA-dtype.</p>
+<p>The dtype names would be parameterized similar to how the datetime64
+is parameterized by the metadata unit. What name to use may require some
+debate, but &#8220;NA&#8221; seems like a reasonable choice. With the default
+missing value bit-pattern, these dtypes would look like
+np.dtype(&#8216;NA[float32]&#8217;), np.dtype(&#8216;NA[f8]&#8217;), or np.dtype(&#8216;NA[i64]&#8217;).</p>
+<p>To override the bit pattern that signals a missing value, a raw
+value in the format of a hexadecimal unsigned integer can be given,
+and in the above special cases for floating point, special strings
+can be provided. The defaults for some cases, written explicitly in this
+form, are then:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;NA[?,0x02]&#39;</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;NA[i4,0x80000000]&#39;</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;NA[u4,0xffffffff]&#39;</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;NA[f4,0x7f8007a2&#39;</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;NA[f8,0x7ff00000000007a2&#39;</span><span class="p">)</span> <span class="p">(</span><span class="n">R</span><span class="o">-</span><span class="n">compatible</span> <span class="n">bitpattern</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;NA[S16,0x15]&#39;</span><span class="p">)</span> <span class="p">(</span><span class="n">using</span> <span class="n">the</span> <span class="n">NAK</span> <span class="n">character</span> <span class="k">as</span> <span class="n">the</span> <span class="n">signal</span><span class="p">)</span><span class="o">.</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;NA[f8,NaN]&#39;</span><span class="p">)</span> <span class="p">(</span><span class="k">for</span> <span class="nb">any</span> <span class="n">NaN</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;NA[f8,InfNaN]&#39;</span><span class="p">)</span> <span class="p">(</span><span class="k">for</span> <span class="nb">any</span> <span class="n">NaN</span> <span class="ow">or</span> <span class="n">Inf</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>When no parameter is specified a flexible NA dtype is created, which itself
+cannot hold values, but will conform to the input types in functions like
+&#8216;np.astype&#8217;. The dtype &#8216;f8&#8217; maps to &#8216;NA[f8]&#8217;, and [(&#8216;a&#8217;, &#8216;f4&#8217;), (&#8216;b&#8217;, &#8216;i4&#8217;)]
+maps to [(&#8216;a&#8217;, &#8216;NA[f4]&#8217;), (&#8216;b&#8217;, &#8216;NA[i4]&#8217;)]. Thus, to view the memory
+of an &#8216;f8&#8217; array &#8216;arr&#8217; with &#8216;NA[f8]&#8217;, you can say arr.view(dtype=&#8217;NA&#8217;).</p>
+</div>
+<div class="section" id="future-expansion-to-multi-na-payloads">
+<h3><a class="toc-backref" href="#id21">Future Expansion to multi-NA Payloads</a><a class="headerlink" href="#future-expansion-to-multi-na-payloads" title="Permalink to this headline">¶</a></h3>
+<p>The packages SAS and Stata both support multiple different &#8220;NA&#8221; values.
+This allows one to specify different reasons for why a value, for
+example homework that wasn&#8217;t done because the dog ate it or the student
+was sick. In these packages, the different NA values have a linear ordering
+which specifies how different NA values combine together.</p>
+<p>In the sections on C implementation details, the mask has been designed
+so that a mask with a payload is a strict superset of the NumPy boolean
+type, and the boolean type has a payload of just zero. Different payloads
+combine with the &#8216;min&#8217; operation.</p>
+<p>The important part of future-proofing the design is making sure
+the C ABI-level choices and the Python API-level choices have a natural
+transition to multi-NA support. Here is one way multi-NA support could look:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">NA</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">NA</span><span class="p">(</span><span class="mi">2</span><span class="p">)],</span> <span class="n">maskna</span><span class="o">=</span><span class="s1">&#39;multi&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">NA(1, dtype=&#39;&lt;i4&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+<span class="go">NA(2, dtype=&#39;&lt;i4&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="n">maskna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<span class="go">array([NA(0), 5, NA(2)], maskna=&#39;multi&#39;)</span>
+</pre></div>
+</div>
+<p>The design of this NEP does not distinguish between NAs that come
+from an NA mask or NAs that come from an NA dtype. Both of these get
+treated equivalently in computations, with masks dominating over NA
+dtypes.:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="n">maskna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;NA&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<span class="go">array([NA, NA, 12], maskna=True)</span>
+</pre></div>
+</div>
+<p>The multi-NA approach allows one to distinguish between these NAs,
+through assigning different payloads to the different types. If we
+extend the &#8216;skipna=&#8217; parameter to accept a list of payloads in addition
+to True/False, one could do this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">NA</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="n">maskna</span><span class="o">=</span><span class="s1">&#39;multi&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">NA</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="mi">7</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;NA[f4,multi]&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<span class="go">array([NA(1), NA(0), 12], maskna=&#39;multi&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">NA(1, dtype=&#39;&lt;i4&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">7</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">8</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">NA(0, dtype=&#39;&lt;f4&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="go">12</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="differences-with-numpy-ma">
+<h3><a class="toc-backref" href="#id22">Differences with numpy.ma</a><a class="headerlink" href="#differences-with-numpy-ma" title="Permalink to this headline">¶</a></h3>
+<p>The computational model that numpy.ma uses does not strictly adhere to
+either the NA or the IGNORE model. This section exhibits some examples
+of how these differences affect simple computations. This information
+will be very important for helping users navigate between the systems,
+so a summary probably should be put in a table in the documentation.:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mask</span> <span class="o">=</span> <span class="p">[[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">],</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">],</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b2</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">maskna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b2</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">NA</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b1</span>
+<span class="go">masked_array(data =</span>
+<span class="go"> [[0.110804969841 --]</span>
+<span class="go"> [-- --]</span>
+<span class="go"> [0.955128477746 0.440430735546]],</span>
+<span class="go">             mask =</span>
+<span class="go"> [[False  True]</span>
+<span class="go"> [ True  True]</span>
+<span class="go"> [False False]],</span>
+<span class="go">       fill_value = 1e+20)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b2</span>
+<span class="go">array([[0.110804969841, NA],</span>
+<span class="go">       [NA, NA],</span>
+<span class="go">       [0.955128477746, 0.440430735546]],</span>
+<span class="go">       maskna=True)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b1</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">masked_array(data = [0.532966723794 0.440430735546],</span>
+<span class="go">             mask = [False False],</span>
+<span class="go">       fill_value = 1e+20)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b2</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">array([NA, NA], dtype=&#39;&lt;f8&#39;, maskna=True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b2</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">array([0.532966723794 0.440430735546], maskna=True)</span>
+</pre></div>
+</div>
+<p>For functions like np.mean, when &#8216;skipna=True&#8217;, the behavior
+for all NAs is consistent with an empty array:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">b1</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">masked_array(data = [0.110804969841 -- 0.697779606646],</span>
+<span class="go">             mask = [False  True False],</span>
+<span class="go">       fill_value = 1e+20)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b2</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">array([NA, NA, 0.697779606646], maskna=True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b2</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">RuntimeWarning: invalid value encountered in double_scalars</span>
+<span class="go">array([0.110804969841, nan, 0.697779606646], maskna=True)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([])</span>
+<span class="go">RuntimeWarning: invalid value encountered in double_scalars</span>
+<span class="go">nan</span>
+</pre></div>
+</div>
+<p>In particular, note that numpy.ma generally skips masked values,
+except returns masked when all the values are masked, while
+the &#8216;skipna=&#8217; parameter returns zero when all the values are NA,
+to be consistent with the result of np.sum([]):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">b1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">masked_array(data = [-- --],</span>
+<span class="go">             mask = [ True  True],</span>
+<span class="go">       fill_value = 1e+20)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">array([NA, NA], dtype=&#39;&lt;f8&#39;, maskna=True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="go">masked</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="go">NA(dtype=&#39;&lt;f8&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">0.0</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">([])</span>
+<span class="go">0.0</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="boolean-indexing">
+<h3><a class="toc-backref" href="#id23">Boolean Indexing</a><a class="headerlink" href="#boolean-indexing" title="Permalink to this headline">¶</a></h3>
+<p>Indexing using a boolean array containing NAs does not have a consistent
+interpretation according to the NA abstraction. For example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span> <span class="kc">True</span><span class="p">],</span> <span class="n">maskna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+<span class="go">What should happen here?</span>
+</pre></div>
+</div>
+<p>Since the NA represents a valid but unknown value, and it is a boolean,
+it has two possible underlying values:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">])]</span>
+<span class="go">array([1, 2])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">])]</span>
+<span class="go">array([2])</span>
+</pre></div>
+</div>
+<p>The thing which changes is the length of the output array, nothing which
+itself can be substituted for NA. For this reason, at least initially,
+NumPy will raise an exception for this case.</p>
+<p>Another possibility is to add an inconsistency, and follow the approach
+R uses. That is, to produce the following:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+<span class="go">array([NA, 2], maskna=True)</span>
+</pre></div>
+</div>
+<p>If, in user testing, this is found necessary for pragmatic reasons,
+the feature should be added even though it is inconsistent.</p>
+</div>
+<div class="section" id="pep-3118">
+<h3><a class="toc-backref" href="#id24">PEP 3118</a><a class="headerlink" href="#pep-3118" title="Permalink to this headline">¶</a></h3>
+<p>PEP 3118 doesn&#8217;t have any mask mechanism, so arrays with masks will
+not be accessible through this interface. Similarly, it doesn&#8217;t support
+the specification of dtypes with NA or IGNORE bitpatterns, so the
+parameterized NA dtypes will also not be accessible through this interface.</p>
+<p>If NumPy did allow access through PEP 3118, this would circumvent the
+missing value abstraction in a very damaging way. Other libraries would
+try to use masked arrays, and silently get access to the data without
+also getting access to the mask or being aware of the missing value
+abstraction the mask and data together are following.</p>
+</div>
+<div class="section" id="cython">
+<h3><a class="toc-backref" href="#id25">Cython</a><a class="headerlink" href="#cython" title="Permalink to this headline">¶</a></h3>
+<p>Cython uses PEP 3118 to work with NumPy arrays, so currently it will
+simply refuse to work with them as described in the &#8220;PEP 3118&#8221; section.</p>
+<p>In order to properly support NumPy missing values, Cython will need to
+be modified in some fashion to add this support. Likely the best way
+to do this will be to include it with supporting np.nditer, which
+is most likely going to have an enhancement to make writing missing
+value algorithms easier.</p>
+</div>
+<div class="section" id="hard-masks">
+<h3><a class="toc-backref" href="#id26">Hard Masks</a><a class="headerlink" href="#hard-masks" title="Permalink to this headline">¶</a></h3>
+<p>The numpy.ma implementation has a &#8220;hardmask&#8221; feature,
+which prevents values from ever being unmasked by assigning a value.
+This would be an internal array flag, named something like
+&#8216;arr.flags.hardmask&#8217;.</p>
+<p>If the hardmask feature is implemented, boolean indexing could
+return a hardmasked array instead of a flattened array with the
+arbitrary choice of C-ordering as it currently does. While this
+improves the abstraction of the array significantly, it is not
+a compatible change.</p>
+</div>
+<div class="section" id="shared-masks">
+<h3><a class="toc-backref" href="#id27">Shared Masks</a><a class="headerlink" href="#shared-masks" title="Permalink to this headline">¶</a></h3>
+<p>One feature of numpy.ma is called &#8216;shared masks&#8217;.</p>
+<p><a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray.sharedmask">http://docs.scipy.org/doc/numpy/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray.sharedmask</a></p>
+<p>This feature cannot be supported by a masked implementation of
+missing values without directly violating the missing value abstraction.
+If the same mask memory is shared between two arrays &#8216;a&#8217; and &#8216;b&#8217;, assigning
+a value to a masked element in &#8216;a&#8217; will simultaneously unmask the
+element with matching index in &#8216;b&#8217;. Because this isn&#8217;t at the same time
+assigning a valid value to that element in &#8216;b&#8217;, this has violated the
+abstraction. For this reason, shared masks will not be supported
+by the mask-based missing value implementation.</p>
+<p>This is slightly different from what happens when taking a view
+of an array with masked missing value support, where a view of
+both the mask and the data are taken simultaneously. The result
+is two views which share the same mask memory and the same data memory,
+which still preserves the missing value abstraction.</p>
+</div>
+<div class="section" id="interaction-with-pre-existing-c-api-usage">
+<h3><a class="toc-backref" href="#id28">Interaction With Pre-existing C API Usage</a><a class="headerlink" href="#interaction-with-pre-existing-c-api-usage" title="Permalink to this headline">¶</a></h3>
+<p>Making sure existing code using the C API, whether it&#8217;s written in C, C++,
+or Cython, does something reasonable is an important goal of this implementation.
+The general strategy is to make existing code which does not explicitly
+tell numpy it supports NA masks fail with an exception saying so. There are
+a few different access patterns people use to get ahold of the numpy array data,
+here we examine a few of them to see what numpy can do. These examples are
+found from doing google searches of numpy C API array access.</p>
+<div class="section" id="numpy-documentation-how-to-extend-numpy">
+<h4><a class="toc-backref" href="#id29">NumPy Documentation - How to extend NumPy</a><a class="headerlink" href="#numpy-documentation-how-to-extend-numpy" title="Permalink to this headline">¶</a></h4>
+<p><a class="reference external" href="http://docs.scipy.org/doc/numpy/user/c-info.how-to-extend.html#dealing-with-array-objects">http://docs.scipy.org/doc/numpy/user/c-info.how-to-extend.html#dealing-with-array-objects</a></p>
+<p>This page has a section &#8220;Dealing with array objects&#8221; which has some advice for how
+to access numpy arrays from C. When accepting arrays, the first step it suggests is
+to use PyArray_FromAny or a macro built on that function, so code following this
+advice will properly fail when given an NA-masked array it doesn&#8217;t know how to handle.</p>
+<p>The way this is handled is that PyArray_FromAny requires a special flag, NPY_ARRAY_ALLOWNA,
+before it will allow NA-masked arrays to flow through.</p>
+<p><a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/c-api.array.html#NPY_ARRAY_ALLOWNA">http://docs.scipy.org/doc/numpy/reference/c-api.array.html#NPY_ARRAY_ALLOWNA</a></p>
+<p>Code which does not follow this advice, and instead just calls PyArray_Check() to verify
+its an ndarray and checks some flags, will silently produce incorrect results. This style
+of code does not provide any opportunity for numpy to say &#8220;hey, this array is special&#8221;,
+so also is not compatible with future ideas of lazy evaluation, derived dtypes, etc.</p>
+</div>
+<div class="section" id="tutorial-from-cython-website">
+<h4><a class="toc-backref" href="#id30">Tutorial From Cython Website</a><a class="headerlink" href="#tutorial-from-cython-website" title="Permalink to this headline">¶</a></h4>
+<p><a class="reference external" href="http://docs.cython.org/src/tutorial/numpy.html">http://docs.cython.org/src/tutorial/numpy.html</a></p>
+<p>This tutorial gives a convolution example, and all the examples fail with
+Python exceptions when given inputs that contain NA values.</p>
+<p>Before any Cython type annotation is introduced, the code functions just
+as equivalent Python would in the interpreter.</p>
+<p>When the type information is introduced, it is done via numpy.pxd which
+defines a mapping between an ndarray declaration and PyArrayObject *.
+Under the hood, this maps to __Pyx_ArgTypeTest, which does a direct
+comparison of Py_TYPE(obj) against the PyTypeObject for the ndarray.</p>
+<p>Then the code does some dtype comparisons, and uses regular python indexing
+to access the array elements. This python indexing still goes through the
+Python API, so the NA handling and error checking in numpy still can work
+like normal and fail if the inputs have NAs which cannot fit in the output
+array. In this case it fails when trying to convert the NA into an integer
+to set in in the output.</p>
+<p>The next version of the code introduces more efficient indexing. This
+operates based on Python&#8217;s buffer protocol. This causes Cython to call
+__Pyx_GetBufferAndValidate, which calls __Pyx_GetBuffer, which calls
+PyObject_GetBuffer. This call gives numpy the opportunity to raise an
+exception if the inputs are arrays with NA-masks, something not supported
+by the Python buffer protocol.</p>
+</div>
+<div class="section" id="numerical-python-jpl-website">
+<h4><a class="toc-backref" href="#id31">Numerical Python - JPL website</a><a class="headerlink" href="#numerical-python-jpl-website" title="Permalink to this headline">¶</a></h4>
+<p><a class="reference external" href="http://dsnra.jpl.nasa.gov/software/Python/numpydoc/numpy-13.html">http://dsnra.jpl.nasa.gov/software/Python/numpydoc/numpy-13.html</a></p>
+<p>This document is from 2001, so does not reflect recent numpy, but it is the
+second hit when searching for &#8220;numpy c api example&#8221; on google.</p>
+<p>There first example, heading &#8220;A simple example&#8221;, is in fact already invalid for
+recent numpy even without the NA support. In particular, if the data is misaligned
+or in a different byteorder, it may crash or produce incorrect results.</p>
+<p>The next thing the document does is introduce PyArray_ContiguousFromObject, which
+gives numpy an opportunity to raise an exception when NA-masked arrays are used,
+so the later code will raise exceptions as desired.</p>
+</div>
+</div>
+</div>
+<div class="section" id="c-implementation-details">
+<h2><a class="toc-backref" href="#id32">C Implementation Details</a><a class="headerlink" href="#c-implementation-details" title="Permalink to this headline">¶</a></h2>
+<p>The first version to implement is the array masks, because it is
+the more general approach. The mask itself is an array, but since
+it is intended to never be directly accessible from Python, it won&#8217;t
+be a full ndarray itself. The mask always has the same shape as
+the array it&#8217;s attached to, so it doesn&#8217;t need its own shape. For
+an array with a struct dtype, however, the mask will have a different
+dtype than just a straight bool, so it does need its own dtype.
+This gives us the following additions to the PyArrayObject:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">/*</span>
+ <span class="o">*</span> <span class="n">Descriptor</span> <span class="k">for</span> <span class="n">the</span> <span class="n">mask</span> <span class="n">dtype</span><span class="o">.</span>
+ <span class="o">*</span>   <span class="n">If</span> <span class="n">no</span> <span class="n">mask</span><span class="p">:</span> <span class="n">NULL</span>
+ <span class="o">*</span>   <span class="n">If</span> <span class="n">mask</span>   <span class="p">:</span> <span class="nb">bool</span><span class="o">/</span><span class="n">uint8</span><span class="o">/</span><span class="n">structured</span> <span class="n">dtype</span> <span class="n">of</span> <span class="n">mask</span> <span class="n">dtypes</span>
+ <span class="o">*/</span>
+<span class="n">PyArray_Descr</span> <span class="o">*</span><span class="n">maskna_dtype</span><span class="p">;</span>
+<span class="o">/*</span>
+ <span class="o">*</span> <span class="n">Raw</span> <span class="n">data</span> <span class="n">buffer</span> <span class="k">for</span> <span class="n">mask</span><span class="o">.</span> <span class="n">If</span> <span class="n">the</span> <span class="n">array</span> <span class="n">has</span> <span class="n">the</span> <span class="n">flag</span>
+ <span class="o">*</span> <span class="n">NPY_ARRAY_OWNMASKNA</span> <span class="n">enabled</span><span class="p">,</span> <span class="n">it</span> <span class="n">owns</span> <span class="n">this</span> <span class="n">memory</span> <span class="ow">and</span>
+ <span class="o">*</span> <span class="n">must</span> <span class="n">call</span> <span class="n">PyArray_free</span> <span class="n">on</span> <span class="n">it</span> <span class="n">when</span> <span class="n">destroyed</span><span class="o">.</span>
+ <span class="o">*/</span>
+<span class="n">npy_mask</span> <span class="o">*</span><span class="n">maskna_data</span><span class="p">;</span>
+<span class="o">/*</span>
+ <span class="o">*</span> <span class="n">Just</span> <span class="n">like</span> <span class="n">dimensions</span> <span class="ow">and</span> <span class="n">strides</span> <span class="n">point</span> <span class="n">into</span> <span class="n">the</span> <span class="n">same</span> <span class="n">memory</span>
+ <span class="o">*</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">we</span> <span class="n">now</span> <span class="n">just</span> <span class="n">make</span> <span class="n">the</span> <span class="n">buffer</span> <span class="mi">3</span><span class="n">x</span> <span class="n">the</span> <span class="n">nd</span> <span class="n">instead</span> <span class="n">of</span> <span class="mi">2</span><span class="n">x</span>
+ <span class="o">*</span> <span class="ow">and</span> <span class="n">use</span> <span class="n">the</span> <span class="n">same</span> <span class="n">buffer</span><span class="o">.</span>
+ <span class="o">*/</span>
+<span class="n">npy_intp</span> <span class="o">*</span><span class="n">maskna_strides</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>These fields can be accessed through the inline functions:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PyArray_Descr</span> <span class="o">*</span>
+<span class="n">PyArray_MASKNA_DTYPE</span><span class="p">(</span><span class="n">PyArrayObject</span> <span class="o">*</span><span class="n">arr</span><span class="p">);</span>
+
+<span class="n">npy_mask</span> <span class="o">*</span>
+<span class="n">PyArray_MASKNA_DATA</span><span class="p">(</span><span class="n">PyArrayObject</span> <span class="o">*</span><span class="n">arr</span><span class="p">);</span>
+
+<span class="n">npy_intp</span> <span class="o">*</span>
+<span class="n">PyArray_MASKNA_STRIDES</span><span class="p">(</span><span class="n">PyArrayObject</span> <span class="o">*</span><span class="n">arr</span><span class="p">);</span>
+
+<span class="n">npy_bool</span>
+<span class="n">PyArray_HASMASKNA</span><span class="p">(</span><span class="n">PyArrayObject</span> <span class="o">*</span><span class="n">arr</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>There are 2 or 3 flags which must be added to the array flags, both
+for requesting NA masks and for testing for them:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">NPY_ARRAY_MASKNA</span>
+<span class="n">NPY_ARRAY_OWNMASKNA</span>
+<span class="o">/*</span> <span class="n">To</span> <span class="n">possibly</span> <span class="n">add</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">later</span> <span class="n">revision</span> <span class="o">*/</span>
+<span class="n">NPY_ARRAY_HARDMASKNA</span>
+</pre></div>
+</div>
+<p>To allow the easy detection of NA support, and whether an array
+has any missing values, we add the following functions:</p>
+<dl class="docutils">
+<dt>PyDataType_HasNASupport(PyArray_Descr* dtype)</dt>
+<dd>Returns true if this is an NA dtype, or a struct
+dtype where every field has NA support.</dd>
+<dt>PyArray_HasNASupport(PyArrayObject* obj)</dt>
+<dd>Returns true if the array dtype has NA support, or
+the array has an NA mask.</dd>
+<dt>PyArray_ContainsNA(PyArrayObject* obj)</dt>
+<dd>Returns false if the array has no NA support. Returns
+true if the array has NA support AND there is an
+NA anywhere in the array.</dd>
+<dt>int PyArray_AllocateMaskNA(PyArrayObject* arr, npy_bool ownmaskna, npy_bool multina)</dt>
+<dd>Allocates an NA mask for the array, ensuring ownership if requested
+and using NPY_MASK instead of NPY_BOOL for the dtype if multina is True.</dd>
+</dl>
+<div class="section" id="mask-binary-format">
+<h3><a class="toc-backref" href="#id33">Mask Binary Format</a><a class="headerlink" href="#mask-binary-format" title="Permalink to this headline">¶</a></h3>
+<p>The format of the mask itself is designed to indicate whether an
+element is masked or not, as well as contain a payload so that multiple
+different NAs with different payloads can be used in the future.
+Initially, we will simply use the payload 0.</p>
+<p>The mask has type npy_uint8, and bit 0 is used to indicate whether
+a value is masked. If ((m&amp;0x01) == 0), the element is masked, otherwise
+it is unmasked. The rest of the bits are the payload, which is (m&gt;&gt;1).
+The convention for combining masks with payloads is that smaller
+payloads propagate. This design gives 128 payload values to masked elements,
+and 128 payload values to unmasked elements.</p>
+<p>The big benefit of this approach is that npy_bool also
+works as a mask, because it takes on the values 0 for False and 1
+for True. Additionally, the payload for npy_bool, which is always
+zero, dominates over all the other possible payloads.</p>
+<p>Since the design involves giving the mask its own dtype, we can
+distinguish between masking with a single NA value (npy_bool mask),
+and masking with multi-NA (npy_uint8 mask). Initial implementations
+will just support the npy_bool mask.</p>
+<p>An idea that was discarded is to allow the combination of masks + payloads
+to be a simple &#8216;min&#8217; operation. This can be done by putting the payload
+in bits 0 through 6, so that the payload is (m&amp;0x7f), and using bit 7
+for the masking flag, so ((m&amp;0x80) == 0) means the element is masked.
+The fact that this makes masks completely different from booleans, instead
+of a strict superset, is the primary reason this choice was discarded.</p>
+</div>
+</div>
+<div class="section" id="c-iterator-api-changes-iteration-with-masks">
+<h2><a class="toc-backref" href="#id34">C Iterator API Changes: Iteration With Masks</a><a class="headerlink" href="#c-iterator-api-changes-iteration-with-masks" title="Permalink to this headline">¶</a></h2>
+<p>For iteration and computation with masks, both in the context of missing
+values and when the mask is used like the &#8216;where=&#8217; parameter in ufuncs,
+extending the nditer is the most natural way to expose this functionality.</p>
+<p>Masked operations need to work with casting, alignment, and anything else
+which causes values to be copied into a temporary buffer, something which
+is handled nicely by the nditer but difficult to do outside that context.</p>
+<p>First we describe iteration designed for use of masks outside the
+context of missing values, then the features which include missing
+value support.</p>
+<div class="section" id="iterator-mask-features">
+<h3><a class="toc-backref" href="#id35">Iterator Mask Features</a><a class="headerlink" href="#iterator-mask-features" title="Permalink to this headline">¶</a></h3>
+<p>We add several new per-operand flags:</p>
+<dl class="docutils">
+<dt>NPY_ITER_WRITEMASKED</dt>
+<dd><p class="first">Indicates that any copies done from a buffer to the array are
+masked. This is necessary because READWRITE mode could destroy
+data if a float array was being treated like an int array, so
+copying to the buffer and back would truncate to integers. No
+similar flag is provided for reading, because it may not be possible
+to know the mask ahead of time, and copying everything into
+the buffer will never destroy data.</p>
+<p class="last">The code using the iterator should only write to values which
+are not masked by the mask specified, otherwise the result will
+be different depending on whether buffering is enabled or not.</p>
+</dd>
+<dt>NPY_ITER_ARRAYMASK</dt>
+<dd><p class="first">Indicates that this array is a boolean mask to use when copying
+any WRITEMASKED argument from a buffer back to the array. There
+can be only one such mask, and there cannot also be a virtual
+mask.</p>
+<p class="last">As a special case, if the flag NPY_ITER_USE_MASKNA is specified
+at the same time, the mask for the operand is used instead
+of the operand itself. If the operand has no mask but is
+based on an NA dtype, that mask exposed by the iterator converts
+into the NA bitpattern when copying from the buffer to the
+array.</p>
+</dd>
+<dt>NPY_ITER_VIRTUAL</dt>
+<dd>Indicates that this operand is not an array, but rather created on
+the fly for the inner iteration code. This allocates enough buffer
+space for the code to read/write data, but does not have
+an actual array backing the data. When combined with NPY_ITER_ARRAYMASK,
+allows for creating a &#8220;virtual mask&#8221;, specifying which values
+are unmasked without ever creating a full mask array.</dd>
+</dl>
+</div>
+<div class="section" id="iterator-na-array-features">
+<h3><a class="toc-backref" href="#id36">Iterator NA-array Features</a><a class="headerlink" href="#iterator-na-array-features" title="Permalink to this headline">¶</a></h3>
+<p>We add several new per-operand flags:</p>
+<dl class="docutils">
+<dt>NPY_ITER_USE_MASKNA</dt>
+<dd>If the operand has an NA dtype, an NA mask, or both, this adds a new
+virtual operand to the end of the operand list which iterates
+over the mask for the particular operand.</dd>
+<dt>NPY_ITER_IGNORE_MASKNA</dt>
+<dd><p class="first">If an operand has an NA mask, by default the iterator will raise
+an exception unless NPY_ITER_USE_MASKNA is specified. This flag
+disables that check, and is intended for cases where one has first
+checked that all the elements in the array are not NA using the
+PyArray_ContainsNA function.</p>
+<p class="last">If the dtype is an NA dtype, this also strips the NA-ness from the
+dtype, showing a dtype that does not support NA.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="rejected-alternative">
+<h2><a class="toc-backref" href="#id37">Rejected Alternative</a><a class="headerlink" href="#rejected-alternative" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="parameterized-data-type-which-adds-additional-memory-for-the-na-flag">
+<h3><a class="toc-backref" href="#id38">Parameterized Data Type Which Adds Additional Memory for the NA Flag</a><a class="headerlink" href="#parameterized-data-type-which-adds-additional-memory-for-the-na-flag" title="Permalink to this headline">¶</a></h3>
+<p>Another alternative to having a separate mask added to the array is
+to introduced a parameterized type, which takes a primitive dtype
+as an argument. The dtype &#8220;i8&#8221; would turn into &#8220;maybe[i8]&#8221;, and
+a byte flag would be appended to the dtype to indicate whether the
+value was NA or not.</p>
+<p>This approach adds memory overhead greater or equal to keeping a separate
+mask, but has better locality. To keep the dtype aligned, an &#8216;i8&#8217; would
+need to have 16 bytes to retain proper alignment, a 100% overhead compared
+to 12.5% overhead for a separately kept mask.</p>
+</div>
+</div>
+<div class="section" id="acknowledgments">
+<h2><a class="toc-backref" href="#id39">Acknowledgments</a><a class="headerlink" href="#acknowledgments" title="Permalink to this headline">¶</a></h2>
+<p>In addition to feedback from Travis Oliphant and others at Enthought,
+this NEP has been revised based on a great deal of feedback from
+the NumPy-Discussion mailing list. The people participating in
+the discussion are:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Nathaniel</span> <span class="n">Smith</span>
+<span class="n">Robert</span> <span class="n">Kern</span>
+<span class="n">Charles</span> <span class="n">Harris</span>
+<span class="n">Gael</span> <span class="n">Varoquaux</span>
+<span class="n">Eric</span> <span class="n">Firing</span>
+<span class="n">Keith</span> <span class="n">Goodman</span>
+<span class="n">Pierre</span> <span class="n">GM</span>
+<span class="n">Christopher</span> <span class="n">Barker</span>
+<span class="n">Josef</span> <span class="n">Perktold</span>
+<span class="n">Ben</span> <span class="n">Root</span>
+<span class="n">Laurent</span> <span class="n">Gautier</span>
+<span class="n">Neal</span> <span class="n">Becker</span>
+<span class="n">Bruce</span> <span class="n">Southey</span>
+<span class="n">Matthew</span> <span class="n">Brett</span>
+<span class="n">Wes</span> <span class="n">McKinney</span>
+<span class="n">Lluís</span>
+<span class="n">Olivier</span> <span class="n">Delalleau</span>
+<span class="n">Alan</span> <span class="n">G</span> <span class="n">Isaac</span>
+<span class="n">E</span><span class="o">.</span> <span class="n">Antero</span> <span class="n">Tammi</span>
+<span class="n">Jason</span> <span class="n">Grout</span>
+<span class="n">Dag</span> <span class="n">Sverre</span> <span class="n">Seljebotn</span>
+<span class="n">Joe</span> <span class="n">Harrington</span>
+<span class="n">Gary</span> <span class="n">Strangman</span>
+<span class="n">Chris</span> <span class="n">Jordan</span><span class="o">-</span><span class="n">Squire</span>
+<span class="n">Peter</span>
+</pre></div>
+</div>
+<p>I apologize if I missed anyone.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

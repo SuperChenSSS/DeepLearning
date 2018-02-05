@@ -1,0 +1,396 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pandas.DatetimeIndex.is_boolean &#8212; pandas 0.22.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.22.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pandas.DatetimeIndex.is_categorical" href="pandas.DatetimeIndex.is_categorical.html" />
+    <link rel="prev" title="pandas.DatetimeIndex.is_" href="pandas.DatetimeIndex.is_.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pandas.DatetimeIndex.is_categorical.html" title="pandas.DatetimeIndex.is_categorical"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pandas.DatetimeIndex.is_.html" title="pandas.DatetimeIndex.is_"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pandas 0.22.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="pandas.DatetimeIndex.html" accesskey="U">pandas.DatetimeIndex</a> &#187;</li> 
+      </ul>
+    </div>
+<div class="content-wrapper">
+    <div class="content">
+        <div class="document">
+            <div class="sphinxsidebar">
+                <h3>Table Of Contents</h3>
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew.html">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Package overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../10min.html">10 Minutes to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dsintro.html">Intro to Data Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basics.html">Essential Basic Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text.html">Working with Text Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../options.html">Options and Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indexing.html">Indexing and Selecting Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced.html">MultiIndex / Advanced Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../computation.html">Computational tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../missing_data.html">Working with missing data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../groupby.html">Group By: split-apply-combine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../merging.html">Merge, join, and concatenate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reshaping.html">Reshaping and Pivot Tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timeseries.html">Time Series / Date functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timedeltas.html">Time Deltas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../categorical.html">Categorical Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../style.html">Styling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io.html">IO Tools (Text, CSV, HDF5, ...)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../remote_data.html">Remote Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enhancingperf.html">Enhancing Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sparse.html">Sparse data structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gotchas.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../r_interface.html">rpy2 / R interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ecosystem.html">pandas Ecosystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_r.html">Comparison with R / R libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_sql.html">Comparison with SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_sas.html">Comparison with SAS</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#input-output">Input/Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#general-functions">General functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#series">Series</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#dataframe">DataFrame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#panel">Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#index">Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#numeric-index">Numeric Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#categoricalindex">CategoricalIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#intervalindex">IntervalIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#multiindex">MultiIndex</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#datetimeindex">DatetimeIndex</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pandas.DatetimeIndex.html">pandas.DatetimeIndex</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.T.html">pandas.DatetimeIndex.T</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.asi8.html">pandas.DatetimeIndex.asi8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.asobject.html">pandas.DatetimeIndex.asobject</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.base.html">pandas.DatetimeIndex.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.data.html">pandas.DatetimeIndex.data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.date.html">pandas.DatetimeIndex.date</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.day.html">pandas.DatetimeIndex.day</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.dayofweek.html">pandas.DatetimeIndex.dayofweek</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.dayofyear.html">pandas.DatetimeIndex.dayofyear</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.days_in_month.html">pandas.DatetimeIndex.days_in_month</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.daysinmonth.html">pandas.DatetimeIndex.daysinmonth</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.dtype.html">pandas.DatetimeIndex.dtype</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.dtype_str.html">pandas.DatetimeIndex.dtype_str</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.empty.html">pandas.DatetimeIndex.empty</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.flags.html">pandas.DatetimeIndex.flags</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.freq.html">pandas.DatetimeIndex.freq</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.freqstr.html">pandas.DatetimeIndex.freqstr</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.has_duplicates.html">pandas.DatetimeIndex.has_duplicates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.hasnans.html">pandas.DatetimeIndex.hasnans</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.hour.html">pandas.DatetimeIndex.hour</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.inferred_freq.html">pandas.DatetimeIndex.inferred_freq</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.inferred_type.html">pandas.DatetimeIndex.inferred_type</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.is_all_dates.html">pandas.DatetimeIndex.is_all_dates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.is_leap_year.html">pandas.DatetimeIndex.is_leap_year</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.is_monotonic.html">pandas.DatetimeIndex.is_monotonic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.is_monotonic_decreasing.html">pandas.DatetimeIndex.is_monotonic_decreasing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.is_monotonic_increasing.html">pandas.DatetimeIndex.is_monotonic_increasing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.is_month_end.html">pandas.DatetimeIndex.is_month_end</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.is_month_start.html">pandas.DatetimeIndex.is_month_start</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.is_normalized.html">pandas.DatetimeIndex.is_normalized</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.is_quarter_end.html">pandas.DatetimeIndex.is_quarter_end</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.is_quarter_start.html">pandas.DatetimeIndex.is_quarter_start</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.is_unique.html">pandas.DatetimeIndex.is_unique</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.is_year_end.html">pandas.DatetimeIndex.is_year_end</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.is_year_start.html">pandas.DatetimeIndex.is_year_start</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.itemsize.html">pandas.DatetimeIndex.itemsize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.microsecond.html">pandas.DatetimeIndex.microsecond</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.minute.html">pandas.DatetimeIndex.minute</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.month.html">pandas.DatetimeIndex.month</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.name.html">pandas.DatetimeIndex.name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.names.html">pandas.DatetimeIndex.names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.nanosecond.html">pandas.DatetimeIndex.nanosecond</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.nbytes.html">pandas.DatetimeIndex.nbytes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.ndim.html">pandas.DatetimeIndex.ndim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.nlevels.html">pandas.DatetimeIndex.nlevels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.offset.html">pandas.DatetimeIndex.offset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.quarter.html">pandas.DatetimeIndex.quarter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.resolution.html">pandas.DatetimeIndex.resolution</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.second.html">pandas.DatetimeIndex.second</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.shape.html">pandas.DatetimeIndex.shape</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.size.html">pandas.DatetimeIndex.size</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.strides.html">pandas.DatetimeIndex.strides</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.time.html">pandas.DatetimeIndex.time</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.tz.html">pandas.DatetimeIndex.tz</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.tzinfo.html">pandas.DatetimeIndex.tzinfo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.values.html">pandas.DatetimeIndex.values</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.week.html">pandas.DatetimeIndex.week</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.weekday.html">pandas.DatetimeIndex.weekday</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.weekday_name.html">pandas.DatetimeIndex.weekday_name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.weekofyear.html">pandas.DatetimeIndex.weekofyear</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.year.html">pandas.DatetimeIndex.year</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.all.html">pandas.DatetimeIndex.all</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.any.html">pandas.DatetimeIndex.any</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.append.html">pandas.DatetimeIndex.append</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.argmax.html">pandas.DatetimeIndex.argmax</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.argmin.html">pandas.DatetimeIndex.argmin</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.argsort.html">pandas.DatetimeIndex.argsort</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.asof.html">pandas.DatetimeIndex.asof</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.asof_locs.html">pandas.DatetimeIndex.asof_locs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.astype.html">pandas.DatetimeIndex.astype</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.ceil.html">pandas.DatetimeIndex.ceil</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.contains.html">pandas.DatetimeIndex.contains</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.copy.html">pandas.DatetimeIndex.copy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.delete.html">pandas.DatetimeIndex.delete</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.difference.html">pandas.DatetimeIndex.difference</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.drop.html">pandas.DatetimeIndex.drop</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.drop_duplicates.html">pandas.DatetimeIndex.drop_duplicates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.dropna.html">pandas.DatetimeIndex.dropna</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.duplicated.html">pandas.DatetimeIndex.duplicated</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.equals.html">pandas.DatetimeIndex.equals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.factorize.html">pandas.DatetimeIndex.factorize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.fillna.html">pandas.DatetimeIndex.fillna</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.floor.html">pandas.DatetimeIndex.floor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.format.html">pandas.DatetimeIndex.format</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.get_duplicates.html">pandas.DatetimeIndex.get_duplicates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.get_indexer.html">pandas.DatetimeIndex.get_indexer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.get_indexer_for.html">pandas.DatetimeIndex.get_indexer_for</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.get_indexer_non_unique.html">pandas.DatetimeIndex.get_indexer_non_unique</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.get_level_values.html">pandas.DatetimeIndex.get_level_values</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.get_loc.html">pandas.DatetimeIndex.get_loc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.get_slice_bound.html">pandas.DatetimeIndex.get_slice_bound</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.get_value.html">pandas.DatetimeIndex.get_value</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.get_value_maybe_box.html">pandas.DatetimeIndex.get_value_maybe_box</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.get_values.html">pandas.DatetimeIndex.get_values</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.groupby.html">pandas.DatetimeIndex.groupby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.holds_integer.html">pandas.DatetimeIndex.holds_integer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.identical.html">pandas.DatetimeIndex.identical</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.indexer_at_time.html">pandas.DatetimeIndex.indexer_at_time</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.indexer_between_time.html">pandas.DatetimeIndex.indexer_between_time</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.insert.html">pandas.DatetimeIndex.insert</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.intersection.html">pandas.DatetimeIndex.intersection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.is_.html">pandas.DatetimeIndex.is_</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pandas.DatetimeIndex.is_boolean</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.is_categorical.html">pandas.DatetimeIndex.is_categorical</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.is_floating.html">pandas.DatetimeIndex.is_floating</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.is_integer.html">pandas.DatetimeIndex.is_integer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.is_interval.html">pandas.DatetimeIndex.is_interval</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.is_lexsorted_for_tuple.html">pandas.DatetimeIndex.is_lexsorted_for_tuple</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.is_mixed.html">pandas.DatetimeIndex.is_mixed</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.is_numeric.html">pandas.DatetimeIndex.is_numeric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.is_object.html">pandas.DatetimeIndex.is_object</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.is_type_compatible.html">pandas.DatetimeIndex.is_type_compatible</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.isin.html">pandas.DatetimeIndex.isin</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.isna.html">pandas.DatetimeIndex.isna</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.isnull.html">pandas.DatetimeIndex.isnull</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.item.html">pandas.DatetimeIndex.item</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.join.html">pandas.DatetimeIndex.join</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.map.html">pandas.DatetimeIndex.map</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.max.html">pandas.DatetimeIndex.max</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.memory_usage.html">pandas.DatetimeIndex.memory_usage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.min.html">pandas.DatetimeIndex.min</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.normalize.html">pandas.DatetimeIndex.normalize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.notna.html">pandas.DatetimeIndex.notna</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.notnull.html">pandas.DatetimeIndex.notnull</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.nunique.html">pandas.DatetimeIndex.nunique</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.putmask.html">pandas.DatetimeIndex.putmask</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.ravel.html">pandas.DatetimeIndex.ravel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.reindex.html">pandas.DatetimeIndex.reindex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.rename.html">pandas.DatetimeIndex.rename</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.repeat.html">pandas.DatetimeIndex.repeat</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.reshape.html">pandas.DatetimeIndex.reshape</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.round.html">pandas.DatetimeIndex.round</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.searchsorted.html">pandas.DatetimeIndex.searchsorted</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.set_names.html">pandas.DatetimeIndex.set_names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.set_value.html">pandas.DatetimeIndex.set_value</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.shift.html">pandas.DatetimeIndex.shift</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.slice_indexer.html">pandas.DatetimeIndex.slice_indexer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.slice_locs.html">pandas.DatetimeIndex.slice_locs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.snap.html">pandas.DatetimeIndex.snap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.sort.html">pandas.DatetimeIndex.sort</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.sort_values.html">pandas.DatetimeIndex.sort_values</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.sortlevel.html">pandas.DatetimeIndex.sortlevel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.str.html">pandas.DatetimeIndex.str</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.strftime.html">pandas.DatetimeIndex.strftime</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.summary.html">pandas.DatetimeIndex.summary</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.symmetric_difference.html">pandas.DatetimeIndex.symmetric_difference</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.take.html">pandas.DatetimeIndex.take</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.to_datetime.html">pandas.DatetimeIndex.to_datetime</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.to_frame.html">pandas.DatetimeIndex.to_frame</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.to_julian_date.html">pandas.DatetimeIndex.to_julian_date</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.to_native_types.html">pandas.DatetimeIndex.to_native_types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.to_period.html">pandas.DatetimeIndex.to_period</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.to_perioddelta.html">pandas.DatetimeIndex.to_perioddelta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.to_pydatetime.html">pandas.DatetimeIndex.to_pydatetime</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.to_series.html">pandas.DatetimeIndex.to_series</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.tolist.html">pandas.DatetimeIndex.tolist</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.transpose.html">pandas.DatetimeIndex.transpose</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.tz_convert.html">pandas.DatetimeIndex.tz_convert</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.tz_localize.html">pandas.DatetimeIndex.tz_localize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.union.html">pandas.DatetimeIndex.union</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.union_many.html">pandas.DatetimeIndex.union_many</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.unique.html">pandas.DatetimeIndex.unique</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.value_counts.html">pandas.DatetimeIndex.value_counts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.view.html">pandas.DatetimeIndex.view</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.DatetimeIndex.where.html">pandas.DatetimeIndex.where</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#time-date-components">Time/Date Components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id27">Selecting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id28">Time-specific operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id29">Conversion</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#timedeltaindex">TimedeltaIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#periodindex">PeriodIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#scalars">Scalars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#window">Window</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#groupby">GroupBy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#resampling">Resampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#style">Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#general-utility-functions">General utility functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developer.html">Developer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../internals.html">Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release Notes</a></li>
+</ul>
+
+                <h3 style="margin-top: 1.5em;">Search</h3>
+
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18"/>
+                    <input type="submit" value="Go"/>
+                    <input type="hidden" name="check_keywords" value="yes"/>
+                    <input type="hidden" name="area" value="default"/>
+                </form>
+                <p class="searchtip" style="font-size: 90%">
+                    Enter search terms or a module, class or function name.
+                </p>
+
+            </div>
+             
+            <div class="documentwrapper">
+                <div class="bodywrapper">
+                    <div class="body">
+                        
+  <div class="section" id="pandas-datetimeindex-is-boolean">
+<h1>pandas.DatetimeIndex.is_boolean<a class="headerlink" href="#pandas-datetimeindex-is-boolean" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pandas.DatetimeIndex.is_boolean">
+<code class="descclassname">DatetimeIndex.</code><code class="descname">is_boolean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="http://github.com/pandas-dev/pandas/blob/v0.22.0/pandas/core/indexes/base.py#L1324-L1325"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pandas.DatetimeIndex.is_boolean" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="clearer"></div>
+        </div>
+    </div>
+</div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pandas.DatetimeIndex.is_categorical.html" title="pandas.DatetimeIndex.is_categorical"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pandas.DatetimeIndex.is_.html" title="pandas.DatetimeIndex.is_"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pandas 0.22.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="pandas.DatetimeIndex.html" >pandas.DatetimeIndex</a> &#187;</li> 
+      </ul>
+    </div>
+<style type="text/css">
+    .scrollToTop {
+        text-align: center;
+        font-weight: bold;
+        position: fixed;
+        bottom: 60px;
+        right: 40px;
+        display: none;
+    }
+</style>
+<a href="#" class="scrollToTop">Scroll To Top</a>
+<script type="text/javascript">
+$(document).ready(function() {
+    //Check to see if the window is top if not then display button
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 200) {
+            $('.scrollToTop').fadeIn();
+        } else {
+            $('.scrollToTop').fadeOut();
+        }
+    });
+
+    //Click event to scroll to top
+    $('.scrollToTop').click(function() {
+        $('html, body').animate({
+            scrollTop: 0
+        }, 500);
+        return false;
+    });
+});
+</script>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27880019-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </body>
+</html>

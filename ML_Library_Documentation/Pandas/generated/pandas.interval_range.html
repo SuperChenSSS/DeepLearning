@@ -1,0 +1,319 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pandas.interval_range &#8212; pandas 0.22.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.22.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pandas.eval" href="pandas.eval.html" />
+    <link rel="prev" title="pandas.infer_freq" href="pandas.infer_freq.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pandas.eval.html" title="pandas.eval"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pandas.infer_freq.html" title="pandas.infer_freq"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pandas 0.22.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" accesskey="U">API Reference</a> &#187;</li> 
+      </ul>
+    </div>
+<div class="content-wrapper">
+    <div class="content">
+        <div class="document">
+            <div class="sphinxsidebar">
+                <h3>Table Of Contents</h3>
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew.html">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Package overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../10min.html">10 Minutes to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dsintro.html">Intro to Data Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basics.html">Essential Basic Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text.html">Working with Text Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../options.html">Options and Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indexing.html">Indexing and Selecting Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced.html">MultiIndex / Advanced Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../computation.html">Computational tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../missing_data.html">Working with missing data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../groupby.html">Group By: split-apply-combine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../merging.html">Merge, join, and concatenate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reshaping.html">Reshaping and Pivot Tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timeseries.html">Time Series / Date functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timedeltas.html">Time Deltas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../categorical.html">Categorical Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../style.html">Styling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io.html">IO Tools (Text, CSV, HDF5, ...)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../remote_data.html">Remote Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enhancingperf.html">Enhancing Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sparse.html">Sparse data structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gotchas.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../r_interface.html">rpy2 / R interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ecosystem.html">pandas Ecosystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_r.html">Comparison with R / R libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_sql.html">Comparison with SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_sas.html">Comparison with SAS</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#input-output">Input/Output</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#general-functions">General functions</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../api.html#data-manipulations">Data manipulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#top-level-missing-data">Top-level missing data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#top-level-conversions">Top-level conversions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#top-level-dealing-with-datetimelike">Top-level dealing with datetimelike</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../api.html#top-level-dealing-with-intervals">Top-level dealing with intervals</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pandas.interval_range</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#top-level-evaluation">Top-level evaluation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#series">Series</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#dataframe">DataFrame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#panel">Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#index">Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#numeric-index">Numeric Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#categoricalindex">CategoricalIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#intervalindex">IntervalIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#multiindex">MultiIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#datetimeindex">DatetimeIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#timedeltaindex">TimedeltaIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#periodindex">PeriodIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#scalars">Scalars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#window">Window</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#groupby">GroupBy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#resampling">Resampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#style">Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#general-utility-functions">General utility functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developer.html">Developer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../internals.html">Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release Notes</a></li>
+</ul>
+
+                <h3 style="margin-top: 1.5em;">Search</h3>
+
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18"/>
+                    <input type="submit" value="Go"/>
+                    <input type="hidden" name="check_keywords" value="yes"/>
+                    <input type="hidden" name="area" value="default"/>
+                </form>
+                <p class="searchtip" style="font-size: 90%">
+                    Enter search terms or a module, class or function name.
+                </p>
+
+            </div>
+             
+            <div class="documentwrapper">
+                <div class="bodywrapper">
+                    <div class="body">
+                        
+  <div class="section" id="pandas-interval-range">
+<h1>pandas.interval_range<a class="headerlink" href="#pandas-interval-range" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pandas.interval_range">
+<code class="descclassname">pandas.</code><code class="descname">interval_range</code><span class="sig-paren">(</span><em>start=None</em>, <em>end=None</em>, <em>periods=None</em>, <em>freq=None</em>, <em>name=None</em>, <em>closed='right'</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/pandas-dev/pandas/blob/v0.22.0/pandas/core/indexes/interval.py#L1161-L1296"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pandas.interval_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a fixed frequency IntervalIndex</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>start</strong> : numeric or datetime-like, default None</p>
+<blockquote>
+<div><p>Left bound for generating intervals</p>
+</div></blockquote>
+<p><strong>end</strong> : numeric or datetime-like, default None</p>
+<blockquote>
+<div><p>Right bound for generating intervals</p>
+</div></blockquote>
+<p><strong>periods</strong> : integer, default None</p>
+<blockquote>
+<div><p>Number of periods to generate</p>
+</div></blockquote>
+<p><strong>freq</strong> : numeric, string, or DateOffset, default None</p>
+<blockquote>
+<div><p>The length of each interval. Must be consistent with the type of start
+and end, e.g. 2 for numeric, or &#8216;5H&#8217; for datetime-like.  Default is 1
+for numeric and &#8216;D&#8217; (calendar daily) for datetime-like.</p>
+</div></blockquote>
+<p><strong>name</strong> : string, default None</p>
+<blockquote>
+<div><p>Name of the resulting IntervalIndex</p>
+</div></blockquote>
+<p><strong>closed</strong> : string, default &#8216;right&#8217;</p>
+<blockquote>
+<div><p>options are: &#8216;left&#8217;, &#8216;right&#8217;, &#8216;both&#8217;, &#8216;neither&#8217;</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>rng</strong> : IntervalIndex</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="pandas.IntervalIndex.html#pandas.IntervalIndex" title="pandas.IntervalIndex"><code class="xref py py-obj docutils literal"><span class="pre">IntervalIndex</span></code></a></dt>
+<dd>an Index of intervals that are all closed on the same side.</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>Of the three parameters: <code class="docutils literal"><span class="pre">start</span></code>, <code class="docutils literal"><span class="pre">end</span></code>, and <code class="docutils literal"><span class="pre">periods</span></code>, exactly two
+must be specified.</p>
+<p class="rubric">Examples</p>
+<p>Numeric <code class="docutils literal"><span class="pre">start</span></code> and  <code class="docutils literal"><span class="pre">end</span></code> is supported.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pd</span><span class="o">.</span><span class="n">interval_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">IntervalIndex([(0, 1], (1, 2], (2, 3], (3, 4], (4, 5]]</span>
+<span class="go">              closed=&#39;right&#39;, dtype=&#39;interval[int64]&#39;)</span>
+</pre></div>
+</div>
+<p>Additionally, datetime-like input is also supported.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pd</span><span class="o">.</span><span class="n">interval_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;2017-01-01&#39;</span><span class="p">),</span>
+<span class="go">                      end=pd.Timestamp(&#39;2017-01-04&#39;))</span>
+<span class="go">IntervalIndex([(2017-01-01, 2017-01-02], (2017-01-02, 2017-01-03],</span>
+<span class="go">               (2017-01-03, 2017-01-04]]</span>
+<span class="go">              closed=&#39;right&#39;, dtype=&#39;interval[datetime64[ns]]&#39;)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">freq</span></code> parameter specifies the frequency between the left and right.
+endpoints of the individual intervals within the <code class="docutils literal"><span class="pre">IntervalIndex</span></code>.  For
+numeric <code class="docutils literal"><span class="pre">start</span></code> and <code class="docutils literal"><span class="pre">end</span></code>, the frequency must also be numeric.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pd</span><span class="o">.</span><span class="n">interval_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+<span class="go">IntervalIndex([(0.0, 1.5], (1.5, 3.0], (3.0, 4.5], (4.5, 6.0]]</span>
+<span class="go">              closed=&#39;right&#39;, dtype=&#39;interval[float64]&#39;)</span>
+</pre></div>
+</div>
+<p>Similarly, for datetime-like <code class="docutils literal"><span class="pre">start</span></code> and <code class="docutils literal"><span class="pre">end</span></code>, the frequency must be
+convertible to a DateOffset.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pd</span><span class="o">.</span><span class="n">interval_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;2017-01-01&#39;</span><span class="p">),</span>
+<span class="go">                      periods=3, freq=&#39;MS&#39;)</span>
+<span class="go">IntervalIndex([(2017-01-01, 2017-02-01], (2017-02-01, 2017-03-01],</span>
+<span class="go">               (2017-03-01, 2017-04-01]]</span>
+<span class="go">              closed=&#39;right&#39;, dtype=&#39;interval[datetime64[ns]]&#39;)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">closed</span></code> parameter specifies which endpoints of the individual
+intervals within the <code class="docutils literal"><span class="pre">IntervalIndex</span></code> are closed.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pd</span><span class="o">.</span><span class="n">interval_range</span><span class="p">(</span><span class="n">end</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">closed</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+<span class="go">IntervalIndex([[1, 2], [2, 3], [3, 4], [4, 5]]</span>
+<span class="go">              closed=&#39;both&#39;, dtype=&#39;interval[int64]&#39;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="clearer"></div>
+        </div>
+    </div>
+</div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pandas.eval.html" title="pandas.eval"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pandas.infer_freq.html" title="pandas.infer_freq"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pandas 0.22.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API Reference</a> &#187;</li> 
+      </ul>
+    </div>
+<style type="text/css">
+    .scrollToTop {
+        text-align: center;
+        font-weight: bold;
+        position: fixed;
+        bottom: 60px;
+        right: 40px;
+        display: none;
+    }
+</style>
+<a href="#" class="scrollToTop">Scroll To Top</a>
+<script type="text/javascript">
+$(document).ready(function() {
+    //Check to see if the window is top if not then display button
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 200) {
+            $('.scrollToTop').fadeIn();
+        } else {
+            $('.scrollToTop').fadeOut();
+        }
+    });
+
+    //Click event to scroll to top
+    $('.scrollToTop').click(function() {
+        $('html, body').animate({
+            scrollTop: 0
+        }, 500);
+        return false;
+    });
+});
+</script>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27880019-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </body>
+</html>

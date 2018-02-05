@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.random.RandomState.standard_cauchy &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="numpy.random.RandomState" href="numpy.random.RandomState.html" >
+    <link rel="next" title="numpy.random.RandomState.standard_exponential" href="numpy.random.RandomState.standard_exponential.html" >
+    <link rel="prev" title="numpy.random.RandomState.shuffle" href="numpy.random.RandomState.shuffle.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.random.html" >Random sampling (<code class="docutils literal"><span class="pre">numpy.random</span></code>)</a></li>
+          <li class="active"><a href="numpy.random.RandomState.html" accesskey="U">numpy.random.RandomState</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.random.RandomState.standard_exponential.html" title="numpy.random.RandomState.standard_exponential"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.random.RandomState.shuffle.html" title="numpy.random.RandomState.shuffle"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.random.RandomState.shuffle.html"
+                        title="previous chapter">numpy.random.RandomState.shuffle</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.random.RandomState.standard_exponential.html"
+                        title="next chapter">numpy.random.RandomState.standard_exponential</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-random-randomstate-standard-cauchy">
+<h1>numpy.random.RandomState.standard_cauchy<a class="headerlink" href="#numpy-random-randomstate-standard-cauchy" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="numpy.random.RandomState.standard_cauchy">
+<code class="descclassname">RandomState.</code><code class="descname">standard_cauchy</code><span class="sig-paren">(</span><em>size=None</em><span class="sig-paren">)</span><a class="headerlink" href="#numpy.random.RandomState.standard_cauchy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw samples from a standard Cauchy distribution with mode = 0.</p>
+<p>Also known as the Lorentz distribution.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>size</strong> : int or tuple of ints, optional</p>
+<blockquote>
+<div><p>Output shape.  If the given shape is, e.g., <code class="docutils literal"><span class="pre">(m,</span> <span class="pre">n,</span> <span class="pre">k)</span></code>, then
+<code class="docutils literal"><span class="pre">m</span> <span class="pre">*</span> <span class="pre">n</span> <span class="pre">*</span> <span class="pre">k</span></code> samples are drawn.  Default is None, in which case a
+single value is returned.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>samples</strong> : ndarray or scalar</p>
+<blockquote class="last">
+<div><p>The drawn samples.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The probability density function for the full Cauchy distribution is</p>
+<div class="math">
+<p><img src="../../_images/math/f9619b937014188ca690962fe730d9fc88b11f86.svg" alt="P(x; x_0, \gamma) = \frac{1}{\pi \gamma \bigl[ 1+
+(\frac{x-x_0}{\gamma})^2 \bigr] }"/></p>
+</div><p>and the Standard Cauchy distribution just sets <img class="math" src="../../_images/math/7ba0cd5c5a5bb305bb3bdf40a0d708b114be124f.svg" alt="x_0=0"/> and
+<img class="math" src="../../_images/math/ee0e1b6e0fb1b9138b30f7c2fb23aaf85b077069.svg" alt="\gamma=1"/></p>
+<p>The Cauchy distribution arises in the solution to the driven harmonic
+oscillator problem, and also describes spectral line broadening. It
+also describes the distribution of values at which a line tilted at
+a random angle will cut the x axis.</p>
+<p>When studying hypothesis tests that assume normality, seeing how the
+tests perform on data from a Cauchy distribution is a good indicator of
+their sensitivity to a heavy-tailed distribution, since the Cauchy looks
+very much like a Gaussian distribution, but with heavier tails.</p>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r196" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R196]</a></td><td>NIST/SEMATECH e-Handbook of Statistical Methods, &#8220;Cauchy
+Distribution&#8221;,
+<a class="reference external" href="http://www.itl.nist.gov/div898/handbook/eda/section3/eda3663.htm">http://www.itl.nist.gov/div898/handbook/eda/section3/eda3663.htm</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r197" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[R197]</a></td><td>Weisstein, Eric W. &#8220;Cauchy Distribution.&#8221; From MathWorld&#8211;A
+Wolfram Web Resource.
+<a class="reference external" href="http://mathworld.wolfram.com/CauchyDistribution.html">http://mathworld.wolfram.com/CauchyDistribution.html</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r198" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[R198]</a></td><td>Wikipedia, &#8220;Cauchy distribution&#8221;
+<a class="reference external" href="http://en.wikipedia.org/wiki/Cauchy_distribution">http://en.wikipedia.org/wiki/Cauchy_distribution</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Draw samples and plot the distribution:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">standard_cauchy</span><span class="p">(</span><span class="mi">1000000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="p">[(</span><span class="n">s</span><span class="o">&gt;-</span><span class="mi">25</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">s</span><span class="o">&lt;</span><span class="mi">25</span><span class="p">)]</span>  <span class="c1"># truncate distribution so it plots well</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.record &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="Standard array subclasses" href="../arrays.classes.html" >
+    <link rel="next" title="numpy.record.T" href="numpy.record.T.html" >
+    <link rel="prev" title="numpy.recarray.view" href="numpy.recarray.view.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../arrays.html" >Array objects</a></li>
+          <li class="active"><a href="../arrays.classes.html" accesskey="U">Standard array subclasses</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.record.T.html" title="numpy.record.T"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.recarray.view.html" title="numpy.recarray.view"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.recarray.view.html"
+                        title="previous chapter">numpy.recarray.view</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.record.T.html"
+                        title="next chapter">numpy.record.T</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-record">
+<h1>numpy.record<a class="headerlink" href="#numpy-record" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="numpy.record">
+<em class="property">class </em><code class="descclassname">numpy.</code><code class="descname">record</code><a class="reference external" href="http://github.com/numpy/numpy/blob/v1.14.0/numpy/__init__.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy.record" title="Permalink to this definition">¶</a></dt>
+<dd><p>A data-type scalar that allows field access as attribute lookup.</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.T.html#numpy.record.T" title="numpy.record.T"><code class="xref py py-obj docutils literal"><span class="pre">T</span></code></a></td>
+<td>transpose</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.base.html#numpy.record.base" title="numpy.record.base"><code class="xref py py-obj docutils literal"><span class="pre">base</span></code></a></td>
+<td>base object</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.data.html#numpy.record.data" title="numpy.record.data"><code class="xref py py-obj docutils literal"><span class="pre">data</span></code></a></td>
+<td>pointer to start of data</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.dtype.html#numpy.record.dtype" title="numpy.record.dtype"><code class="xref py py-obj docutils literal"><span class="pre">dtype</span></code></a></td>
+<td>dtype object</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.flags.html#numpy.record.flags" title="numpy.record.flags"><code class="xref py py-obj docutils literal"><span class="pre">flags</span></code></a></td>
+<td>integer value of flags</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.flat.html#numpy.record.flat" title="numpy.record.flat"><code class="xref py py-obj docutils literal"><span class="pre">flat</span></code></a></td>
+<td>a 1-d view of scalar</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.imag.html#numpy.record.imag" title="numpy.record.imag"><code class="xref py py-obj docutils literal"><span class="pre">imag</span></code></a></td>
+<td>imaginary part of scalar</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.itemsize.html#numpy.record.itemsize" title="numpy.record.itemsize"><code class="xref py py-obj docutils literal"><span class="pre">itemsize</span></code></a></td>
+<td>length of one element in bytes</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.nbytes.html#numpy.record.nbytes" title="numpy.record.nbytes"><code class="xref py py-obj docutils literal"><span class="pre">nbytes</span></code></a></td>
+<td>length of item in bytes</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.ndim.html#numpy.record.ndim" title="numpy.record.ndim"><code class="xref py py-obj docutils literal"><span class="pre">ndim</span></code></a></td>
+<td>number of array dimensions</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.real.html#numpy.record.real" title="numpy.record.real"><code class="xref py py-obj docutils literal"><span class="pre">real</span></code></a></td>
+<td>real part of scalar</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.shape.html#numpy.record.shape" title="numpy.record.shape"><code class="xref py py-obj docutils literal"><span class="pre">shape</span></code></a></td>
+<td>tuple of array dimensions</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.size.html#numpy.record.size" title="numpy.record.size"><code class="xref py py-obj docutils literal"><span class="pre">size</span></code></a></td>
+<td>number of elements in the gentype</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.strides.html#numpy.record.strides" title="numpy.record.strides"><code class="xref py py-obj docutils literal"><span class="pre">strides</span></code></a></td>
+<td>tuple of bytes steps in each dimension</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.all.html#numpy.record.all" title="numpy.record.all"><code class="xref py py-obj docutils literal"><span class="pre">all</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.any.html#numpy.record.any" title="numpy.record.any"><code class="xref py py-obj docutils literal"><span class="pre">any</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.argmax.html#numpy.record.argmax" title="numpy.record.argmax"><code class="xref py py-obj docutils literal"><span class="pre">argmax</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.argmin.html#numpy.record.argmin" title="numpy.record.argmin"><code class="xref py py-obj docutils literal"><span class="pre">argmin</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.argsort.html#numpy.record.argsort" title="numpy.record.argsort"><code class="xref py py-obj docutils literal"><span class="pre">argsort</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.astype.html#numpy.record.astype" title="numpy.record.astype"><code class="xref py py-obj docutils literal"><span class="pre">astype</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.byteswap.html#numpy.record.byteswap" title="numpy.record.byteswap"><code class="xref py py-obj docutils literal"><span class="pre">byteswap</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.choose.html#numpy.record.choose" title="numpy.record.choose"><code class="xref py py-obj docutils literal"><span class="pre">choose</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.clip.html#numpy.record.clip" title="numpy.record.clip"><code class="xref py py-obj docutils literal"><span class="pre">clip</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.compress.html#numpy.record.compress" title="numpy.record.compress"><code class="xref py py-obj docutils literal"><span class="pre">compress</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.conj.html#numpy.record.conj" title="numpy.record.conj"><code class="xref py py-obj docutils literal"><span class="pre">conj</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.conjugate.html#numpy.record.conjugate" title="numpy.record.conjugate"><code class="xref py py-obj docutils literal"><span class="pre">conjugate</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.copy.html#numpy.record.copy" title="numpy.record.copy"><code class="xref py py-obj docutils literal"><span class="pre">copy</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.cumprod.html#numpy.record.cumprod" title="numpy.record.cumprod"><code class="xref py py-obj docutils literal"><span class="pre">cumprod</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.cumsum.html#numpy.record.cumsum" title="numpy.record.cumsum"><code class="xref py py-obj docutils literal"><span class="pre">cumsum</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.diagonal.html#numpy.record.diagonal" title="numpy.record.diagonal"><code class="xref py py-obj docutils literal"><span class="pre">diagonal</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.dump.html#numpy.record.dump" title="numpy.record.dump"><code class="xref py py-obj docutils literal"><span class="pre">dump</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.dumps.html#numpy.record.dumps" title="numpy.record.dumps"><code class="xref py py-obj docutils literal"><span class="pre">dumps</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.fill.html#numpy.record.fill" title="numpy.record.fill"><code class="xref py py-obj docutils literal"><span class="pre">fill</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.flatten.html#numpy.record.flatten" title="numpy.record.flatten"><code class="xref py py-obj docutils literal"><span class="pre">flatten</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.getfield.html#numpy.record.getfield" title="numpy.record.getfield"><code class="xref py py-obj docutils literal"><span class="pre">getfield</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.item.html#numpy.record.item" title="numpy.record.item"><code class="xref py py-obj docutils literal"><span class="pre">item</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.itemset.html#numpy.record.itemset" title="numpy.record.itemset"><code class="xref py py-obj docutils literal"><span class="pre">itemset</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.max.html#numpy.record.max" title="numpy.record.max"><code class="xref py py-obj docutils literal"><span class="pre">max</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.mean.html#numpy.record.mean" title="numpy.record.mean"><code class="xref py py-obj docutils literal"><span class="pre">mean</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.min.html#numpy.record.min" title="numpy.record.min"><code class="xref py py-obj docutils literal"><span class="pre">min</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.newbyteorder.html#numpy.record.newbyteorder" title="numpy.record.newbyteorder"><code class="xref py py-obj docutils literal"><span class="pre">newbyteorder</span></code></a>([new_order])</td>
+<td>Return a new <a class="reference internal" href="numpy.dtype.html#numpy.dtype" title="numpy.dtype"><code class="xref py py-obj docutils literal"><span class="pre">dtype</span></code></a> with a different byte order.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.nonzero.html#numpy.record.nonzero" title="numpy.record.nonzero"><code class="xref py py-obj docutils literal"><span class="pre">nonzero</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.pprint.html#numpy.record.pprint" title="numpy.record.pprint"><code class="xref py py-obj docutils literal"><span class="pre">pprint</span></code></a>()</td>
+<td>Pretty-print all fields.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.prod.html#numpy.record.prod" title="numpy.record.prod"><code class="xref py py-obj docutils literal"><span class="pre">prod</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.ptp.html#numpy.record.ptp" title="numpy.record.ptp"><code class="xref py py-obj docutils literal"><span class="pre">ptp</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.put.html#numpy.record.put" title="numpy.record.put"><code class="xref py py-obj docutils literal"><span class="pre">put</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.ravel.html#numpy.record.ravel" title="numpy.record.ravel"><code class="xref py py-obj docutils literal"><span class="pre">ravel</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.repeat.html#numpy.record.repeat" title="numpy.record.repeat"><code class="xref py py-obj docutils literal"><span class="pre">repeat</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.reshape.html#numpy.record.reshape" title="numpy.record.reshape"><code class="xref py py-obj docutils literal"><span class="pre">reshape</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.resize.html#numpy.record.resize" title="numpy.record.resize"><code class="xref py py-obj docutils literal"><span class="pre">resize</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.round.html#numpy.record.round" title="numpy.record.round"><code class="xref py py-obj docutils literal"><span class="pre">round</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.searchsorted.html#numpy.record.searchsorted" title="numpy.record.searchsorted"><code class="xref py py-obj docutils literal"><span class="pre">searchsorted</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.setfield.html#numpy.record.setfield" title="numpy.record.setfield"><code class="xref py py-obj docutils literal"><span class="pre">setfield</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.setflags.html#numpy.record.setflags" title="numpy.record.setflags"><code class="xref py py-obj docutils literal"><span class="pre">setflags</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.sort.html#numpy.record.sort" title="numpy.record.sort"><code class="xref py py-obj docutils literal"><span class="pre">sort</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.squeeze.html#numpy.record.squeeze" title="numpy.record.squeeze"><code class="xref py py-obj docutils literal"><span class="pre">squeeze</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.std.html#numpy.record.std" title="numpy.record.std"><code class="xref py py-obj docutils literal"><span class="pre">std</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.sum.html#numpy.record.sum" title="numpy.record.sum"><code class="xref py py-obj docutils literal"><span class="pre">sum</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.swapaxes.html#numpy.record.swapaxes" title="numpy.record.swapaxes"><code class="xref py py-obj docutils literal"><span class="pre">swapaxes</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.take.html#numpy.record.take" title="numpy.record.take"><code class="xref py py-obj docutils literal"><span class="pre">take</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.tobytes.html#numpy.record.tobytes" title="numpy.record.tobytes"><code class="xref py py-obj docutils literal"><span class="pre">tobytes</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.tofile.html#numpy.record.tofile" title="numpy.record.tofile"><code class="xref py py-obj docutils literal"><span class="pre">tofile</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.tolist.html#numpy.record.tolist" title="numpy.record.tolist"><code class="xref py py-obj docutils literal"><span class="pre">tolist</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.tostring.html#numpy.record.tostring" title="numpy.record.tostring"><code class="xref py py-obj docutils literal"><span class="pre">tostring</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.trace.html#numpy.record.trace" title="numpy.record.trace"><code class="xref py py-obj docutils literal"><span class="pre">trace</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.transpose.html#numpy.record.transpose" title="numpy.record.transpose"><code class="xref py py-obj docutils literal"><span class="pre">transpose</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.record.var.html#numpy.record.var" title="numpy.record.var"><code class="xref py py-obj docutils literal"><span class="pre">var</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.record.view.html#numpy.record.view" title="numpy.record.view"><code class="xref py py-obj docutils literal"><span class="pre">view</span></code></a></td>
+<td>Not implemented (virtual attribute)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

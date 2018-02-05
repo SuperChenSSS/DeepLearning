@@ -1,0 +1,6 @@
+pandas\.TimedeltaIndex\.isna
+============================
+
+.. currentmodule:: pandas
+
+.. automethod:: TimedeltaIndex.isna

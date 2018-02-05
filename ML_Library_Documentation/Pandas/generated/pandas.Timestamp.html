@@ -1,0 +1,495 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pandas.Timestamp &#8212; pandas 0.22.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.22.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pandas.Timestamp.asm8" href="pandas.Timestamp.asm8.html" />
+    <link rel="prev" title="pandas.Period.to_timestamp" href="pandas.Period.to_timestamp.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pandas.Timestamp.asm8.html" title="pandas.Timestamp.asm8"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pandas.Period.to_timestamp.html" title="pandas.Period.to_timestamp"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pandas 0.22.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" accesskey="U">API Reference</a> &#187;</li> 
+      </ul>
+    </div>
+<div class="content-wrapper">
+    <div class="content">
+        <div class="document">
+            <div class="sphinxsidebar">
+                <h3>Table Of Contents</h3>
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew.html">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Package overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../10min.html">10 Minutes to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dsintro.html">Intro to Data Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basics.html">Essential Basic Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text.html">Working with Text Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../options.html">Options and Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indexing.html">Indexing and Selecting Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced.html">MultiIndex / Advanced Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../computation.html">Computational tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../missing_data.html">Working with missing data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../groupby.html">Group By: split-apply-combine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../merging.html">Merge, join, and concatenate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reshaping.html">Reshaping and Pivot Tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timeseries.html">Time Series / Date functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timedeltas.html">Time Deltas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../categorical.html">Categorical Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../style.html">Styling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io.html">IO Tools (Text, CSV, HDF5, ...)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../remote_data.html">Remote Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enhancingperf.html">Enhancing Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sparse.html">Sparse data structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gotchas.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../r_interface.html">rpy2 / R interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ecosystem.html">pandas Ecosystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_r.html">Comparison with R / R libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_sql.html">Comparison with SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_sas.html">Comparison with SAS</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#input-output">Input/Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#general-functions">General functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#series">Series</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#dataframe">DataFrame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#panel">Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#index">Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#numeric-index">Numeric Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#categoricalindex">CategoricalIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#intervalindex">IntervalIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#multiindex">MultiIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#datetimeindex">DatetimeIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#timedeltaindex">TimedeltaIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#periodindex">PeriodIndex</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#scalars">Scalars</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../api.html#period">Period</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id32">Attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id33">Methods</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../api.html#timestamp">Timestamp</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pandas.Timestamp</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#properties">Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id34">Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#interval">Interval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id35">Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#timedelta">Timedelta</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id36">Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id37">Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#window">Window</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#groupby">GroupBy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#resampling">Resampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#style">Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#general-utility-functions">General utility functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developer.html">Developer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../internals.html">Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release Notes</a></li>
+</ul>
+
+                <h3 style="margin-top: 1.5em;">Search</h3>
+
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18"/>
+                    <input type="submit" value="Go"/>
+                    <input type="hidden" name="check_keywords" value="yes"/>
+                    <input type="hidden" name="area" value="default"/>
+                </form>
+                <p class="searchtip" style="font-size: 90%">
+                    Enter search terms or a module, class or function name.
+                </p>
+
+            </div>
+             
+            <div class="documentwrapper">
+                <div class="bodywrapper">
+                    <div class="body">
+                        
+  <div class="section" id="pandas-timestamp">
+<h1>pandas.Timestamp<a class="headerlink" href="#pandas-timestamp" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pandas.Timestamp">
+<em class="property">class </em><code class="descclassname">pandas.</code><code class="descname">Timestamp</code><a class="headerlink" href="#pandas.Timestamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>TimeStamp is the pandas equivalent of python&#8217;s Datetime
+and is interchangable with it in most cases. It&#8217;s the type used
+for the entries that make up a DatetimeIndex, and other timeseries
+oriented data structures in pandas.</p>
+<p>There are essentially three calling conventions for the constructor. The
+primary form accepts four parameters. They can be passed by position or
+keyword.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ts_input</strong> : datetime-like, str, int, float</p>
+<blockquote>
+<div><p>Value to be converted to Timestamp</p>
+</div></blockquote>
+<p><strong>freq</strong> : str, DateOffset</p>
+<blockquote>
+<div><p>Offset which Timestamp will have</p>
+</div></blockquote>
+<p><strong>tz</strong> : string, pytz.timezone, dateutil.tz.tzfile or None</p>
+<blockquote>
+<div><p>Time zone for time which Timestamp will have.</p>
+</div></blockquote>
+<p><strong>unit</strong> : string</p>
+<blockquote>
+<div><p>numpy unit used for conversion, if ts_input is int or float</p>
+</div></blockquote>
+<p><strong>offset</strong> : str, DateOffset</p>
+<blockquote>
+<div><p>Deprecated, use freq</p>
+</div></blockquote>
+<p><strong>The other two forms mimic the parameters from ``datetime.datetime``. They</strong></p>
+<p class="last"><strong>can be passed by either position or keyword, but not both mixed together.</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.asm8.html#pandas.Timestamp.asm8" title="pandas.Timestamp.asm8"><code class="xref py py-obj docutils literal"><span class="pre">asm8</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.day.html#pandas.Timestamp.day" title="pandas.Timestamp.day"><code class="xref py py-obj docutils literal"><span class="pre">day</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.dayofweek.html#pandas.Timestamp.dayofweek" title="pandas.Timestamp.dayofweek"><code class="xref py py-obj docutils literal"><span class="pre">dayofweek</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.dayofyear.html#pandas.Timestamp.dayofyear" title="pandas.Timestamp.dayofyear"><code class="xref py py-obj docutils literal"><span class="pre">dayofyear</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.days_in_month.html#pandas.Timestamp.days_in_month" title="pandas.Timestamp.days_in_month"><code class="xref py py-obj docutils literal"><span class="pre">days_in_month</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.daysinmonth.html#pandas.Timestamp.daysinmonth" title="pandas.Timestamp.daysinmonth"><code class="xref py py-obj docutils literal"><span class="pre">daysinmonth</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.fold.html#pandas.Timestamp.fold" title="pandas.Timestamp.fold"><code class="xref py py-obj docutils literal"><span class="pre">fold</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.freq.html#pandas.Timestamp.freq" title="pandas.Timestamp.freq"><code class="xref py py-obj docutils literal"><span class="pre">freq</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.freqstr.html#pandas.Timestamp.freqstr" title="pandas.Timestamp.freqstr"><code class="xref py py-obj docutils literal"><span class="pre">freqstr</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.hour.html#pandas.Timestamp.hour" title="pandas.Timestamp.hour"><code class="xref py py-obj docutils literal"><span class="pre">hour</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.is_leap_year.html#pandas.Timestamp.is_leap_year" title="pandas.Timestamp.is_leap_year"><code class="xref py py-obj docutils literal"><span class="pre">is_leap_year</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.is_month_end.html#pandas.Timestamp.is_month_end" title="pandas.Timestamp.is_month_end"><code class="xref py py-obj docutils literal"><span class="pre">is_month_end</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.is_month_start.html#pandas.Timestamp.is_month_start" title="pandas.Timestamp.is_month_start"><code class="xref py py-obj docutils literal"><span class="pre">is_month_start</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.is_quarter_end.html#pandas.Timestamp.is_quarter_end" title="pandas.Timestamp.is_quarter_end"><code class="xref py py-obj docutils literal"><span class="pre">is_quarter_end</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.is_quarter_start.html#pandas.Timestamp.is_quarter_start" title="pandas.Timestamp.is_quarter_start"><code class="xref py py-obj docutils literal"><span class="pre">is_quarter_start</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.is_year_end.html#pandas.Timestamp.is_year_end" title="pandas.Timestamp.is_year_end"><code class="xref py py-obj docutils literal"><span class="pre">is_year_end</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.is_year_start.html#pandas.Timestamp.is_year_start" title="pandas.Timestamp.is_year_start"><code class="xref py py-obj docutils literal"><span class="pre">is_year_start</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.microsecond.html#pandas.Timestamp.microsecond" title="pandas.Timestamp.microsecond"><code class="xref py py-obj docutils literal"><span class="pre">microsecond</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.minute.html#pandas.Timestamp.minute" title="pandas.Timestamp.minute"><code class="xref py py-obj docutils literal"><span class="pre">minute</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.month.html#pandas.Timestamp.month" title="pandas.Timestamp.month"><code class="xref py py-obj docutils literal"><span class="pre">month</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.nanosecond.html#pandas.Timestamp.nanosecond" title="pandas.Timestamp.nanosecond"><code class="xref py py-obj docutils literal"><span class="pre">nanosecond</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.offset.html#pandas.Timestamp.offset" title="pandas.Timestamp.offset"><code class="xref py py-obj docutils literal"><span class="pre">offset</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.quarter.html#pandas.Timestamp.quarter" title="pandas.Timestamp.quarter"><code class="xref py py-obj docutils literal"><span class="pre">quarter</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.second.html#pandas.Timestamp.second" title="pandas.Timestamp.second"><code class="xref py py-obj docutils literal"><span class="pre">second</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.tz.html#pandas.Timestamp.tz" title="pandas.Timestamp.tz"><code class="xref py py-obj docutils literal"><span class="pre">tz</span></code></a></td>
+<td>Alias for tzinfo</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.tzinfo.html#pandas.Timestamp.tzinfo" title="pandas.Timestamp.tzinfo"><code class="xref py py-obj docutils literal"><span class="pre">tzinfo</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.value.html#pandas.Timestamp.value" title="pandas.Timestamp.value"><code class="xref py py-obj docutils literal"><span class="pre">value</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.week.html#pandas.Timestamp.week" title="pandas.Timestamp.week"><code class="xref py py-obj docutils literal"><span class="pre">week</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.weekday_name.html#pandas.Timestamp.weekday_name" title="pandas.Timestamp.weekday_name"><code class="xref py py-obj docutils literal"><span class="pre">weekday_name</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.weekofyear.html#pandas.Timestamp.weekofyear" title="pandas.Timestamp.weekofyear"><code class="xref py py-obj docutils literal"><span class="pre">weekofyear</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.year.html#pandas.Timestamp.year" title="pandas.Timestamp.year"><code class="xref py py-obj docutils literal"><span class="pre">year</span></code></a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.astimezone.html#pandas.Timestamp.astimezone" title="pandas.Timestamp.astimezone"><code class="xref py py-obj docutils literal"><span class="pre">astimezone</span></code></a></td>
+<td>Convert tz-aware Timestamp to another time zone.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.ceil.html#pandas.Timestamp.ceil" title="pandas.Timestamp.ceil"><code class="xref py py-obj docutils literal"><span class="pre">ceil</span></code></a></td>
+<td>return a new Timestamp ceiled to this resolution</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.combine.html#pandas.Timestamp.combine" title="pandas.Timestamp.combine"><code class="xref py py-obj docutils literal"><span class="pre">combine</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.ctime.html#pandas.Timestamp.ctime" title="pandas.Timestamp.ctime"><code class="xref py py-obj docutils literal"><span class="pre">ctime</span></code></a></td>
+<td>Return ctime() style string.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.date.html#pandas.Timestamp.date" title="pandas.Timestamp.date"><code class="xref py py-obj docutils literal"><span class="pre">date</span></code></a></td>
+<td>Return date object with same year, month and day.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.dst.html#pandas.Timestamp.dst" title="pandas.Timestamp.dst"><code class="xref py py-obj docutils literal"><span class="pre">dst</span></code></a></td>
+<td>Return self.tzinfo.dst(self).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.floor.html#pandas.Timestamp.floor" title="pandas.Timestamp.floor"><code class="xref py py-obj docutils literal"><span class="pre">floor</span></code></a></td>
+<td>return a new Timestamp floored to this resolution</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.fromordinal.html#pandas.Timestamp.fromordinal" title="pandas.Timestamp.fromordinal"><code class="xref py py-obj docutils literal"><span class="pre">fromordinal</span></code></a></td>
+<td>passed an ordinal, translate and convert to a ts</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.fromtimestamp.html#pandas.Timestamp.fromtimestamp" title="pandas.Timestamp.fromtimestamp"><code class="xref py py-obj docutils literal"><span class="pre">fromtimestamp</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.isocalendar.html#pandas.Timestamp.isocalendar" title="pandas.Timestamp.isocalendar"><code class="xref py py-obj docutils literal"><span class="pre">isocalendar</span></code></a></td>
+<td>Return a 3-tuple containing ISO year, week number, and weekday.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.isoformat.html#pandas.Timestamp.isoformat" title="pandas.Timestamp.isoformat"><code class="xref py py-obj docutils literal"><span class="pre">isoformat</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.isoweekday.html#pandas.Timestamp.isoweekday" title="pandas.Timestamp.isoweekday"><code class="xref py py-obj docutils literal"><span class="pre">isoweekday</span></code></a></td>
+<td>Return the day of the week represented by the date.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.normalize.html#pandas.Timestamp.normalize" title="pandas.Timestamp.normalize"><code class="xref py py-obj docutils literal"><span class="pre">normalize</span></code></a></td>
+<td>Normalize Timestamp to midnight, preserving tz information.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.now.html#pandas.Timestamp.now" title="pandas.Timestamp.now"><code class="xref py py-obj docutils literal"><span class="pre">now</span></code></a></td>
+<td>Return the current time in the local timezone.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.replace.html#pandas.Timestamp.replace" title="pandas.Timestamp.replace"><code class="xref py py-obj docutils literal"><span class="pre">replace</span></code></a></td>
+<td>implements datetime.replace, handles nanoseconds</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.round.html#pandas.Timestamp.round" title="pandas.Timestamp.round"><code class="xref py py-obj docutils literal"><span class="pre">round</span></code></a></td>
+<td>Round the Timestamp to the specified resolution</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.strftime.html#pandas.Timestamp.strftime" title="pandas.Timestamp.strftime"><code class="xref py py-obj docutils literal"><span class="pre">strftime</span></code></a></td>
+<td>format -&gt; strftime() style string.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.strptime.html#pandas.Timestamp.strptime" title="pandas.Timestamp.strptime"><code class="xref py py-obj docutils literal"><span class="pre">strptime</span></code></a></td>
+<td>string, format -&gt; new datetime parsed from a string (like time.strptime()).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.time.html#pandas.Timestamp.time" title="pandas.Timestamp.time"><code class="xref py py-obj docutils literal"><span class="pre">time</span></code></a></td>
+<td>Return time object with same time but with tzinfo=None.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.timestamp.html#pandas.Timestamp.timestamp" title="pandas.Timestamp.timestamp"><code class="xref py py-obj docutils literal"><span class="pre">timestamp</span></code></a></td>
+<td>Return POSIX timestamp as float.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.timetuple.html#pandas.Timestamp.timetuple" title="pandas.Timestamp.timetuple"><code class="xref py py-obj docutils literal"><span class="pre">timetuple</span></code></a></td>
+<td>Return time tuple, compatible with time.localtime().</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.timetz.html#pandas.Timestamp.timetz" title="pandas.Timestamp.timetz"><code class="xref py py-obj docutils literal"><span class="pre">timetz</span></code></a></td>
+<td>Return time object with same time and tzinfo.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.to_datetime.html#pandas.Timestamp.to_datetime" title="pandas.Timestamp.to_datetime"><code class="xref py py-obj docutils literal"><span class="pre">to_datetime</span></code></a></td>
+<td>DEPRECATED: use <a class="reference internal" href="pandas.Timestamp.to_pydatetime.html#pandas.Timestamp.to_pydatetime" title="pandas.Timestamp.to_pydatetime"><code class="xref py py-meth docutils literal"><span class="pre">to_pydatetime()</span></code></a> instead.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.to_datetime64.html#pandas.Timestamp.to_datetime64" title="pandas.Timestamp.to_datetime64"><code class="xref py py-obj docutils literal"><span class="pre">to_datetime64</span></code></a></td>
+<td>Returns a numpy.datetime64 object with &#8216;ns&#8217; precision</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.to_julian_date.html#pandas.Timestamp.to_julian_date" title="pandas.Timestamp.to_julian_date"><code class="xref py py-obj docutils literal"><span class="pre">to_julian_date</span></code></a></td>
+<td>Convert TimeStamp to a Julian Date.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.to_period.html#pandas.Timestamp.to_period" title="pandas.Timestamp.to_period"><code class="xref py py-obj docutils literal"><span class="pre">to_period</span></code></a></td>
+<td>Return an period of which this timestamp is an observation.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.to_pydatetime.html#pandas.Timestamp.to_pydatetime" title="pandas.Timestamp.to_pydatetime"><code class="xref py py-obj docutils literal"><span class="pre">to_pydatetime</span></code></a></td>
+<td>Convert a Timestamp object to a native Python datetime object.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.today.html#pandas.Timestamp.today" title="pandas.Timestamp.today"><code class="xref py py-obj docutils literal"><span class="pre">today</span></code></a></td>
+<td>Return the current time in the local timezone.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.toordinal.html#pandas.Timestamp.toordinal" title="pandas.Timestamp.toordinal"><code class="xref py py-obj docutils literal"><span class="pre">toordinal</span></code></a></td>
+<td>Return proleptic Gregorian ordinal.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.tz_convert.html#pandas.Timestamp.tz_convert" title="pandas.Timestamp.tz_convert"><code class="xref py py-obj docutils literal"><span class="pre">tz_convert</span></code></a></td>
+<td>Convert tz-aware Timestamp to another time zone.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.tz_localize.html#pandas.Timestamp.tz_localize" title="pandas.Timestamp.tz_localize"><code class="xref py py-obj docutils literal"><span class="pre">tz_localize</span></code></a></td>
+<td>Convert naive Timestamp to local time zone, or remove timezone from tz-aware Timestamp.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.tzname.html#pandas.Timestamp.tzname" title="pandas.Timestamp.tzname"><code class="xref py py-obj docutils literal"><span class="pre">tzname</span></code></a></td>
+<td>Return self.tzinfo.tzname(self).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.utcfromtimestamp.html#pandas.Timestamp.utcfromtimestamp" title="pandas.Timestamp.utcfromtimestamp"><code class="xref py py-obj docutils literal"><span class="pre">utcfromtimestamp</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.utcnow.html#pandas.Timestamp.utcnow" title="pandas.Timestamp.utcnow"><code class="xref py py-obj docutils literal"><span class="pre">utcnow</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.utcoffset.html#pandas.Timestamp.utcoffset" title="pandas.Timestamp.utcoffset"><code class="xref py py-obj docutils literal"><span class="pre">utcoffset</span></code></a></td>
+<td>Return self.tzinfo.utcoffset(self).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Timestamp.utctimetuple.html#pandas.Timestamp.utctimetuple" title="pandas.Timestamp.utctimetuple"><code class="xref py py-obj docutils literal"><span class="pre">utctimetuple</span></code></a></td>
+<td>Return UTC time tuple, compatible with time.localtime().</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Timestamp.weekday.html#pandas.Timestamp.weekday" title="pandas.Timestamp.weekday"><code class="xref py py-obj docutils literal"><span class="pre">weekday</span></code></a></td>
+<td>Return the day of the week represented by the date.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="clearer"></div>
+        </div>
+    </div>
+</div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pandas.Timestamp.asm8.html" title="pandas.Timestamp.asm8"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pandas.Period.to_timestamp.html" title="pandas.Period.to_timestamp"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pandas 0.22.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API Reference</a> &#187;</li> 
+      </ul>
+    </div>
+<style type="text/css">
+    .scrollToTop {
+        text-align: center;
+        font-weight: bold;
+        position: fixed;
+        bottom: 60px;
+        right: 40px;
+        display: none;
+    }
+</style>
+<a href="#" class="scrollToTop">Scroll To Top</a>
+<script type="text/javascript">
+$(document).ready(function() {
+    //Check to see if the window is top if not then display button
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 200) {
+            $('.scrollToTop').fadeIn();
+        } else {
+            $('.scrollToTop').fadeOut();
+        }
+    });
+
+    //Click event to scroll to top
+    $('.scrollToTop').click(function() {
+        $('html, body').animate({
+            scrollTop: 0
+        }, 500);
+        return false;
+    });
+});
+</script>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27880019-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </body>
+</html>

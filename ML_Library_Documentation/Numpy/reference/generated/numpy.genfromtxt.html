@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.genfromtxt &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="Input and output" href="../routines.io.html" >
+    <link rel="next" title="numpy.fromregex" href="numpy.fromregex.html" >
+    <link rel="prev" title="numpy.savetxt" href="numpy.savetxt.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.io.html" accesskey="U">Input and output</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.fromregex.html" title="numpy.fromregex"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.savetxt.html" title="numpy.savetxt"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.savetxt.html"
+                        title="previous chapter">numpy.savetxt</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.fromregex.html"
+                        title="next chapter">numpy.fromregex</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-genfromtxt">
+<h1>numpy.genfromtxt<a class="headerlink" href="#numpy-genfromtxt" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="numpy.genfromtxt">
+<code class="descclassname">numpy.</code><code class="descname">genfromtxt</code><span class="sig-paren">(</span><em>fname</em>, <em>dtype=&lt;type 'float'&gt;</em>, <em>comments='#'</em>, <em>delimiter=None</em>, <em>skip_header=0</em>, <em>skip_footer=0</em>, <em>converters=None</em>, <em>missing_values=None</em>, <em>filling_values=None</em>, <em>usecols=None</em>, <em>names=None</em>, <em>excludelist=None</em>, <em>deletechars=None</em>, <em>replace_space='_'</em>, <em>autostrip=False</em>, <em>case_sensitive=True</em>, <em>defaultfmt='f%i'</em>, <em>unpack=None</em>, <em>usemask=False</em>, <em>loose=True</em>, <em>invalid_raise=True</em>, <em>max_rows=None</em>, <em>encoding='bytes'</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/numpy/numpy/blob/v1.14.0/numpy/lib/npyio.py#L1484-L2162"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy.genfromtxt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load data from a text file, with missing values handled as specified.</p>
+<p>Each line past the first <em class="xref py py-obj">skip_header</em> lines is split at the <em class="xref py py-obj">delimiter</em>
+character, and characters following the <em class="xref py py-obj">comments</em> character are discarded.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fname</strong> : file, str, pathlib.Path, list of str, generator</p>
+<blockquote>
+<div><p>File, filename, list, or generator to read.  If the filename
+extension is <em class="xref py py-obj">gz</em> or <a class="reference external" href="https://docs.python.org/dev/library/bz2.html#module-bz2" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">bz2</span></code></a>, the file is first decompressed. Note
+that generators must return byte strings in Python 3k.  The strings
+in a list or produced by a generator are treated as lines.</p>
+</div></blockquote>
+<p><strong>dtype</strong> : dtype, optional</p>
+<blockquote>
+<div><p>Data type of the resulting array.
+If None, the dtypes will be determined by the contents of each
+column, individually.</p>
+</div></blockquote>
+<p><strong>comments</strong> : str, optional</p>
+<blockquote>
+<div><p>The character used to indicate the start of a comment.
+All the characters occurring on a line after a comment are discarded</p>
+</div></blockquote>
+<p><strong>delimiter</strong> : str, int, or sequence, optional</p>
+<blockquote>
+<div><p>The string used to separate values.  By default, any consecutive
+whitespaces act as delimiter.  An integer or sequence of integers
+can also be provided as width(s) of each field.</p>
+</div></blockquote>
+<p><strong>skiprows</strong> : int, optional</p>
+<blockquote>
+<div><p><em class="xref py py-obj">skiprows</em> was removed in numpy 1.10. Please use <em class="xref py py-obj">skip_header</em> instead.</p>
+</div></blockquote>
+<p><strong>skip_header</strong> : int, optional</p>
+<blockquote>
+<div><p>The number of lines to skip at the beginning of the file.</p>
+</div></blockquote>
+<p><strong>skip_footer</strong> : int, optional</p>
+<blockquote>
+<div><p>The number of lines to skip at the end of the file.</p>
+</div></blockquote>
+<p><strong>converters</strong> : variable, optional</p>
+<blockquote>
+<div><p>The set of functions that convert the data of a column to a value.
+The converters can also be used to provide a default value
+for missing data: <code class="docutils literal"><span class="pre">converters</span> <span class="pre">=</span> <span class="pre">{3:</span> <span class="pre">lambda</span> <span class="pre">s:</span> <span class="pre">float(s</span> <span class="pre">or</span> <span class="pre">0)}</span></code>.</p>
+</div></blockquote>
+<p><strong>missing</strong> : variable, optional</p>
+<blockquote>
+<div><p><em class="xref py py-obj">missing</em> was removed in numpy 1.10. Please use <em class="xref py py-obj">missing_values</em>
+instead.</p>
+</div></blockquote>
+<p><strong>missing_values</strong> : variable, optional</p>
+<blockquote>
+<div><p>The set of strings corresponding to missing data.</p>
+</div></blockquote>
+<p><strong>filling_values</strong> : variable, optional</p>
+<blockquote>
+<div><p>The set of values to be used as default when the data are missing.</p>
+</div></blockquote>
+<p><strong>usecols</strong> : sequence, optional</p>
+<blockquote>
+<div><p>Which columns to read, with 0 being the first.  For example,
+<code class="docutils literal"><span class="pre">usecols</span> <span class="pre">=</span> <span class="pre">(1,</span> <span class="pre">4,</span> <span class="pre">5)</span></code> will extract the 2nd, 5th and 6th columns.</p>
+</div></blockquote>
+<p><strong>names</strong> : {None, True, str, sequence}, optional</p>
+<blockquote>
+<div><p>If <em class="xref py py-obj">names</em> is True, the field names are read from the first line after
+the first <em class="xref py py-obj">skip_header</em> lines.  This line can optionally be proceeded
+by a comment delimeter. If <em class="xref py py-obj">names</em> is a sequence or a single-string of
+comma-separated names, the names will be used to define the field names
+in a structured dtype. If <em class="xref py py-obj">names</em> is None, the names of the dtype
+fields will be used, if any.</p>
+</div></blockquote>
+<p><strong>excludelist</strong> : sequence, optional</p>
+<blockquote>
+<div><p>A list of names to exclude. This list is appended to the default list
+[&#8216;return&#8217;,&#8217;file&#8217;,&#8217;print&#8217;]. Excluded names are appended an underscore:
+for example, <em class="xref py py-obj">file</em> would become <em class="xref py py-obj">file_</em>.</p>
+</div></blockquote>
+<p><strong>deletechars</strong> : str, optional</p>
+<blockquote>
+<div><p>A string combining invalid characters that must be deleted from the
+names.</p>
+</div></blockquote>
+<p><strong>defaultfmt</strong> : str, optional</p>
+<blockquote>
+<div><p>A format used to define default field names, such as &#8220;f%i&#8221; or &#8220;f_%02i&#8221;.</p>
+</div></blockquote>
+<p><strong>autostrip</strong> : bool, optional</p>
+<blockquote>
+<div><p>Whether to automatically strip white spaces from the variables.</p>
+</div></blockquote>
+<p><strong>replace_space</strong> : char, optional</p>
+<blockquote>
+<div><p>Character(s) used in replacement of white spaces in the variables
+names. By default, use a &#8216;_&#8217;.</p>
+</div></blockquote>
+<p><strong>case_sensitive</strong> : {True, False, &#8216;upper&#8217;, &#8216;lower&#8217;}, optional</p>
+<blockquote>
+<div><p>If True, field names are case sensitive.
+If False or &#8216;upper&#8217;, field names are converted to upper case.
+If &#8216;lower&#8217;, field names are converted to lower case.</p>
+</div></blockquote>
+<p><strong>unpack</strong> : bool, optional</p>
+<blockquote>
+<div><p>If True, the returned array is transposed, so that arguments may be
+unpacked using <code class="docutils literal"><span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">z</span> <span class="pre">=</span> <span class="pre">loadtxt(...)</span></code></p>
+</div></blockquote>
+<p><strong>usemask</strong> : bool, optional</p>
+<blockquote>
+<div><p>If True, return a masked array.
+If False, return a regular array.</p>
+</div></blockquote>
+<p><strong>loose</strong> : bool, optional</p>
+<blockquote>
+<div><p>If True, do not raise errors for invalid values.</p>
+</div></blockquote>
+<p><strong>invalid_raise</strong> : bool, optional</p>
+<blockquote>
+<div><p>If True, an exception is raised if an inconsistency is detected in the
+number of columns.
+If False, a warning is emitted and the offending lines are skipped.</p>
+</div></blockquote>
+<p><strong>max_rows</strong> : int,  optional</p>
+<blockquote>
+<div><p>The maximum number of rows to read. Must not be used with skip_footer
+at the same time.  If given, the value must be at least 1. Default is
+to read the entire file.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.10.0.</span></p>
+</div>
+</div></blockquote>
+<p><strong>encoding</strong> : str, optional</p>
+<blockquote>
+<div><p>Encoding used to decode the inputfile. Does not apply when <em class="xref py py-obj">fname</em> is
+a file object.  The special value &#8216;bytes&#8217; enables backward compatibility
+workarounds that ensure that you receive byte arrays when possible
+and passes latin1 encoded strings to converters. Override this value to
+receive unicode arrays and pass strings as input to converters.  If set
+to None the system default is used. The default value is &#8216;bytes&#8217;.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.14.0.</span></p>
+</div>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Data read from the text file. If <em class="xref py py-obj">usemask</em> is True, this is a
+masked array.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="numpy.loadtxt.html#numpy.loadtxt" title="numpy.loadtxt"><code class="xref py py-obj docutils literal"><span class="pre">numpy.loadtxt</span></code></a></dt>
+<dd>equivalent function when no data is missing.</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>When spaces are used as delimiters, or when no delimiter has been given
+as input, there should not be any missing data between two fields.</li>
+<li>When the variables are named (either by a flexible dtype or with <em class="xref py py-obj">names</em>,
+there must not be any header in the file (else a ValueError
+exception is raised).</li>
+<li>Individual values are not stripped of spaces by default.
+When using a custom converter, make sure the function does remove spaces.</li>
+</ul>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r20" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R20]</a></td><td>NumPy User Guide, section <a class="reference external" href="http://docs.scipy.org/doc/numpy/user/basics.io.genfromtxt.html">I/O with NumPy</a>.</td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="k">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+<p>Comma delimited file with mixed dtype</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">(</span><span class="s2">&quot;1,1.3,abcde&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;myint&#39;</span><span class="p">,</span><span class="s1">&#39;i8&#39;</span><span class="p">),(</span><span class="s1">&#39;myfloat&#39;</span><span class="p">,</span><span class="s1">&#39;f8&#39;</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">(</span><span class="s1">&#39;mystring&#39;</span><span class="p">,</span><span class="s1">&#39;S5&#39;</span><span class="p">)],</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span>
+<span class="go">array((1, 1.3, &#39;abcde&#39;),</span>
+<span class="go">      dtype=[(&#39;myint&#39;, &#39;&lt;i8&#39;), (&#39;myfloat&#39;, &#39;&lt;f8&#39;), (&#39;mystring&#39;, &#39;|S5&#39;)])</span>
+</pre></div>
+</div>
+<p>Using dtype = None</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># needed for StringIO example only</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;myint&#39;</span><span class="p">,</span><span class="s1">&#39;myfloat&#39;</span><span class="p">,</span><span class="s1">&#39;mystring&#39;</span><span class="p">],</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span>
+<span class="go">array((1, 1.3, &#39;abcde&#39;),</span>
+<span class="go">      dtype=[(&#39;myint&#39;, &#39;&lt;i8&#39;), (&#39;myfloat&#39;, &#39;&lt;f8&#39;), (&#39;mystring&#39;, &#39;|S5&#39;)])</span>
+</pre></div>
+</div>
+<p>Specifying dtype and names</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;i8,f8,S5&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;myint&#39;</span><span class="p">,</span><span class="s1">&#39;myfloat&#39;</span><span class="p">,</span><span class="s1">&#39;mystring&#39;</span><span class="p">],</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span>
+<span class="go">array((1, 1.3, &#39;abcde&#39;),</span>
+<span class="go">      dtype=[(&#39;myint&#39;, &#39;&lt;i8&#39;), (&#39;myfloat&#39;, &#39;&lt;f8&#39;), (&#39;mystring&#39;, &#39;|S5&#39;)])</span>
+</pre></div>
+</div>
+<p>An example with fixed-width columns</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">(</span><span class="s2">&quot;11.3abcde&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;intvar&#39;</span><span class="p">,</span><span class="s1">&#39;fltvar&#39;</span><span class="p">,</span><span class="s1">&#39;strvar&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">delimiter</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span>
+<span class="go">array((1, 1.3, &#39;abcde&#39;),</span>
+<span class="go">      dtype=[(&#39;intvar&#39;, &#39;&lt;i8&#39;), (&#39;fltvar&#39;, &#39;&lt;f8&#39;), (&#39;strvar&#39;, &#39;|S5&#39;)])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

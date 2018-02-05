@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.flatiter &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="Indexing routines" href="../routines.indexing.html" >
+    <link rel="next" title="numpy.flatiter.coords" href="numpy.flatiter.coords.html" >
+    <link rel="prev" title="numpy.ndindex.next" href="numpy.ndindex.next.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.indexing.html" accesskey="U">Indexing routines</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.flatiter.coords.html" title="numpy.flatiter.coords"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.ndindex.next.html" title="numpy.ndindex.next"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.ndindex.next.html"
+                        title="previous chapter">numpy.ndindex.next</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.flatiter.coords.html"
+                        title="next chapter">numpy.flatiter.coords</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-flatiter">
+<h1>numpy.flatiter<a class="headerlink" href="#numpy-flatiter" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="numpy.flatiter">
+<em class="property">class </em><code class="descclassname">numpy.</code><code class="descname">flatiter</code><a class="reference external" href="http://github.com/numpy/numpy/blob/v1.14.0/numpy/__init__.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy.flatiter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flat iterator object to iterate over arrays.</p>
+<p>A <a class="reference internal" href="#numpy.flatiter" title="numpy.flatiter"><code class="xref py py-obj docutils literal"><span class="pre">flatiter</span></code></a> iterator is returned by <code class="docutils literal"><span class="pre">x.flat</span></code> for any array <em class="xref py py-obj">x</em>.
+It allows iterating over the array as if it were a 1-D array,
+either in a for-loop or by calling its <a class="reference internal" href="numpy.flatiter.next.html#numpy.flatiter.next" title="numpy.flatiter.next"><code class="xref py py-obj docutils literal"><span class="pre">next</span></code></a> method.</p>
+<p>Iteration is done in row-major, C-style order (the last
+index varying the fastest). The iterator can also be indexed using
+basic slicing or advanced indexing.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="numpy.ndarray.flat.html#numpy.ndarray.flat" title="numpy.ndarray.flat"><code class="xref py py-obj docutils literal"><span class="pre">ndarray.flat</span></code></a></dt>
+<dd>Return a flat iterator over an array.</dd>
+<dt><a class="reference internal" href="numpy.ndarray.flatten.html#numpy.ndarray.flatten" title="numpy.ndarray.flatten"><code class="xref py py-obj docutils literal"><span class="pre">ndarray.flatten</span></code></a></dt>
+<dd>Returns a flattened copy of an array.</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>A <a class="reference internal" href="#numpy.flatiter" title="numpy.flatiter"><code class="xref py py-obj docutils literal"><span class="pre">flatiter</span></code></a> iterator can not be constructed directly from Python code
+by calling the <a class="reference internal" href="#numpy.flatiter" title="numpy.flatiter"><code class="xref py py-obj docutils literal"><span class="pre">flatiter</span></code></a> constructor.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fl</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">flat</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">fl</span><span class="p">)</span>
+<span class="go">&lt;type &#39;numpy.flatiter&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">fl</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">0</span>
+<span class="go">1</span>
+<span class="go">2</span>
+<span class="go">3</span>
+<span class="go">4</span>
+<span class="go">5</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fl</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+<span class="go">array([2, 3])</span>
+</pre></div>
+</div>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="numpy.flatiter.coords.html#numpy.flatiter.coords" title="numpy.flatiter.coords"><code class="xref py py-obj docutils literal"><span class="pre">coords</span></code></a></td>
+<td>An N-dimensional tuple of current coordinates.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="numpy.flatiter.copy.html#numpy.flatiter.copy" title="numpy.flatiter.copy"><code class="xref py py-obj docutils literal"><span class="pre">copy</span></code></a>()</td>
+<td>Get a copy of the iterator as a 1-D array.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.flatiter.next.html#numpy.flatiter.next" title="numpy.flatiter.next"><code class="xref py py-obj docutils literal"><span class="pre">next</span></code></a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

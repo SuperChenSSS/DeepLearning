@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Sorting, searching, and counting &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" >
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../index.html" >
+    <link rel="up" title="Routines" href="routines.html" >
+    <link rel="next" title="numpy.sort" href="generated/numpy.sort.html" >
+    <link rel="prev" title="numpy.union1d" href="generated/numpy.union1d.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="routines.html" accesskey="U">Routines</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="generated/numpy.sort.html" title="numpy.sort"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="generated/numpy.union1d.html" title="numpy.union1d"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Sorting, searching, and counting</a><ul>
+<li><a class="reference internal" href="#sorting">Sorting</a></li>
+<li><a class="reference internal" href="#searching">Searching</a></li>
+<li><a class="reference internal" href="#counting">Counting</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="generated/numpy.union1d.html"
+                        title="previous chapter">numpy.union1d</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="generated/numpy.sort.html"
+                        title="next chapter">numpy.sort</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="sorting-searching-and-counting">
+<h1>Sorting, searching, and counting<a class="headerlink" href="#sorting-searching-and-counting" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="sorting">
+<h2>Sorting<a class="headerlink" href="#sorting" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.sort.html#numpy.sort" title="numpy.sort"><code class="xref py py-obj docutils literal"><span class="pre">sort</span></code></a>(a[,&nbsp;axis,&nbsp;kind,&nbsp;order])</td>
+<td>Return a sorted copy of an array.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.lexsort.html#numpy.lexsort" title="numpy.lexsort"><code class="xref py py-obj docutils literal"><span class="pre">lexsort</span></code></a>(keys[,&nbsp;axis])</td>
+<td>Perform an indirect sort using a sequence of keys.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.argsort.html#numpy.argsort" title="numpy.argsort"><code class="xref py py-obj docutils literal"><span class="pre">argsort</span></code></a>(a[,&nbsp;axis,&nbsp;kind,&nbsp;order])</td>
+<td>Returns the indices that would sort an array.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.ndarray.sort.html#numpy.ndarray.sort" title="numpy.ndarray.sort"><code class="xref py py-obj docutils literal"><span class="pre">ndarray.sort</span></code></a>([axis,&nbsp;kind,&nbsp;order])</td>
+<td>Sort an array, in-place.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.msort.html#numpy.msort" title="numpy.msort"><code class="xref py py-obj docutils literal"><span class="pre">msort</span></code></a>(a)</td>
+<td>Return a copy of an array sorted along the first axis.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.sort_complex.html#numpy.sort_complex" title="numpy.sort_complex"><code class="xref py py-obj docutils literal"><span class="pre">sort_complex</span></code></a>(a)</td>
+<td>Sort a complex array using the real part first, then the imaginary part.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.partition.html#numpy.partition" title="numpy.partition"><code class="xref py py-obj docutils literal"><span class="pre">partition</span></code></a>(a,&nbsp;kth[,&nbsp;axis,&nbsp;kind,&nbsp;order])</td>
+<td>Return a partitioned copy of an array.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.argpartition.html#numpy.argpartition" title="numpy.argpartition"><code class="xref py py-obj docutils literal"><span class="pre">argpartition</span></code></a>(a,&nbsp;kth[,&nbsp;axis,&nbsp;kind,&nbsp;order])</td>
+<td>Perform an indirect partition along the given axis using the algorithm specified by the <em class="xref py py-obj">kind</em> keyword.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="searching">
+<h2>Searching<a class="headerlink" href="#searching" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.argmax.html#numpy.argmax" title="numpy.argmax"><code class="xref py py-obj docutils literal"><span class="pre">argmax</span></code></a>(a[,&nbsp;axis,&nbsp;out])</td>
+<td>Returns the indices of the maximum values along an axis.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.nanargmax.html#numpy.nanargmax" title="numpy.nanargmax"><code class="xref py py-obj docutils literal"><span class="pre">nanargmax</span></code></a>(a[,&nbsp;axis])</td>
+<td>Return the indices of the maximum values in the specified axis ignoring NaNs.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.argmin.html#numpy.argmin" title="numpy.argmin"><code class="xref py py-obj docutils literal"><span class="pre">argmin</span></code></a>(a[,&nbsp;axis,&nbsp;out])</td>
+<td>Returns the indices of the minimum values along an axis.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.nanargmin.html#numpy.nanargmin" title="numpy.nanargmin"><code class="xref py py-obj docutils literal"><span class="pre">nanargmin</span></code></a>(a[,&nbsp;axis])</td>
+<td>Return the indices of the minimum values in the specified axis ignoring NaNs.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.argwhere.html#numpy.argwhere" title="numpy.argwhere"><code class="xref py py-obj docutils literal"><span class="pre">argwhere</span></code></a>(a)</td>
+<td>Find the indices of array elements that are non-zero, grouped by element.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.nonzero.html#numpy.nonzero" title="numpy.nonzero"><code class="xref py py-obj docutils literal"><span class="pre">nonzero</span></code></a>(a)</td>
+<td>Return the indices of the elements that are non-zero.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.flatnonzero.html#numpy.flatnonzero" title="numpy.flatnonzero"><code class="xref py py-obj docutils literal"><span class="pre">flatnonzero</span></code></a>(a)</td>
+<td>Return indices that are non-zero in the flattened version of a.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.where.html#numpy.where" title="numpy.where"><code class="xref py py-obj docutils literal"><span class="pre">where</span></code></a>(condition,&nbsp;[x,&nbsp;y])</td>
+<td>Return elements, either from <em class="xref py py-obj">x</em> or <em class="xref py py-obj">y</em>, depending on <em class="xref py py-obj">condition</em>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.searchsorted.html#numpy.searchsorted" title="numpy.searchsorted"><code class="xref py py-obj docutils literal"><span class="pre">searchsorted</span></code></a>(a,&nbsp;v[,&nbsp;side,&nbsp;sorter])</td>
+<td>Find indices where elements should be inserted to maintain order.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.extract.html#numpy.extract" title="numpy.extract"><code class="xref py py-obj docutils literal"><span class="pre">extract</span></code></a>(condition,&nbsp;arr)</td>
+<td>Return the elements of an array that satisfy some condition.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="counting">
+<h2>Counting<a class="headerlink" href="#counting" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.count_nonzero.html#numpy.count_nonzero" title="numpy.count_nonzero"><code class="xref py py-obj docutils literal"><span class="pre">count_nonzero</span></code></a>(a[,&nbsp;axis])</td>
+<td>Counts the number of non-zero values in the array <code class="docutils literal"><span class="pre">a</span></code>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

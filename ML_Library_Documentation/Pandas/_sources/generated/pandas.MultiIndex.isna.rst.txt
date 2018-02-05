@@ -1,0 +1,6 @@
+pandas\.MultiIndex\.isna
+========================
+
+.. currentmodule:: pandas
+
+.. automethod:: MultiIndex.isna

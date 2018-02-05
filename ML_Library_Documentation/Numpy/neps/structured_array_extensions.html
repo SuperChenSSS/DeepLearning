@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Structured array extensions &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" >
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../index.html" >
+    <link rel="up" title="NumPy Enhancement Proposals" href="index.html" >
+    <link rel="next" title="A proposal for implementing some date/time types in NumPy" href="datetime-proposal.html" >
+    <link rel="prev" title="Deferred UFunc Evaluation" href="deferred-ufunc-evaluation.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="index.html" accesskey="U">NumPy Enhancement Proposals</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="datetime-proposal.html" title="A proposal for implementing some date/time types in NumPy"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="deferred-ufunc-evaluation.html" title="Deferred UFunc Evaluation"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="deferred-ufunc-evaluation.html"
+                        title="previous chapter">Deferred UFunc Evaluation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="datetime-proposal.html"
+                        title="next chapter">A proposal for implementing some date/time types in NumPy</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="structured-array-extensions">
+<h1>Structured array extensions<a class="headerlink" href="#structured-array-extensions" title="Permalink to this headline">¶</a></h1>
+<ol class="arabic simple">
+<li>Create with-style context that makes &#8220;named-columns&#8221; available as names in the namespace.</li>
+</ol>
+<blockquote>
+<div><dl class="docutils">
+<dt>with np.columns(array):</dt>
+<dd>price = unit * quantityt</dd>
+</dl>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li>Allow structured arrays to be sliced by their column  (i.e. one additional indexing option for structured arrays) so that a[:4, &#8216;foo&#8217;:&#8217;bar&#8217;]  would be allowed.</li>
+</ol>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

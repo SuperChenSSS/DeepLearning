@@ -1,0 +1,6 @@
+pandas\.Timestamp\.offset
+=========================
+
+.. currentmodule:: pandas
+
+.. autoattribute:: Timestamp.offset

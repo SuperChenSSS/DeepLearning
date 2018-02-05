@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.arcsin &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="Mathematical functions" href="../routines.math.html" >
+    <link rel="next" title="numpy.arccos" href="numpy.arccos.html" >
+    <link rel="prev" title="numpy.tan" href="numpy.tan.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.math.html" accesskey="U">Mathematical functions</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.arccos.html" title="numpy.arccos"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.tan.html" title="numpy.tan"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.tan.html"
+                        title="previous chapter">numpy.tan</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.arccos.html"
+                        title="next chapter">numpy.arccos</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-arcsin">
+<h1>numpy.arcsin<a class="headerlink" href="#numpy-arcsin" title="Permalink to this headline">¶</a></h1>
+<dl class="data">
+<dt id="numpy.arcsin">
+<code class="descclassname">numpy.</code><code class="descname">arcsin</code><span class="sig-paren">(</span><em>x</em>, <em>/</em>, <em>out=None</em>, <em>*</em>, <em>where=True</em>, <em>casting='same_kind'</em>, <em>order='K'</em>, <em>dtype=None</em>, <em>subok=True</em><span class="optional">[</span>, <em>signature</em>, <em>extobj</em><span class="optional">]</span><span class="sig-paren">)</span><em class="property"> = &lt;ufunc 'arcsin'&gt;</em><a class="headerlink" href="#numpy.arcsin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inverse sine, element-wise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : array_like</p>
+<blockquote>
+<div><p><em class="xref py py-obj">y</em>-coordinate on the unit circle.</p>
+</div></blockquote>
+<p><strong>out</strong> : ndarray, None, or tuple of ndarray and None, optional</p>
+<blockquote>
+<div><p>A location into which the result is stored. If provided, it must have
+a shape that the inputs broadcast to. If not provided or <em class="xref py py-obj">None</em>,
+a freshly-allocated array is returned. A tuple (possible only as a
+keyword argument) must have length equal to the number of outputs.</p>
+</div></blockquote>
+<p><strong>where</strong> : array_like, optional</p>
+<blockquote>
+<div><p>Values of True indicate to calculate the ufunc at that position, values
+of False indicate to leave the value in the output alone.</p>
+</div></blockquote>
+<p><strong>**kwargs</strong></p>
+<blockquote>
+<div><p>For other keyword-only arguments, see the
+<a class="reference internal" href="../ufuncs.html#ufuncs-kwargs"><span class="std std-ref">ufunc docs</span></a>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>angle</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>The inverse sine of each element in <em class="xref py py-obj">x</em>, in radians and in the
+closed interval <code class="docutils literal"><span class="pre">[-pi/2,</span> <span class="pre">pi/2]</span></code>.  If <em class="xref py py-obj">x</em> is a scalar, a scalar
+is returned, otherwise an array.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="numpy.sin.html#numpy.sin" title="numpy.sin"><code class="xref py py-obj docutils literal"><span class="pre">sin</span></code></a>, <a class="reference internal" href="numpy.cos.html#numpy.cos" title="numpy.cos"><code class="xref py py-obj docutils literal"><span class="pre">cos</span></code></a>, <a class="reference internal" href="numpy.arccos.html#numpy.arccos" title="numpy.arccos"><code class="xref py py-obj docutils literal"><span class="pre">arccos</span></code></a>, <a class="reference internal" href="numpy.tan.html#numpy.tan" title="numpy.tan"><code class="xref py py-obj docutils literal"><span class="pre">tan</span></code></a>, <a class="reference internal" href="numpy.arctan.html#numpy.arctan" title="numpy.arctan"><code class="xref py py-obj docutils literal"><span class="pre">arctan</span></code></a>, <a class="reference internal" href="numpy.arctan2.html#numpy.arctan2" title="numpy.arctan2"><code class="xref py py-obj docutils literal"><span class="pre">arctan2</span></code></a>, <code class="xref py py-obj docutils literal"><span class="pre">emath.arcsin</span></code></p>
+</div>
+<p class="rubric">Notes</p>
+<p><a class="reference internal" href="#numpy.arcsin" title="numpy.arcsin"><code class="xref py py-obj docutils literal"><span class="pre">arcsin</span></code></a> is a multivalued function: for each <em class="xref py py-obj">x</em> there are infinitely
+many numbers <em class="xref py py-obj">z</em> such that <img class="math" src="../../_images/math/ed9a6624b7ca37b4dd7c957cf84611dc9e7b8a5b.svg" alt="sin(z) = x"/>.  The convention is to
+return the angle <em class="xref py py-obj">z</em> whose real part lies in [-pi/2, pi/2].</p>
+<p>For real-valued input data types, <em>arcsin</em> always returns real output.
+For each value that cannot be expressed as a real number or infinity,
+it yields <code class="docutils literal"><span class="pre">nan</span></code> and sets the <em class="xref py py-obj">invalid</em> floating point error flag.</p>
+<p>For complex-valued input, <a class="reference internal" href="#numpy.arcsin" title="numpy.arcsin"><code class="xref py py-obj docutils literal"><span class="pre">arcsin</span></code></a> is a complex analytic function that
+has, by convention, the branch cuts [-inf, -1] and [1, inf]  and is
+continuous from above on the former and from below on the latter.</p>
+<p>The inverse sine is also known as <em class="xref py py-obj">asin</em> or sin^{-1}.</p>
+<p class="rubric">References</p>
+<p>Abramowitz, M. and Stegun, I. A., <em>Handbook of Mathematical Functions</em>,
+10th printing, New York: Dover, 1964, pp. 79ff.
+<a class="reference external" href="http://www.math.sfu.ca/~cbm/aands/">http://www.math.sfu.ca/~cbm/aands/</a></p>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>     <span class="c1"># pi/2</span>
+<span class="go">1.5707963267948966</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>    <span class="c1"># -pi/2</span>
+<span class="go">-1.5707963267948966</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">0.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

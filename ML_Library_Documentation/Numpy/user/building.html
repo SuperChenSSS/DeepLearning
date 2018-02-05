@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Building from source &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" >
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../index.html" >
+    <link rel="up" title="NumPy User Guide" href="index.html" >
+    <link rel="next" title="Using NumPy C-API" href="c-info.html" >
+    <link rel="prev" title="NumPy for Matlab users" href="numpy-for-matlab-users.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="index.html" accesskey="U">NumPy User Guide</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="c-info.html" title="Using NumPy C-API"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy-for-matlab-users.html" title="NumPy for Matlab users"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Building from source</a><ul>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li><a class="reference internal" href="#basic-installation">Basic Installation</a><ul>
+<li><a class="reference internal" href="#parallel-builds">Parallel builds</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fortran-abi-mismatch">FORTRAN ABI mismatch</a><ul>
+<li><a class="reference internal" href="#choosing-the-fortran-compiler">Choosing the fortran compiler</a></li>
+<li><a class="reference internal" href="#how-to-check-the-abi-of-blas-lapack-atlas">How to check the ABI of blas/lapack/atlas</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#disabling-atlas-and-other-accelerated-libraries">Disabling ATLAS and other accelerated libraries</a></li>
+<li><a class="reference internal" href="#supplying-additional-compiler-flags">Supplying additional compiler flags</a></li>
+<li><a class="reference internal" href="#building-with-atlas-support">Building with ATLAS support</a><ul>
+<li><a class="reference internal" href="#ubuntu">Ubuntu</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy-for-matlab-users.html"
+                        title="previous chapter">NumPy for Matlab users</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="c-info.html"
+                        title="next chapter">Using NumPy C-API</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="building-from-source">
+<span id="id1"></span><h1>Building from source<a class="headerlink" href="#building-from-source" title="Permalink to this headline">¶</a></h1>
+<p>A general overview of building NumPy from source is given here, with detailed
+instructions for specific platforms given separately.</p>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>Building NumPy requires the following software installed:</p>
+<ol class="arabic">
+<li><p class="first">Python 2.7.x, 3.4.x or newer</p>
+<p>On Debian and derivatives (Ubuntu): python, python-dev (or python3-dev)</p>
+<p>On Windows: the official python installer at
+<a class="reference external" href="http://www.python.org">www.python.org</a> is enough</p>
+<p>Make sure that the Python package distutils is installed before
+continuing. For example, in Debian GNU/Linux, installing python-dev
+also installs distutils.</p>
+<p>Python must also be compiled with the zlib module enabled. This is
+practically always the case with pre-packaged Pythons.</p>
+</li>
+<li><p class="first">Compilers</p>
+<p>To build any extension modules for Python, you&#8217;ll need a C compiler.
+Various NumPy modules use FORTRAN 77 libraries, so you&#8217;ll also need a
+FORTRAN 77 compiler installed.</p>
+<p>Note that NumPy is developed mainly using GNU compilers. Compilers from
+other vendors such as Intel, Absoft, Sun, NAG, Compaq, Vast, Portland,
+Lahey, HP, IBM, Microsoft are only supported in the form of community
+feedback, and may not work out of the box. GCC 4.x (and later) compilers
+are recommended.</p>
+</li>
+<li><p class="first">Linear Algebra libraries</p>
+<p>NumPy does not require any external linear algebra libraries to be
+installed. However, if these are available, NumPy&#8217;s setup script can detect
+them and use them for building. A number of different LAPACK library setups
+can be used, including optimized LAPACK libraries such as ATLAS, MKL or the
+Accelerate/vecLib framework on OS X.</p>
+</li>
+<li><p class="first">Cython</p>
+<p>To build development versions of NumPy, you&#8217;ll need a recent version of
+Cython.  Released NumPy sources on PyPi include the C files generated from
+Cython code, so for released versions having Cython installed isn&#8217;t needed.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="basic-installation">
+<h2>Basic Installation<a class="headerlink" href="#basic-installation" title="Permalink to this headline">¶</a></h2>
+<p>To install NumPy run:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+</pre></div>
+</div>
+<p>To perform an in-place build that can be run from the source folder run:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">build_ext</span> <span class="o">--</span><span class="n">inplace</span>
+</pre></div>
+</div>
+<p>The NumPy build system uses <code class="docutils literal"><span class="pre">setuptools</span></code> (from numpy 1.11.0, before that it
+was plain <code class="docutils literal"><span class="pre">distutils</span></code>) and <code class="docutils literal"><span class="pre">numpy.distutils</span></code>.
+Using <code class="docutils literal"><span class="pre">virtualenv</span></code> should work as expected.</p>
+<p><em>Note: for build instructions to do development work on NumPy itself, see</em>
+<a class="reference internal" href="../dev/development_environment.html#development-environment"><span class="std std-ref">Setting up and using your development environment</span></a>.</p>
+<div class="section" id="parallel-builds">
+<span id="id2"></span><h3>Parallel builds<a class="headerlink" href="#parallel-builds" title="Permalink to this headline">¶</a></h3>
+<p>From NumPy 1.10.0 on it&#8217;s also possible to do a parallel build with:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>python setup.py build -j 4 install --prefix $HOME/.local
+</pre></div>
+</div>
+<p>This will compile numpy on 4 CPUs and install it into the specified prefix.
+to perform a parallel in-place build, run:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">build_ext</span> <span class="o">--</span><span class="n">inplace</span> <span class="o">-</span><span class="n">j</span> <span class="mi">4</span>
+</pre></div>
+</div>
+<p>The number of build jobs can also be specified via the environment variable
+<code class="docutils literal"><span class="pre">NPY_NUM_BUILD_JOBS</span></code>.</p>
+</div>
+</div>
+<div class="section" id="fortran-abi-mismatch">
+<h2>FORTRAN ABI mismatch<a class="headerlink" href="#fortran-abi-mismatch" title="Permalink to this headline">¶</a></h2>
+<p>The two most popular open source fortran compilers are g77 and gfortran.
+Unfortunately, they are not ABI compatible, which means that concretely you
+should avoid mixing libraries built with one with another. In particular, if
+your blas/lapack/atlas is built with g77, you <em>must</em> use g77 when building
+numpy and scipy; on the contrary, if your atlas is built with gfortran, you
+<em>must</em> build numpy/scipy with gfortran. This applies for most other cases
+where different FORTRAN compilers might have been used.</p>
+<div class="section" id="choosing-the-fortran-compiler">
+<h3>Choosing the fortran compiler<a class="headerlink" href="#choosing-the-fortran-compiler" title="Permalink to this headline">¶</a></h3>
+<p>To build with gfortran:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">build</span> <span class="o">--</span><span class="n">fcompiler</span><span class="o">=</span><span class="n">gnu95</span>
+</pre></div>
+</div>
+<p>For more information see:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">build</span> <span class="o">--</span><span class="n">help</span><span class="o">-</span><span class="n">fcompiler</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="how-to-check-the-abi-of-blas-lapack-atlas">
+<h3>How to check the ABI of blas/lapack/atlas<a class="headerlink" href="#how-to-check-the-abi-of-blas-lapack-atlas" title="Permalink to this headline">¶</a></h3>
+<p>One relatively simple and reliable way to check for the compiler used to build
+a library is to use ldd on the library. If libg2c.so is a dependency, this
+means that g77 has been used. If libgfortran.so is a dependency, gfortran
+has been used. If both are dependencies, this means both have been used, which
+is almost always a very bad idea.</p>
+</div>
+</div>
+<div class="section" id="disabling-atlas-and-other-accelerated-libraries">
+<h2>Disabling ATLAS and other accelerated libraries<a class="headerlink" href="#disabling-atlas-and-other-accelerated-libraries" title="Permalink to this headline">¶</a></h2>
+<p>Usage of ATLAS and other accelerated libraries in NumPy can be disabled
+via:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">BLAS</span><span class="o">=</span><span class="kc">None</span> <span class="n">LAPACK</span><span class="o">=</span><span class="kc">None</span> <span class="n">ATLAS</span><span class="o">=</span><span class="kc">None</span> <span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">build</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="supplying-additional-compiler-flags">
+<h2>Supplying additional compiler flags<a class="headerlink" href="#supplying-additional-compiler-flags" title="Permalink to this headline">¶</a></h2>
+<p>Additional compiler flags can be supplied by setting the <code class="docutils literal"><span class="pre">OPT</span></code>,
+<code class="docutils literal"><span class="pre">FOPT</span></code> (for Fortran), and <code class="docutils literal"><span class="pre">CC</span></code> environment variables.</p>
+</div>
+<div class="section" id="building-with-atlas-support">
+<h2>Building with ATLAS support<a class="headerlink" href="#building-with-atlas-support" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="ubuntu">
+<h3>Ubuntu<a class="headerlink" href="#ubuntu" title="Permalink to this headline">¶</a></h3>
+<p>You can install the necessary package for optimized ATLAS with this command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">libatlas</span><span class="o">-</span><span class="n">base</span><span class="o">-</span><span class="n">dev</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

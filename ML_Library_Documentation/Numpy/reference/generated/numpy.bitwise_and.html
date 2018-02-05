@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.bitwise_and &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="Binary operations" href="../routines.bitwise.html" >
+    <link rel="next" title="numpy.bitwise_or" href="numpy.bitwise_or.html" >
+    <link rel="prev" title="Binary operations" href="../routines.bitwise.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.bitwise.html" accesskey="U">Binary operations</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.bitwise_or.html" title="numpy.bitwise_or"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../routines.bitwise.html" title="Binary operations"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../routines.bitwise.html"
+                        title="previous chapter">Binary operations</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.bitwise_or.html"
+                        title="next chapter">numpy.bitwise_or</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-bitwise-and">
+<h1>numpy.bitwise_and<a class="headerlink" href="#numpy-bitwise-and" title="Permalink to this headline">¶</a></h1>
+<dl class="data">
+<dt id="numpy.bitwise_and">
+<code class="descclassname">numpy.</code><code class="descname">bitwise_and</code><span class="sig-paren">(</span><em>x1</em>, <em>x2</em>, <em>/</em>, <em>out=None</em>, <em>*</em>, <em>where=True</em>, <em>casting='same_kind'</em>, <em>order='K'</em>, <em>dtype=None</em>, <em>subok=True</em><span class="optional">[</span>, <em>signature</em>, <em>extobj</em><span class="optional">]</span><span class="sig-paren">)</span><em class="property"> = &lt;ufunc 'bitwise_and'&gt;</em><a class="headerlink" href="#numpy.bitwise_and" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the bit-wise AND of two arrays element-wise.</p>
+<p>Computes the bit-wise AND of the underlying binary representation of
+the integers in the input arrays. This ufunc implements the C/Python
+operator <code class="docutils literal"><span class="pre">&amp;</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x1, x2</strong> : array_like</p>
+<blockquote>
+<div><p>Only integer and boolean types are handled.</p>
+</div></blockquote>
+<p><strong>out</strong> : ndarray, None, or tuple of ndarray and None, optional</p>
+<blockquote>
+<div><p>A location into which the result is stored. If provided, it must have
+a shape that the inputs broadcast to. If not provided or <em class="xref py py-obj">None</em>,
+a freshly-allocated array is returned. A tuple (possible only as a
+keyword argument) must have length equal to the number of outputs.</p>
+</div></blockquote>
+<p><strong>where</strong> : array_like, optional</p>
+<blockquote>
+<div><p>Values of True indicate to calculate the ufunc at that position, values
+of False indicate to leave the value in the output alone.</p>
+</div></blockquote>
+<p><strong>**kwargs</strong></p>
+<blockquote>
+<div><p>For other keyword-only arguments, see the
+<a class="reference internal" href="../ufuncs.html#ufuncs-kwargs"><span class="std std-ref">ufunc docs</span></a>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out</strong> : array_like</p>
+<blockquote class="last">
+<div><p>Result.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p><a class="reference internal" href="numpy.logical_and.html#numpy.logical_and" title="numpy.logical_and"><code class="xref py py-obj docutils literal"><span class="pre">logical_and</span></code></a>, <a class="reference internal" href="numpy.bitwise_or.html#numpy.bitwise_or" title="numpy.bitwise_or"><code class="xref py py-obj docutils literal"><span class="pre">bitwise_or</span></code></a>, <a class="reference internal" href="numpy.bitwise_xor.html#numpy.bitwise_xor" title="numpy.bitwise_xor"><code class="xref py py-obj docutils literal"><span class="pre">bitwise_xor</span></code></a></p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="numpy.binary_repr.html#numpy.binary_repr" title="numpy.binary_repr"><code class="xref py py-obj docutils literal"><span class="pre">binary_repr</span></code></a></dt>
+<dd>Return the binary representation of the input number as a string.</dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
+<p>The number 13 is represented by <code class="docutils literal"><span class="pre">00001101</span></code>.  Likewise, 17 is
+represented by <code class="docutils literal"><span class="pre">00010001</span></code>.  The bit-wise AND of 13 and 17 is
+therefore <code class="docutils literal"><span class="pre">000000001</span></code>, or 1:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">bitwise_and</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="mi">17</span><span class="p">)</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">bitwise_and</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
+<span class="go">12</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">binary_repr</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span>
+<span class="go">&#39;1100&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">bitwise_and</span><span class="p">([</span><span class="mi">14</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="mi">13</span><span class="p">)</span>
+<span class="go">array([12,  1])</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">bitwise_and</span><span class="p">([</span><span class="mi">11</span><span class="p">,</span><span class="mi">7</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">25</span><span class="p">])</span>
+<span class="go">array([0, 1])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">bitwise_and</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">255</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">16</span><span class="p">]))</span>
+<span class="go">array([ 2,  4, 16])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">bitwise_and</span><span class="p">([</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">],</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">])</span>
+<span class="go">array([False,  True])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

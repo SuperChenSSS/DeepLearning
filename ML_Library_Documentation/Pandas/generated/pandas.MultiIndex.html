@@ -1,0 +1,843 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pandas.MultiIndex &#8212; pandas 0.22.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.22.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pandas.MultiIndex.T" href="pandas.MultiIndex.T.html" />
+    <link rel="prev" title="pandas.IntervalIndex.from_intervals" href="pandas.IntervalIndex.from_intervals.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pandas.MultiIndex.T.html" title="pandas.MultiIndex.T"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pandas.IntervalIndex.from_intervals.html" title="pandas.IntervalIndex.from_intervals"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pandas 0.22.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" accesskey="U">API Reference</a> &#187;</li> 
+      </ul>
+    </div>
+<div class="content-wrapper">
+    <div class="content">
+        <div class="document">
+            <div class="sphinxsidebar">
+                <h3>Table Of Contents</h3>
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew.html">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Package overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../10min.html">10 Minutes to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dsintro.html">Intro to Data Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basics.html">Essential Basic Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text.html">Working with Text Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../options.html">Options and Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indexing.html">Indexing and Selecting Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced.html">MultiIndex / Advanced Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../computation.html">Computational tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../missing_data.html">Working with missing data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../groupby.html">Group By: split-apply-combine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../merging.html">Merge, join, and concatenate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reshaping.html">Reshaping and Pivot Tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timeseries.html">Time Series / Date functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timedeltas.html">Time Deltas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../categorical.html">Categorical Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../style.html">Styling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io.html">IO Tools (Text, CSV, HDF5, ...)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../remote_data.html">Remote Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enhancingperf.html">Enhancing Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sparse.html">Sparse data structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gotchas.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../r_interface.html">rpy2 / R interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ecosystem.html">pandas Ecosystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_r.html">Comparison with R / R libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_sql.html">Comparison with SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_sas.html">Comparison with SAS</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#input-output">Input/Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#general-functions">General functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#series">Series</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#dataframe">DataFrame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#panel">Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#index">Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#numeric-index">Numeric Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#categoricalindex">CategoricalIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#intervalindex">IntervalIndex</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#multiindex">MultiIndex</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">pandas.MultiIndex</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.T.html">pandas.MultiIndex.T</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.asi8.html">pandas.MultiIndex.asi8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.base.html">pandas.MultiIndex.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.data.html">pandas.MultiIndex.data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.dtype.html">pandas.MultiIndex.dtype</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.dtype_str.html">pandas.MultiIndex.dtype_str</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.empty.html">pandas.MultiIndex.empty</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.flags.html">pandas.MultiIndex.flags</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.has_duplicates.html">pandas.MultiIndex.has_duplicates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.hasnans.html">pandas.MultiIndex.hasnans</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.inferred_type.html">pandas.MultiIndex.inferred_type</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_all_dates.html">pandas.MultiIndex.is_all_dates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_monotonic.html">pandas.MultiIndex.is_monotonic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_monotonic_decreasing.html">pandas.MultiIndex.is_monotonic_decreasing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_monotonic_increasing.html">pandas.MultiIndex.is_monotonic_increasing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_unique.html">pandas.MultiIndex.is_unique</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.itemsize.html">pandas.MultiIndex.itemsize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.labels.html">pandas.MultiIndex.labels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.levels.html">pandas.MultiIndex.levels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.levshape.html">pandas.MultiIndex.levshape</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.lexsort_depth.html">pandas.MultiIndex.lexsort_depth</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.name.html">pandas.MultiIndex.name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.names.html">pandas.MultiIndex.names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.nbytes.html">pandas.MultiIndex.nbytes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.ndim.html">pandas.MultiIndex.ndim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.nlevels.html">pandas.MultiIndex.nlevels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.shape.html">pandas.MultiIndex.shape</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.size.html">pandas.MultiIndex.size</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.strides.html">pandas.MultiIndex.strides</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.values.html">pandas.MultiIndex.values</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.all.html">pandas.MultiIndex.all</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.any.html">pandas.MultiIndex.any</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.append.html">pandas.MultiIndex.append</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.argmax.html">pandas.MultiIndex.argmax</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.argmin.html">pandas.MultiIndex.argmin</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.argsort.html">pandas.MultiIndex.argsort</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.asof.html">pandas.MultiIndex.asof</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.asof_locs.html">pandas.MultiIndex.asof_locs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.astype.html">pandas.MultiIndex.astype</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.contains.html">pandas.MultiIndex.contains</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.copy.html">pandas.MultiIndex.copy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.delete.html">pandas.MultiIndex.delete</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.difference.html">pandas.MultiIndex.difference</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.drop.html">pandas.MultiIndex.drop</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.drop_duplicates.html">pandas.MultiIndex.drop_duplicates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.droplevel.html">pandas.MultiIndex.droplevel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.dropna.html">pandas.MultiIndex.dropna</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.duplicated.html">pandas.MultiIndex.duplicated</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.equal_levels.html">pandas.MultiIndex.equal_levels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.equals.html">pandas.MultiIndex.equals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.factorize.html">pandas.MultiIndex.factorize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.fillna.html">pandas.MultiIndex.fillna</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.format.html">pandas.MultiIndex.format</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.from_arrays.html">pandas.MultiIndex.from_arrays</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.from_product.html">pandas.MultiIndex.from_product</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.from_tuples.html">pandas.MultiIndex.from_tuples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.get_duplicates.html">pandas.MultiIndex.get_duplicates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.get_indexer.html">pandas.MultiIndex.get_indexer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.get_indexer_for.html">pandas.MultiIndex.get_indexer_for</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.get_indexer_non_unique.html">pandas.MultiIndex.get_indexer_non_unique</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.get_level_values.html">pandas.MultiIndex.get_level_values</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.get_loc.html">pandas.MultiIndex.get_loc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.get_loc_level.html">pandas.MultiIndex.get_loc_level</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.get_locs.html">pandas.MultiIndex.get_locs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.get_major_bounds.html">pandas.MultiIndex.get_major_bounds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.get_slice_bound.html">pandas.MultiIndex.get_slice_bound</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.get_value.html">pandas.MultiIndex.get_value</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.get_values.html">pandas.MultiIndex.get_values</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.groupby.html">pandas.MultiIndex.groupby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.holds_integer.html">pandas.MultiIndex.holds_integer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.identical.html">pandas.MultiIndex.identical</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.insert.html">pandas.MultiIndex.insert</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.intersection.html">pandas.MultiIndex.intersection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_.html">pandas.MultiIndex.is_</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_boolean.html">pandas.MultiIndex.is_boolean</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_categorical.html">pandas.MultiIndex.is_categorical</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_floating.html">pandas.MultiIndex.is_floating</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_integer.html">pandas.MultiIndex.is_integer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_interval.html">pandas.MultiIndex.is_interval</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_lexsorted.html">pandas.MultiIndex.is_lexsorted</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_lexsorted_for_tuple.html">pandas.MultiIndex.is_lexsorted_for_tuple</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_mixed.html">pandas.MultiIndex.is_mixed</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_numeric.html">pandas.MultiIndex.is_numeric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_object.html">pandas.MultiIndex.is_object</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_type_compatible.html">pandas.MultiIndex.is_type_compatible</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.isin.html">pandas.MultiIndex.isin</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.isna.html">pandas.MultiIndex.isna</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.isnull.html">pandas.MultiIndex.isnull</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.item.html">pandas.MultiIndex.item</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.join.html">pandas.MultiIndex.join</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.map.html">pandas.MultiIndex.map</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.max.html">pandas.MultiIndex.max</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.memory_usage.html">pandas.MultiIndex.memory_usage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.min.html">pandas.MultiIndex.min</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.notna.html">pandas.MultiIndex.notna</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.notnull.html">pandas.MultiIndex.notnull</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.nunique.html">pandas.MultiIndex.nunique</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.putmask.html">pandas.MultiIndex.putmask</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.ravel.html">pandas.MultiIndex.ravel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.reindex.html">pandas.MultiIndex.reindex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.remove_unused_levels.html">pandas.MultiIndex.remove_unused_levels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.rename.html">pandas.MultiIndex.rename</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.reorder_levels.html">pandas.MultiIndex.reorder_levels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.repeat.html">pandas.MultiIndex.repeat</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.reshape.html">pandas.MultiIndex.reshape</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.searchsorted.html">pandas.MultiIndex.searchsorted</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.set_labels.html">pandas.MultiIndex.set_labels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.set_levels.html">pandas.MultiIndex.set_levels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.set_names.html">pandas.MultiIndex.set_names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.set_value.html">pandas.MultiIndex.set_value</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.shift.html">pandas.MultiIndex.shift</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.slice_indexer.html">pandas.MultiIndex.slice_indexer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.slice_locs.html">pandas.MultiIndex.slice_locs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.sort.html">pandas.MultiIndex.sort</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.sort_values.html">pandas.MultiIndex.sort_values</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.sortlevel.html">pandas.MultiIndex.sortlevel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.str.html">pandas.MultiIndex.str</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.summary.html">pandas.MultiIndex.summary</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.swaplevel.html">pandas.MultiIndex.swaplevel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.symmetric_difference.html">pandas.MultiIndex.symmetric_difference</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.take.html">pandas.MultiIndex.take</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.to_datetime.html">pandas.MultiIndex.to_datetime</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.to_frame.html">pandas.MultiIndex.to_frame</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.to_hierarchical.html">pandas.MultiIndex.to_hierarchical</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.to_native_types.html">pandas.MultiIndex.to_native_types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.to_series.html">pandas.MultiIndex.to_series</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.tolist.html">pandas.MultiIndex.tolist</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.transpose.html">pandas.MultiIndex.transpose</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.truncate.html">pandas.MultiIndex.truncate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.union.html">pandas.MultiIndex.union</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.unique.html">pandas.MultiIndex.unique</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.value_counts.html">pandas.MultiIndex.value_counts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.view.html">pandas.MultiIndex.view</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.where.html">pandas.MultiIndex.where</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pandas.IndexSlice.html">pandas.IndexSlice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#multiindex-components">MultiIndex Components</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#datetimeindex">DatetimeIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#timedeltaindex">TimedeltaIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#periodindex">PeriodIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#scalars">Scalars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#window">Window</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#groupby">GroupBy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#resampling">Resampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#style">Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#general-utility-functions">General utility functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developer.html">Developer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../internals.html">Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release Notes</a></li>
+</ul>
+
+                <h3 style="margin-top: 1.5em;">Search</h3>
+
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18"/>
+                    <input type="submit" value="Go"/>
+                    <input type="hidden" name="check_keywords" value="yes"/>
+                    <input type="hidden" name="area" value="default"/>
+                </form>
+                <p class="searchtip" style="font-size: 90%">
+                    Enter search terms or a module, class or function name.
+                </p>
+
+            </div>
+             
+            <div class="documentwrapper">
+                <div class="bodywrapper">
+                    <div class="body">
+                        
+  <div class="section" id="pandas-multiindex">
+<h1>pandas.MultiIndex<a class="headerlink" href="#pandas-multiindex" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pandas.MultiIndex">
+<em class="property">class </em><code class="descclassname">pandas.</code><code class="descname">MultiIndex</code><a class="reference external" href="http://github.com/pandas-dev/pandas/blob/v0.22.0/pandas/core/indexes/multi.py#L53-L2781"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pandas.MultiIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>A multi-level, or hierarchical, index object for pandas objects</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>levels</strong> : sequence of arrays</p>
+<blockquote>
+<div><p>The unique labels for each level</p>
+</div></blockquote>
+<p><strong>labels</strong> : sequence of arrays</p>
+<blockquote>
+<div><p>Integers for each level designating which label at each location</p>
+</div></blockquote>
+<p><strong>sortorder</strong> : optional int</p>
+<blockquote>
+<div><p>Level of sortedness (must be lexicographically sorted by that
+level)</p>
+</div></blockquote>
+<p><strong>names</strong> : optional sequence of objects</p>
+<blockquote>
+<div><p>Names for each of the index levels. (name is accepted for compat)</p>
+</div></blockquote>
+<p><strong>copy</strong> : boolean, default False</p>
+<blockquote>
+<div><p>Copy the meta-data</p>
+</div></blockquote>
+<p><strong>verify_integrity</strong> : boolean, default True</p>
+<blockquote class="last">
+<div><p>Check that the levels/labels are consistent and valid</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="pandas.MultiIndex.from_arrays.html#pandas.MultiIndex.from_arrays" title="pandas.MultiIndex.from_arrays"><code class="xref py py-obj docutils literal"><span class="pre">MultiIndex.from_arrays</span></code></a></dt>
+<dd>Convert list of arrays to MultiIndex</dd>
+<dt><a class="reference internal" href="pandas.MultiIndex.from_product.html#pandas.MultiIndex.from_product" title="pandas.MultiIndex.from_product"><code class="xref py py-obj docutils literal"><span class="pre">MultiIndex.from_product</span></code></a></dt>
+<dd>Create a MultiIndex from the cartesian product of iterables</dd>
+<dt><a class="reference internal" href="pandas.MultiIndex.from_tuples.html#pandas.MultiIndex.from_tuples" title="pandas.MultiIndex.from_tuples"><code class="xref py py-obj docutils literal"><span class="pre">MultiIndex.from_tuples</span></code></a></dt>
+<dd>Convert list of tuples to a MultiIndex</dd>
+<dt><a class="reference internal" href="pandas.Index.html#pandas.Index" title="pandas.Index"><code class="xref py py-obj docutils literal"><span class="pre">Index</span></code></a></dt>
+<dd>The base pandas Index type</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>See the <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/advanced.html">user guide</a> for more.</p>
+<p class="rubric">Examples</p>
+<p>A new <code class="docutils literal"><span class="pre">MultiIndex</span></code> is typically constructed using one of the helper
+methods <a class="reference internal" href="pandas.MultiIndex.from_arrays.html#pandas.MultiIndex.from_arrays" title="pandas.MultiIndex.from_arrays"><code class="xref py py-meth docutils literal"><span class="pre">MultiIndex.from_arrays()</span></code></a>, <a class="reference internal" href="pandas.MultiIndex.from_product.html#pandas.MultiIndex.from_product" title="pandas.MultiIndex.from_product"><code class="xref py py-meth docutils literal"><span class="pre">MultiIndex.from_product()</span></code></a>
+and <a class="reference internal" href="pandas.MultiIndex.from_tuples.html#pandas.MultiIndex.from_tuples" title="pandas.MultiIndex.from_tuples"><code class="xref py py-meth docutils literal"><span class="pre">MultiIndex.from_tuples()</span></code></a>. For example (using <code class="docutils literal"><span class="pre">.from_arrays</span></code>):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">arrays</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pd</span><span class="o">.</span><span class="n">MultiIndex</span><span class="o">.</span><span class="n">from_arrays</span><span class="p">(</span><span class="n">arrays</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;number&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">))</span>
+<span class="go">MultiIndex(levels=[[1, 2], [&#39;blue&#39;, &#39;red&#39;]],</span>
+<span class="go">       labels=[[0, 0, 1, 1], [1, 0, 1, 0]],</span>
+<span class="go">       names=[&#39;number&#39;, &#39;color&#39;])</span>
+</pre></div>
+</div>
+<p>See further examples for how to construct a MultiIndex in the doc strings
+of the mentioned helper methods.</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.T.html#pandas.MultiIndex.T" title="pandas.MultiIndex.T"><code class="xref py py-obj docutils literal"><span class="pre">T</span></code></a></td>
+<td>return the transpose, which is by definition self</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.asi8.html#pandas.MultiIndex.asi8" title="pandas.MultiIndex.asi8"><code class="xref py py-obj docutils literal"><span class="pre">asi8</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.base.html#pandas.MultiIndex.base" title="pandas.MultiIndex.base"><code class="xref py py-obj docutils literal"><span class="pre">base</span></code></a></td>
+<td>return the base object if the memory of the underlying data is</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.data.html#pandas.MultiIndex.data" title="pandas.MultiIndex.data"><code class="xref py py-obj docutils literal"><span class="pre">data</span></code></a></td>
+<td>return the data pointer of the underlying data</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.dtype.html#pandas.MultiIndex.dtype" title="pandas.MultiIndex.dtype"><code class="xref py py-obj docutils literal"><span class="pre">dtype</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.dtype_str.html#pandas.MultiIndex.dtype_str" title="pandas.MultiIndex.dtype_str"><code class="xref py py-obj docutils literal"><span class="pre">dtype_str</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.empty.html#pandas.MultiIndex.empty" title="pandas.MultiIndex.empty"><code class="xref py py-obj docutils literal"><span class="pre">empty</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.flags.html#pandas.MultiIndex.flags" title="pandas.MultiIndex.flags"><code class="xref py py-obj docutils literal"><span class="pre">flags</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.has_duplicates.html#pandas.MultiIndex.has_duplicates" title="pandas.MultiIndex.has_duplicates"><code class="xref py py-obj docutils literal"><span class="pre">has_duplicates</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.hasnans.html#pandas.MultiIndex.hasnans" title="pandas.MultiIndex.hasnans"><code class="xref py py-obj docutils literal"><span class="pre">hasnans</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.inferred_type.html#pandas.MultiIndex.inferred_type" title="pandas.MultiIndex.inferred_type"><code class="xref py py-obj docutils literal"><span class="pre">inferred_type</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.is_all_dates.html#pandas.MultiIndex.is_all_dates" title="pandas.MultiIndex.is_all_dates"><code class="xref py py-obj docutils literal"><span class="pre">is_all_dates</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.is_monotonic.html#pandas.MultiIndex.is_monotonic" title="pandas.MultiIndex.is_monotonic"><code class="xref py py-obj docutils literal"><span class="pre">is_monotonic</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.is_monotonic_decreasing.html#pandas.MultiIndex.is_monotonic_decreasing" title="pandas.MultiIndex.is_monotonic_decreasing"><code class="xref py py-obj docutils literal"><span class="pre">is_monotonic_decreasing</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.is_monotonic_increasing.html#pandas.MultiIndex.is_monotonic_increasing" title="pandas.MultiIndex.is_monotonic_increasing"><code class="xref py py-obj docutils literal"><span class="pre">is_monotonic_increasing</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.is_unique.html#pandas.MultiIndex.is_unique" title="pandas.MultiIndex.is_unique"><code class="xref py py-obj docutils literal"><span class="pre">is_unique</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.itemsize.html#pandas.MultiIndex.itemsize" title="pandas.MultiIndex.itemsize"><code class="xref py py-obj docutils literal"><span class="pre">itemsize</span></code></a></td>
+<td>return the size of the dtype of the item of the underlying data</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.labels.html#pandas.MultiIndex.labels" title="pandas.MultiIndex.labels"><code class="xref py py-obj docutils literal"><span class="pre">labels</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.levels.html#pandas.MultiIndex.levels" title="pandas.MultiIndex.levels"><code class="xref py py-obj docutils literal"><span class="pre">levels</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.levshape.html#pandas.MultiIndex.levshape" title="pandas.MultiIndex.levshape"><code class="xref py py-obj docutils literal"><span class="pre">levshape</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.lexsort_depth.html#pandas.MultiIndex.lexsort_depth" title="pandas.MultiIndex.lexsort_depth"><code class="xref py py-obj docutils literal"><span class="pre">lexsort_depth</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.name.html#pandas.MultiIndex.name" title="pandas.MultiIndex.name"><code class="xref py py-obj docutils literal"><span class="pre">name</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.names.html#pandas.MultiIndex.names" title="pandas.MultiIndex.names"><code class="xref py py-obj docutils literal"><span class="pre">names</span></code></a></td>
+<td>Names of levels in MultiIndex</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.nbytes.html#pandas.MultiIndex.nbytes" title="pandas.MultiIndex.nbytes"><code class="xref py py-obj docutils literal"><span class="pre">nbytes</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.ndim.html#pandas.MultiIndex.ndim" title="pandas.MultiIndex.ndim"><code class="xref py py-obj docutils literal"><span class="pre">ndim</span></code></a></td>
+<td>return the number of dimensions of the underlying data,</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.nlevels.html#pandas.MultiIndex.nlevels" title="pandas.MultiIndex.nlevels"><code class="xref py py-obj docutils literal"><span class="pre">nlevels</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.shape.html#pandas.MultiIndex.shape" title="pandas.MultiIndex.shape"><code class="xref py py-obj docutils literal"><span class="pre">shape</span></code></a></td>
+<td>return a tuple of the shape of the underlying data</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.size.html#pandas.MultiIndex.size" title="pandas.MultiIndex.size"><code class="xref py py-obj docutils literal"><span class="pre">size</span></code></a></td>
+<td>return the number of elements in the underlying data</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.strides.html#pandas.MultiIndex.strides" title="pandas.MultiIndex.strides"><code class="xref py py-obj docutils literal"><span class="pre">strides</span></code></a></td>
+<td>return the strides of the underlying data</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.values.html#pandas.MultiIndex.values" title="pandas.MultiIndex.values"><code class="xref py py-obj docutils literal"><span class="pre">values</span></code></a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.all.html#pandas.MultiIndex.all" title="pandas.MultiIndex.all"><code class="xref py py-obj docutils literal"><span class="pre">all</span></code></a>([other])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.any.html#pandas.MultiIndex.any" title="pandas.MultiIndex.any"><code class="xref py py-obj docutils literal"><span class="pre">any</span></code></a>([other])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.append.html#pandas.MultiIndex.append" title="pandas.MultiIndex.append"><code class="xref py py-obj docutils literal"><span class="pre">append</span></code></a>(other)</td>
+<td>Append a collection of Index options together</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.argmax.html#pandas.MultiIndex.argmax" title="pandas.MultiIndex.argmax"><code class="xref py py-obj docutils literal"><span class="pre">argmax</span></code></a>([axis])</td>
+<td>return a ndarray of the maximum argument indexer</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.argmin.html#pandas.MultiIndex.argmin" title="pandas.MultiIndex.argmin"><code class="xref py py-obj docutils literal"><span class="pre">argmin</span></code></a>([axis])</td>
+<td>return a ndarray of the minimum argument indexer</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.argsort.html#pandas.MultiIndex.argsort" title="pandas.MultiIndex.argsort"><code class="xref py py-obj docutils literal"><span class="pre">argsort</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.asof.html#pandas.MultiIndex.asof" title="pandas.MultiIndex.asof"><code class="xref py py-obj docutils literal"><span class="pre">asof</span></code></a>(label)</td>
+<td>For a sorted index, return the most recent label up to and including the passed label.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.asof_locs.html#pandas.MultiIndex.asof_locs" title="pandas.MultiIndex.asof_locs"><code class="xref py py-obj docutils literal"><span class="pre">asof_locs</span></code></a>(where,&nbsp;mask)</td>
+<td>where : array of timestamps</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.astype.html#pandas.MultiIndex.astype" title="pandas.MultiIndex.astype"><code class="xref py py-obj docutils literal"><span class="pre">astype</span></code></a>(dtype[,&nbsp;copy])</td>
+<td>Create an Index with values cast to dtypes.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.contains.html#pandas.MultiIndex.contains" title="pandas.MultiIndex.contains"><code class="xref py py-obj docutils literal"><span class="pre">contains</span></code></a>(key)</td>
+<td>return a boolean if this key is IN the index</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.copy.html#pandas.MultiIndex.copy" title="pandas.MultiIndex.copy"><code class="xref py py-obj docutils literal"><span class="pre">copy</span></code></a>([names,&nbsp;dtype,&nbsp;levels,&nbsp;labels,&nbsp;deep,&nbsp;...])</td>
+<td>Make a copy of this object.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.delete.html#pandas.MultiIndex.delete" title="pandas.MultiIndex.delete"><code class="xref py py-obj docutils literal"><span class="pre">delete</span></code></a>(loc)</td>
+<td>Make new index with passed location deleted</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.difference.html#pandas.MultiIndex.difference" title="pandas.MultiIndex.difference"><code class="xref py py-obj docutils literal"><span class="pre">difference</span></code></a>(other)</td>
+<td>Compute sorted set difference of two MultiIndex objects</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.drop.html#pandas.MultiIndex.drop" title="pandas.MultiIndex.drop"><code class="xref py py-obj docutils literal"><span class="pre">drop</span></code></a>(labels[,&nbsp;level,&nbsp;errors])</td>
+<td>Make new MultiIndex with passed list of labels deleted</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.drop_duplicates.html#pandas.MultiIndex.drop_duplicates" title="pandas.MultiIndex.drop_duplicates"><code class="xref py py-obj docutils literal"><span class="pre">drop_duplicates</span></code></a>([keep])</td>
+<td>Return Index with duplicate values removed</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.droplevel.html#pandas.MultiIndex.droplevel" title="pandas.MultiIndex.droplevel"><code class="xref py py-obj docutils literal"><span class="pre">droplevel</span></code></a>([level])</td>
+<td>Return Index with requested level removed.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.dropna.html#pandas.MultiIndex.dropna" title="pandas.MultiIndex.dropna"><code class="xref py py-obj docutils literal"><span class="pre">dropna</span></code></a>([how])</td>
+<td>Return Index without NA/NaN values</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.duplicated.html#pandas.MultiIndex.duplicated" title="pandas.MultiIndex.duplicated"><code class="xref py py-obj docutils literal"><span class="pre">duplicated</span></code></a>([keep])</td>
+<td>Return boolean np.ndarray denoting duplicate values</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.equal_levels.html#pandas.MultiIndex.equal_levels" title="pandas.MultiIndex.equal_levels"><code class="xref py py-obj docutils literal"><span class="pre">equal_levels</span></code></a>(other)</td>
+<td>Return True if the levels of both MultiIndex objects are the same</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.equals.html#pandas.MultiIndex.equals" title="pandas.MultiIndex.equals"><code class="xref py py-obj docutils literal"><span class="pre">equals</span></code></a>(other)</td>
+<td>Determines if two MultiIndex objects have the same labeling information</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.factorize.html#pandas.MultiIndex.factorize" title="pandas.MultiIndex.factorize"><code class="xref py py-obj docutils literal"><span class="pre">factorize</span></code></a>([sort,&nbsp;na_sentinel])</td>
+<td>Encode the object as an enumerated type or categorical variable</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.fillna.html#pandas.MultiIndex.fillna" title="pandas.MultiIndex.fillna"><code class="xref py py-obj docutils literal"><span class="pre">fillna</span></code></a>([value,&nbsp;downcast])</td>
+<td>fillna is not implemented for MultiIndex</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.format.html#pandas.MultiIndex.format" title="pandas.MultiIndex.format"><code class="xref py py-obj docutils literal"><span class="pre">format</span></code></a>([space,&nbsp;sparsify,&nbsp;adjoin,&nbsp;names,&nbsp;...])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.from_arrays.html#pandas.MultiIndex.from_arrays" title="pandas.MultiIndex.from_arrays"><code class="xref py py-obj docutils literal"><span class="pre">from_arrays</span></code></a>(arrays[,&nbsp;sortorder,&nbsp;names])</td>
+<td>Convert arrays to MultiIndex</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.from_product.html#pandas.MultiIndex.from_product" title="pandas.MultiIndex.from_product"><code class="xref py py-obj docutils literal"><span class="pre">from_product</span></code></a>(iterables[,&nbsp;sortorder,&nbsp;names])</td>
+<td>Make a MultiIndex from the cartesian product of multiple iterables</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.from_tuples.html#pandas.MultiIndex.from_tuples" title="pandas.MultiIndex.from_tuples"><code class="xref py py-obj docutils literal"><span class="pre">from_tuples</span></code></a>(tuples[,&nbsp;sortorder,&nbsp;names])</td>
+<td>Convert list of tuples to MultiIndex</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.get_duplicates.html#pandas.MultiIndex.get_duplicates" title="pandas.MultiIndex.get_duplicates"><code class="xref py py-obj docutils literal"><span class="pre">get_duplicates</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.get_indexer.html#pandas.MultiIndex.get_indexer" title="pandas.MultiIndex.get_indexer"><code class="xref py py-obj docutils literal"><span class="pre">get_indexer</span></code></a>(target[,&nbsp;method,&nbsp;limit,&nbsp;tolerance])</td>
+<td>Compute indexer and mask for new index given the current index.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.get_indexer_for.html#pandas.MultiIndex.get_indexer_for" title="pandas.MultiIndex.get_indexer_for"><code class="xref py py-obj docutils literal"><span class="pre">get_indexer_for</span></code></a>(target,&nbsp;**kwargs)</td>
+<td>guaranteed return of an indexer even when non-unique</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.get_indexer_non_unique.html#pandas.MultiIndex.get_indexer_non_unique" title="pandas.MultiIndex.get_indexer_non_unique"><code class="xref py py-obj docutils literal"><span class="pre">get_indexer_non_unique</span></code></a>(target)</td>
+<td>Compute indexer and mask for new index given the current index.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.get_level_values.html#pandas.MultiIndex.get_level_values" title="pandas.MultiIndex.get_level_values"><code class="xref py py-obj docutils literal"><span class="pre">get_level_values</span></code></a>(level)</td>
+<td>Return vector of label values for requested level, equal to the length of the index.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.get_loc.html#pandas.MultiIndex.get_loc" title="pandas.MultiIndex.get_loc"><code class="xref py py-obj docutils literal"><span class="pre">get_loc</span></code></a>(key[,&nbsp;method])</td>
+<td>Get location for a label or a tuple of labels as an integer, slice or boolean mask.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.get_loc_level.html#pandas.MultiIndex.get_loc_level" title="pandas.MultiIndex.get_loc_level"><code class="xref py py-obj docutils literal"><span class="pre">get_loc_level</span></code></a>(key[,&nbsp;level,&nbsp;drop_level])</td>
+<td>Get both the location for the requested label(s) and the resulting sliced index.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.get_locs.html#pandas.MultiIndex.get_locs" title="pandas.MultiIndex.get_locs"><code class="xref py py-obj docutils literal"><span class="pre">get_locs</span></code></a>(seq)</td>
+<td>Get location for a given label/slice/list/mask or a sequence of such as an array of integers.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.get_major_bounds.html#pandas.MultiIndex.get_major_bounds" title="pandas.MultiIndex.get_major_bounds"><code class="xref py py-obj docutils literal"><span class="pre">get_major_bounds</span></code></a>([start,&nbsp;end,&nbsp;step,&nbsp;kind])</td>
+<td>For an ordered MultiIndex, compute the slice locations for input labels.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.get_slice_bound.html#pandas.MultiIndex.get_slice_bound" title="pandas.MultiIndex.get_slice_bound"><code class="xref py py-obj docutils literal"><span class="pre">get_slice_bound</span></code></a>(label,&nbsp;side,&nbsp;kind)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.get_value.html#pandas.MultiIndex.get_value" title="pandas.MultiIndex.get_value"><code class="xref py py-obj docutils literal"><span class="pre">get_value</span></code></a>(series,&nbsp;key)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.get_values.html#pandas.MultiIndex.get_values" title="pandas.MultiIndex.get_values"><code class="xref py py-obj docutils literal"><span class="pre">get_values</span></code></a>()</td>
+<td>return the underlying data as an ndarray</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.groupby.html#pandas.MultiIndex.groupby" title="pandas.MultiIndex.groupby"><code class="xref py py-obj docutils literal"><span class="pre">groupby</span></code></a>(values)</td>
+<td>Group the index labels by a given array of values.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.holds_integer.html#pandas.MultiIndex.holds_integer" title="pandas.MultiIndex.holds_integer"><code class="xref py py-obj docutils literal"><span class="pre">holds_integer</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.identical.html#pandas.MultiIndex.identical" title="pandas.MultiIndex.identical"><code class="xref py py-obj docutils literal"><span class="pre">identical</span></code></a>(other)</td>
+<td>Similar to equals, but check that other comparable attributes are</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.insert.html#pandas.MultiIndex.insert" title="pandas.MultiIndex.insert"><code class="xref py py-obj docutils literal"><span class="pre">insert</span></code></a>(loc,&nbsp;item)</td>
+<td>Make new MultiIndex inserting new item at location</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.intersection.html#pandas.MultiIndex.intersection" title="pandas.MultiIndex.intersection"><code class="xref py py-obj docutils literal"><span class="pre">intersection</span></code></a>(other)</td>
+<td>Form the intersection of two MultiIndex objects, sorting if possible</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.is_.html#pandas.MultiIndex.is_" title="pandas.MultiIndex.is_"><code class="xref py py-obj docutils literal"><span class="pre">is_</span></code></a>(other)</td>
+<td>More flexible, faster check like <code class="docutils literal"><span class="pre">is</span></code> but that works through views</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.is_boolean.html#pandas.MultiIndex.is_boolean" title="pandas.MultiIndex.is_boolean"><code class="xref py py-obj docutils literal"><span class="pre">is_boolean</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.is_categorical.html#pandas.MultiIndex.is_categorical" title="pandas.MultiIndex.is_categorical"><code class="xref py py-obj docutils literal"><span class="pre">is_categorical</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.is_floating.html#pandas.MultiIndex.is_floating" title="pandas.MultiIndex.is_floating"><code class="xref py py-obj docutils literal"><span class="pre">is_floating</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.is_integer.html#pandas.MultiIndex.is_integer" title="pandas.MultiIndex.is_integer"><code class="xref py py-obj docutils literal"><span class="pre">is_integer</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.is_interval.html#pandas.MultiIndex.is_interval" title="pandas.MultiIndex.is_interval"><code class="xref py py-obj docutils literal"><span class="pre">is_interval</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.is_lexsorted.html#pandas.MultiIndex.is_lexsorted" title="pandas.MultiIndex.is_lexsorted"><code class="xref py py-obj docutils literal"><span class="pre">is_lexsorted</span></code></a>()</td>
+<td>Return True if the labels are lexicographically sorted</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.is_lexsorted_for_tuple.html#pandas.MultiIndex.is_lexsorted_for_tuple" title="pandas.MultiIndex.is_lexsorted_for_tuple"><code class="xref py py-obj docutils literal"><span class="pre">is_lexsorted_for_tuple</span></code></a>(tup)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.is_mixed.html#pandas.MultiIndex.is_mixed" title="pandas.MultiIndex.is_mixed"><code class="xref py py-obj docutils literal"><span class="pre">is_mixed</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.is_numeric.html#pandas.MultiIndex.is_numeric" title="pandas.MultiIndex.is_numeric"><code class="xref py py-obj docutils literal"><span class="pre">is_numeric</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.is_object.html#pandas.MultiIndex.is_object" title="pandas.MultiIndex.is_object"><code class="xref py py-obj docutils literal"><span class="pre">is_object</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.is_type_compatible.html#pandas.MultiIndex.is_type_compatible" title="pandas.MultiIndex.is_type_compatible"><code class="xref py py-obj docutils literal"><span class="pre">is_type_compatible</span></code></a>(kind)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.isin.html#pandas.MultiIndex.isin" title="pandas.MultiIndex.isin"><code class="xref py py-obj docutils literal"><span class="pre">isin</span></code></a>(values[,&nbsp;level])</td>
+<td>Compute boolean array of whether each index value is found in the passed set of values.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.isna.html#pandas.MultiIndex.isna" title="pandas.MultiIndex.isna"><code class="xref py py-obj docutils literal"><span class="pre">isna</span></code></a>()</td>
+<td>Detect missing values</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.isnull.html#pandas.MultiIndex.isnull" title="pandas.MultiIndex.isnull"><code class="xref py py-obj docutils literal"><span class="pre">isnull</span></code></a>()</td>
+<td>Detect missing values</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.item.html#pandas.MultiIndex.item" title="pandas.MultiIndex.item"><code class="xref py py-obj docutils literal"><span class="pre">item</span></code></a>()</td>
+<td>return the first element of the underlying data as a python</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.join.html#pandas.MultiIndex.join" title="pandas.MultiIndex.join"><code class="xref py py-obj docutils literal"><span class="pre">join</span></code></a>(other[,&nbsp;how,&nbsp;level,&nbsp;return_indexers,&nbsp;sort])</td>
+<td><em>this is an internal non-public method</em></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.map.html#pandas.MultiIndex.map" title="pandas.MultiIndex.map"><code class="xref py py-obj docutils literal"><span class="pre">map</span></code></a>(mapper)</td>
+<td>Apply mapper function to an index.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.max.html#pandas.MultiIndex.max" title="pandas.MultiIndex.max"><code class="xref py py-obj docutils literal"><span class="pre">max</span></code></a>()</td>
+<td>The maximum value of the object</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.memory_usage.html#pandas.MultiIndex.memory_usage" title="pandas.MultiIndex.memory_usage"><code class="xref py py-obj docutils literal"><span class="pre">memory_usage</span></code></a>([deep])</td>
+<td>Memory usage of my values</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.min.html#pandas.MultiIndex.min" title="pandas.MultiIndex.min"><code class="xref py py-obj docutils literal"><span class="pre">min</span></code></a>()</td>
+<td>The minimum value of the object</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.notna.html#pandas.MultiIndex.notna" title="pandas.MultiIndex.notna"><code class="xref py py-obj docutils literal"><span class="pre">notna</span></code></a>()</td>
+<td>Inverse of isna</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.notnull.html#pandas.MultiIndex.notnull" title="pandas.MultiIndex.notnull"><code class="xref py py-obj docutils literal"><span class="pre">notnull</span></code></a>()</td>
+<td>Inverse of isna</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.nunique.html#pandas.MultiIndex.nunique" title="pandas.MultiIndex.nunique"><code class="xref py py-obj docutils literal"><span class="pre">nunique</span></code></a>([dropna])</td>
+<td>Return number of unique elements in the object.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.putmask.html#pandas.MultiIndex.putmask" title="pandas.MultiIndex.putmask"><code class="xref py py-obj docutils literal"><span class="pre">putmask</span></code></a>(mask,&nbsp;value)</td>
+<td>return a new Index of the values set with the mask</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.ravel.html#pandas.MultiIndex.ravel" title="pandas.MultiIndex.ravel"><code class="xref py py-obj docutils literal"><span class="pre">ravel</span></code></a>([order])</td>
+<td>return an ndarray of the flattened values of the underlying data</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.reindex.html#pandas.MultiIndex.reindex" title="pandas.MultiIndex.reindex"><code class="xref py py-obj docutils literal"><span class="pre">reindex</span></code></a>(target[,&nbsp;method,&nbsp;level,&nbsp;limit,&nbsp;...])</td>
+<td>Create index with target&#8217;s values (move/add/delete values as necessary)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.remove_unused_levels.html#pandas.MultiIndex.remove_unused_levels" title="pandas.MultiIndex.remove_unused_levels"><code class="xref py py-obj docutils literal"><span class="pre">remove_unused_levels</span></code></a>()</td>
+<td>create a new MultiIndex from the current that removing</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.rename.html#pandas.MultiIndex.rename" title="pandas.MultiIndex.rename"><code class="xref py py-obj docutils literal"><span class="pre">rename</span></code></a>(names[,&nbsp;level,&nbsp;inplace])</td>
+<td>Set new names on index.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.reorder_levels.html#pandas.MultiIndex.reorder_levels" title="pandas.MultiIndex.reorder_levels"><code class="xref py py-obj docutils literal"><span class="pre">reorder_levels</span></code></a>(order)</td>
+<td>Rearrange levels using input order.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.repeat.html#pandas.MultiIndex.repeat" title="pandas.MultiIndex.repeat"><code class="xref py py-obj docutils literal"><span class="pre">repeat</span></code></a>(repeats,&nbsp;*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.reshape.html#pandas.MultiIndex.reshape" title="pandas.MultiIndex.reshape"><code class="xref py py-obj docutils literal"><span class="pre">reshape</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td>NOT IMPLEMENTED: do not call this method, as reshaping is not supported for Index objects and will raise an error.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.searchsorted.html#pandas.MultiIndex.searchsorted" title="pandas.MultiIndex.searchsorted"><code class="xref py py-obj docutils literal"><span class="pre">searchsorted</span></code></a>(value[,&nbsp;side,&nbsp;sorter])</td>
+<td>Find indices where elements should be inserted to maintain order.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.set_labels.html#pandas.MultiIndex.set_labels" title="pandas.MultiIndex.set_labels"><code class="xref py py-obj docutils literal"><span class="pre">set_labels</span></code></a>(labels[,&nbsp;level,&nbsp;inplace,&nbsp;...])</td>
+<td>Set new labels on MultiIndex.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.set_levels.html#pandas.MultiIndex.set_levels" title="pandas.MultiIndex.set_levels"><code class="xref py py-obj docutils literal"><span class="pre">set_levels</span></code></a>(levels[,&nbsp;level,&nbsp;inplace,&nbsp;...])</td>
+<td>Set new levels on MultiIndex.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.set_names.html#pandas.MultiIndex.set_names" title="pandas.MultiIndex.set_names"><code class="xref py py-obj docutils literal"><span class="pre">set_names</span></code></a>(names[,&nbsp;level,&nbsp;inplace])</td>
+<td>Set new names on index.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.set_value.html#pandas.MultiIndex.set_value" title="pandas.MultiIndex.set_value"><code class="xref py py-obj docutils literal"><span class="pre">set_value</span></code></a>(arr,&nbsp;key,&nbsp;value)</td>
+<td>Fast lookup of value from 1-dimensional ndarray.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.shift.html#pandas.MultiIndex.shift" title="pandas.MultiIndex.shift"><code class="xref py py-obj docutils literal"><span class="pre">shift</span></code></a>([periods,&nbsp;freq])</td>
+<td>Shift Index containing datetime objects by input number of periods and</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.slice_indexer.html#pandas.MultiIndex.slice_indexer" title="pandas.MultiIndex.slice_indexer"><code class="xref py py-obj docutils literal"><span class="pre">slice_indexer</span></code></a>([start,&nbsp;end,&nbsp;step,&nbsp;kind])</td>
+<td>For an ordered Index, compute the slice indexer for input labels and</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.slice_locs.html#pandas.MultiIndex.slice_locs" title="pandas.MultiIndex.slice_locs"><code class="xref py py-obj docutils literal"><span class="pre">slice_locs</span></code></a>([start,&nbsp;end,&nbsp;step,&nbsp;kind])</td>
+<td>For an ordered MultiIndex, compute the slice locations for input labels.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.sort.html#pandas.MultiIndex.sort" title="pandas.MultiIndex.sort"><code class="xref py py-obj docutils literal"><span class="pre">sort</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.sort_values.html#pandas.MultiIndex.sort_values" title="pandas.MultiIndex.sort_values"><code class="xref py py-obj docutils literal"><span class="pre">sort_values</span></code></a>([return_indexer,&nbsp;ascending])</td>
+<td>Return sorted copy of Index</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.sortlevel.html#pandas.MultiIndex.sortlevel" title="pandas.MultiIndex.sortlevel"><code class="xref py py-obj docutils literal"><span class="pre">sortlevel</span></code></a>([level,&nbsp;ascending,&nbsp;sort_remaining])</td>
+<td>Sort MultiIndex at the requested level.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.str.html#pandas.MultiIndex.str" title="pandas.MultiIndex.str"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a></td>
+<td>alias of <code class="xref py py-class docutils literal"><span class="pre">StringMethods</span></code></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.summary.html#pandas.MultiIndex.summary" title="pandas.MultiIndex.summary"><code class="xref py py-obj docutils literal"><span class="pre">summary</span></code></a>([name])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.swaplevel.html#pandas.MultiIndex.swaplevel" title="pandas.MultiIndex.swaplevel"><code class="xref py py-obj docutils literal"><span class="pre">swaplevel</span></code></a>([i,&nbsp;j])</td>
+<td>Swap level i with level j.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.symmetric_difference.html#pandas.MultiIndex.symmetric_difference" title="pandas.MultiIndex.symmetric_difference"><code class="xref py py-obj docutils literal"><span class="pre">symmetric_difference</span></code></a>(other[,&nbsp;result_name])</td>
+<td>Compute the symmetric difference of two Index objects.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.take.html#pandas.MultiIndex.take" title="pandas.MultiIndex.take"><code class="xref py py-obj docutils literal"><span class="pre">take</span></code></a>(indices[,&nbsp;axis,&nbsp;allow_fill,&nbsp;fill_value])</td>
+<td>return a new MultiIndex of the values selected by the indices</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.to_datetime.html#pandas.MultiIndex.to_datetime" title="pandas.MultiIndex.to_datetime"><code class="xref py py-obj docutils literal"><span class="pre">to_datetime</span></code></a>([dayfirst])</td>
+<td>DEPRECATED: use <a class="reference internal" href="pandas.to_datetime.html#pandas.to_datetime" title="pandas.to_datetime"><code class="xref py py-meth docutils literal"><span class="pre">pandas.to_datetime()</span></code></a> instead.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.to_frame.html#pandas.MultiIndex.to_frame" title="pandas.MultiIndex.to_frame"><code class="xref py py-obj docutils literal"><span class="pre">to_frame</span></code></a>([index])</td>
+<td>Create a DataFrame with the levels of the MultiIndex as columns.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.to_hierarchical.html#pandas.MultiIndex.to_hierarchical" title="pandas.MultiIndex.to_hierarchical"><code class="xref py py-obj docutils literal"><span class="pre">to_hierarchical</span></code></a>(n_repeat[,&nbsp;n_shuffle])</td>
+<td>Return a MultiIndex reshaped to conform to the shapes given by n_repeat and n_shuffle.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.to_native_types.html#pandas.MultiIndex.to_native_types" title="pandas.MultiIndex.to_native_types"><code class="xref py py-obj docutils literal"><span class="pre">to_native_types</span></code></a>([slicer])</td>
+<td>Format specified values of <cite>self</cite> and return them.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.to_series.html#pandas.MultiIndex.to_series" title="pandas.MultiIndex.to_series"><code class="xref py py-obj docutils literal"><span class="pre">to_series</span></code></a>(**kwargs)</td>
+<td>Create a Series with both index and values equal to the index keys</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.tolist.html#pandas.MultiIndex.tolist" title="pandas.MultiIndex.tolist"><code class="xref py py-obj docutils literal"><span class="pre">tolist</span></code></a>()</td>
+<td>Return a list of the values.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.transpose.html#pandas.MultiIndex.transpose" title="pandas.MultiIndex.transpose"><code class="xref py py-obj docutils literal"><span class="pre">transpose</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td>return the transpose, which is by definition self</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.truncate.html#pandas.MultiIndex.truncate" title="pandas.MultiIndex.truncate"><code class="xref py py-obj docutils literal"><span class="pre">truncate</span></code></a>([before,&nbsp;after])</td>
+<td>Slice index between two labels / tuples, return new MultiIndex</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.union.html#pandas.MultiIndex.union" title="pandas.MultiIndex.union"><code class="xref py py-obj docutils literal"><span class="pre">union</span></code></a>(other)</td>
+<td>Form the union of two MultiIndex objects, sorting if possible</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.unique.html#pandas.MultiIndex.unique" title="pandas.MultiIndex.unique"><code class="xref py py-obj docutils literal"><span class="pre">unique</span></code></a>()</td>
+<td>Return unique values in the object.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.value_counts.html#pandas.MultiIndex.value_counts" title="pandas.MultiIndex.value_counts"><code class="xref py py-obj docutils literal"><span class="pre">value_counts</span></code></a>([normalize,&nbsp;sort,&nbsp;ascending,&nbsp;...])</td>
+<td>Returns object containing counts of unique values.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.MultiIndex.view.html#pandas.MultiIndex.view" title="pandas.MultiIndex.view"><code class="xref py py-obj docutils literal"><span class="pre">view</span></code></a>([cls])</td>
+<td>this is defined as a copy with the same identity</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.MultiIndex.where.html#pandas.MultiIndex.where" title="pandas.MultiIndex.where"><code class="xref py py-obj docutils literal"><span class="pre">where</span></code></a>(cond[,&nbsp;other])</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="clearer"></div>
+        </div>
+    </div>
+</div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pandas.MultiIndex.T.html" title="pandas.MultiIndex.T"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pandas.IntervalIndex.from_intervals.html" title="pandas.IntervalIndex.from_intervals"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pandas 0.22.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API Reference</a> &#187;</li> 
+      </ul>
+    </div>
+<style type="text/css">
+    .scrollToTop {
+        text-align: center;
+        font-weight: bold;
+        position: fixed;
+        bottom: 60px;
+        right: 40px;
+        display: none;
+    }
+</style>
+<a href="#" class="scrollToTop">Scroll To Top</a>
+<script type="text/javascript">
+$(document).ready(function() {
+    //Check to see if the window is top if not then display button
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 200) {
+            $('.scrollToTop').fadeIn();
+        } else {
+            $('.scrollToTop').fadeOut();
+        }
+    });
+
+    //Click event to scroll to top
+    $('.scrollToTop').click(function() {
+        $('html, body').animate({
+            scrollTop: 0
+        }, 500);
+        return false;
+    });
+});
+</script>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27880019-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </body>
+</html>

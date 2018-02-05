@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Chebyshev Module (numpy.polynomial.chebyshev) &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" >
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../index.html" >
+    <link rel="up" title="Polynomial Package" href="routines.polynomials.package.html" >
+    <link rel="next" title="numpy.polynomial.chebyshev.Chebyshev" href="generated/numpy.polynomial.chebyshev.Chebyshev.html" >
+    <link rel="prev" title="numpy.polynomial.polynomial.polyline" href="generated/numpy.polynomial.polynomial.polyline.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="routines.html" >Routines</a></li>
+          <li class="active"><a href="routines.polynomials.html" >Polynomials</a></li>
+          <li class="active"><a href="routines.polynomials.package.html" accesskey="U">Polynomial Package</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="generated/numpy.polynomial.chebyshev.Chebyshev.html" title="numpy.polynomial.chebyshev.Chebyshev"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="generated/numpy.polynomial.polynomial.polyline.html" title="numpy.polynomial.polynomial.polyline"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Chebyshev Module (<code class="docutils literal"><span class="pre">numpy.polynomial.chebyshev</span></code>)</a><ul>
+<li><a class="reference internal" href="#chebyshev-class">Chebyshev Class</a></li>
+<li><a class="reference internal" href="#basics">Basics</a></li>
+<li><a class="reference internal" href="#fitting">Fitting</a></li>
+<li><a class="reference internal" href="#calculus">Calculus</a></li>
+<li><a class="reference internal" href="#algebra">Algebra</a></li>
+<li><a class="reference internal" href="#quadrature">Quadrature</a></li>
+<li><a class="reference internal" href="#miscellaneous">Miscellaneous</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="generated/numpy.polynomial.polynomial.polyline.html"
+                        title="previous chapter">numpy.polynomial.polynomial.polyline</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="generated/numpy.polynomial.chebyshev.Chebyshev.html"
+                        title="next chapter">numpy.polynomial.chebyshev.Chebyshev</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="chebyshev-module-numpy-polynomial-chebyshev">
+<h1>Chebyshev Module (<code class="xref py py-mod docutils literal"><span class="pre">numpy.polynomial.chebyshev</span></code>)<a class="headerlink" href="#chebyshev-module-numpy-polynomial-chebyshev" title="Permalink to this headline">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.4.0.</span></p>
+</div>
+<p>This module provides a number of objects (mostly functions) useful for
+dealing with Chebyshev series, including a <a class="reference internal" href="generated/numpy.polynomial.chebyshev.Chebyshev.html#numpy.polynomial.chebyshev.Chebyshev" title="numpy.polynomial.chebyshev.Chebyshev"><code class="xref py py-obj docutils literal"><span class="pre">Chebyshev</span></code></a> class that
+encapsulates the usual arithmetic operations.  (General information
+on how this module represents and works with such polynomials is in the
+docstring for its &#8220;parent&#8221; sub-package, <code class="xref py py-obj docutils literal"><span class="pre">numpy.polynomial</span></code>).</p>
+<div class="section" id="chebyshev-class">
+<h2>Chebyshev Class<a class="headerlink" href="#chebyshev-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.Chebyshev.html#numpy.polynomial.chebyshev.Chebyshev" title="numpy.polynomial.chebyshev.Chebyshev"><code class="xref py py-obj docutils literal"><span class="pre">Chebyshev</span></code></a>(coef[,&nbsp;domain,&nbsp;window])</td>
+<td>A Chebyshev series class.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="basics">
+<h2>Basics<a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebval.html#numpy.polynomial.chebyshev.chebval" title="numpy.polynomial.chebyshev.chebval"><code class="xref py py-obj docutils literal"><span class="pre">chebval</span></code></a>(x,&nbsp;c[,&nbsp;tensor])</td>
+<td>Evaluate a Chebyshev series at points x.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebval2d.html#numpy.polynomial.chebyshev.chebval2d" title="numpy.polynomial.chebyshev.chebval2d"><code class="xref py py-obj docutils literal"><span class="pre">chebval2d</span></code></a>(x,&nbsp;y,&nbsp;c)</td>
+<td>Evaluate a 2-D Chebyshev series at points (x, y).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebval3d.html#numpy.polynomial.chebyshev.chebval3d" title="numpy.polynomial.chebyshev.chebval3d"><code class="xref py py-obj docutils literal"><span class="pre">chebval3d</span></code></a>(x,&nbsp;y,&nbsp;z,&nbsp;c)</td>
+<td>Evaluate a 3-D Chebyshev series at points (x, y, z).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebgrid2d.html#numpy.polynomial.chebyshev.chebgrid2d" title="numpy.polynomial.chebyshev.chebgrid2d"><code class="xref py py-obj docutils literal"><span class="pre">chebgrid2d</span></code></a>(x,&nbsp;y,&nbsp;c)</td>
+<td>Evaluate a 2-D Chebyshev series on the Cartesian product of x and y.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebgrid3d.html#numpy.polynomial.chebyshev.chebgrid3d" title="numpy.polynomial.chebyshev.chebgrid3d"><code class="xref py py-obj docutils literal"><span class="pre">chebgrid3d</span></code></a>(x,&nbsp;y,&nbsp;z,&nbsp;c)</td>
+<td>Evaluate a 3-D Chebyshev series on the Cartesian product of x, y, and z.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebroots.html#numpy.polynomial.chebyshev.chebroots" title="numpy.polynomial.chebyshev.chebroots"><code class="xref py py-obj docutils literal"><span class="pre">chebroots</span></code></a>(c)</td>
+<td>Compute the roots of a Chebyshev series.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebfromroots.html#numpy.polynomial.chebyshev.chebfromroots" title="numpy.polynomial.chebyshev.chebfromroots"><code class="xref py py-obj docutils literal"><span class="pre">chebfromroots</span></code></a>(roots)</td>
+<td>Generate a Chebyshev series with given roots.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="fitting">
+<h2>Fitting<a class="headerlink" href="#fitting" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebfit.html#numpy.polynomial.chebyshev.chebfit" title="numpy.polynomial.chebyshev.chebfit"><code class="xref py py-obj docutils literal"><span class="pre">chebfit</span></code></a>(x,&nbsp;y,&nbsp;deg[,&nbsp;rcond,&nbsp;full,&nbsp;w])</td>
+<td>Least squares fit of Chebyshev series to data.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebvander.html#numpy.polynomial.chebyshev.chebvander" title="numpy.polynomial.chebyshev.chebvander"><code class="xref py py-obj docutils literal"><span class="pre">chebvander</span></code></a>(x,&nbsp;deg)</td>
+<td>Pseudo-Vandermonde matrix of given degree.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebvander2d.html#numpy.polynomial.chebyshev.chebvander2d" title="numpy.polynomial.chebyshev.chebvander2d"><code class="xref py py-obj docutils literal"><span class="pre">chebvander2d</span></code></a>(x,&nbsp;y,&nbsp;deg)</td>
+<td>Pseudo-Vandermonde matrix of given degrees.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebvander3d.html#numpy.polynomial.chebyshev.chebvander3d" title="numpy.polynomial.chebyshev.chebvander3d"><code class="xref py py-obj docutils literal"><span class="pre">chebvander3d</span></code></a>(x,&nbsp;y,&nbsp;z,&nbsp;deg)</td>
+<td>Pseudo-Vandermonde matrix of given degrees.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="calculus">
+<h2>Calculus<a class="headerlink" href="#calculus" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebder.html#numpy.polynomial.chebyshev.chebder" title="numpy.polynomial.chebyshev.chebder"><code class="xref py py-obj docutils literal"><span class="pre">chebder</span></code></a>(c[,&nbsp;m,&nbsp;scl,&nbsp;axis])</td>
+<td>Differentiate a Chebyshev series.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebint.html#numpy.polynomial.chebyshev.chebint" title="numpy.polynomial.chebyshev.chebint"><code class="xref py py-obj docutils literal"><span class="pre">chebint</span></code></a>(c[,&nbsp;m,&nbsp;k,&nbsp;lbnd,&nbsp;scl,&nbsp;axis])</td>
+<td>Integrate a Chebyshev series.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="algebra">
+<h2>Algebra<a class="headerlink" href="#algebra" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebadd.html#numpy.polynomial.chebyshev.chebadd" title="numpy.polynomial.chebyshev.chebadd"><code class="xref py py-obj docutils literal"><span class="pre">chebadd</span></code></a>(c1,&nbsp;c2)</td>
+<td>Add one Chebyshev series to another.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebsub.html#numpy.polynomial.chebyshev.chebsub" title="numpy.polynomial.chebyshev.chebsub"><code class="xref py py-obj docutils literal"><span class="pre">chebsub</span></code></a>(c1,&nbsp;c2)</td>
+<td>Subtract one Chebyshev series from another.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebmul.html#numpy.polynomial.chebyshev.chebmul" title="numpy.polynomial.chebyshev.chebmul"><code class="xref py py-obj docutils literal"><span class="pre">chebmul</span></code></a>(c1,&nbsp;c2)</td>
+<td>Multiply one Chebyshev series by another.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebmulx.html#numpy.polynomial.chebyshev.chebmulx" title="numpy.polynomial.chebyshev.chebmulx"><code class="xref py py-obj docutils literal"><span class="pre">chebmulx</span></code></a>(c)</td>
+<td>Multiply a Chebyshev series by x.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebdiv.html#numpy.polynomial.chebyshev.chebdiv" title="numpy.polynomial.chebyshev.chebdiv"><code class="xref py py-obj docutils literal"><span class="pre">chebdiv</span></code></a>(c1,&nbsp;c2)</td>
+<td>Divide one Chebyshev series by another.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebpow.html#numpy.polynomial.chebyshev.chebpow" title="numpy.polynomial.chebyshev.chebpow"><code class="xref py py-obj docutils literal"><span class="pre">chebpow</span></code></a>(c,&nbsp;pow[,&nbsp;maxpower])</td>
+<td>Raise a Chebyshev series to a power.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="quadrature">
+<h2>Quadrature<a class="headerlink" href="#quadrature" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebgauss.html#numpy.polynomial.chebyshev.chebgauss" title="numpy.polynomial.chebyshev.chebgauss"><code class="xref py py-obj docutils literal"><span class="pre">chebgauss</span></code></a>(deg)</td>
+<td>Gauss-Chebyshev quadrature.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebweight.html#numpy.polynomial.chebyshev.chebweight" title="numpy.polynomial.chebyshev.chebweight"><code class="xref py py-obj docutils literal"><span class="pre">chebweight</span></code></a>(x)</td>
+<td>The weight function of the Chebyshev polynomials.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="miscellaneous">
+<h2>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebcompanion.html#numpy.polynomial.chebyshev.chebcompanion" title="numpy.polynomial.chebyshev.chebcompanion"><code class="xref py py-obj docutils literal"><span class="pre">chebcompanion</span></code></a>(c)</td>
+<td>Return the scaled companion matrix of c.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebdomain.html#numpy.polynomial.chebyshev.chebdomain" title="numpy.polynomial.chebyshev.chebdomain"><code class="xref py py-obj docutils literal"><span class="pre">chebdomain</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebzero.html#numpy.polynomial.chebyshev.chebzero" title="numpy.polynomial.chebyshev.chebzero"><code class="xref py py-obj docutils literal"><span class="pre">chebzero</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebone.html#numpy.polynomial.chebyshev.chebone" title="numpy.polynomial.chebyshev.chebone"><code class="xref py py-obj docutils literal"><span class="pre">chebone</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebx.html#numpy.polynomial.chebyshev.chebx" title="numpy.polynomial.chebyshev.chebx"><code class="xref py py-obj docutils literal"><span class="pre">chebx</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebtrim.html#numpy.polynomial.chebyshev.chebtrim" title="numpy.polynomial.chebyshev.chebtrim"><code class="xref py py-obj docutils literal"><span class="pre">chebtrim</span></code></a>(c[,&nbsp;tol])</td>
+<td>Remove &#8220;small&#8221; &#8220;trailing&#8221; coefficients from a polynomial.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.chebline.html#numpy.polynomial.chebyshev.chebline" title="numpy.polynomial.chebyshev.chebline"><code class="xref py py-obj docutils literal"><span class="pre">chebline</span></code></a>(off,&nbsp;scl)</td>
+<td>Chebyshev series whose graph is a straight line.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.cheb2poly.html#numpy.polynomial.chebyshev.cheb2poly" title="numpy.polynomial.chebyshev.cheb2poly"><code class="xref py py-obj docutils literal"><span class="pre">cheb2poly</span></code></a>(c)</td>
+<td>Convert a Chebyshev series to a polynomial.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.polynomial.chebyshev.poly2cheb.html#numpy.polynomial.chebyshev.poly2cheb" title="numpy.polynomial.chebyshev.poly2cheb"><code class="xref py py-obj docutils literal"><span class="pre">poly2cheb</span></code></a>(pol)</td>
+<td>Convert a polynomial to a Chebyshev series.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

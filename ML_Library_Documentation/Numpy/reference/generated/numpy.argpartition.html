@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.argpartition &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="Sorting, searching, and counting" href="../routines.sort.html" >
+    <link rel="next" title="numpy.argmax" href="numpy.argmax.html" >
+    <link rel="prev" title="numpy.partition" href="numpy.partition.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.sort.html" accesskey="U">Sorting, searching, and counting</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.argmax.html" title="numpy.argmax"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.partition.html" title="numpy.partition"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.partition.html"
+                        title="previous chapter">numpy.partition</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.argmax.html"
+                        title="next chapter">numpy.argmax</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-argpartition">
+<h1>numpy.argpartition<a class="headerlink" href="#numpy-argpartition" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="numpy.argpartition">
+<code class="descclassname">numpy.</code><code class="descname">argpartition</code><span class="sig-paren">(</span><em>a</em>, <em>kth</em>, <em>axis=-1</em>, <em>kind='introselect'</em>, <em>order=None</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/numpy/numpy/blob/v1.14.0/numpy/core/fromnumeric.py#L668-L731"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy.argpartition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform an indirect partition along the given axis using the
+algorithm specified by the <em class="xref py py-obj">kind</em> keyword. It returns an array of
+indices of the same shape as <em class="xref py py-obj">a</em> that index data along the given
+axis in partitioned order.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.8.0.</span></p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : array_like</p>
+<blockquote>
+<div><p>Array to sort.</p>
+</div></blockquote>
+<p><strong>kth</strong> : int or sequence of ints</p>
+<blockquote>
+<div><p>Element index to partition by. The k-th element will be in its
+final sorted position and all smaller elements will be moved
+before it and all larger elements behind it. The order all
+elements in the partitions is undefined. If provided with a
+sequence of k-th it will partition all of them into their sorted
+position at once.</p>
+</div></blockquote>
+<p><strong>axis</strong> : int or None, optional</p>
+<blockquote>
+<div><p>Axis along which to sort. The default is -1 (the last axis). If
+None, the flattened array is used.</p>
+</div></blockquote>
+<p><strong>kind</strong> : {&#8216;introselect&#8217;}, optional</p>
+<blockquote>
+<div><p>Selection algorithm. Default is &#8216;introselect&#8217;</p>
+</div></blockquote>
+<p><strong>order</strong> : str or list of str, optional</p>
+<blockquote>
+<div><p>When <em class="xref py py-obj">a</em> is an array with fields defined, this argument
+specifies which fields to compare first, second, etc. A single
+field can be specified as a string, and not all fields need be
+specified, but unspecified fields will still be used, in the
+order in which they come up in the dtype, to break ties.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>index_array</strong> : ndarray, int</p>
+<blockquote class="last">
+<div><p>Array of indices that partition <em class="xref py py-obj">a</em> along the specified axis.
+In other words, <code class="docutils literal"><span class="pre">a[index_array]</span></code> yields a partitioned <em class="xref py py-obj">a</em>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="numpy.partition.html#numpy.partition" title="numpy.partition"><code class="xref py py-obj docutils literal"><span class="pre">partition</span></code></a></dt>
+<dd>Describes partition algorithms used.</dd>
+<dt><a class="reference internal" href="numpy.ndarray.partition.html#numpy.ndarray.partition" title="numpy.ndarray.partition"><code class="xref py py-obj docutils literal"><span class="pre">ndarray.partition</span></code></a></dt>
+<dd>Inplace partition.</dd>
+<dt><a class="reference internal" href="numpy.argsort.html#numpy.argsort" title="numpy.argsort"><code class="xref py py-obj docutils literal"><span class="pre">argsort</span></code></a></dt>
+<dd>Full indirect sort</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>See <a class="reference internal" href="numpy.partition.html#numpy.partition" title="numpy.partition"><code class="xref py py-obj docutils literal"><span class="pre">partition</span></code></a> for notes on the different selection algorithms.</p>
+<p class="rubric">Examples</p>
+<p>One dimensional array:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argpartition</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]</span>
+<span class="go">array([2, 1, 3, 4])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argpartition</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))]</span>
+<span class="go">array([1, 2, 3, 4])</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">argpartition</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]</span>
+<span class="go">array([2, 1, 3, 4])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

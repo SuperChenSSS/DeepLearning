@@ -1,0 +1,450 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pandas Ecosystem &#8212; pandas 0.22.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.22.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Comparison with R / R libraries" href="comparison_with_r.html" />
+    <link rel="prev" title="rpy2 / R interface" href="r_interface.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="comparison_with_r.html" title="Comparison with R / R libraries"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="r_interface.html" title="rpy2 / R interface"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pandas 0.22.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+<div class="content-wrapper">
+    <div class="content">
+        <div class="document">
+            <div class="sphinxsidebar">
+                <h3>Table Of Contents</h3>
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Package overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10min.html">10 Minutes to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dsintro.html">Intro to Data Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basics.html">Essential Basic Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="text.html">Working with Text Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="options.html">Options and Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indexing.html">Indexing and Selecting Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">MultiIndex / Advanced Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="computation.html">Computational tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="missing_data.html">Working with missing data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="groupby.html">Group By: split-apply-combine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="merging.html">Merge, join, and concatenate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reshaping.html">Reshaping and Pivot Tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timeseries.html">Time Series / Date functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timedeltas.html">Time Deltas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="categorical.html">Categorical Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style.html">Styling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">IO Tools (Text, CSV, HDF5, ...)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="remote_data.html">Remote Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="enhancingperf.html">Enhancing Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sparse.html">Sparse data structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gotchas.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="r_interface.html">rpy2 / R interface</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">pandas Ecosystem</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#statistics-and-machine-learning">Statistics and Machine Learning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#statsmodels">Statsmodels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sklearn-pandas">sklearn-pandas</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#visualization">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#bokeh">Bokeh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#seaborn">seaborn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#yhat-ggplot">yhat/ggplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vincent">Vincent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ipython-vega">IPython Vega</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plotly">Plotly</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#qtpandas">QtPandas</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ecosystem-ide">IDE</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ipython">IPython</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#quantopian-qgrid">quantopian/qgrid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spyder">Spyder</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#api">API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pandas-datareader">pandas-datareader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#quandl-python">quandl/Python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pydatastream">pydatastream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pandasdmx">pandaSDMX</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fredapi">fredapi</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#domain-specific">Domain Specific</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#geopandas">Geopandas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#xarray">xarray</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#out-of-core">Out-of-core</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#dask">Dask</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dask-ml">Dask-ML</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#blaze">Blaze</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#odo">Odo</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#data-validation">Data validation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#engarde">Engarde</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="comparison_with_r.html">Comparison with R / R libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comparison_with_sql.html">Comparison with SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comparison_with_sas.html">Comparison with SAS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer.html">Developer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals.html">Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release.html">Release Notes</a></li>
+</ul>
+
+                <h3 style="margin-top: 1.5em;">Search</h3>
+
+                <form class="search" action="search.html" method="get">
+                    <input type="text" name="q" size="18"/>
+                    <input type="submit" value="Go"/>
+                    <input type="hidden" name="check_keywords" value="yes"/>
+                    <input type="hidden" name="area" value="default"/>
+                </form>
+                <p class="searchtip" style="font-size: 90%">
+                    Enter search terms or a module, class or function name.
+                </p>
+
+            </div>
+             
+            <div class="documentwrapper">
+                <div class="bodywrapper">
+                    <div class="body">
+                        
+  <div class="section" id="pandas-ecosystem">
+<span id="ecosystem"></span><h1>pandas Ecosystem<a class="headerlink" href="#pandas-ecosystem" title="Permalink to this headline">¶</a></h1>
+<p>Increasingly, packages are being built on top of pandas to address specific needs
+in data preparation, analysis and visualization.
+This is encouraging because it means pandas is not only helping users to handle
+their data tasks but also that it provides a better starting point for developers to
+build powerful and more focused data tools.
+The creation of libraries that complement pandas&#8217; functionality also allows pandas
+development to remain focused around it&#8217;s original requirements.</p>
+<p>This is an in-exhaustive list of projects that build on pandas in order to provide
+tools in the PyData space.</p>
+<p>We&#8217;d like to make it easier for users to find these project, if you know of other
+substantial projects that you feel should be on this list, please let us know.</p>
+<div class="section" id="statistics-and-machine-learning">
+<span id="ecosystem-stats"></span><h2>Statistics and Machine Learning<a class="headerlink" href="#statistics-and-machine-learning" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="statsmodels">
+<h3><a class="reference external" href="http://www.statsmodels.org/">Statsmodels</a><a class="headerlink" href="#statsmodels" title="Permalink to this headline">¶</a></h3>
+<p>Statsmodels is the prominent python &#8220;statistics and econometrics library&#8221; and it has
+a long-standing special relationship with pandas. Statsmodels provides powerful statistics,
+econometrics, analysis and modeling functionality that is out of pandas&#8217; scope.
+Statsmodels leverages pandas objects as the underlying data container for computation.</p>
+</div>
+<div class="section" id="sklearn-pandas">
+<h3><a class="reference external" href="https://github.com/paulgb/sklearn-pandas">sklearn-pandas</a><a class="headerlink" href="#sklearn-pandas" title="Permalink to this headline">¶</a></h3>
+<p>Use pandas DataFrames in your <a class="reference external" href="http://scikit-learn.org/">scikit-learn</a>
+ML pipeline.</p>
+</div>
+</div>
+<div class="section" id="visualization">
+<span id="ecosystem-visualization"></span><h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="bokeh">
+<h3><a class="reference external" href="http://bokeh.pydata.org">Bokeh</a><a class="headerlink" href="#bokeh" title="Permalink to this headline">¶</a></h3>
+<p>Bokeh is a Python interactive visualization library for large datasets that natively uses
+the latest web technologies. Its goal is to provide elegant, concise construction of novel
+graphics in the style of Protovis/D3, while delivering high-performance interactivity over
+large data to thin clients.</p>
+</div>
+<div class="section" id="seaborn">
+<h3><a class="reference external" href="https://seaborn.pydata.org">seaborn</a><a class="headerlink" href="#seaborn" title="Permalink to this headline">¶</a></h3>
+<p>Seaborn is a Python visualization library based on <a class="reference external" href="http://matplotlib.org">matplotlib</a>.  It provides a high-level, dataset-oriented
+interface for creating attractive statistical graphics. The plotting functions
+in seaborn understand pandas objects and leverage pandas grouping operations
+internally to support concise specification of complex visualizations. Seaborn
+also goes beyond matplotlib and pandas with the option to perform statistical
+estimation while plotting, aggregating across observations and visualizing the
+fit of statistical models to emphasize patterns in a dataset.</p>
+</div>
+<div class="section" id="yhat-ggplot">
+<h3><a class="reference external" href="https://github.com/yhat/ggplot">yhat/ggplot</a><a class="headerlink" href="#yhat-ggplot" title="Permalink to this headline">¶</a></h3>
+<p>Hadley Wickham&#8217;s <a class="reference external" href="http://ggplot2.org/">ggplot2</a> is a foundational exploratory visualization package for the R language.
+Based on <a class="reference external" href="http://www.cs.uic.edu/~wilkinson/TheGrammarOfGraphics/GOG.html">&#8220;The Grammar of Graphics&#8221;</a> it
+provides a powerful, declarative and extremely general way to generate bespoke plots of any kind of data.
+It&#8217;s really quite incredible. Various implementations to other languages are available,
+but a faithful implementation for python users has long been missing. Although still young
+(as of Jan-2014), the <a class="reference external" href="https://github.com/yhat/ggplot">yhat/ggplot</a> project has been
+progressing quickly in that direction.</p>
+</div>
+<div class="section" id="vincent">
+<h3><a class="reference external" href="https://github.com/wrobstory/vincent">Vincent</a><a class="headerlink" href="#vincent" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference external" href="https://github.com/wrobstory/vincent">Vincent</a> project leverages <a class="reference external" href="https://github.com/trifacta/vega">Vega</a>
+(that in turn, leverages <a class="reference external" href="http://d3js.org/">d3</a>) to create
+plots. Although functional, as of Summer 2016 the Vincent project has not been updated
+in over two years and is <a class="reference external" href="https://github.com/wrobstory/vincent#2015-08-12-update">unlikely to receive further updates</a>.</p>
+</div>
+<div class="section" id="ipython-vega">
+<h3><a class="reference external" href="https://github.com/vega/ipyvega">IPython Vega</a><a class="headerlink" href="#ipython-vega" title="Permalink to this headline">¶</a></h3>
+<p>Like Vincent, the <a class="reference external" href="https://github.com/vega/ipyvega">IPython Vega</a> project leverages <a class="reference external" href="https://github.com/trifacta/vega">Vega</a> to create plots, but primarily
+targets the IPython Notebook environment.</p>
+</div>
+<div class="section" id="plotly">
+<h3><a class="reference external" href="https://plot.ly/python">Plotly</a><a class="headerlink" href="#plotly" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="https://plot.ly/">Plotly’s</a> <a class="reference external" href="https://plot.ly/python/">Python API</a> enables interactive figures and web shareability. Maps, 2D, 3D, and live-streaming graphs are rendered with WebGL and <a class="reference external" href="http://d3js.org/">D3.js</a>. The library supports plotting directly from a pandas DataFrame and cloud-based collaboration. Users of <a class="reference external" href="https://plot.ly/python/matplotlib-to-plotly-tutorial/">matplotlib, ggplot for Python, and Seaborn</a> can convert figures into interactive web-based plots. Plots can be drawn in <a class="reference external" href="https://plot.ly/ipython-notebooks/">IPython Notebooks</a> , edited with R or MATLAB, modified in a GUI, or embedded in apps and dashboards. Plotly is free for unlimited sharing, and has <a class="reference external" href="https://plot.ly/product/plans/">cloud</a>, <a class="reference external" href="https://plot.ly/python/offline/">offline</a>, or <a class="reference external" href="https://plot.ly/product/enterprise/">on-premise</a> accounts for private use.</p>
+</div>
+<div class="section" id="qtpandas">
+<h3><a class="reference external" href="https://github.com/draperjames/qtpandas">QtPandas</a><a class="headerlink" href="#qtpandas" title="Permalink to this headline">¶</a></h3>
+<p>Spun off from the main pandas library, the <a class="reference external" href="https://github.com/draperjames/qtpandas">qtpandas</a>
+library enables DataFrame visualization and manipulation in PyQt4 and PySide applications.</p>
+</div>
+</div>
+<div class="section" id="ecosystem-ide">
+<span id="ide"></span><h2>IDE<a class="headerlink" href="#ecosystem-ide" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="ipython">
+<h3><a class="reference external" href="http://ipython.org/documentation.html">IPython</a><a class="headerlink" href="#ipython" title="Permalink to this headline">¶</a></h3>
+<p>IPython is an interactive command shell and distributed computing
+environment.
+IPython Notebook is a web application for creating IPython notebooks.
+An IPython notebook is a JSON document containing an ordered list
+of input/output cells which can contain code, text, mathematics, plots
+and rich media.
+IPython notebooks can be converted to a number of open standard output formats
+(HTML, HTML presentation slides, LaTeX, PDF, ReStructuredText, Markdown,
+Python) through &#8216;Download As&#8217; in the web interface and <code class="docutils literal"><span class="pre">ipython</span> <span class="pre">nbconvert</span></code>
+in a shell.</p>
+<p>Pandas DataFrames implement <code class="docutils literal"><span class="pre">_repr_html_</span></code> methods
+which are utilized by IPython Notebook for displaying
+(abbreviated) HTML tables.  (Note: HTML tables may or may not be
+compatible with non-HTML IPython output formats.)</p>
+</div>
+<div class="section" id="quantopian-qgrid">
+<h3><a class="reference external" href="https://github.com/quantopian/qgrid">quantopian/qgrid</a><a class="headerlink" href="#quantopian-qgrid" title="Permalink to this headline">¶</a></h3>
+<p>qgrid is &#8220;an interactive grid for sorting and filtering
+DataFrames in IPython Notebook&#8221; built with SlickGrid.</p>
+</div>
+<div class="section" id="spyder">
+<h3><a class="reference external" href="https://github.com/spyder-ide/spyder/">Spyder</a><a class="headerlink" href="#spyder" title="Permalink to this headline">¶</a></h3>
+<p>Spyder is a cross-platform Qt-based open-source Python IDE with
+editing, testing, debugging, and introspection features.
+Spyder can now introspect and display Pandas DataFrames and show
+both &#8220;column wise min/max and global min/max coloring.&#8221;</p>
+</div>
+</div>
+<div class="section" id="api">
+<span id="ecosystem-api"></span><h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="pandas-datareader">
+<h3><a class="reference external" href="https://github.com/pydata/pandas-datareader">pandas-datareader</a><a class="headerlink" href="#pandas-datareader" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">pandas-datareader</span></code> is a remote data access library for pandas. <code class="docutils literal"><span class="pre">pandas.io</span></code> from pandas &lt; 0.17.0 is now refactored/split-off to and importable from <code class="docutils literal"><span class="pre">pandas_datareader</span></code> (PyPI:<code class="docutils literal"><span class="pre">pandas-datareader</span></code>). Many/most of the supported APIs have at least a documentation paragraph in the <a class="reference external" href="https://pandas-datareader.readthedocs.io/en/latest/">pandas-datareader docs</a>:</p>
+<p>The following data feeds are available:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Yahoo! Finance</li>
+<li>Google Finance</li>
+<li>FRED</li>
+<li>Fama/French</li>
+<li>World Bank</li>
+<li>OECD</li>
+<li>Eurostat</li>
+<li>EDGAR Index</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="quandl-python">
+<h3><a class="reference external" href="https://github.com/quandl/Python">quandl/Python</a><a class="headerlink" href="#quandl-python" title="Permalink to this headline">¶</a></h3>
+<p>Quandl API for Python wraps the Quandl REST API to return
+Pandas DataFrames with timeseries indexes.</p>
+</div>
+<div class="section" id="pydatastream">
+<h3><a class="reference external" href="https://github.com/vfilimonov/pydatastream">pydatastream</a><a class="headerlink" href="#pydatastream" title="Permalink to this headline">¶</a></h3>
+<p>PyDatastream is a Python interface to the
+<a class="reference external" href="http://dataworks.thomson.com/Dataworks/Enterprise/1.0/">Thomson Dataworks Enterprise (DWE/Datastream)</a>
+SOAP API to return indexed Pandas DataFrames or Panels with financial data.
+This package requires valid credentials for this API (non free).</p>
+</div>
+<div class="section" id="pandasdmx">
+<h3><a class="reference external" href="https://pandasdmx.readthedocs.io">pandaSDMX</a><a class="headerlink" href="#pandasdmx" title="Permalink to this headline">¶</a></h3>
+<p>pandaSDMX is a library to retrieve and acquire statistical data
+and metadata disseminated in
+<a class="reference external" href="http://www.sdmx.org">SDMX</a> 2.1, an ISO-standard
+widely used by institutions such as statistics offices, central banks,
+and international organisations. pandaSDMX can expose datasets and related
+structural metadata including dataflows, code-lists,
+and datastructure definitions as pandas Series
+or multi-indexed DataFrames.</p>
+</div>
+<div class="section" id="fredapi">
+<h3><a class="reference external" href="https://github.com/mortada/fredapi">fredapi</a><a class="headerlink" href="#fredapi" title="Permalink to this headline">¶</a></h3>
+<p>fredapi is a Python interface to the <a class="reference external" href="http://research.stlouisfed.org/fred2/">Federal Reserve Economic Data (FRED)</a>
+provided by the Federal Reserve Bank of St. Louis. It works with both the FRED database and ALFRED database that
+contains point-in-time data (i.e. historic data revisions). fredapi provides a wrapper in python to the FRED
+HTTP API, and also provides several convenient methods for parsing and analyzing point-in-time data from ALFRED.
+fredapi makes use of pandas and returns data in a Series or DataFrame. This module requires a FRED API key that
+you can obtain for free on the FRED website.</p>
+</div>
+</div>
+<div class="section" id="domain-specific">
+<span id="ecosystem-domain"></span><h2>Domain Specific<a class="headerlink" href="#domain-specific" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="geopandas">
+<h3><a class="reference external" href="https://github.com/kjordahl/geopandas">Geopandas</a><a class="headerlink" href="#geopandas" title="Permalink to this headline">¶</a></h3>
+<p>Geopandas extends pandas data objects to include geographic information which support
+geometric operations. If your work entails maps and geographical coordinates, and
+you love pandas, you should take a close look at Geopandas.</p>
+</div>
+<div class="section" id="xarray">
+<h3><a class="reference external" href="https://github.com/pydata/xarray">xarray</a><a class="headerlink" href="#xarray" title="Permalink to this headline">¶</a></h3>
+<p>xarray brings the labeled data power of pandas to the physical sciences by
+providing N-dimensional variants of the core pandas data structures. It aims to
+provide a pandas-like and pandas-compatible toolkit for analytics on multi-
+dimensional arrays, rather than the tabular data for which pandas excels.</p>
+</div>
+</div>
+<div class="section" id="out-of-core">
+<span id="ecosystem-out-of-core"></span><h2>Out-of-core<a class="headerlink" href="#out-of-core" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="dask">
+<h3><a class="reference external" href="https://dask.readthedocs.io/en/latest/">Dask</a><a class="headerlink" href="#dask" title="Permalink to this headline">¶</a></h3>
+<p>Dask is a flexible parallel computing library for analytics. Dask
+provides a familiar <code class="docutils literal"><span class="pre">DataFrame</span></code> interface for out-of-core, parallel and distributed computing.</p>
+</div>
+<div class="section" id="dask-ml">
+<h3><a class="reference external" href="https://dask-ml.readthedocs.io/en/latest/">Dask-ML</a><a class="headerlink" href="#dask-ml" title="Permalink to this headline">¶</a></h3>
+<p>Dask-ML enables parallel and distributed machine learning using Dask alongside existing machine learning libraries like Scikit-Learn, XGBoost, and TensorFlow.</p>
+</div>
+<div class="section" id="blaze">
+<h3><a class="reference external" href="http://blaze.pydata.org/">Blaze</a><a class="headerlink" href="#blaze" title="Permalink to this headline">¶</a></h3>
+<p>Blaze provides a standard API for doing computations with various
+in-memory and on-disk backends: NumPy, Pandas, SQLAlchemy, MongoDB, PyTables,
+PySpark.</p>
+</div>
+<div class="section" id="odo">
+<h3><a class="reference external" href="http://odo.pydata.org">Odo</a><a class="headerlink" href="#odo" title="Permalink to this headline">¶</a></h3>
+<p>Odo provides a uniform API for moving data between different formats. It uses
+pandas own <code class="docutils literal"><span class="pre">read_csv</span></code> for CSV IO and leverages many existing packages such as
+PyTables, h5py, and pymongo to move data between non pandas formats. Its graph
+based approach is also extensible by end users for custom formats that may be
+too specific for the core of odo.</p>
+</div>
+</div>
+<div class="section" id="data-validation">
+<span id="ecosystem-data-validation"></span><h2>Data validation<a class="headerlink" href="#data-validation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="engarde">
+<h3><a class="reference external" href="http://engarde.readthedocs.io/en/latest/">Engarde</a><a class="headerlink" href="#engarde" title="Permalink to this headline">¶</a></h3>
+<p>Engarde is a lightweight library used to explicitly state your assumptions abour your datasets
+and check that they&#8217;re <em>actually</em> true.</p>
+</div>
+</div>
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="clearer"></div>
+        </div>
+    </div>
+</div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="comparison_with_r.html" title="Comparison with R / R libraries"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="r_interface.html" title="rpy2 / R interface"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pandas 0.22.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+<style type="text/css">
+    .scrollToTop {
+        text-align: center;
+        font-weight: bold;
+        position: fixed;
+        bottom: 60px;
+        right: 40px;
+        display: none;
+    }
+</style>
+<a href="#" class="scrollToTop">Scroll To Top</a>
+<script type="text/javascript">
+$(document).ready(function() {
+    //Check to see if the window is top if not then display button
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 200) {
+            $('.scrollToTop').fadeIn();
+        } else {
+            $('.scrollToTop').fadeOut();
+        }
+    });
+
+    //Click event to scroll to top
+    $('.scrollToTop').click(function() {
+        $('html, body').animate({
+            scrollTop: 0
+        }, 500);
+        return false;
+    });
+});
+</script>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27880019-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </body>
+</html>

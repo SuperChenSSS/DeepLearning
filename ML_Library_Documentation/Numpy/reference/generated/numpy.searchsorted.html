@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.searchsorted &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="Sorting, searching, and counting" href="../routines.sort.html" >
+    <link rel="next" title="numpy.extract" href="numpy.extract.html" >
+    <link rel="prev" title="numpy.flatnonzero" href="numpy.flatnonzero.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.sort.html" accesskey="U">Sorting, searching, and counting</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.extract.html" title="numpy.extract"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.flatnonzero.html" title="numpy.flatnonzero"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.flatnonzero.html"
+                        title="previous chapter">numpy.flatnonzero</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.extract.html"
+                        title="next chapter">numpy.extract</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-searchsorted">
+<h1>numpy.searchsorted<a class="headerlink" href="#numpy-searchsorted" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="numpy.searchsorted">
+<code class="descclassname">numpy.</code><code class="descname">searchsorted</code><span class="sig-paren">(</span><em>a</em>, <em>v</em>, <em>side='left'</em>, <em>sorter=None</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/numpy/numpy/blob/v1.14.0/numpy/core/fromnumeric.py#L1071-L1124"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy.searchsorted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find indices where elements should be inserted to maintain order.</p>
+<p>Find the indices into a sorted array <em class="xref py py-obj">a</em> such that, if the
+corresponding elements in <em class="xref py py-obj">v</em> were inserted before the indices, the
+order of <em class="xref py py-obj">a</em> would be preserved.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : 1-D array_like</p>
+<blockquote>
+<div><p>Input array. If <em class="xref py py-obj">sorter</em> is None, then it must be sorted in
+ascending order, otherwise <em class="xref py py-obj">sorter</em> must be an array of indices
+that sort it.</p>
+</div></blockquote>
+<p><strong>v</strong> : array_like</p>
+<blockquote>
+<div><p>Values to insert into <em class="xref py py-obj">a</em>.</p>
+</div></blockquote>
+<p><strong>side</strong> : {&#8216;left&#8217;, &#8216;right&#8217;}, optional</p>
+<blockquote>
+<div><p>If &#8216;left&#8217;, the index of the first suitable location found is given.
+If &#8216;right&#8217;, return the last such index.  If there is no suitable
+index, return either 0 or N (where N is the length of <em class="xref py py-obj">a</em>).</p>
+</div></blockquote>
+<p><strong>sorter</strong> : 1-D array_like, optional</p>
+<blockquote>
+<div><p>Optional array of integer indices that sort array a into ascending
+order. They are typically the result of argsort.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.7.0.</span></p>
+</div>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>indices</strong> : array of ints</p>
+<blockquote class="last">
+<div><p>Array of insertion points with the same shape as <em class="xref py py-obj">v</em>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="numpy.sort.html#numpy.sort" title="numpy.sort"><code class="xref py py-obj docutils literal"><span class="pre">sort</span></code></a></dt>
+<dd>Return a sorted copy of an array.</dd>
+<dt><a class="reference internal" href="numpy.histogram.html#numpy.histogram" title="numpy.histogram"><code class="xref py py-obj docutils literal"><span class="pre">histogram</span></code></a></dt>
+<dd>Produce histogram from 1-D data.</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>Binary search is used to find the required insertion points.</p>
+<p>As of NumPy 1.4.0 <a class="reference internal" href="#numpy.searchsorted" title="numpy.searchsorted"><code class="xref py py-obj docutils literal"><span class="pre">searchsorted</span></code></a> works with real/complex arrays containing
+<code class="xref py py-obj docutils literal"><span class="pre">nan</span></code> values. The enhanced sort order is documented in <a class="reference internal" href="numpy.sort.html#numpy.sort" title="numpy.sort"><code class="xref py py-obj docutils literal"><span class="pre">sort</span></code></a>.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="mi">3</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">)</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="go">array([0, 5, 1, 2])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

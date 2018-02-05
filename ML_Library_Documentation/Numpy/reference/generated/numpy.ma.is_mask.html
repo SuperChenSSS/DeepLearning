@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.ma.is_mask &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="Masked array operations" href="../routines.ma.html" >
+    <link rel="next" title="numpy.ma.MaskedArray.data" href="numpy.ma.MaskedArray.data.html" >
+    <link rel="prev" title="numpy.ma.is_masked" href="numpy.ma.is_masked.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../arrays.html" >Array objects</a></li>
+          <li class="active"><a href="../maskedarray.html" >Masked arrays</a></li>
+          <li class="active"><a href="../routines.ma.html" accesskey="U">Masked array operations</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.ma.MaskedArray.data.html" title="numpy.ma.MaskedArray.data"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.ma.is_masked.html" title="numpy.ma.is_masked"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.ma.is_masked.html"
+                        title="previous chapter">numpy.ma.is_masked</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.ma.MaskedArray.data.html"
+                        title="next chapter">numpy.ma.MaskedArray.data</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-ma-is-mask">
+<h1>numpy.ma.is_mask<a class="headerlink" href="#numpy-ma-is-mask" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="numpy.ma.is_mask">
+<code class="descclassname">numpy.ma.</code><code class="descname">is_mask</code><span class="sig-paren">(</span><em>m</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/numpy/numpy/blob/v1.14.0/numpy/ma/core.py#L1473-L1538"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy.ma.is_mask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if m is a valid, standard mask.</p>
+<p>This function does not check the contents of the input, only that the
+type is MaskType. In particular, this function returns False if the
+mask has a flexible dtype.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>m</strong> : array_like</p>
+<blockquote>
+<div><p>Array to test.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>result</strong> : bool</p>
+<blockquote class="last">
+<div><p>True if <em class="xref py py-obj">m.dtype.type</em> is MaskType, False otherwise.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><code class="xref py py-obj docutils literal"><span class="pre">isMaskedArray</span></code></dt>
+<dd>Test whether input is an instance of MaskedArray.</dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy.ma</span> <span class="k">as</span> <span class="nn">ma</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">ma</span><span class="o">.</span><span class="n">masked_equal</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span>
+<span class="go">masked_array(data = [-- 1 -- 2 3],</span>
+<span class="go">      mask = [ True False  True False False],</span>
+<span class="go">      fill_value=999999)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ma</span><span class="o">.</span><span class="n">is_mask</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ma</span><span class="o">.</span><span class="n">is_mask</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">mask</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>Input must be an ndarray (or have similar attributes)
+for it to be considered a valid mask.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ma</span><span class="o">.</span><span class="n">is_mask</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span>
+<span class="go">array([False,  True, False])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ma</span><span class="o">.</span><span class="n">is_mask</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>Arrays with complex dtypes don&#8217;t return True.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">({</span><span class="s1">&#39;names&#39;</span><span class="p">:[</span><span class="s1">&#39;monty&#39;</span><span class="p">,</span> <span class="s1">&#39;pithon&#39;</span><span class="p">],</span>
+<span class="go">                      &#39;formats&#39;:[bool, bool]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dtype</span>
+<span class="go">dtype([(&#39;monty&#39;, &#39;|b1&#39;), (&#39;pithon&#39;, &#39;|b1&#39;)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">)],</span>
+<span class="go">                 dtype=dtype)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span>
+<span class="go">array([(True, False), (False, True), (True, False)],</span>
+<span class="go">      dtype=[(&#39;monty&#39;, &#39;|b1&#39;), (&#39;pithon&#39;, &#39;|b1&#39;)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ma</span><span class="o">.</span><span class="n">is_mask</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

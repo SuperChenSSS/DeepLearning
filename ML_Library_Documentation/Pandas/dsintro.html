@@ -1,0 +1,1855 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Intro to Data Structures &#8212; pandas 0.22.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.22.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Essential Basic Functionality" href="basics.html" />
+    <link rel="prev" title="Cookbook" href="cookbook.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="basics.html" title="Essential Basic Functionality"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cookbook.html" title="Cookbook"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pandas 0.22.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+<div class="content-wrapper">
+    <div class="content">
+        <div class="document">
+            <div class="sphinxsidebar">
+                <h3>Table Of Contents</h3>
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Package overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10min.html">10 Minutes to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Intro to Data Structures</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#series">Series</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#series-is-ndarray-like">Series is ndarray-like</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#series-is-dict-like">Series is dict-like</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vectorized-operations-and-label-alignment-with-series">Vectorized operations and label alignment with Series</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#name-attribute">Name attribute</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#dataframe">DataFrame</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#from-dict-of-series-or-dicts">From dict of Series or dicts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#from-dict-of-ndarrays-lists">From dict of ndarrays / lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#from-structured-or-record-array">From structured or record array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#from-a-list-of-dicts">From a list of dicts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#from-a-dict-of-tuples">From a dict of tuples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#from-a-series">From a Series</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#alternate-constructors">Alternate Constructors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#column-selection-addition-deletion">Column selection, addition, deletion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#assigning-new-columns-in-method-chains">Assigning New Columns in Method Chains</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#indexing-selection">Indexing / Selection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-alignment-and-arithmetic">Data alignment and arithmetic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#transposing">Transposing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dataframe-interoperability-with-numpy-functions">DataFrame interoperability with NumPy functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#console-display">Console display</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dataframe-column-attribute-access-and-ipython-completion">DataFrame column attribute access and IPython completion</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#panel">Panel</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#from-3d-ndarray-with-optional-axis-labels">From 3D ndarray with optional axis labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#from-dict-of-dataframe-objects">From dict of DataFrame objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#from-dataframe-using-to-panel-method">From DataFrame using <code class="docutils literal"><span class="pre">to_panel</span></code> method</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#item-selection-addition-deletion">Item selection / addition / deletion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Transposing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Indexing / Selection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#squeezing">Squeezing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#conversion-to-dataframe">Conversion to DataFrame</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#deprecate-panel">Deprecate Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#panel4d-and-panelnd-deprecated">Panel4D and PanelND (Deprecated)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="basics.html">Essential Basic Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="text.html">Working with Text Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="options.html">Options and Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indexing.html">Indexing and Selecting Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">MultiIndex / Advanced Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="computation.html">Computational tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="missing_data.html">Working with missing data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="groupby.html">Group By: split-apply-combine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="merging.html">Merge, join, and concatenate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reshaping.html">Reshaping and Pivot Tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timeseries.html">Time Series / Date functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timedeltas.html">Time Deltas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="categorical.html">Categorical Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style.html">Styling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">IO Tools (Text, CSV, HDF5, ...)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="remote_data.html">Remote Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="enhancingperf.html">Enhancing Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sparse.html">Sparse data structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gotchas.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="r_interface.html">rpy2 / R interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ecosystem.html">pandas Ecosystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comparison_with_r.html">Comparison with R / R libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comparison_with_sql.html">Comparison with SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comparison_with_sas.html">Comparison with SAS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer.html">Developer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals.html">Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release.html">Release Notes</a></li>
+</ul>
+
+                <h3 style="margin-top: 1.5em;">Search</h3>
+
+                <form class="search" action="search.html" method="get">
+                    <input type="text" name="q" size="18"/>
+                    <input type="submit" value="Go"/>
+                    <input type="hidden" name="check_keywords" value="yes"/>
+                    <input type="hidden" name="area" value="default"/>
+                </form>
+                <p class="searchtip" style="font-size: 90%">
+                    Enter search terms or a module, class or function name.
+                </p>
+
+            </div>
+             
+            <div class="documentwrapper">
+                <div class="bodywrapper">
+                    <div class="body">
+                        
+  <div class="section" id="intro-to-data-structures">
+<span id="dsintro"></span><h1>Intro to Data Structures<a class="headerlink" href="#intro-to-data-structures" title="Permalink to this headline">¶</a></h1>
+<p>We&#8217;ll start with a quick, non-comprehensive overview of the fundamental data
+structures in pandas to get you started. The fundamental behavior about data
+types, indexing, and axis labeling / alignment apply across all of the
+objects. To get started, import numpy and load pandas into your namespace:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+</pre></div>
+</div>
+<p>Here is a basic tenet to keep in mind: <strong>data alignment is intrinsic</strong>. The link
+between labels and data will not be broken unless done so explicitly by you.</p>
+<p>We&#8217;ll give a brief intro to the data structures, then consider all of the broad
+categories of functionality and methods in separate sections.</p>
+<div class="section" id="series">
+<span id="basics-series"></span><h2>Series<a class="headerlink" href="#series" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="generated/pandas.Series.html#pandas.Series" title="pandas.Series"><code class="xref py py-class docutils literal"><span class="pre">Series</span></code></a> is a one-dimensional labeled array capable of holding any data
+type (integers, strings, floating point numbers, Python objects, etc.). The axis
+labels are collectively referred to as the <strong>index</strong>. The basic method to create a Series is to call:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here, <code class="docutils literal"><span class="pre">data</span></code> can be many different things:</p>
+<blockquote>
+<div><ul class="simple">
+<li>a Python dict</li>
+<li>an ndarray</li>
+<li>a scalar value (like 5)</li>
+</ul>
+</div></blockquote>
+<p>The passed <strong>index</strong> is a list of axis labels. Thus, this separates into a few
+cases depending on what <strong>data is</strong>:</p>
+<p><strong>From ndarray</strong></p>
+<p>If <code class="docutils literal"><span class="pre">data</span></code> is an ndarray, <strong>index</strong> must be the same length as <strong>data</strong>. If no
+index is passed, one will be created having values <code class="docutils literal"><span class="pre">[0,</span> <span class="pre">...,</span> <span class="pre">len(data)</span> <span class="pre">-</span> <span class="pre">1]</span></code>.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [3]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">])</span>
+
+<span class="gp">In [4]: </span><span class="n">s</span>
+<span class="gh">Out[4]: </span><span class="go"></span>
+<span class="go">a    0.4691</span>
+<span class="go">b   -0.2829</span>
+<span class="go">c   -1.5091</span>
+<span class="go">d   -1.1356</span>
+<span class="go">e    1.2121</span>
+<span class="go">dtype: float64</span>
+
+<span class="gp">In [5]: </span><span class="n">s</span><span class="o">.</span><span class="n">index</span>
+<span class="go">                                                                                    Out[5]: Index([&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;], dtype=&#39;object&#39;)</span>
+
+<span class="gp">In [6]: </span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="go">                                                                                                                                             Out[6]: </span>
+<span class="go">0   -0.1732</span>
+<span class="go">1    0.1192</span>
+<span class="go">2   -1.0442</span>
+<span class="go">3   -0.8618</span>
+<span class="go">4   -2.1046</span>
+<span class="go">dtype: float64</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">pandas supports non-unique index values. If an operation
+that does not support duplicate index values is attempted, an exception
+will be raised at that time. The reason for being lazy is nearly all performance-based
+(there are many instances in computations, like parts of GroupBy, where the index
+is not used).</p>
+</div>
+<p><strong>From dict</strong></p>
+<p>If <code class="docutils literal"><span class="pre">data</span></code> is a dict, if <strong>index</strong> is passed the values in data corresponding
+to the labels in the index will be pulled out. Otherwise, an index will be
+constructed from the sorted keys of the dict, if possible.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span> <span class="p">:</span> <span class="mf">0.</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span> <span class="p">:</span> <span class="mf">1.</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span> <span class="p">:</span> <span class="mf">2.</span><span class="p">}</span>
+
+<span class="gp">In [8]: </span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="gh">Out[8]: </span><span class="go"></span>
+<span class="go">a    0.0</span>
+<span class="go">b    1.0</span>
+<span class="go">c    2.0</span>
+<span class="go">dtype: float64</span>
+
+<span class="gp">In [9]: </span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">])</span>
+<span class="go">                                                   Out[9]: </span>
+<span class="go">b    1.0</span>
+<span class="go">c    2.0</span>
+<span class="go">d    NaN</span>
+<span class="go">a    0.0</span>
+<span class="go">dtype: float64</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">NaN (not a number) is the standard missing data marker used in pandas</p>
+</div>
+<p><strong>From scalar value</strong> If <code class="docutils literal"><span class="pre">data</span></code> is a scalar value, an index must be
+provided. The value will be repeated to match the length of <strong>index</strong></p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="mf">5.</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">])</span>
+<span class="gh">Out[10]: </span><span class="go"></span>
+<span class="go">a    5.0</span>
+<span class="go">b    5.0</span>
+<span class="go">c    5.0</span>
+<span class="go">d    5.0</span>
+<span class="go">e    5.0</span>
+<span class="go">dtype: float64</span>
+</pre></div>
+</div>
+<div class="section" id="series-is-ndarray-like">
+<h3>Series is ndarray-like<a class="headerlink" href="#series-is-ndarray-like" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">Series</span></code> acts very similarly to a <code class="docutils literal"><span class="pre">ndarray</span></code>, and is a valid argument to most NumPy functions.
+However, things like slicing also slice the index.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [11]: </span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gh">Out[11]: </span><span class="go">0.46911229990718628</span>
+
+<span class="gp">In [12]: </span><span class="n">s</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+<span class="go">                             Out[12]: </span>
+<span class="go">a    0.4691</span>
+<span class="go">b   -0.2829</span>
+<span class="go">c   -1.5091</span>
+<span class="go">dtype: float64</span>
+
+<span class="gp">In [13]: </span><span class="n">s</span><span class="p">[</span><span class="n">s</span> <span class="o">&gt;</span> <span class="n">s</span><span class="o">.</span><span class="n">median</span><span class="p">()]</span>
+<span class="go">                                                                                          Out[13]: </span>
+<span class="go">a    0.4691</span>
+<span class="go">e    1.2121</span>
+<span class="go">dtype: float64</span>
+
+<span class="gp">In [14]: </span><span class="n">s</span><span class="p">[[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+<span class="go">                                                                                                                                           Out[14]: </span>
+<span class="go">e    1.2121</span>
+<span class="go">d   -1.1356</span>
+<span class="go">b   -0.2829</span>
+<span class="go">dtype: float64</span>
+
+<span class="gp">In [15]: </span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="go">                                                                                                                                                                                                        Out[15]: </span>
+<span class="go">a    1.5986</span>
+<span class="go">b    0.7536</span>
+<span class="go">c    0.2211</span>
+<span class="go">d    0.3212</span>
+<span class="go">e    3.3606</span>
+<span class="go">dtype: float64</span>
+</pre></div>
+</div>
+<p>We will address array-based indexing in a separate <a class="reference internal" href="indexing.html#indexing"><span class="std std-ref">section</span></a>.</p>
+</div>
+<div class="section" id="series-is-dict-like">
+<h3>Series is dict-like<a class="headerlink" href="#series-is-dict-like" title="Permalink to this headline">¶</a></h3>
+<p>A Series is like a fixed-size dict in that you can get and set values by index
+label:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [16]: </span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>
+<span class="gh">Out[16]: </span><span class="go">0.46911229990718628</span>
+
+<span class="gp">In [17]: </span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">12.</span>
+
+<span class="gp">In [18]: </span><span class="n">s</span>
+<span class="gh">Out[18]: </span><span class="go"></span>
+<span class="go">a     0.4691</span>
+<span class="go">b    -0.2829</span>
+<span class="go">c    -1.5091</span>
+<span class="go">d    -1.1356</span>
+<span class="go">e    12.0000</span>
+<span class="go">dtype: float64</span>
+
+<span class="gp">In [19]: </span><span class="s1">&#39;e&#39;</span> <span class="ow">in</span> <span class="n">s</span>
+<span class="go">                                                                                          Out[19]: True</span>
+
+<span class="gp">In [20]: </span><span class="s1">&#39;f&#39;</span> <span class="ow">in</span> <span class="n">s</span>
+<span class="go">                                                                                                        Out[20]: False</span>
+</pre></div>
+</div>
+<p>If a label is not contained, an exception is raised:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">]</span>
+<span class="go">KeyError: &#39;f&#39;</span>
+</pre></div>
+</div>
+<p>Using the <code class="docutils literal"><span class="pre">get</span></code> method, a missing label will return None or specified default:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [21]: </span><span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>
+
+<span class="gp">In [22]: </span><span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+<span class="gh">Out[22]: </span><span class="go">nan</span>
+</pre></div>
+</div>
+<p>See also the <a class="reference internal" href="indexing.html#indexing-attribute-access"><span class="std std-ref">section on attribute access</span></a>.</p>
+</div>
+<div class="section" id="vectorized-operations-and-label-alignment-with-series">
+<h3>Vectorized operations and label alignment with Series<a class="headerlink" href="#vectorized-operations-and-label-alignment-with-series" title="Permalink to this headline">¶</a></h3>
+<p>When doing data analysis, as with raw NumPy arrays looping through Series
+value-by-value is usually not necessary. Series can also be passed into most
+NumPy methods expecting an ndarray.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [23]: </span><span class="n">s</span> <span class="o">+</span> <span class="n">s</span>
+<span class="gh">Out[23]: </span><span class="go"></span>
+<span class="go">a     0.9382</span>
+<span class="go">b    -0.5657</span>
+<span class="go">c    -3.0181</span>
+<span class="go">d    -2.2713</span>
+<span class="go">e    24.0000</span>
+<span class="go">dtype: float64</span>
+
+<span class="gp">In [24]: </span><span class="n">s</span> <span class="o">*</span> <span class="mi">2</span>
+<span class="go">                                                                                          Out[24]: </span>
+<span class="go">a     0.9382</span>
+<span class="go">b    -0.5657</span>
+<span class="go">c    -3.0181</span>
+<span class="go">d    -2.2713</span>
+<span class="go">e    24.0000</span>
+<span class="go">dtype: float64</span>
+
+<span class="gp">In [25]: </span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="go">                                                                                                                                                                                    Out[25]: </span>
+<span class="go">a         1.5986</span>
+<span class="go">b         0.7536</span>
+<span class="go">c         0.2211</span>
+<span class="go">d         0.3212</span>
+<span class="go">e    162754.7914</span>
+<span class="go">dtype: float64</span>
+</pre></div>
+</div>
+<p>A key difference between Series and ndarray is that operations between Series
+automatically align the data based on label. Thus, you can write computations
+without giving consideration to whether the Series involved have the same
+labels.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [26]: </span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="n">s</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="gh">Out[26]: </span><span class="go"></span>
+<span class="go">a       NaN</span>
+<span class="go">b   -0.5657</span>
+<span class="go">c   -3.0181</span>
+<span class="go">d   -2.2713</span>
+<span class="go">e       NaN</span>
+<span class="go">dtype: float64</span>
+</pre></div>
+</div>
+<p>The result of an operation between unaligned Series will have the <strong>union</strong> of
+the indexes involved. If a label is not found in one Series or the other, the
+result will be marked as missing <code class="docutils literal"><span class="pre">NaN</span></code>. Being able to write code without doing
+any explicit data alignment grants immense freedom and flexibility in
+interactive data analysis and research. The integrated data alignment features
+of the pandas data structures set pandas apart from the majority of related
+tools for working with labeled data.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In general, we chose to make the default result of operations between
+differently indexed objects yield the <strong>union</strong> of the indexes in order to
+avoid loss of information. Having an index label, though the data is
+missing, is typically important information as part of a computation. You
+of course have the option of dropping labels with missing data via the
+<strong>dropna</strong> function.</p>
+</div>
+</div>
+<div class="section" id="name-attribute">
+<h3>Name attribute<a class="headerlink" href="#name-attribute" title="Permalink to this headline">¶</a></h3>
+<p id="dsintro-name-attribute">Series can also have a <code class="docutils literal"><span class="pre">name</span></code> attribute:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [27]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;something&#39;</span><span class="p">)</span>
+
+<span class="gp">In [28]: </span><span class="n">s</span>
+<span class="gh">Out[28]: </span><span class="go"></span>
+<span class="go">0   -0.4949</span>
+<span class="go">1    1.0718</span>
+<span class="go">2    0.7216</span>
+<span class="go">3   -0.7068</span>
+<span class="go">4   -1.0396</span>
+<span class="go">Name: something, dtype: float64</span>
+
+<span class="gp">In [29]: </span><span class="n">s</span><span class="o">.</span><span class="n">name</span>
+<span class="go">                                                                                                      Out[29]: &#39;something&#39;</span>
+</pre></div>
+</div>
+<p>The Series <code class="docutils literal"><span class="pre">name</span></code> will be assigned automatically in many cases, in particular
+when taking 1D slices of DataFrame as you will see below.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.18.0.</span></p>
+</div>
+<p>You can rename a Series with the <a class="reference internal" href="generated/pandas.Series.rename.html#pandas.Series.rename" title="pandas.Series.rename"><code class="xref py py-meth docutils literal"><span class="pre">pandas.Series.rename()</span></code></a> method.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [30]: </span><span class="n">s2</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;different&quot;</span><span class="p">)</span>
+
+<span class="gp">In [31]: </span><span class="n">s2</span><span class="o">.</span><span class="n">name</span>
+<span class="gh">Out[31]: </span><span class="go">&#39;different&#39;</span>
+</pre></div>
+</div>
+<p>Note that <code class="docutils literal"><span class="pre">s</span></code> and <code class="docutils literal"><span class="pre">s2</span></code> refer to different objects.</p>
+</div>
+</div>
+<div class="section" id="dataframe">
+<span id="basics-dataframe"></span><h2>DataFrame<a class="headerlink" href="#dataframe" title="Permalink to this headline">¶</a></h2>
+<p><strong>DataFrame</strong> is a 2-dimensional labeled data structure with columns of
+potentially different types. You can think of it like a spreadsheet or SQL
+table, or a dict of Series objects. It is generally the most commonly used
+pandas object. Like Series, DataFrame accepts many different kinds of input:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Dict of 1D ndarrays, lists, dicts, or Series</li>
+<li>2-D numpy.ndarray</li>
+<li><a class="reference external" href="http://docs.scipy.org/doc/numpy/user/basics.rec.html">Structured or record</a> ndarray</li>
+<li>A <code class="docutils literal"><span class="pre">Series</span></code></li>
+<li>Another <code class="docutils literal"><span class="pre">DataFrame</span></code></li>
+</ul>
+</div></blockquote>
+<p>Along with the data, you can optionally pass <strong>index</strong> (row labels) and
+<strong>columns</strong> (column labels) arguments. If you pass an index and / or columns,
+you are guaranteeing the index and / or columns of the resulting
+DataFrame. Thus, a dict of Series plus a specific index will discard all data
+not matching up to the passed index.</p>
+<p>If axis labels are not passed, they will be constructed from the input data
+based on common sense rules.</p>
+<div class="section" id="from-dict-of-series-or-dicts">
+<h3>From dict of Series or dicts<a class="headerlink" href="#from-dict-of-series-or-dicts" title="Permalink to this headline">¶</a></h3>
+<p>The result <strong>index</strong> will be the <strong>union</strong> of the indexes of the various
+Series. If there are any nested dicts, these will be first converted to
+Series. If no columns are passed, the columns will be the sorted list of dict
+keys.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [32]: </span><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;one&#39;</span> <span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">]),</span>
+<span class="gp">   ....: </span>     <span class="s1">&#39;two&#39;</span> <span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">])}</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [33]: </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+<span class="gp">In [34]: </span><span class="n">df</span>
+<span class="gh">Out[34]: </span><span class="go"></span>
+<span class="go">   one  two</span>
+<span class="go">a  1.0  1.0</span>
+<span class="go">b  2.0  2.0</span>
+<span class="go">c  3.0  3.0</span>
+<span class="go">d  NaN  4.0</span>
+
+<span class="gp">In [35]: </span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">])</span>
+<span class="go">                                                                      Out[35]: </span>
+<span class="go">   one  two</span>
+<span class="go">d  NaN  4.0</span>
+<span class="go">b  2.0  2.0</span>
+<span class="go">a  1.0  1.0</span>
+
+<span class="gp">In [36]: </span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;two&#39;</span><span class="p">,</span> <span class="s1">&#39;three&#39;</span><span class="p">])</span>
+<span class="go">                                                                                                                                Out[36]: </span>
+<span class="go">   two three</span>
+<span class="go">d  4.0   NaN</span>
+<span class="go">b  2.0   NaN</span>
+<span class="go">a  1.0   NaN</span>
+</pre></div>
+</div>
+<p>The row and column labels can be accessed respectively by accessing the
+<strong>index</strong> and <strong>columns</strong> attributes:</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When a particular set of columns is passed along with a dict of data, the
+passed columns override the keys in the dict.</p>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [37]: </span><span class="n">df</span><span class="o">.</span><span class="n">index</span>
+<span class="gh">Out[37]: </span><span class="go">Index([&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;], dtype=&#39;object&#39;)</span>
+
+<span class="gp">In [38]: </span><span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+<span class="go">                                                     Out[38]: Index([&#39;one&#39;, &#39;two&#39;], dtype=&#39;object&#39;)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="from-dict-of-ndarrays-lists">
+<h3>From dict of ndarrays / lists<a class="headerlink" href="#from-dict-of-ndarrays-lists" title="Permalink to this headline">¶</a></h3>
+<p>The ndarrays must all be the same length. If an index is passed, it must
+clearly also be the same length as the arrays. If no index is passed, the
+result will be <code class="docutils literal"><span class="pre">range(n)</span></code>, where <code class="docutils literal"><span class="pre">n</span></code> is the array length.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [39]: </span><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;one&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">],</span>
+<span class="gp">   ....: </span>     <span class="s1">&#39;two&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mf">4.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">]}</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [40]: </span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="gh">Out[40]: </span><span class="go"></span>
+<span class="go">   one  two</span>
+<span class="go">0  1.0  4.0</span>
+<span class="go">1  2.0  3.0</span>
+<span class="go">2  3.0  2.0</span>
+<span class="go">3  4.0  1.0</span>
+
+<span class="gp">In [41]: </span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">])</span>
+<span class="go">                                                                      Out[41]: </span>
+<span class="go">   one  two</span>
+<span class="go">a  1.0  4.0</span>
+<span class="go">b  2.0  3.0</span>
+<span class="go">c  3.0  2.0</span>
+<span class="go">d  4.0  1.0</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="from-structured-or-record-array">
+<h3>From structured or record array<a class="headerlink" href="#from-structured-or-record-array" title="Permalink to this headline">¶</a></h3>
+<p>This case is handled identically to a dict of arrays.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [42]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;i4&#39;</span><span class="p">),(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;f4&#39;</span><span class="p">),(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;a10&#39;</span><span class="p">)])</span>
+
+<span class="gp">In [43]: </span><span class="n">data</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span><span class="mf">2.</span><span class="p">,</span><span class="s1">&#39;Hello&#39;</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mf">3.</span><span class="p">,</span><span class="s2">&quot;World&quot;</span><span class="p">)]</span>
+
+<span class="gp">In [44]: </span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="gh">Out[44]: </span><span class="go"></span>
+<span class="go">   A    B         C</span>
+<span class="go">0  1  2.0  b&#39;Hello&#39;</span>
+<span class="go">1  2  3.0  b&#39;World&#39;</span>
+
+<span class="gp">In [45]: </span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;first&#39;</span><span class="p">,</span> <span class="s1">&#39;second&#39;</span><span class="p">])</span>
+<span class="go">                                                                      Out[45]: </span>
+<span class="go">        A    B         C</span>
+<span class="go">first   1  2.0  b&#39;Hello&#39;</span>
+<span class="go">second  2  3.0  b&#39;World&#39;</span>
+
+<span class="gp">In [46]: </span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">])</span>
+<span class="go">                                                                                                                                                           Out[46]: </span>
+<span class="go">          C  A    B</span>
+<span class="go">0  b&#39;Hello&#39;  1  2.0</span>
+<span class="go">1  b&#39;World&#39;  2  3.0</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">DataFrame is not intended to work exactly like a 2-dimensional NumPy
+ndarray.</p>
+</div>
+</div>
+<div class="section" id="from-a-list-of-dicts">
+<span id="basics-dataframe-from-list-of-dicts"></span><h3>From a list of dicts<a class="headerlink" href="#from-a-list-of-dicts" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [47]: </span><span class="n">data2</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">}]</span>
+
+<span class="gp">In [48]: </span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data2</span><span class="p">)</span>
+<span class="gh">Out[48]: </span><span class="go"></span>
+<span class="go">   a   b     c</span>
+<span class="go">0  1   2   NaN</span>
+<span class="go">1  5  10  20.0</span>
+
+<span class="gp">In [49]: </span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data2</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;first&#39;</span><span class="p">,</span> <span class="s1">&#39;second&#39;</span><span class="p">])</span>
+<span class="go">                                                       Out[49]: </span>
+<span class="go">        a   b     c</span>
+<span class="go">first   1   2   NaN</span>
+<span class="go">second  5  10  20.0</span>
+
+<span class="gp">In [50]: </span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data2</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">])</span>
+<span class="go">                                                                                                                             Out[50]: </span>
+<span class="go">   a   b</span>
+<span class="go">0  1   2</span>
+<span class="go">1  5  10</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="from-a-dict-of-tuples">
+<span id="basics-dataframe-from-dict-of-tuples"></span><h3>From a dict of tuples<a class="headerlink" href="#from-a-dict-of-tuples" title="Permalink to this headline">¶</a></h3>
+<p>You can automatically create a multi-indexed frame by passing a tuples dictionary</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [51]: </span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">):</span> <span class="p">{(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">):</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">):</span> <span class="mi">2</span><span class="p">},</span>
+<span class="gp">   ....: </span>              <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">):</span> <span class="p">{(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">):</span> <span class="mi">3</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">):</span> <span class="mi">4</span><span class="p">},</span>
+<span class="gp">   ....: </span>              <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">):</span> <span class="p">{(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">):</span> <span class="mi">5</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">):</span> <span class="mi">6</span><span class="p">},</span>
+<span class="gp">   ....: </span>              <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">):</span> <span class="p">{(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">):</span> <span class="mi">7</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">):</span> <span class="mi">8</span><span class="p">},</span>
+<span class="gp">   ....: </span>              <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">):</span> <span class="p">{(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">):</span> <span class="mi">9</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">):</span> <span class="mi">10</span><span class="p">}})</span>
+<span class="gp">   ....: </span>
+<span class="gh">Out[51]: </span><span class="go"></span>
+<span class="go">       a              b      </span>
+<span class="go">       a    b    c    a     b</span>
+<span class="go">A B  4.0  1.0  5.0  8.0  10.0</span>
+<span class="go">  C  3.0  2.0  6.0  7.0   NaN</span>
+<span class="go">  D  NaN  NaN  NaN  NaN   9.0</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="from-a-series">
+<span id="basics-dataframe-from-series"></span><h3>From a Series<a class="headerlink" href="#from-a-series" title="Permalink to this headline">¶</a></h3>
+<p>The result will be a DataFrame with the same index as the input Series, and
+with one column whose name is the original name of the Series (only if no other
+column name provided).</p>
+<p><strong>Missing Data</strong></p>
+<p>Much more will be said on this topic in the <a class="reference internal" href="missing_data.html#missing-data"><span class="std std-ref">Missing data</span></a>
+section. To construct a DataFrame with missing data, use <code class="docutils literal"><span class="pre">np.nan</span></code> for those
+values which are missing. Alternatively, you may pass a <code class="docutils literal"><span class="pre">numpy.MaskedArray</span></code>
+as the data argument to the DataFrame constructor, and its masked entries will
+be considered missing.</p>
+</div>
+<div class="section" id="alternate-constructors">
+<h3>Alternate Constructors<a class="headerlink" href="#alternate-constructors" title="Permalink to this headline">¶</a></h3>
+<p id="basics-dataframe-from-dict"><strong>DataFrame.from_dict</strong></p>
+<p><code class="docutils literal"><span class="pre">DataFrame.from_dict</span></code> takes a dict of dicts or a dict of array-like sequences
+and returns a DataFrame. It operates like the <code class="docutils literal"><span class="pre">DataFrame</span></code> constructor except
+for the <code class="docutils literal"><span class="pre">orient</span></code> parameter which is <code class="docutils literal"><span class="pre">'columns'</span></code> by default, but which can be
+set to <code class="docutils literal"><span class="pre">'index'</span></code> in order to use the dict keys as row labels.</p>
+<p id="basics-dataframe-from-records"><strong>DataFrame.from_records</strong></p>
+<p><code class="docutils literal"><span class="pre">DataFrame.from_records</span></code> takes a list of tuples or an ndarray with structured
+dtype. Works analogously to the normal <code class="docutils literal"><span class="pre">DataFrame</span></code> constructor, except that
+index maybe be a specific field of the structured dtype to use as the index.
+For example:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [52]: </span><span class="n">data</span>
+<span class="gh">Out[52]: </span><span class="go"></span>
+<span class="go">array([(1,  2., b&#39;Hello&#39;), (2,  3., b&#39;World&#39;)],</span>
+<span class="go">      dtype=[(&#39;A&#39;, &#39;&lt;i4&#39;), (&#39;B&#39;, &#39;&lt;f4&#39;), (&#39;C&#39;, &#39;S10&#39;)])</span>
+
+<span class="gp">In [53]: </span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_records</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">)</span>
+<span class="go">                                                                                                                  Out[53]: </span>
+<span class="go">          A    B</span>
+<span class="go">C               </span>
+<span class="go">b&#39;Hello&#39;  1  2.0</span>
+<span class="go">b&#39;World&#39;  2  3.0</span>
+</pre></div>
+</div>
+<p id="basics-dataframe-from-items"><strong>DataFrame.from_items</strong></p>
+<p><code class="docutils literal"><span class="pre">DataFrame.from_items</span></code> works analogously to the form of the <code class="docutils literal"><span class="pre">dict</span></code>
+constructor that takes a sequence of <code class="docutils literal"><span class="pre">(key,</span> <span class="pre">value)</span></code> pairs, where the keys are
+column (or row, in the case of <code class="docutils literal"><span class="pre">orient='index'</span></code>) names, and the value are the
+column values (or row values). This can be useful for constructing a DataFrame
+with the columns in a particular order without having to pass an explicit list
+of columns:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [54]: </span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_items</span><span class="p">([(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]),</span> <span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])])</span>
+<span class="gh">Out[54]: </span><span class="go"></span>
+<span class="go">   A  B</span>
+<span class="go">0  1  4</span>
+<span class="go">1  2  5</span>
+<span class="go">2  3  6</span>
+</pre></div>
+</div>
+<p>If you pass <code class="docutils literal"><span class="pre">orient='index'</span></code>, the keys will be the row labels. But in this
+case you must also pass the desired column names:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [55]: </span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_items</span><span class="p">([(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]),</span> <span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])],</span>
+<span class="gp">   ....: </span>                        <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;one&#39;</span><span class="p">,</span> <span class="s1">&#39;two&#39;</span><span class="p">,</span> <span class="s1">&#39;three&#39;</span><span class="p">])</span>
+<span class="gp">   ....: </span>
+<span class="gh">Out[55]: </span><span class="go"></span>
+<span class="go">   one  two  three</span>
+<span class="go">A    1    2      3</span>
+<span class="go">B    4    5      6</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="column-selection-addition-deletion">
+<h3>Column selection, addition, deletion<a class="headerlink" href="#column-selection-addition-deletion" title="Permalink to this headline">¶</a></h3>
+<p>You can treat a DataFrame semantically like a dict of like-indexed Series
+objects. Getting, setting, and deleting columns works with the same syntax as
+the analogous dict operations:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [56]: </span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;one&#39;</span><span class="p">]</span>
+<span class="gh">Out[56]: </span><span class="go"></span>
+<span class="go">a    1.0</span>
+<span class="go">b    2.0</span>
+<span class="go">c    3.0</span>
+<span class="go">d    NaN</span>
+<span class="go">Name: one, dtype: float64</span>
+
+<span class="gp">In [57]: </span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;three&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;one&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;two&#39;</span><span class="p">]</span>
+
+<span class="gp">In [58]: </span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;flag&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;one&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2</span>
+
+<span class="gp">In [59]: </span><span class="n">df</span>
+<span class="gh">Out[59]: </span><span class="go"></span>
+<span class="go">   one  two  three   flag</span>
+<span class="go">a  1.0  1.0    1.0  False</span>
+<span class="go">b  2.0  2.0    4.0  False</span>
+<span class="go">c  3.0  3.0    9.0   True</span>
+<span class="go">d  NaN  4.0    NaN  False</span>
+</pre></div>
+</div>
+<p>Columns can be deleted or popped like with a dict:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [60]: </span><span class="k">del</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;two&#39;</span><span class="p">]</span>
+
+<span class="gp">In [61]: </span><span class="n">three</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;three&#39;</span><span class="p">)</span>
+
+<span class="gp">In [62]: </span><span class="n">df</span>
+<span class="gh">Out[62]: </span><span class="go"></span>
+<span class="go">   one   flag</span>
+<span class="go">a  1.0  False</span>
+<span class="go">b  2.0  False</span>
+<span class="go">c  3.0   True</span>
+<span class="go">d  NaN  False</span>
+</pre></div>
+</div>
+<p>When inserting a scalar value, it will naturally be propagated to fill the
+column:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [63]: </span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;foo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;bar&#39;</span>
+
+<span class="gp">In [64]: </span><span class="n">df</span>
+<span class="gh">Out[64]: </span><span class="go"></span>
+<span class="go">   one   flag  foo</span>
+<span class="go">a  1.0  False  bar</span>
+<span class="go">b  2.0  False  bar</span>
+<span class="go">c  3.0   True  bar</span>
+<span class="go">d  NaN  False  bar</span>
+</pre></div>
+</div>
+<p>When inserting a Series that does not have the same index as the DataFrame, it
+will be conformed to the DataFrame&#8217;s index:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [65]: </span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;one_trunc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;one&#39;</span><span class="p">][:</span><span class="mi">2</span><span class="p">]</span>
+
+<span class="gp">In [66]: </span><span class="n">df</span>
+<span class="gh">Out[66]: </span><span class="go"></span>
+<span class="go">   one   flag  foo  one_trunc</span>
+<span class="go">a  1.0  False  bar        1.0</span>
+<span class="go">b  2.0  False  bar        2.0</span>
+<span class="go">c  3.0   True  bar        NaN</span>
+<span class="go">d  NaN  False  bar        NaN</span>
+</pre></div>
+</div>
+<p>You can insert raw ndarrays but their length must match the length of the
+DataFrame&#8217;s index.</p>
+<p>By default, columns get inserted at the end. The <code class="docutils literal"><span class="pre">insert</span></code> function is
+available to insert at a particular location in the columns:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [67]: </span><span class="n">df</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;one&#39;</span><span class="p">])</span>
+
+<span class="gp">In [68]: </span><span class="n">df</span>
+<span class="gh">Out[68]: </span><span class="go"></span>
+<span class="go">   one  bar   flag  foo  one_trunc</span>
+<span class="go">a  1.0  1.0  False  bar        1.0</span>
+<span class="go">b  2.0  2.0  False  bar        2.0</span>
+<span class="go">c  3.0  3.0   True  bar        NaN</span>
+<span class="go">d  NaN  NaN  False  bar        NaN</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="assigning-new-columns-in-method-chains">
+<span id="dsintro-chained-assignment"></span><h3>Assigning New Columns in Method Chains<a class="headerlink" href="#assigning-new-columns-in-method-chains" title="Permalink to this headline">¶</a></h3>
+<p>Inspired by <a class="reference external" href="http://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html#mutate">dplyr&#8217;s</a>
+<code class="docutils literal"><span class="pre">mutate</span></code> verb, DataFrame has an <a class="reference internal" href="generated/pandas.DataFrame.assign.html#pandas.DataFrame.assign" title="pandas.DataFrame.assign"><code class="xref py py-meth docutils literal"><span class="pre">assign()</span></code></a>
+method that allows you to easily create new columns that are potentially
+derived from existing columns.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [69]: </span><span class="n">iris</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/iris.data&#39;</span><span class="p">)</span>
+
+<span class="gp">In [70]: </span><span class="n">iris</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="gh">Out[70]: </span><span class="go"></span>
+<span class="go">   SepalLength  SepalWidth  PetalLength  PetalWidth         Name</span>
+<span class="go">0          5.1         3.5          1.4         0.2  Iris-setosa</span>
+<span class="go">1          4.9         3.0          1.4         0.2  Iris-setosa</span>
+<span class="go">2          4.7         3.2          1.3         0.2  Iris-setosa</span>
+<span class="go">3          4.6         3.1          1.5         0.2  Iris-setosa</span>
+<span class="go">4          5.0         3.6          1.4         0.2  Iris-setosa</span>
+
+<span class="gp">In [71]: </span><span class="p">(</span><span class="n">iris</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">sepal_ratio</span> <span class="o">=</span> <span class="n">iris</span><span class="p">[</span><span class="s1">&#39;SepalWidth&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">iris</span><span class="p">[</span><span class="s1">&#39;SepalLength&#39;</span><span class="p">])</span>
+<span class="gp">   ....: </span>     <span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="gp">   ....: </span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                Out[71]: </span>
+<span class="go">   SepalLength  SepalWidth  PetalLength  PetalWidth         Name  sepal_ratio</span>
+<span class="go">0          5.1         3.5          1.4         0.2  Iris-setosa       0.6863</span>
+<span class="go">1          4.9         3.0          1.4         0.2  Iris-setosa       0.6122</span>
+<span class="go">2          4.7         3.2          1.3         0.2  Iris-setosa       0.6809</span>
+<span class="go">3          4.6         3.1          1.5         0.2  Iris-setosa       0.6739</span>
+<span class="go">4          5.0         3.6          1.4         0.2  Iris-setosa       0.7200</span>
+</pre></div>
+</div>
+<p>Above was an example of inserting a precomputed value. We can also pass in
+a function of one argument to be evalutated on the DataFrame being assigned to.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [72]: </span><span class="n">iris</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">sepal_ratio</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;SepalWidth&#39;</span><span class="p">]</span> <span class="o">/</span>
+<span class="gp">   ....: </span>                                     <span class="n">x</span><span class="p">[</span><span class="s1">&#39;SepalLength&#39;</span><span class="p">]))</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="gp">   ....: </span>
+<span class="gh">Out[72]: </span><span class="go"></span>
+<span class="go">   SepalLength  SepalWidth  PetalLength  PetalWidth         Name  sepal_ratio</span>
+<span class="go">0          5.1         3.5          1.4         0.2  Iris-setosa       0.6863</span>
+<span class="go">1          4.9         3.0          1.4         0.2  Iris-setosa       0.6122</span>
+<span class="go">2          4.7         3.2          1.3         0.2  Iris-setosa       0.6809</span>
+<span class="go">3          4.6         3.1          1.5         0.2  Iris-setosa       0.6739</span>
+<span class="go">4          5.0         3.6          1.4         0.2  Iris-setosa       0.7200</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">assign</span></code> <strong>always</strong> returns a copy of the data, leaving the original
+DataFrame untouched.</p>
+<p>Passing a callable, as opposed to an actual value to be inserted, is
+useful when you don&#8217;t have a reference to the DataFrame at hand. This is
+common when using <code class="docutils literal"><span class="pre">assign</span></code> in chains of operations. For example,
+we can limit the DataFrame to just those observations with a Sepal Length
+greater than 5, calculate the ratio, and plot:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [73]: </span><span class="p">(</span><span class="n">iris</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;SepalLength &gt; 5&#39;</span><span class="p">)</span>
+<span class="gp">   ....: </span>     <span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">SepalRatio</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">SepalWidth</span> <span class="o">/</span> <span class="n">x</span><span class="o">.</span><span class="n">SepalLength</span><span class="p">,</span>
+<span class="gp">   ....: </span>             <span class="n">PetalRatio</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">PetalWidth</span> <span class="o">/</span> <span class="n">x</span><span class="o">.</span><span class="n">PetalLength</span><span class="p">)</span>
+<span class="gp">   ....: </span>     <span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;scatter&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;SepalRatio&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;PetalRatio&#39;</span><span class="p">))</span>
+<span class="gp">   ....: </span>
+<span class="gh">Out[73]: </span><span class="go">&lt;matplotlib.axes._subplots.AxesSubplot at 0x1197dd908&gt;</span>
+</pre></div>
+</div>
+<img alt="_images/basics_assign.png" src="_images/basics_assign.png" />
+<p>Since a function is passed in, the function is computed on the DataFrame
+being assigned to. Importantly, this is the DataFrame that&#8217;s been filtered
+to those rows with sepal length greater than 5. The filtering happens first,
+and then the ratio calculations. This is an example where we didn&#8217;t
+have a reference to the <em>filtered</em> DataFrame available.</p>
+<p>The function signature for <code class="docutils literal"><span class="pre">assign</span></code> is simply <code class="docutils literal"><span class="pre">**kwargs</span></code>. The keys
+are the column names for the new fields, and the values are either a value
+to be inserted (for example, a <code class="docutils literal"><span class="pre">Series</span></code> or NumPy array), or a function
+of one argument to be called on the <code class="docutils literal"><span class="pre">DataFrame</span></code>. A <em>copy</em> of the original
+DataFrame is returned, with the new values inserted.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>Since the function signature of <code class="docutils literal"><span class="pre">assign</span></code> is <code class="docutils literal"><span class="pre">**kwargs</span></code>, a dictionary,
+the order of the new columns in the resulting DataFrame cannot be guaranteed
+to match the order you pass in. To make things predictable, items are inserted
+alphabetically (by key) at the end of the DataFrame.</p>
+<p>All expressions are computed first, and then assigned. So you can&#8217;t refer
+to another column being assigned in the same call to <code class="docutils literal"><span class="pre">assign</span></code>. For example:</p>
+<blockquote class="last">
+<div><div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [74]: </span><span class="c1"># Don&#39;t do this, bad reference to `C`</span>
+<span class="go">        df.assign(C = lambda x: x[&#39;A&#39;] + x[&#39;B&#39;],</span>
+<span class="go">                  D = lambda x: x[&#39;A&#39;] + x[&#39;C&#39;])</span>
+<span class="gp">In [2]: </span><span class="c1"># Instead, break it into two assigns</span>
+<span class="go">        (df.assign(C = lambda x: x[&#39;A&#39;] + x[&#39;B&#39;])</span>
+<span class="go">           .assign(D = lambda x: x[&#39;A&#39;] + x[&#39;C&#39;]))</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="indexing-selection">
+<h3>Indexing / Selection<a class="headerlink" href="#indexing-selection" title="Permalink to this headline">¶</a></h3>
+<p>The basics of indexing are as follows:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="50%" />
+<col width="33%" />
+<col width="17%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Operation</th>
+<th class="head">Syntax</th>
+<th class="head">Result</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Select column</td>
+<td><code class="docutils literal"><span class="pre">df[col]</span></code></td>
+<td>Series</td>
+</tr>
+<tr class="row-odd"><td>Select row by label</td>
+<td><code class="docutils literal"><span class="pre">df.loc[label]</span></code></td>
+<td>Series</td>
+</tr>
+<tr class="row-even"><td>Select row by integer location</td>
+<td><code class="docutils literal"><span class="pre">df.iloc[loc]</span></code></td>
+<td>Series</td>
+</tr>
+<tr class="row-odd"><td>Slice rows</td>
+<td><code class="docutils literal"><span class="pre">df[5:10]</span></code></td>
+<td>DataFrame</td>
+</tr>
+<tr class="row-even"><td>Select rows by boolean vector</td>
+<td><code class="docutils literal"><span class="pre">df[bool_vec]</span></code></td>
+<td>DataFrame</td>
+</tr>
+</tbody>
+</table>
+<p>Row selection, for example, returns a Series whose index is the columns of the
+DataFrame:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [75]: </span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span>
+<span class="gh">Out[75]: </span><span class="go"></span>
+<span class="go">one              2</span>
+<span class="go">bar              2</span>
+<span class="go">flag         False</span>
+<span class="go">foo            bar</span>
+<span class="go">one_trunc        2</span>
+<span class="go">Name: b, dtype: object</span>
+
+<span class="gp">In [76]: </span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="go">                                                                                                                                Out[76]: </span>
+<span class="go">one             3</span>
+<span class="go">bar             3</span>
+<span class="go">flag         True</span>
+<span class="go">foo           bar</span>
+<span class="go">one_trunc     NaN</span>
+<span class="go">Name: c, dtype: object</span>
+</pre></div>
+</div>
+<p>For a more exhaustive treatment of more sophisticated label-based indexing and
+slicing, see the <a class="reference internal" href="indexing.html#indexing"><span class="std std-ref">section on indexing</span></a>. We will address the
+fundamentals of reindexing / conforming to new sets of labels in the
+<a class="reference internal" href="basics.html#basics-reindexing"><span class="std std-ref">section on reindexing</span></a>.</p>
+</div>
+<div class="section" id="data-alignment-and-arithmetic">
+<h3>Data alignment and arithmetic<a class="headerlink" href="#data-alignment-and-arithmetic" title="Permalink to this headline">¶</a></h3>
+<p>Data alignment between DataFrame objects automatically align on <strong>both the
+columns and the index (row labels)</strong>. Again, the resulting object will have the
+union of the column and row labels.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [77]: </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">])</span>
+
+<span class="gp">In [78]: </span><span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">])</span>
+
+<span class="gp">In [79]: </span><span class="n">df</span> <span class="o">+</span> <span class="n">df2</span>
+<span class="gh">Out[79]: </span><span class="go"></span>
+<span class="go">        A       B       C   D</span>
+<span class="go">0  0.0457 -0.0141  1.3809 NaN</span>
+<span class="go">1 -0.9554 -1.5010  0.0372 NaN</span>
+<span class="go">2 -0.6627  1.5348 -0.8597 NaN</span>
+<span class="go">3 -2.4529  1.2373 -0.1337 NaN</span>
+<span class="go">4  1.4145  1.9517 -2.3204 NaN</span>
+<span class="go">5 -0.4949 -1.6497 -1.0846 NaN</span>
+<span class="go">6 -1.0476 -0.7486 -0.8055 NaN</span>
+<span class="go">7     NaN     NaN     NaN NaN</span>
+<span class="go">8     NaN     NaN     NaN NaN</span>
+<span class="go">9     NaN     NaN     NaN NaN</span>
+</pre></div>
+</div>
+<p>When doing an operation between DataFrame and Series, the default behavior is
+to align the Series <strong>index</strong> on the DataFrame <strong>columns</strong>, thus <a class="reference external" href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">broadcasting</a>
+row-wise. For example:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [80]: </span><span class="n">df</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gh">Out[80]: </span><span class="go"></span>
+<span class="go">        A       B       C       D</span>
+<span class="go">0  0.0000  0.0000  0.0000  0.0000</span>
+<span class="go">1 -1.3593 -0.2487 -0.4534 -1.7547</span>
+<span class="go">2  0.2531  0.8297  0.0100 -1.9912</span>
+<span class="go">3 -1.3111  0.0543 -1.7249 -1.6205</span>
+<span class="go">4  0.5730  1.5007 -0.6761  1.3673</span>
+<span class="go">5 -1.7412  0.7820 -1.2416 -2.0531</span>
+<span class="go">6 -1.2408 -0.8696 -0.1533  0.0004</span>
+<span class="go">7 -0.7439  0.4110 -0.9296 -0.2824</span>
+<span class="go">8 -1.1949  1.3207  0.2382 -1.4826</span>
+<span class="go">9  2.2938  1.8562  0.7733 -1.4465</span>
+</pre></div>
+</div>
+<p>In the special case of working with time series data, and the DataFrame index
+also contains dates, the broadcasting will be column-wise:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [81]: </span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="s1">&#39;1/1/2000&#39;</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+
+<span class="gp">In [82]: </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="s1">&#39;ABC&#39;</span><span class="p">))</span>
+
+<span class="gp">In [83]: </span><span class="n">df</span>
+<span class="gh">Out[83]: </span><span class="go"></span>
+<span class="go">                 A       B       C</span>
+<span class="go">2000-01-01 -1.2268  0.7698 -1.2812</span>
+<span class="go">2000-01-02 -0.7277 -0.1213 -0.0979</span>
+<span class="go">2000-01-03  0.6958  0.3417  0.9597</span>
+<span class="go">2000-01-04 -1.1103 -0.6200  0.1497</span>
+<span class="go">2000-01-05 -0.7323  0.6877  0.1764</span>
+<span class="go">2000-01-06  0.4033 -0.1550  0.3016</span>
+<span class="go">2000-01-07 -2.1799 -1.3698 -0.9542</span>
+<span class="go">2000-01-08  1.4627 -1.7432 -0.8266</span>
+
+<span class="gp">In [84]: </span><span class="nb">type</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">])</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                     Out[84]: pandas.core.series.Series</span>
+
+<span class="gp">In [85]: </span><span class="n">df</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">]</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                        Out[85]: </span>
+<span class="go">            2000-01-01 00:00:00  2000-01-02 00:00:00  2000-01-03 00:00:00  \</span>
+<span class="go">2000-01-01                  NaN                  NaN                  NaN   </span>
+<span class="go">2000-01-02                  NaN                  NaN                  NaN   </span>
+<span class="go">2000-01-03                  NaN                  NaN                  NaN   </span>
+<span class="go">2000-01-04                  NaN                  NaN                  NaN   </span>
+<span class="go">2000-01-05                  NaN                  NaN                  NaN   </span>
+<span class="go">2000-01-06                  NaN                  NaN                  NaN   </span>
+<span class="go">2000-01-07                  NaN                  NaN                  NaN   </span>
+<span class="go">2000-01-08                  NaN                  NaN                  NaN   </span>
+
+<span class="go">            2000-01-04 00:00:00 ...  2000-01-08 00:00:00   A   B   C  </span>
+<span class="go">2000-01-01                  NaN ...                  NaN NaN NaN NaN  </span>
+<span class="go">2000-01-02                  NaN ...                  NaN NaN NaN NaN  </span>
+<span class="go">2000-01-03                  NaN ...                  NaN NaN NaN NaN  </span>
+<span class="go">2000-01-04                  NaN ...                  NaN NaN NaN NaN  </span>
+<span class="go">2000-01-05                  NaN ...                  NaN NaN NaN NaN  </span>
+<span class="go">2000-01-06                  NaN ...                  NaN NaN NaN NaN  </span>
+<span class="go">2000-01-07                  NaN ...                  NaN NaN NaN NaN  </span>
+<span class="go">2000-01-08                  NaN ...                  NaN NaN NaN NaN  </span>
+
+<span class="go">[8 rows x 11 columns]</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>is now deprecated and will be removed in a future release. The preferred way
+to replicate this behavior is</p>
+<div class="last highlight-python"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>For explicit control over the matching and broadcasting behavior, see the
+section on <a class="reference internal" href="basics.html#basics-binop"><span class="std std-ref">flexible binary operations</span></a>.</p>
+<p>Operations with scalars are just as you would expect:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [86]: </span><span class="n">df</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">2</span>
+<span class="gh">Out[86]: </span><span class="go"></span>
+<span class="go">                 A       B       C</span>
+<span class="go">2000-01-01 -4.1341  5.8490 -4.4062</span>
+<span class="go">2000-01-02 -1.6385  1.3935  1.5106</span>
+<span class="go">2000-01-03  5.4789  3.7087  6.7986</span>
+<span class="go">2000-01-04 -3.5517 -1.0999  2.7487</span>
+<span class="go">2000-01-05 -1.6617  5.4387  2.8822</span>
+<span class="go">2000-01-06  4.0165  1.2252  3.5081</span>
+<span class="go">2000-01-07 -8.8993 -4.8492 -2.7710</span>
+<span class="go">2000-01-08  9.3135 -6.7158 -2.1330</span>
+
+<span class="gp">In [87]: </span><span class="mi">1</span> <span class="o">/</span> <span class="n">df</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                     Out[87]: </span>
+<span class="go">                 A       B        C</span>
+<span class="go">2000-01-01 -0.8151  1.2990  -0.7805</span>
+<span class="go">2000-01-02 -1.3742 -8.2436 -10.2163</span>
+<span class="go">2000-01-03  1.4372  2.9262   1.0420</span>
+<span class="go">2000-01-04 -0.9006 -1.6130   6.6779</span>
+<span class="go">2000-01-05 -1.3655  1.4540   5.6675</span>
+<span class="go">2000-01-06  2.4795 -6.4537   3.3154</span>
+<span class="go">2000-01-07 -0.4587 -0.7300  -1.0480</span>
+<span class="go">2000-01-08  0.6837 -0.5737  -1.2098</span>
+
+<span class="gp">In [88]: </span><span class="n">df</span> <span class="o">**</span> <span class="mi">4</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   Out[88]: </span>
+<span class="go">                  A       B           C</span>
+<span class="go">2000-01-01   2.2653  0.3512  2.6948e+00</span>
+<span class="go">2000-01-02   0.2804  0.0002  9.1796e-05</span>
+<span class="go">2000-01-03   0.2344  0.0136  8.4838e-01</span>
+<span class="go">2000-01-04   1.5199  0.1477  5.0286e-04</span>
+<span class="go">2000-01-05   0.2876  0.2237  9.6924e-04</span>
+<span class="go">2000-01-06   0.0265  0.0006  8.2769e-03</span>
+<span class="go">2000-01-07  22.5795  3.5212  8.2903e-01</span>
+<span class="go">2000-01-08   4.5774  9.2332  4.6683e-01</span>
+</pre></div>
+</div>
+<p id="dsintro-boolean">Boolean operators work as well:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [89]: </span><span class="n">df1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;a&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;b&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="p">},</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+
+<span class="gp">In [90]: </span><span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;a&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;b&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="p">},</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+
+<span class="gp">In [91]: </span><span class="n">df1</span> <span class="o">&amp;</span> <span class="n">df2</span>
+<span class="gh">Out[91]: </span><span class="go"></span>
+<span class="go">       a      b</span>
+<span class="go">0  False  False</span>
+<span class="go">1  False   True</span>
+<span class="go">2   True  False</span>
+
+<span class="gp">In [92]: </span><span class="n">df1</span> <span class="o">|</span> <span class="n">df2</span>
+<span class="go">                                                                          Out[92]: </span>
+<span class="go">      a     b</span>
+<span class="go">0  True  True</span>
+<span class="go">1  True  True</span>
+<span class="go">2  True  True</span>
+
+<span class="gp">In [93]: </span><span class="n">df1</span> <span class="o">^</span> <span class="n">df2</span>
+<span class="go">                                                                                                                                            Out[93]: </span>
+<span class="go">       a      b</span>
+<span class="go">0   True   True</span>
+<span class="go">1   True  False</span>
+<span class="go">2  False   True</span>
+
+<span class="gp">In [94]: </span><span class="o">-</span><span class="n">df1</span>
+<span class="go">                                                                                                                                                                                                                      Out[94]: </span>
+<span class="go">       a      b</span>
+<span class="go">0  False   True</span>
+<span class="go">1   True  False</span>
+<span class="go">2  False  False</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="transposing">
+<h3>Transposing<a class="headerlink" href="#transposing" title="Permalink to this headline">¶</a></h3>
+<p>To transpose, access the <code class="docutils literal"><span class="pre">T</span></code> attribute (also the <code class="docutils literal"><span class="pre">transpose</span></code> function),
+similar to an ndarray:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="go"># only show the first 5 rows</span>
+<span class="gp">In [95]: </span><span class="n">df</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="gh">Out[95]: </span><span class="go"></span>
+<span class="go">   2000-01-01  2000-01-02  2000-01-03  2000-01-04  2000-01-05</span>
+<span class="go">A     -1.2268     -0.7277      0.6958     -1.1103     -0.7323</span>
+<span class="go">B      0.7698     -0.1213      0.3417     -0.6200      0.6877</span>
+<span class="go">C     -1.2812     -0.0979      0.9597      0.1497      0.1764</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="dataframe-interoperability-with-numpy-functions">
+<h3>DataFrame interoperability with NumPy functions<a class="headerlink" href="#dataframe-interoperability-with-numpy-functions" title="Permalink to this headline">¶</a></h3>
+<p id="dsintro-numpy-interop">Elementwise NumPy ufuncs (log, exp, sqrt, ...) and various other NumPy functions
+can be used with no issues on DataFrame, assuming the data within are numeric:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [96]: </span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="gh">Out[96]: </span><span class="go"></span>
+<span class="go">                 A       B       C</span>
+<span class="go">2000-01-01  0.2932  2.1593  0.2777</span>
+<span class="go">2000-01-02  0.4830  0.8858  0.9068</span>
+<span class="go">2000-01-03  2.0053  1.4074  2.6110</span>
+<span class="go">2000-01-04  0.3294  0.5380  1.1615</span>
+<span class="go">2000-01-05  0.4808  1.9892  1.1930</span>
+<span class="go">2000-01-06  1.4968  0.8565  1.3521</span>
+<span class="go">2000-01-07  0.1131  0.2541  0.3851</span>
+<span class="go">2000-01-08  4.3176  0.1750  0.4375</span>
+
+<span class="gp">In [97]: </span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                     Out[97]: </span>
+<span class="go">array([[-1.2268,  0.7698, -1.2812],</span>
+<span class="go">       [-0.7277, -0.1213, -0.0979],</span>
+<span class="go">       [ 0.6958,  0.3417,  0.9597],</span>
+<span class="go">       [-1.1103, -0.62  ,  0.1497],</span>
+<span class="go">       [-0.7323,  0.6877,  0.1764],</span>
+<span class="go">       [ 0.4033, -0.155 ,  0.3016],</span>
+<span class="go">       [-2.1799, -1.3698, -0.9542],</span>
+<span class="go">       [ 1.4627, -1.7432, -0.8266]])</span>
+</pre></div>
+</div>
+<p>The dot method on DataFrame implements matrix multiplication:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [98]: </span><span class="n">df</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="gh">Out[98]: </span><span class="go"></span>
+<span class="go">         A       B       C</span>
+<span class="go">A  11.3419 -0.0598  3.0080</span>
+<span class="go">B  -0.0598  6.5206  2.0833</span>
+<span class="go">C   3.0080  2.0833  4.3105</span>
+</pre></div>
+</div>
+<p>Similarly, the dot method on Series implements dot product:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [99]: </span><span class="n">s1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="gp">In [100]: </span><span class="n">s1</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span>
+<span class="gh">Out[100]: </span><span class="go">255</span>
+</pre></div>
+</div>
+<p>DataFrame is not intended to be a drop-in replacement for ndarray as its
+indexing semantics are quite different in places from a matrix.</p>
+</div>
+<div class="section" id="console-display">
+<h3>Console display<a class="headerlink" href="#console-display" title="Permalink to this headline">¶</a></h3>
+<p>Very large DataFrames will be truncated to display them in the console.
+You can also get a summary using <a class="reference internal" href="generated/pandas.DataFrame.info.html#pandas.DataFrame.info" title="pandas.DataFrame.info"><code class="xref py py-meth docutils literal"><span class="pre">info()</span></code></a>.
+(Here I am reading a CSV version of the <strong>baseball</strong> dataset from the <strong>plyr</strong>
+R package):</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [101]: </span><span class="n">baseball</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/baseball.csv&#39;</span><span class="p">)</span>
+
+<span class="gp">In [102]: </span><span class="k">print</span><span class="p">(</span><span class="n">baseball</span><span class="p">)</span>
+<span class="go">       id     player  year  stint  ...   hbp   sh   sf  gidp</span>
+<span class="go">0   88641  womacto01  2006      2  ...   0.0  3.0  0.0   0.0</span>
+<span class="go">1   88643  schilcu01  2006      1  ...   0.0  0.0  0.0   0.0</span>
+<span class="go">..    ...        ...   ...    ...  ...   ...  ...  ...   ...</span>
+<span class="go">98  89533   aloumo01  2007      1  ...   2.0  0.0  3.0  13.0</span>
+<span class="go">99  89534  alomasa02  2007      1  ...   0.0  0.0  0.0   0.0</span>
+
+<span class="go">[100 rows x 23 columns]</span>
+
+<span class="gp">In [103]: </span><span class="n">baseball</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                       &lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;</span>
+<span class="go">RangeIndex: 100 entries, 0 to 99</span>
+<span class="go">Data columns (total 23 columns):</span>
+<span class="go">id        100 non-null int64</span>
+<span class="go">player    100 non-null object</span>
+<span class="go">year      100 non-null int64</span>
+<span class="go">stint     100 non-null int64</span>
+<span class="go">team      100 non-null object</span>
+<span class="go">lg        100 non-null object</span>
+<span class="go">g         100 non-null int64</span>
+<span class="go">ab        100 non-null int64</span>
+<span class="go">r         100 non-null int64</span>
+<span class="go">h         100 non-null int64</span>
+<span class="go">X2b       100 non-null int64</span>
+<span class="go">X3b       100 non-null int64</span>
+<span class="go">hr        100 non-null int64</span>
+<span class="go">rbi       100 non-null float64</span>
+<span class="go">sb        100 non-null float64</span>
+<span class="go">cs        100 non-null float64</span>
+<span class="go">bb        100 non-null int64</span>
+<span class="go">so        100 non-null float64</span>
+<span class="go">ibb       100 non-null float64</span>
+<span class="go">hbp       100 non-null float64</span>
+<span class="go">sh        100 non-null float64</span>
+<span class="go">sf        100 non-null float64</span>
+<span class="go">gidp      100 non-null float64</span>
+<span class="go">dtypes: float64(9), int64(11), object(3)</span>
+<span class="go">memory usage: 18.0+ KB</span>
+</pre></div>
+</div>
+<p>However, using <code class="docutils literal"><span class="pre">to_string</span></code> will return a string representation of the
+DataFrame in tabular form, though it won&#8217;t always fit the console width:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [104]: </span><span class="k">print</span><span class="p">(</span><span class="n">baseball</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">20</span><span class="p">:,</span> <span class="p">:</span><span class="mi">12</span><span class="p">]</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+<span class="go">       id     player  year  stint team  lg    g   ab   r    h  X2b  X3b</span>
+<span class="go">80  89474  finlest01  2007      1  COL  NL   43   94   9   17    3    0</span>
+<span class="go">81  89480  embreal01  2007      1  OAK  AL    4    0   0    0    0    0</span>
+<span class="go">82  89481  edmonji01  2007      1  SLN  NL  117  365  39   92   15    2</span>
+<span class="go">83  89482  easleda01  2007      1  NYN  NL   76  193  24   54    6    0</span>
+<span class="go">84  89489  delgaca01  2007      1  NYN  NL  139  538  71  139   30    0</span>
+<span class="go">85  89493  cormirh01  2007      1  CIN  NL    6    0   0    0    0    0</span>
+<span class="go">86  89494  coninje01  2007      2  NYN  NL   21   41   2    8    2    0</span>
+<span class="go">87  89495  coninje01  2007      1  CIN  NL   80  215  23   57   11    1</span>
+<span class="go">88  89497  clemero02  2007      1  NYA  AL    2    2   0    1    0    0</span>
+<span class="go">89  89498  claytro01  2007      2  BOS  AL    8    6   1    0    0    0</span>
+<span class="go">90  89499  claytro01  2007      1  TOR  AL   69  189  23   48   14    0</span>
+<span class="go">91  89501  cirilje01  2007      2  ARI  NL   28   40   6    8    4    0</span>
+<span class="go">92  89502  cirilje01  2007      1  MIN  AL   50  153  18   40    9    2</span>
+<span class="go">93  89521  bondsba01  2007      1  SFN  NL  126  340  75   94   14    0</span>
+<span class="go">94  89523  biggicr01  2007      1  HOU  NL  141  517  68  130   31    3</span>
+<span class="go">95  89525  benitar01  2007      2  FLO  NL   34    0   0    0    0    0</span>
+<span class="go">96  89526  benitar01  2007      1  SFN  NL   19    0   0    0    0    0</span>
+<span class="go">97  89530  ausmubr01  2007      1  HOU  NL  117  349  38   82   16    3</span>
+<span class="go">98  89533   aloumo01  2007      1  NYN  NL   87  328  51  112   19    1</span>
+<span class="go">99  89534  alomasa02  2007      1  NYN  NL    8   22   1    3    1    0</span>
+</pre></div>
+</div>
+<p>Wide DataFrames will be printed across multiple rows by
+default:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [105]: </span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+<span class="gh">Out[105]: </span><span class="go"></span>
+<span class="go">         0         1         2         3         4         5         6   \</span>
+<span class="go">0 -0.345352  1.314232  0.690579  0.995761  2.396780  0.014871  3.357427   </span>
+<span class="go">1 -2.182937  0.380396  0.084844  0.432390  1.519970 -0.493662  0.600178   </span>
+<span class="go">2  0.206053 -0.251905 -2.213588  1.063327  1.266143  0.299368 -0.863838   </span>
+
+<span class="go">         7         8         9         10        11  </span>
+<span class="go">0 -0.317441 -1.236269  0.896171 -0.487602 -0.082240  </span>
+<span class="go">1  0.274230  0.132885 -0.023688  2.410179  1.450520  </span>
+<span class="go">2  0.408204 -1.048089 -0.025747 -0.988387  0.094055  </span>
+</pre></div>
+</div>
+<p>You can change how much to print on a single row by setting the <code class="docutils literal"><span class="pre">display.width</span></code>
+option:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [106]: </span><span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.width&#39;</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span> <span class="c1"># default is 80</span>
+
+<span class="gp">In [107]: </span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+<span class="gh">Out[107]: </span><span class="go"></span>
+<span class="go">         0         1         2   \</span>
+<span class="go">0  1.262731  1.289997  0.082423   </span>
+<span class="go">1  1.126203 -0.977349  1.474071   </span>
+<span class="go">2  0.758527  1.729689 -0.964980   </span>
+
+<span class="go">         3         4         5   \</span>
+<span class="go">0 -0.055758  0.536580 -0.489682   </span>
+<span class="go">1 -0.064034 -1.282782  0.781836   </span>
+<span class="go">2 -0.845696 -1.340896  1.846883   </span>
+
+<span class="go">         6         7         8   \</span>
+<span class="go">0  0.369374 -0.034571 -2.484478   </span>
+<span class="go">1 -1.071357  0.441153  2.353925   </span>
+<span class="go">2 -1.328865  1.682706 -1.717693   </span>
+
+<span class="go">         9         10        11  </span>
+<span class="go">0 -0.281461  0.030711  0.109121  </span>
+<span class="go">1  0.583787  0.221471 -0.744471  </span>
+<span class="go">2  0.888782  0.228440  0.901805  </span>
+</pre></div>
+</div>
+<p>You can adjust the max width of the individual columns by setting <code class="docutils literal"><span class="pre">display.max_colwidth</span></code></p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [108]: </span><span class="n">datafile</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;filename&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;filename_01&#39;</span><span class="p">,</span><span class="s1">&#39;filename_02&#39;</span><span class="p">],</span>
+<span class="gp">   .....: </span>          <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;media/user_name/storage/folder_01/filename_01&quot;</span><span class="p">,</span>
+<span class="gp">   .....: </span>                   <span class="s2">&quot;media/user_name/storage/folder_02/filename_02&quot;</span><span class="p">]}</span>
+<span class="gp">   .....: </span>
+
+<span class="gp">In [109]: </span><span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.max_colwidth&#39;</span><span class="p">,</span><span class="mi">30</span><span class="p">)</span>
+
+<span class="gp">In [110]: </span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">datafile</span><span class="p">)</span>
+<span class="gh">Out[110]: </span><span class="go"></span>
+<span class="go">      filename  \</span>
+<span class="go">0  filename_01   </span>
+<span class="go">1  filename_02   </span>
+
+<span class="go">                            path  </span>
+<span class="go">0  media/user_name/storage/fo...  </span>
+<span class="go">1  media/user_name/storage/fo...  </span>
+
+<span class="gp">In [111]: </span><span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.max_colwidth&#39;</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="gp">In [112]: </span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">datafile</span><span class="p">)</span>
+<span class="gh">Out[112]: </span><span class="go"></span>
+<span class="go">      filename  \</span>
+<span class="go">0  filename_01   </span>
+<span class="go">1  filename_02   </span>
+
+<span class="go">                                            path  </span>
+<span class="go">0  media/user_name/storage/folder_01/filename_01  </span>
+<span class="go">1  media/user_name/storage/folder_02/filename_02  </span>
+</pre></div>
+</div>
+<p>You can also disable this feature via the <code class="docutils literal"><span class="pre">expand_frame_repr</span></code> option.
+This will print the table in one block.</p>
+</div>
+<div class="section" id="dataframe-column-attribute-access-and-ipython-completion">
+<h3>DataFrame column attribute access and IPython completion<a class="headerlink" href="#dataframe-column-attribute-access-and-ipython-completion" title="Permalink to this headline">¶</a></h3>
+<p>If a DataFrame column label is a valid Python variable name, the column can be
+accessed like attributes:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [113]: </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;foo1&#39;</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span>
+<span class="gp">   .....: </span>                   <span class="s1">&#39;foo2&#39;</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">)})</span>
+<span class="gp">   .....: </span>
+
+<span class="gp">In [114]: </span><span class="n">df</span>
+<span class="gh">Out[114]: </span><span class="go"></span>
+<span class="go">       foo1      foo2</span>
+<span class="go">0  1.171216 -0.858447</span>
+<span class="go">1  0.520260  0.306996</span>
+<span class="go">2 -1.197071 -0.028665</span>
+<span class="go">3 -1.066969  0.384316</span>
+<span class="go">4 -0.303421  1.574159</span>
+
+<span class="gp">In [115]: </span><span class="n">df</span><span class="o">.</span><span class="n">foo1</span>
+<span class="go">                                                                                                                                               Out[115]: </span>
+<span class="go">0    1.171216</span>
+<span class="go">1    0.520260</span>
+<span class="go">2   -1.197071</span>
+<span class="go">3   -1.066969</span>
+<span class="go">4   -0.303421</span>
+<span class="go">Name: foo1, dtype: float64</span>
+</pre></div>
+</div>
+<p>The columns are also connected to the <a class="reference external" href="http://ipython.org">IPython</a>
+completion mechanism so they can be tab-completed:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">df</span><span class="o">.</span><span class="n">fo</span><span class="o">&lt;</span><span class="n">TAB</span><span class="o">&gt;</span>
+<span class="go">df.foo1  df.foo2</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="panel">
+<span id="basics-panel"></span><h2>Panel<a class="headerlink" href="#panel" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">In 0.20.0, <code class="docutils literal"><span class="pre">Panel</span></code> is deprecated and will be removed in
+a future version. See the section <a class="reference internal" href="#dsintro-deprecate-panel"><span class="std std-ref">Deprecate Panel</span></a>.</p>
+</div>
+<p>Panel is a somewhat less-used, but still important container for 3-dimensional
+data. The term <a class="reference external" href="http://en.wikipedia.org/wiki/Panel_data">panel data</a> is
+derived from econometrics and is partially responsible for the name pandas:
+pan(el)-da(ta)-s. The names for the 3 axes are intended to give some semantic
+meaning to describing operations involving panel data and, in particular,
+econometric analysis of panel data. However, for the strict purposes of slicing
+and dicing a collection of DataFrame objects, you may find the axis names
+slightly arbitrary:</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>items</strong>: axis 0, each item corresponds to a DataFrame contained inside</li>
+<li><strong>major_axis</strong>: axis 1, it is the <strong>index</strong> (rows) of each of the
+DataFrames</li>
+<li><strong>minor_axis</strong>: axis 2, it is the <strong>columns</strong> of each of the DataFrames</li>
+</ul>
+</div></blockquote>
+<p>Construction of Panels works about like you would expect:</p>
+<div class="section" id="from-3d-ndarray-with-optional-axis-labels">
+<h3>From 3D ndarray with optional axis labels<a class="headerlink" href="#from-3d-ndarray-with-optional-axis-labels" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [116]: </span><span class="n">wp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Panel</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">items</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Item1&#39;</span><span class="p">,</span> <span class="s1">&#39;Item2&#39;</span><span class="p">],</span>
+<span class="gp">   .....: </span>              <span class="n">major_axis</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="s1">&#39;1/1/2000&#39;</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+<span class="gp">   .....: </span>              <span class="n">minor_axis</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">])</span>
+<span class="gp">   .....: </span>
+
+<span class="gp">In [117]: </span><span class="n">wp</span>
+<span class="gh">Out[117]: </span><span class="go"></span>
+<span class="go">&lt;class &#39;pandas.core.panel.Panel&#39;&gt;</span>
+<span class="go">Dimensions: 2 (items) x 5 (major_axis) x 4 (minor_axis)</span>
+<span class="go">Items axis: Item1 to Item2</span>
+<span class="go">Major_axis axis: 2000-01-01 00:00:00 to 2000-01-05 00:00:00</span>
+<span class="go">Minor_axis axis: A to D</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="from-dict-of-dataframe-objects">
+<h3>From dict of DataFrame objects<a class="headerlink" href="#from-dict-of-dataframe-objects" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [118]: </span><span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Item1&#39;</span> <span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
+<span class="gp">   .....: </span>        <span class="s1">&#39;Item2&#39;</span> <span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">))}</span>
+<span class="gp">   .....: </span>
+
+<span class="gp">In [119]: </span><span class="n">pd</span><span class="o">.</span><span class="n">Panel</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="gh">Out[119]: </span><span class="go"></span>
+<span class="go">&lt;class &#39;pandas.core.panel.Panel&#39;&gt;</span>
+<span class="go">Dimensions: 2 (items) x 4 (major_axis) x 3 (minor_axis)</span>
+<span class="go">Items axis: Item1 to Item2</span>
+<span class="go">Major_axis axis: 0 to 3</span>
+<span class="go">Minor_axis axis: 0 to 2</span>
+</pre></div>
+</div>
+<p>Note that the values in the dict need only be <strong>convertible to
+DataFrame</strong>. Thus, they can be any of the other valid inputs to DataFrame as
+per above.</p>
+<p>One helpful factory method is <code class="docutils literal"><span class="pre">Panel.from_dict</span></code>, which takes a
+dictionary of DataFrames as above, and the following named parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="17%" />
+<col width="17%" />
+<col width="67%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>intersect</td>
+<td><code class="docutils literal"><span class="pre">False</span></code></td>
+<td>drops elements whose indices do not align</td>
+</tr>
+<tr class="row-odd"><td>orient</td>
+<td><code class="docutils literal"><span class="pre">items</span></code></td>
+<td>use <code class="docutils literal"><span class="pre">minor</span></code> to use DataFrames&#8217; columns as panel items</td>
+</tr>
+</tbody>
+</table>
+<p>For example, compare to the construction above:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [120]: </span><span class="n">pd</span><span class="o">.</span><span class="n">Panel</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;minor&#39;</span><span class="p">)</span>
+<span class="gh">Out[120]: </span><span class="go"></span>
+<span class="go">&lt;class &#39;pandas.core.panel.Panel&#39;&gt;</span>
+<span class="go">Dimensions: 3 (items) x 4 (major_axis) x 2 (minor_axis)</span>
+<span class="go">Items axis: 0 to 2</span>
+<span class="go">Major_axis axis: 0 to 3</span>
+<span class="go">Minor_axis axis: Item1 to Item2</span>
+</pre></div>
+</div>
+<p>Orient is especially useful for mixed-type DataFrames. If you pass a dict of
+DataFrame objects with mixed-type columns, all of the data will get upcasted to
+<code class="docutils literal"><span class="pre">dtype=object</span></code> unless you pass <code class="docutils literal"><span class="pre">orient='minor'</span></code>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [121]: </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="s1">&#39;baz&#39;</span><span class="p">],</span>
+<span class="gp">   .....: </span>                   <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">)})</span>
+<span class="gp">   .....: </span>
+
+<span class="gp">In [122]: </span><span class="n">df</span>
+<span class="gh">Out[122]: </span><span class="go"></span>
+<span class="go">     a         b</span>
+<span class="go">0  foo -0.308853</span>
+<span class="go">1  bar -0.681087</span>
+<span class="go">2  baz  0.377953</span>
+
+<span class="gp">In [123]: </span><span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;item1&#39;</span><span class="p">:</span> <span class="n">df</span><span class="p">,</span> <span class="s1">&#39;item2&#39;</span><span class="p">:</span> <span class="n">df</span><span class="p">}</span>
+
+<span class="gp">In [124]: </span><span class="n">panel</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Panel</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;minor&#39;</span><span class="p">)</span>
+
+<span class="gp">In [125]: </span><span class="n">panel</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>
+<span class="gh">Out[125]: </span><span class="go"></span>
+<span class="go">  item1 item2</span>
+<span class="go">0   foo   foo</span>
+<span class="go">1   bar   bar</span>
+<span class="go">2   baz   baz</span>
+
+<span class="gp">In [126]: </span><span class="n">panel</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span>
+<span class="go">                                                                   Out[126]: </span>
+<span class="go">      item1     item2</span>
+<span class="go">0 -0.308853 -0.308853</span>
+<span class="go">1 -0.681087 -0.681087</span>
+<span class="go">2  0.377953  0.377953</span>
+
+<span class="gp">In [127]: </span><span class="n">panel</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dtypes</span>
+<span class="go">                                                                                                                                                                      Out[127]: </span>
+<span class="go">item1    float64</span>
+<span class="go">item2    float64</span>
+<span class="go">dtype: object</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Panel, being less commonly used than Series and DataFrame,
+has been slightly neglected feature-wise. A number of methods and options
+available in DataFrame are not available in Panel.</p>
+</div>
+</div>
+<div class="section" id="from-dataframe-using-to-panel-method">
+<span id="dsintro-to-panel"></span><h3>From DataFrame using <code class="docutils literal"><span class="pre">to_panel</span></code> method<a class="headerlink" href="#from-dataframe-using-to-panel-method" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">to_panel</span></code> converts a DataFrame with a two-level index to a Panel.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [128]: </span><span class="n">midx</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">MultiIndex</span><span class="p">(</span><span class="n">levels</span><span class="o">=</span><span class="p">[[</span><span class="s1">&#39;one&#39;</span><span class="p">,</span> <span class="s1">&#39;two&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">]],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
+
+<span class="gp">In [129]: </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">]},</span> <span class="n">index</span><span class="o">=</span><span class="n">midx</span><span class="p">)</span>
+
+<span class="gp">In [130]: </span><span class="n">df</span><span class="o">.</span><span class="n">to_panel</span><span class="p">()</span>
+<span class="gh">Out[130]: </span><span class="go"></span>
+<span class="go">&lt;class &#39;pandas.core.panel.Panel&#39;&gt;</span>
+<span class="go">Dimensions: 2 (items) x 2 (major_axis) x 2 (minor_axis)</span>
+<span class="go">Items axis: A to B</span>
+<span class="go">Major_axis axis: one to two</span>
+<span class="go">Minor_axis axis: x to y</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="item-selection-addition-deletion">
+<span id="dsintro-panel-item-selection"></span><h3>Item selection / addition / deletion<a class="headerlink" href="#item-selection-addition-deletion" title="Permalink to this headline">¶</a></h3>
+<p>Similar to DataFrame functioning as a dict of Series, Panel is like a dict
+of DataFrames:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [131]: </span><span class="n">wp</span><span class="p">[</span><span class="s1">&#39;Item1&#39;</span><span class="p">]</span>
+<span class="gh">Out[131]: </span><span class="go"></span>
+<span class="go">                   A         B         C         D</span>
+<span class="go">2000-01-01  1.588931  0.476720  0.473424 -0.242861</span>
+<span class="go">2000-01-02 -0.014805 -0.284319  0.650776 -1.461665</span>
+<span class="go">2000-01-03 -1.137707 -0.891060 -0.693921  1.613616</span>
+<span class="go">2000-01-04  0.464000  0.227371 -0.496922  0.306389</span>
+<span class="go">2000-01-05 -2.290613 -1.134623 -1.561819 -0.260838</span>
+
+<span class="gp">In [132]: </span><span class="n">wp</span><span class="p">[</span><span class="s1">&#39;Item3&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">wp</span><span class="p">[</span><span class="s1">&#39;Item1&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">wp</span><span class="p">[</span><span class="s1">&#39;Item2&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The API for insertion and deletion is the same as for DataFrame. And as with
+DataFrame, if the item is a valid python identifier, you can access it as an
+attribute and tab-complete it in IPython.</p>
+</div>
+<div class="section" id="id1">
+<h3>Transposing<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>A Panel can be rearranged using its <code class="docutils literal"><span class="pre">transpose</span></code> method (which does not make a
+copy by default unless the data are heterogeneous):</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [133]: </span><span class="n">wp</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gh">Out[133]: </span><span class="go"></span>
+<span class="go">&lt;class &#39;pandas.core.panel.Panel&#39;&gt;</span>
+<span class="go">Dimensions: 4 (items) x 3 (major_axis) x 5 (minor_axis)</span>
+<span class="go">Items axis: A to D</span>
+<span class="go">Major_axis axis: Item1 to Item3</span>
+<span class="go">Minor_axis axis: 2000-01-01 00:00:00 to 2000-01-05 00:00:00</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h3>Indexing / Selection<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="50%" />
+<col width="33%" />
+<col width="17%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Operation</th>
+<th class="head">Syntax</th>
+<th class="head">Result</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Select item</td>
+<td><code class="docutils literal"><span class="pre">wp[item]</span></code></td>
+<td>DataFrame</td>
+</tr>
+<tr class="row-odd"><td>Get slice at major_axis label</td>
+<td><code class="docutils literal"><span class="pre">wp.major_xs(val)</span></code></td>
+<td>DataFrame</td>
+</tr>
+<tr class="row-even"><td>Get slice at minor_axis label</td>
+<td><code class="docutils literal"><span class="pre">wp.minor_xs(val)</span></code></td>
+<td>DataFrame</td>
+</tr>
+</tbody>
+</table>
+<p>For example, using the earlier example data, we could do:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [134]: </span><span class="n">wp</span><span class="p">[</span><span class="s1">&#39;Item1&#39;</span><span class="p">]</span>
+<span class="gh">Out[134]: </span><span class="go"></span>
+<span class="go">                   A         B         C         D</span>
+<span class="go">2000-01-01  1.588931  0.476720  0.473424 -0.242861</span>
+<span class="go">2000-01-02 -0.014805 -0.284319  0.650776 -1.461665</span>
+<span class="go">2000-01-03 -1.137707 -0.891060 -0.693921  1.613616</span>
+<span class="go">2000-01-04  0.464000  0.227371 -0.496922  0.306389</span>
+<span class="go">2000-01-05 -2.290613 -1.134623 -1.561819 -0.260838</span>
+
+<span class="gp">In [135]: </span><span class="n">wp</span><span class="o">.</span><span class="n">major_xs</span><span class="p">(</span><span class="n">wp</span><span class="o">.</span><span class="n">major_axis</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                             Out[135]: </span>
+<span class="go">      Item1     Item2     Item3</span>
+<span class="go">A -1.137707  0.800193 -1.421791</span>
+<span class="go">B -0.891060  0.782098 -1.139320</span>
+<span class="go">C -0.693921 -1.069094  0.649074</span>
+<span class="go">D  1.613616 -1.099248 -1.467927</span>
+
+<span class="gp">In [136]: </span><span class="n">wp</span><span class="o">.</span><span class="n">minor_axis</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        Out[136]: Index([&#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;], dtype=&#39;object&#39;)</span>
+
+<span class="gp">In [137]: </span><span class="n">wp</span><span class="o">.</span><span class="n">minor_xs</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">)</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              Out[137]: </span>
+<span class="go">               Item1     Item2     Item3</span>
+<span class="go">2000-01-01  0.473424 -0.902937 -0.524316</span>
+<span class="go">2000-01-02  0.650776 -1.144073 -0.568824</span>
+<span class="go">2000-01-03 -0.693921 -1.069094  0.649074</span>
+<span class="go">2000-01-04 -0.496922  0.661084 -0.751678</span>
+<span class="go">2000-01-05 -1.561819 -1.056652  1.478083</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="squeezing">
+<h3>Squeezing<a class="headerlink" href="#squeezing" title="Permalink to this headline">¶</a></h3>
+<p>Another way to change the dimensionality of an object is to <code class="docutils literal"><span class="pre">squeeze</span></code> a 1-len object, similar to <code class="docutils literal"><span class="pre">wp['Item1']</span></code></p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [138]: </span><span class="n">wp</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">items</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Item1&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+<span class="gh">Out[138]: </span><span class="go"></span>
+<span class="go">                   A         B         C         D</span>
+<span class="go">2000-01-01  1.588931  0.476720  0.473424 -0.242861</span>
+<span class="go">2000-01-02 -0.014805 -0.284319  0.650776 -1.461665</span>
+<span class="go">2000-01-03 -1.137707 -0.891060 -0.693921  1.613616</span>
+<span class="go">2000-01-04  0.464000  0.227371 -0.496922  0.306389</span>
+<span class="go">2000-01-05 -2.290613 -1.134623 -1.561819 -0.260838</span>
+
+<span class="gp">In [139]: </span><span class="n">wp</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">items</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Item1&#39;</span><span class="p">],</span> <span class="n">minor</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;B&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                             Out[139]: </span>
+<span class="go">2000-01-01    0.476720</span>
+<span class="go">2000-01-02   -0.284319</span>
+<span class="go">2000-01-03   -0.891060</span>
+<span class="go">2000-01-04    0.227371</span>
+<span class="go">2000-01-05   -1.134623</span>
+<span class="go">Freq: D, Name: B, dtype: float64</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="conversion-to-dataframe">
+<h3>Conversion to DataFrame<a class="headerlink" href="#conversion-to-dataframe" title="Permalink to this headline">¶</a></h3>
+<p>A Panel can be represented in 2D form as a hierarchically indexed
+DataFrame. See the section <a class="reference internal" href="advanced.html#advanced-hierarchical"><span class="std std-ref">hierarchical indexing</span></a>
+for more on this. To convert a Panel to a DataFrame, use the <code class="docutils literal"><span class="pre">to_frame</span></code>
+method:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [140]: </span><span class="n">panel</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Panel</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">items</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;one&#39;</span><span class="p">,</span> <span class="s1">&#39;two&#39;</span><span class="p">,</span> <span class="s1">&#39;three&#39;</span><span class="p">],</span>
+<span class="gp">   .....: </span>                 <span class="n">major_axis</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="s1">&#39;1/1/2000&#39;</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+<span class="gp">   .....: </span>                 <span class="n">minor_axis</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">])</span>
+<span class="gp">   .....: </span>
+
+<span class="gp">In [141]: </span><span class="n">panel</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span>
+<span class="gh">Out[141]: </span><span class="go"></span>
+<span class="go">                       one       two     three</span>
+<span class="go">major      minor                              </span>
+<span class="go">2000-01-01 a      0.493672  1.219492 -1.290493</span>
+<span class="go">           b     -2.461467  0.062297  0.787872</span>
+<span class="go">           c     -1.553902 -0.110388  1.515707</span>
+<span class="go">           d      2.015523 -1.184357 -0.276487</span>
+<span class="go">2000-01-02 a     -1.833722 -0.558081 -0.223762</span>
+<span class="go">           b      1.771740  0.077849  1.397431</span>
+<span class="go">           c     -0.670027  0.629498  1.503874</span>
+<span class="go">           d      0.049307 -1.035260 -0.478905</span>
+<span class="go">2000-01-03 a     -0.521493 -0.438229 -0.135950</span>
+<span class="go">           b     -3.201750  0.503703 -0.730327</span>
+<span class="go">           c      0.792716  0.413086 -0.033277</span>
+<span class="go">           d      0.146111 -1.139050  0.281151</span>
+<span class="go">2000-01-04 a      1.903247  0.660342 -1.298915</span>
+<span class="go">           b     -0.747169  0.464794 -2.819487</span>
+<span class="go">           c     -0.309038 -0.309337 -0.851985</span>
+<span class="go">           d      0.393876 -0.649593 -1.106952</span>
+<span class="go">2000-01-05 a      1.861468  0.683758 -0.937731</span>
+<span class="go">           b      0.936527 -0.643834 -1.537770</span>
+<span class="go">           c      1.255746  0.421287  0.555759</span>
+<span class="go">           d     -2.655452  1.032814 -2.277282</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="deprecate-panel">
+<span id="dsintro-deprecate-panel"></span><h2>Deprecate Panel<a class="headerlink" href="#deprecate-panel" title="Permalink to this headline">¶</a></h2>
+<p>Over the last few years, pandas has increased in both breadth and depth, with new features,
+datatype support, and manipulation routines. As a result, supporting efficient indexing and functional
+routines for <code class="docutils literal"><span class="pre">Series</span></code>, <code class="docutils literal"><span class="pre">DataFrame</span></code> and <code class="docutils literal"><span class="pre">Panel</span></code> has contributed to an increasingly fragmented and
+difficult-to-understand codebase.</p>
+<p>The 3-D structure of a <code class="docutils literal"><span class="pre">Panel</span></code> is much less common for many types of data analysis,
+than the 1-D of the <code class="docutils literal"><span class="pre">Series</span></code> or the 2-D of the <code class="docutils literal"><span class="pre">DataFrame</span></code>. Going forward it makes sense for
+pandas to focus on these areas exclusively.</p>
+<p>Oftentimes, one can simply use a MultiIndex <code class="docutils literal"><span class="pre">DataFrame</span></code> for easily working with higher dimensional data.</p>
+<p>In additon, the <code class="docutils literal"><span class="pre">xarray</span></code> package was built from the ground up, specifically in order to
+support the multi-dimensional analysis that is one of <code class="docutils literal"><span class="pre">Panel</span></code> s main usecases.
+<a class="reference external" href="http://xarray.pydata.org/en/stable/pandas.html#panel-transition">Here is a link to the xarray panel-transition documentation</a>.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [142]: </span><span class="n">p</span> <span class="o">=</span> <span class="n">tm</span><span class="o">.</span><span class="n">makePanel</span><span class="p">()</span>
+
+<span class="gp">In [143]: </span><span class="n">p</span>
+<span class="gh">Out[143]: </span><span class="go"></span>
+<span class="go">&lt;class &#39;pandas.core.panel.Panel&#39;&gt;</span>
+<span class="go">Dimensions: 3 (items) x 30 (major_axis) x 4 (minor_axis)</span>
+<span class="go">Items axis: ItemA to ItemC</span>
+<span class="go">Major_axis axis: 2000-01-03 00:00:00 to 2000-02-11 00:00:00</span>
+<span class="go">Minor_axis axis: A to D</span>
+</pre></div>
+</div>
+<p>Convert to a MultiIndex DataFrame</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [144]: </span><span class="n">p</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span>
+<span class="gh">Out[144]: </span><span class="go"></span>
+<span class="go">                     ItemA     ItemB     ItemC</span>
+<span class="go">major      minor                              </span>
+<span class="go">2000-01-03 A     -0.390201 -1.624062 -0.605044</span>
+<span class="go">           B      1.562443  0.483103  0.583129</span>
+<span class="go">           C     -1.085663  0.768159 -0.273458</span>
+<span class="go">           D      0.136235 -0.021763 -0.700648</span>
+<span class="go">2000-01-04 A      1.207122 -0.758514  0.878404</span>
+<span class="go">           B      0.763264  0.061495 -0.876690</span>
+<span class="go">           C     -1.114738  0.225441 -0.335117</span>
+<span class="go">           D      0.886313 -0.047152 -1.166607</span>
+<span class="go">2000-01-05 A      0.178690 -0.560859 -0.921485</span>
+<span class="go">           B      0.162027  0.240767 -1.919354</span>
+<span class="go">           C     -0.058216  0.543294 -0.476268</span>
+<span class="go">           D     -1.350722  0.088472 -0.367236</span>
+<span class="go">2000-01-06 A     -1.004168 -0.589005 -0.200312</span>
+<span class="go">           B     -0.902704  0.782413 -0.572707</span>
+<span class="go">           C     -0.486768  0.771931 -1.765602</span>
+<span class="go">           D     -0.886348 -0.857435  1.296674</span>
+<span class="go">2000-01-07 A     -1.377627 -1.070678  0.522423</span>
+<span class="go">           B      1.106010  0.628462 -1.736484</span>
+<span class="go">           C      1.685148 -0.968145  0.578223</span>
+<span class="go">           D     -1.013316 -2.503786  0.641385</span>
+<span class="go">2000-01-10 A      0.499281 -1.681101  0.722511</span>
+<span class="go">           B     -0.199234 -0.880627 -1.335113</span>
+<span class="go">           C      0.112572 -1.176383  0.242697</span>
+<span class="go">           D      1.920906 -1.058041 -0.779432</span>
+<span class="go">2000-01-11 A     -1.405256  0.403776 -1.702486</span>
+<span class="go">           B      0.458265  0.777575 -1.244471</span>
+<span class="go">           C     -1.495309 -3.192716  0.208129</span>
+<span class="go">           D     -0.388231 -0.657981  0.602456</span>
+<span class="go">2000-01-12 A      0.162565  0.609862 -0.709535</span>
+<span class="go">           B      0.491048 -0.779367  0.347339</span>
+<span class="go">...                    ...       ...       ...</span>
+<span class="go">2000-02-02 C     -0.303961 -0.463752 -0.288962</span>
+<span class="go">           D      0.104050  1.116086  0.506445</span>
+<span class="go">2000-02-03 A     -2.338595 -0.581967 -0.801820</span>
+<span class="go">           B     -0.557697 -0.033731 -0.176382</span>
+<span class="go">           C      0.625555 -0.055289  0.875359</span>
+<span class="go">           D      0.174068 -0.443915  1.626369</span>
+<span class="go">2000-02-04 A     -0.374279 -1.233862 -0.915751</span>
+<span class="go">           B      0.381353 -1.108761 -1.970108</span>
+<span class="go">           C     -0.059268 -0.360853 -0.614618</span>
+<span class="go">           D     -0.439461 -0.200491  0.429518</span>
+<span class="go">2000-02-07 A     -2.359958 -3.520876 -0.288156</span>
+<span class="go">           B      1.337122 -0.314399 -1.044208</span>
+<span class="go">           C      0.249698  0.728197  0.565375</span>
+<span class="go">           D     -0.741343  1.092633  0.013910</span>
+<span class="go">2000-02-08 A     -1.157886  0.516870 -1.199945</span>
+<span class="go">           B     -1.531095 -0.860626 -0.821179</span>
+<span class="go">           C      1.103949  1.326768  0.068184</span>
+<span class="go">           D     -0.079673 -1.675194 -0.458272</span>
+<span class="go">2000-02-09 A     -0.551865  0.343125 -0.072869</span>
+<span class="go">           B      1.331458  0.370397 -1.914267</span>
+<span class="go">           C     -1.087532  0.208927  0.788871</span>
+<span class="go">           D     -0.922875  0.437234 -1.531004</span>
+<span class="go">2000-02-10 A      1.592673  2.137827 -1.828740</span>
+<span class="go">           B     -0.571329 -1.761442 -0.826439</span>
+<span class="go">           C      1.998044  0.292058 -0.280343</span>
+<span class="go">           D      0.303638  0.388254 -0.500569</span>
+<span class="go">2000-02-11 A      1.559318  0.452429 -1.716981</span>
+<span class="go">           B     -0.026671 -0.899454  0.124808</span>
+<span class="go">           C     -0.244548 -2.019610  0.931536</span>
+<span class="go">           D     -0.917368  0.479630  0.870690</span>
+
+<span class="go">[120 rows x 3 columns]</span>
+</pre></div>
+</div>
+<p>Alternatively, one can convert to an xarray <code class="docutils literal"><span class="pre">DataArray</span></code>.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [145]: </span><span class="n">p</span><span class="o">.</span><span class="n">to_xarray</span><span class="p">()</span>
+<span class="gh">Out[145]: </span><span class="go"></span>
+<span class="go">&lt;xarray.DataArray (items: 3, major_axis: 30, minor_axis: 4)&gt;</span>
+<span class="go">array([[[-0.390201,  1.562443, -1.085663,  0.136235],</span>
+<span class="go">        [ 1.207122,  0.763264, -1.114738,  0.886313],</span>
+<span class="go">        ..., </span>
+<span class="go">        [ 1.592673, -0.571329,  1.998044,  0.303638],</span>
+<span class="go">        [ 1.559318, -0.026671, -0.244548, -0.917368]],</span>
+
+<span class="go">       [[-1.624062,  0.483103,  0.768159, -0.021763],</span>
+<span class="go">        [-0.758514,  0.061495,  0.225441, -0.047152],</span>
+<span class="go">        ..., </span>
+<span class="go">        [ 2.137827, -1.761442,  0.292058,  0.388254],</span>
+<span class="go">        [ 0.452429, -0.899454, -2.01961 ,  0.47963 ]],</span>
+
+<span class="go">       [[-0.605044,  0.583129, -0.273458, -0.700648],</span>
+<span class="go">        [ 0.878404, -0.87669 , -0.335117, -1.166607],</span>
+<span class="go">        ..., </span>
+<span class="go">        [-1.82874 , -0.826439, -0.280343, -0.500569],</span>
+<span class="go">        [-1.716981,  0.124808,  0.931536,  0.87069 ]]])</span>
+<span class="go">Coordinates:</span>
+<span class="go">  * items       (items) object &#39;ItemA&#39; &#39;ItemB&#39; &#39;ItemC&#39;</span>
+<span class="go">  * major_axis  (major_axis) datetime64[ns] 2000-01-03 2000-01-04 2000-01-05 ...</span>
+<span class="go">  * minor_axis  (minor_axis) object &#39;A&#39; &#39;B&#39; &#39;C&#39; &#39;D&#39;</span>
+</pre></div>
+</div>
+<p>You can see the full-documentation for the <a class="reference external" href="http://xarray.pydata.org/en/stable/">xarray package</a>.</p>
+</div>
+<div class="section" id="panel4d-and-panelnd-deprecated">
+<span id="dsintro-panel4d"></span><span id="dsintro-panelnd"></span><h2>Panel4D and PanelND (Deprecated)<a class="headerlink" href="#panel4d-and-panelnd-deprecated" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">In 0.19.0 <code class="docutils literal"><span class="pre">Panel4D</span></code> and <code class="docutils literal"><span class="pre">PanelND</span></code> are deprecated and will be removed in
+a future version. The recommended way to represent these types of
+n-dimensional data are with the
+<a class="reference external" href="http://xarray.pydata.org/en/stable/">xarray package</a>.
+Pandas provides a <code class="xref py py-meth docutils literal"><span class="pre">to_xarray()</span></code> method to automate
+this conversion.</p>
+</div>
+<p>See the <a class="reference external" href="http://pandas.pydata.org/pandas-docs/version/0.18.1/dsintro.html#panel4d-experimental">docs of a previous version</a>
+for documentation on these objects.</p>
+</div>
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="clearer"></div>
+        </div>
+    </div>
+</div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="basics.html" title="Essential Basic Functionality"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cookbook.html" title="Cookbook"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pandas 0.22.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+<style type="text/css">
+    .scrollToTop {
+        text-align: center;
+        font-weight: bold;
+        position: fixed;
+        bottom: 60px;
+        right: 40px;
+        display: none;
+    }
+</style>
+<a href="#" class="scrollToTop">Scroll To Top</a>
+<script type="text/javascript">
+$(document).ready(function() {
+    //Check to see if the window is top if not then display button
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 200) {
+            $('.scrollToTop').fadeIn();
+        } else {
+            $('.scrollToTop').fadeOut();
+        }
+    });
+
+    //Click event to scroll to top
+    $('.scrollToTop').click(function() {
+        $('html, body').animate({
+            scrollTop: 0
+        }, 500);
+        return false;
+    });
+});
+</script>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27880019-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </body>
+</html>

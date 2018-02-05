@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.random.f &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="Random sampling (numpy.random)" href="../routines.random.html" >
+    <link rel="next" title="numpy.random.gamma" href="numpy.random.gamma.html" >
+    <link rel="prev" title="numpy.random.exponential" href="numpy.random.exponential.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.random.html" accesskey="U">Random sampling (<code class="docutils literal"><span class="pre">numpy.random</span></code>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.random.gamma.html" title="numpy.random.gamma"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.random.exponential.html" title="numpy.random.exponential"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.random.exponential.html"
+                        title="previous chapter">numpy.random.exponential</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.random.gamma.html"
+                        title="next chapter">numpy.random.gamma</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-random-f">
+<h1>numpy.random.f<a class="headerlink" href="#numpy-random-f" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="numpy.random.f">
+<code class="descclassname">numpy.random.</code><code class="descname">f</code><span class="sig-paren">(</span><em>dfnum</em>, <em>dfden</em>, <em>size=None</em><span class="sig-paren">)</span><a class="headerlink" href="#numpy.random.f" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw samples from an F distribution.</p>
+<p>Samples are drawn from an F distribution with specified parameters,
+<em class="xref py py-obj">dfnum</em> (degrees of freedom in numerator) and <em class="xref py py-obj">dfden</em> (degrees of
+freedom in denominator), where both parameters should be greater than
+zero.</p>
+<p>The random variate of the F distribution (also known as the
+Fisher distribution) is a continuous probability distribution
+that arises in ANOVA tests, and is the ratio of two chi-square
+variates.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dfnum</strong> : float or array_like of floats</p>
+<blockquote>
+<div><p>Degrees of freedom in numerator, should be &gt; 0.</p>
+</div></blockquote>
+<p><strong>dfden</strong> : float or array_like of float</p>
+<blockquote>
+<div><p>Degrees of freedom in denominator, should be &gt; 0.</p>
+</div></blockquote>
+<p><strong>size</strong> : int or tuple of ints, optional</p>
+<blockquote>
+<div><p>Output shape.  If the given shape is, e.g., <code class="docutils literal"><span class="pre">(m,</span> <span class="pre">n,</span> <span class="pre">k)</span></code>, then
+<code class="docutils literal"><span class="pre">m</span> <span class="pre">*</span> <span class="pre">n</span> <span class="pre">*</span> <span class="pre">k</span></code> samples are drawn.  If size is <code class="docutils literal"><span class="pre">None</span></code> (default),
+a single value is returned if <code class="docutils literal"><span class="pre">dfnum</span></code> and <code class="docutils literal"><span class="pre">dfden</span></code> are both scalars.
+Otherwise, <code class="docutils literal"><span class="pre">np.broadcast(dfnum,</span> <span class="pre">dfden).size</span></code> samples are drawn.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out</strong> : ndarray or scalar</p>
+<blockquote class="last">
+<div><p>Drawn samples from the parameterized Fisher distribution.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.f.html#scipy.stats.f" title="(in SciPy v1.0.0)"><code class="xref py py-obj docutils literal"><span class="pre">scipy.stats.f</span></code></a></dt>
+<dd>probability density function, distribution or cumulative density function, etc.</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>The F statistic is used to compare in-group variances to between-group
+variances. Calculating the distribution depends on the sampling, and
+so it is a function of the respective degrees of freedom in the
+problem.  The variable <em class="xref py py-obj">dfnum</em> is the number of samples minus one, the
+between-groups degrees of freedom, while <em class="xref py py-obj">dfden</em> is the within-groups
+degrees of freedom, the sum of the number of samples in each group
+minus the number of groups.</p>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r224" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R224]</a></td><td>Glantz, Stanton A. &#8220;Primer of Biostatistics.&#8221;, McGraw-Hill,
+Fifth Edition, 2002.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r225" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[R225]</a></td><td>Wikipedia, &#8220;F-distribution&#8221;,
+<a class="reference external" href="http://en.wikipedia.org/wiki/F-distribution">http://en.wikipedia.org/wiki/F-distribution</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>An example from Glantz[1], pp 47-40:</p>
+<p>Two groups, children of diabetics (25 people) and children from people
+without diabetes (25 controls). Fasting blood glucose was measured,
+case group had a mean value of 86.1, controls had a mean value of
+82.2. Standard deviations were 2.09 and 2.49 respectively. Are these
+data consistent with the null hypothesis that the parents diabetic
+status does not affect their children&#8217;s blood glucose levels?
+Calculating the F statistic from the data gives a value of 36.01.</p>
+<p>Draw samples from the distribution:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dfnum</span> <span class="o">=</span> <span class="mf">1.</span> <span class="c1"># between group degrees of freedom</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfden</span> <span class="o">=</span> <span class="mf">48.</span> <span class="c1"># within groups degrees of freedom</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="n">dfnum</span><span class="p">,</span> <span class="n">dfden</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The lower bound for the top 1% of the samples is :</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sort</span><span class="p">(</span><span class="n">s</span><span class="p">)[</span><span class="o">-</span><span class="mi">10</span><span class="p">]</span>
+<span class="go">7.61988120985</span>
+</pre></div>
+</div>
+<p>So there is about a 1% chance that the F statistic will exceed 7.62,
+the measured value is 36, so the null hypothesis is rejected at the 1%
+level.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

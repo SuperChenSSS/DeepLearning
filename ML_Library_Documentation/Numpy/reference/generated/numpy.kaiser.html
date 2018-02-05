@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.kaiser &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="Window functions" href="../routines.window.html" >
+    <link rel="next" title="Packaging (numpy.distutils)" href="../distutils.html" >
+    <link rel="prev" title="numpy.hanning" href="numpy.hanning.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.window.html" accesskey="U">Window functions</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../distutils.html" title="Packaging (numpy.distutils)"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.hanning.html" title="numpy.hanning"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.hanning.html"
+                        title="previous chapter">numpy.hanning</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../distutils.html"
+                        title="next chapter">Packaging (<code class="docutils literal"><span class="pre">numpy.distutils</span></code>)</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-kaiser">
+<h1>numpy.kaiser<a class="headerlink" href="#numpy-kaiser" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="numpy.kaiser">
+<code class="descclassname">numpy.</code><code class="descname">kaiser</code><span class="sig-paren">(</span><em>M</em>, <em>beta</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/numpy/numpy/blob/v1.14.0/numpy/lib/function_base.py#L3748-L3872"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy.kaiser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Kaiser window.</p>
+<p>The Kaiser window is a taper formed by using a Bessel function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>M</strong> : int</p>
+<blockquote>
+<div><p>Number of points in the output window. If zero or less, an
+empty array is returned.</p>
+</div></blockquote>
+<p><strong>beta</strong> : float</p>
+<blockquote>
+<div><p>Shape parameter for window.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out</strong> : array</p>
+<blockquote class="last">
+<div><p>The window, with the maximum value normalized to one (the value
+one appears only if the number of samples is odd).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="numpy.bartlett.html#numpy.bartlett" title="numpy.bartlett"><code class="xref py py-obj docutils literal"><span class="pre">bartlett</span></code></a>, <a class="reference internal" href="numpy.blackman.html#numpy.blackman" title="numpy.blackman"><code class="xref py py-obj docutils literal"><span class="pre">blackman</span></code></a>, <a class="reference internal" href="numpy.hamming.html#numpy.hamming" title="numpy.hamming"><code class="xref py py-obj docutils literal"><span class="pre">hamming</span></code></a>, <a class="reference internal" href="numpy.hanning.html#numpy.hanning" title="numpy.hanning"><code class="xref py py-obj docutils literal"><span class="pre">hanning</span></code></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p>The Kaiser window is defined as</p>
+<div class="math">
+<p><img src="../../_images/math/87241ea48f9219702fc36e56cd113c8826f7a71f.svg" alt="w(n) = I_0\left( \beta \sqrt{1-\frac{4n^2}{(M-1)^2}}
+\right)/I_0(\beta)"/></p>
+</div><p>with</p>
+<div class="math">
+<p><img src="../../_images/math/90fe8cf4deb769800d878ca1e55a874151735e78.svg" alt="\quad -\frac{M-1}{2} \leq n \leq \frac{M-1}{2},"/></p>
+</div><p>where <img class="math" src="../../_images/math/855050f8e6ce09f0c2716ded698e80a83b3436b3.svg" alt="I_0"/> is the modified zeroth-order Bessel function.</p>
+<p>The Kaiser was named for Jim Kaiser, who discovered a simple
+approximation to the DPSS window based on Bessel functions.  The Kaiser
+window is a very good approximation to the Digital Prolate Spheroidal
+Sequence, or Slepian window, which is the transform which maximizes the
+energy in the main lobe of the window relative to total energy.</p>
+<p>The Kaiser can approximate many other windows by varying the beta
+parameter.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="85%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">beta</th>
+<th class="head">Window shape</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>0</td>
+<td>Rectangular</td>
+</tr>
+<tr class="row-odd"><td>5</td>
+<td>Similar to a Hamming</td>
+</tr>
+<tr class="row-even"><td>6</td>
+<td>Similar to a Hanning</td>
+</tr>
+<tr class="row-odd"><td>8.6</td>
+<td>Similar to a Blackman</td>
+</tr>
+</tbody>
+</table>
+<p>A beta value of 14 is probably a good starting point. Note that as beta
+gets large, the window narrows, and so the number of samples needs to be
+large enough to sample the increasingly narrow spike, otherwise NaNs will
+get returned.</p>
+<p>Most references to the Kaiser window come from the signal processing
+literature, where it is used as one of many windowing functions for
+smoothing values.  It is also known as an apodization (which means
+&#8220;removing the foot&#8221;, i.e. smoothing discontinuities at the beginning
+and end of the sampled signal) or tapering function.</p>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r37" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R37]</a></td><td>J. F. Kaiser, &#8220;Digital Filters&#8221; - Ch 7 in &#8220;Systems analysis by
+digital computer&#8221;, Editors: F.F. Kuo and J.F. Kaiser, p 218-285.
+John Wiley and Sons, New York, (1966).</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r38" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[R38]</a></td><td>E.R. Kanasewich, &#8220;Time Sequence Analysis in Geophysics&#8221;, The
+University of Alberta Press, 1975, pp. 177-178.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r39" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[R39]</a></td><td>Wikipedia, &#8220;Window function&#8221;,
+<a class="reference external" href="http://en.wikipedia.org/wiki/Window_function">http://en.wikipedia.org/wiki/Window_function</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">kaiser</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">14</span><span class="p">)</span>
+<span class="go">array([  7.72686684e-06,   3.46009194e-03,   4.65200189e-02,</span>
+<span class="go">         2.29737120e-01,   5.99885316e-01,   9.45674898e-01,</span>
+<span class="go">         9.45674898e-01,   5.99885316e-01,   2.29737120e-01,</span>
+<span class="go">         4.65200189e-02,   3.46009194e-03,   7.72686684e-06])</span>
+</pre></div>
+</div>
+<p>Plot the window and the frequency response:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy.fft</span> <span class="k">import</span> <span class="n">fft</span><span class="p">,</span> <span class="n">fftshift</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">window</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kaiser</span><span class="p">(</span><span class="mi">51</span><span class="p">,</span> <span class="mi">14</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">window</span><span class="p">)</span>
+<span class="go">[&lt;matplotlib.lines.Line2D object at 0x...&gt;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Kaiser window&quot;</span><span class="p">)</span>
+<span class="go">&lt;matplotlib.text.Text object at 0x...&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Amplitude&quot;</span><span class="p">)</span>
+<span class="go">&lt;matplotlib.text.Text object at 0x...&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Sample&quot;</span><span class="p">)</span>
+<span class="go">&lt;matplotlib.text.Text object at 0x...&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="go">&lt;matplotlib.figure.Figure object at 0x...&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">fft</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="mi">2048</span><span class="p">)</span> <span class="o">/</span> <span class="mf">25.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">fftshift</span><span class="p">(</span><span class="n">A</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">mag</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
+<span class="go">[&lt;matplotlib.lines.Line2D object at 0x...&gt;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Frequency response of Kaiser window&quot;</span><span class="p">)</span>
+<span class="go">&lt;matplotlib.text.Text object at 0x...&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Magnitude [dB]&quot;</span><span class="p">)</span>
+<span class="go">&lt;matplotlib.text.Text object at 0x...&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Normalized frequency [cycles per sample]&quot;</span><span class="p">)</span>
+<span class="go">&lt;matplotlib.text.Text object at 0x...&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+<span class="go">(-0.5, 0.5, -100.0, ...)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.random.RandomState.laplace &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="numpy.random.RandomState" href="numpy.random.RandomState.html" >
+    <link rel="next" title="numpy.random.RandomState.logistic" href="numpy.random.RandomState.logistic.html" >
+    <link rel="prev" title="numpy.random.RandomState.hypergeometric" href="numpy.random.RandomState.hypergeometric.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.random.html" >Random sampling (<code class="docutils literal"><span class="pre">numpy.random</span></code>)</a></li>
+          <li class="active"><a href="numpy.random.RandomState.html" accesskey="U">numpy.random.RandomState</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.random.RandomState.logistic.html" title="numpy.random.RandomState.logistic"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.random.RandomState.hypergeometric.html" title="numpy.random.RandomState.hypergeometric"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.random.RandomState.hypergeometric.html"
+                        title="previous chapter">numpy.random.RandomState.hypergeometric</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.random.RandomState.logistic.html"
+                        title="next chapter">numpy.random.RandomState.logistic</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-random-randomstate-laplace">
+<h1>numpy.random.RandomState.laplace<a class="headerlink" href="#numpy-random-randomstate-laplace" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="numpy.random.RandomState.laplace">
+<code class="descclassname">RandomState.</code><code class="descname">laplace</code><span class="sig-paren">(</span><em>loc=0.0</em>, <em>scale=1.0</em>, <em>size=None</em><span class="sig-paren">)</span><a class="headerlink" href="#numpy.random.RandomState.laplace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw samples from the Laplace or double exponential distribution with
+specified location (or mean) and scale (decay).</p>
+<p>The Laplace distribution is similar to the Gaussian/normal distribution,
+but is sharper at the peak and has fatter tails. It represents the
+difference between two independent, identically distributed exponential
+random variables.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>loc</strong> : float or array_like of floats, optional</p>
+<blockquote>
+<div><p>The position, <img class="math" src="../../_images/math/d79e8a2c7ce54906c2b25549da38bdbe02cf40d6.svg" alt="\mu"/>, of the distribution peak. Default is 0.</p>
+</div></blockquote>
+<p><strong>scale</strong> : float or array_like of floats, optional</p>
+<blockquote>
+<div><p><img class="math" src="../../_images/math/76f1d8ace30435987c01a00ca53a71cba1f40e6c.svg" alt="\lambda"/>, the exponential decay. Default is 1.</p>
+</div></blockquote>
+<p><strong>size</strong> : int or tuple of ints, optional</p>
+<blockquote>
+<div><p>Output shape.  If the given shape is, e.g., <code class="docutils literal"><span class="pre">(m,</span> <span class="pre">n,</span> <span class="pre">k)</span></code>, then
+<code class="docutils literal"><span class="pre">m</span> <span class="pre">*</span> <span class="pre">n</span> <span class="pre">*</span> <span class="pre">k</span></code> samples are drawn.  If size is <code class="docutils literal"><span class="pre">None</span></code> (default),
+a single value is returned if <code class="docutils literal"><span class="pre">loc</span></code> and <code class="docutils literal"><span class="pre">scale</span></code> are both scalars.
+Otherwise, <code class="docutils literal"><span class="pre">np.broadcast(loc,</span> <span class="pre">scale).size</span></code> samples are drawn.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out</strong> : ndarray or scalar</p>
+<blockquote class="last">
+<div><p>Drawn samples from the parameterized Laplace distribution.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>It has the probability density function</p>
+<div class="math">
+<p><img src="../../_images/math/f24101930bd10fdf969be7be2b9a4a8d3dcc7fe1.svg" alt="f(x; \mu, \lambda) = \frac{1}{2\lambda}
+\exp\left(-\frac{|x - \mu|}{\lambda}\right)."/></p>
+</div><p>The first law of Laplace, from 1774, states that the frequency
+of an error can be expressed as an exponential function of the
+absolute magnitude of the error, which leads to the Laplace
+distribution. For many problems in economics and health
+sciences, this distribution seems to model the data better
+than the standard Gaussian distribution.</p>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r162" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R162]</a></td><td>Abramowitz, M. and Stegun, I. A. (Eds.). &#8220;Handbook of
+Mathematical Functions with Formulas, Graphs, and Mathematical
+Tables, 9th printing,&#8221; New York: Dover, 1972.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r163" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[R163]</a></td><td>Kotz, Samuel, et. al. &#8220;The Laplace Distribution and
+Generalizations, &#8221; Birkhauser, 2001.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r164" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[R164]</a></td><td>Weisstein, Eric W. &#8220;Laplace Distribution.&#8221;
+From MathWorld&#8211;A Wolfram Web Resource.
+<a class="reference external" href="http://mathworld.wolfram.com/LaplaceDistribution.html">http://mathworld.wolfram.com/LaplaceDistribution.html</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r165" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[R165]</a></td><td>Wikipedia, &#8220;Laplace distribution&#8221;,
+<a class="reference external" href="http://en.wikipedia.org/wiki/Laplace_distribution">http://en.wikipedia.org/wiki/Laplace_distribution</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Draw samples from the distribution</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">loc</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Display the histogram of the samples, along with
+the probability density function:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">count</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">ignored</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">normed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mf">8.</span><span class="p">,</span> <span class="mf">8.</span><span class="p">,</span> <span class="o">.</span><span class="mi">01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pdf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">loc</span><span class="p">)</span><span class="o">/</span><span class="n">scale</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="n">scale</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pdf</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Plot Gaussian for comparison:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">scale</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span> <span class="o">*</span>
+<span class="gp">... </span>     <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">loc</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">scale</span><span class="o">**</span><span class="mi">2</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">g</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure">
+<img alt="../../_images/numpy-random-RandomState-laplace-1.png" src="../../_images/numpy-random-RandomState-laplace-1.png" />
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

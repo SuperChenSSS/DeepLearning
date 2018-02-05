@@ -1,0 +1,350 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Tutorials &#8212; pandas 0.22.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.22.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Cookbook" href="cookbook.html" />
+    <link rel="prev" title="10 Minutes to pandas" href="10min.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cookbook.html" title="Cookbook"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="10min.html" title="10 Minutes to pandas"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pandas 0.22.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+<div class="content-wrapper">
+    <div class="content">
+        <div class="document">
+            <div class="sphinxsidebar">
+                <h3>Table Of Contents</h3>
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Package overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10min.html">10 Minutes to pandas</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#internal-guides">Internal Guides</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pandas-cookbook">pandas Cookbook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lessons-for-new-pandas-users">Lessons for New pandas Users</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#practical-data-analysis-with-python">Practical data analysis with Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exercises-for-new-users">Exercises for New Users</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modern-pandas">Modern Pandas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#excel-charts-with-pandas-vincent-and-xlsxwriter">Excel charts with pandas, vincent and xlsxwriter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#various-tutorials">Various Tutorials</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dsintro.html">Intro to Data Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basics.html">Essential Basic Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="text.html">Working with Text Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="options.html">Options and Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indexing.html">Indexing and Selecting Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">MultiIndex / Advanced Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="computation.html">Computational tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="missing_data.html">Working with missing data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="groupby.html">Group By: split-apply-combine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="merging.html">Merge, join, and concatenate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reshaping.html">Reshaping and Pivot Tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timeseries.html">Time Series / Date functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timedeltas.html">Time Deltas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="categorical.html">Categorical Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style.html">Styling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">IO Tools (Text, CSV, HDF5, ...)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="remote_data.html">Remote Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="enhancingperf.html">Enhancing Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sparse.html">Sparse data structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gotchas.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="r_interface.html">rpy2 / R interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ecosystem.html">pandas Ecosystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comparison_with_r.html">Comparison with R / R libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comparison_with_sql.html">Comparison with SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comparison_with_sas.html">Comparison with SAS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer.html">Developer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals.html">Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release.html">Release Notes</a></li>
+</ul>
+
+                <h3 style="margin-top: 1.5em;">Search</h3>
+
+                <form class="search" action="search.html" method="get">
+                    <input type="text" name="q" size="18"/>
+                    <input type="submit" value="Go"/>
+                    <input type="hidden" name="check_keywords" value="yes"/>
+                    <input type="hidden" name="area" value="default"/>
+                </form>
+                <p class="searchtip" style="font-size: 90%">
+                    Enter search terms or a module, class or function name.
+                </p>
+
+            </div>
+             
+            <div class="documentwrapper">
+                <div class="bodywrapper">
+                    <div class="body">
+                        
+  <div class="section" id="tutorials">
+<span id="id1"></span><h1>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h1>
+<p>This is a guide to many pandas tutorials, geared mainly for new users.</p>
+<div class="section" id="internal-guides">
+<h2>Internal Guides<a class="headerlink" href="#internal-guides" title="Permalink to this headline">¶</a></h2>
+<p>pandas own <a class="reference internal" href="10min.html#min"><span class="std std-ref">10 Minutes to pandas</span></a></p>
+<p>More complex recipes are in the <a class="reference internal" href="cookbook.html#cookbook"><span class="std std-ref">Cookbook</span></a></p>
+</div>
+<div class="section" id="pandas-cookbook">
+<h2>pandas Cookbook<a class="headerlink" href="#pandas-cookbook" title="Permalink to this headline">¶</a></h2>
+<p>The goal of this cookbook (by <a class="reference external" href="http://jvns.ca">Julia Evans</a>) is to
+give you some concrete examples for getting started with pandas. These
+are examples with real-world data, and all the bugs and weirdness that
+that entails.</p>
+<p>Here are links to the v0.1 release. For an up-to-date table of contents, see the <a class="reference external" href="http://github.com/jvns/pandas-cookbook">pandas-cookbook GitHub
+repository</a>. To run the examples in this tutorial, you&#8217;ll need to
+clone the GitHub repository and get IPython Notebook running.
+See <a class="reference external" href="https://github.com/jvns/pandas-cookbook#how-to-use-this-cookbook">How to use this cookbook</a>.</p>
+<ul class="simple">
+<li><a class="reference external" href="http://nbviewer.ipython.org/github/jvns/pandas-cookbook/blob/v0.1/cookbook/A%20quick%20tour%20of%20IPython%20Notebook.ipynb">A quick tour of the IPython Notebook:</a>
+Shows off IPython&#8217;s awesome tab completion and magic functions.</li>
+<li><a class="reference external" href="http://nbviewer.ipython.org/github/jvns/pandas-cookbook/blob/v0.1/cookbook/Chapter%201%20-%20Reading%20from%20a%20CSV.ipynb">Chapter 1:</a>
+Reading your data into pandas is pretty much the easiest thing. Even
+when the encoding is wrong!</li>
+<li><a class="reference external" href="http://nbviewer.ipython.org/github/jvns/pandas-cookbook/blob/v0.1/cookbook/Chapter%202%20-%20Selecting%20data%20&amp;%20finding%20the%20most%20common%20complaint%20type.ipynb">Chapter 2:</a>
+It&#8217;s not totally obvious how to select data from a pandas dataframe.
+Here we explain the basics (how to take slices and get columns)</li>
+<li><a class="reference external" href="http://nbviewer.ipython.org/github/jvns/pandas-cookbook/blob/v0.1/cookbook/Chapter%203%20-%20Which%20borough%20has%20the%20most%20noise%20complaints%3F%20%28or%2C%20more%20selecting%20data%29.ipynb">Chapter 3:</a>
+Here we get into serious slicing and dicing and learn how to filter
+dataframes in complicated ways, really fast.</li>
+<li><a class="reference external" href="http://nbviewer.ipython.org/github/jvns/pandas-cookbook/blob/v0.1/cookbook/Chapter%204%20-%20Find%20out%20on%20which%20weekday%20people%20bike%20the%20most%20with%20groupby%20and%20aggregate.ipynb">Chapter 4:</a>
+Groupby/aggregate is seriously my favorite thing about pandas
+and I use it all the time. You should probably read this.</li>
+<li><a class="reference external" href="http://nbviewer.ipython.org/github/jvns/pandas-cookbook/blob/v0.1/cookbook/Chapter%205%20-%20Combining%20dataframes%20and%20scraping%20Canadian%20weather%20data.ipynb">Chapter 5:</a>
+Here you get to find out if it&#8217;s cold in Montreal in the winter
+(spoiler: yes). Web scraping with pandas is fun! Here we combine dataframes.</li>
+<li><a class="reference external" href="http://nbviewer.ipython.org/github/jvns/pandas-cookbook/blob/v0.1/cookbook/Chapter%206%20-%20String%20operations%21%20Which%20month%20was%20the%20snowiest%3F.ipynb">Chapter 6:</a>
+Strings with pandas are great. It has all these vectorized string
+operations and they&#8217;re the best. We will turn a bunch of strings
+containing &#8220;Snow&#8221; into vectors of numbers in a trice.</li>
+<li><a class="reference external" href="http://nbviewer.ipython.org/github/jvns/pandas-cookbook/blob/v0.1/cookbook/Chapter%207%20-%20Cleaning%20up%20messy%20data.ipynb">Chapter 7:</a>
+Cleaning up messy data is never a joy, but with pandas it&#8217;s easier.</li>
+<li><a class="reference external" href="http://nbviewer.ipython.org/github/jvns/pandas-cookbook/blob/v0.1/cookbook/Chapter%208%20-%20How%20to%20deal%20with%20timestamps.ipynb">Chapter 8:</a>
+Parsing Unix timestamps is confusing at first but it turns out
+to be really easy.</li>
+</ul>
+</div>
+<div class="section" id="lessons-for-new-pandas-users">
+<h2>Lessons for New pandas Users<a class="headerlink" href="#lessons-for-new-pandas-users" title="Permalink to this headline">¶</a></h2>
+<p>For more resources, please visit the main <a class="reference external" href="https://bitbucket.org/hrojas/learn-pandas">repository</a>.</p>
+<ul class="simple">
+<li><a class="reference external" href="http://nbviewer.ipython.org/urls/bitbucket.org/hrojas/learn-pandas/raw/master/lessons/01%20-%20Lesson.ipynb">01 - Lesson:</a>
+- Importing libraries
+- Creating data sets
+- Creating data frames
+- Reading from CSV
+- Exporting to CSV
+- Finding maximums
+- Plotting data</li>
+<li><a class="reference external" href="http://nbviewer.ipython.org/urls/bitbucket.org/hrojas/learn-pandas/raw/master/lessons/02%20-%20Lesson.ipynb">02 - Lesson:</a>
+- Reading from TXT
+- Exporting to TXT
+- Selecting top/bottom records
+- Descriptive statistics
+- Grouping/sorting data</li>
+<li><a class="reference external" href="http://nbviewer.ipython.org/urls/bitbucket.org/hrojas/learn-pandas/raw/master/lessons/03%20-%20Lesson.ipynb">03 - Lesson:</a>
+- Creating functions
+- Reading from EXCEL
+- Exporting to EXCEL
+- Outliers
+- Lambda functions
+- Slice and dice data</li>
+<li><a class="reference external" href="http://nbviewer.ipython.org/urls/bitbucket.org/hrojas/learn-pandas/raw/master/lessons/04%20-%20Lesson.ipynb">04 - Lesson:</a>
+- Adding/deleting columns
+- Index operations</li>
+<li><a class="reference external" href="http://nbviewer.ipython.org/urls/bitbucket.org/hrojas/learn-pandas/raw/master/lessons/05%20-%20Lesson.ipynb">05 - Lesson:</a>
+- Stack/Unstack/Transpose functions</li>
+<li><a class="reference external" href="http://nbviewer.ipython.org/urls/bitbucket.org/hrojas/learn-pandas/raw/master/lessons/06%20-%20Lesson.ipynb">06 - Lesson:</a>
+- GroupBy function</li>
+<li><a class="reference external" href="http://nbviewer.ipython.org/urls/bitbucket.org/hrojas/learn-pandas/raw/master/lessons/07%20-%20Lesson.ipynb">07 - Lesson:</a>
+- Ways to calculate outliers</li>
+<li><a class="reference external" href="http://nbviewer.ipython.org/urls/bitbucket.org/hrojas/learn-pandas/raw/master/lessons/08%20-%20Lesson.ipynb">08 - Lesson:</a>
+- Read from Microsoft SQL databases</li>
+<li><a class="reference external" href="http://nbviewer.ipython.org/urls/bitbucket.org/hrojas/learn-pandas/raw/master/lessons/09%20-%20Lesson.ipynb">09 - Lesson:</a>
+- Export to CSV/EXCEL/TXT</li>
+<li><a class="reference external" href="http://nbviewer.ipython.org/urls/bitbucket.org/hrojas/learn-pandas/raw/master/lessons/10%20-%20Lesson.ipynb">10 - Lesson:</a>
+- Converting between different kinds of formats</li>
+<li><a class="reference external" href="http://nbviewer.ipython.org/urls/bitbucket.org/hrojas/learn-pandas/raw/master/lessons/11%20-%20Lesson.ipynb">11 - Lesson:</a>
+- Combining data from various sources</li>
+</ul>
+</div>
+<div class="section" id="practical-data-analysis-with-python">
+<h2>Practical data analysis with Python<a class="headerlink" href="#practical-data-analysis-with-python" title="Permalink to this headline">¶</a></h2>
+<p>This <a class="reference external" href="http://wavedatalab.github.io/datawithpython">guide</a> is a comprehensive introduction to the data analysis process using the Python data ecosystem and an interesting open dataset.
+There are four sections covering selected topics as follows:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://wavedatalab.github.io/datawithpython/munge.html">Munging Data</a></li>
+<li><a class="reference external" href="http://wavedatalab.github.io/datawithpython/aggregate.html">Aggregating Data</a></li>
+<li><a class="reference external" href="http://wavedatalab.github.io/datawithpython/visualize.html">Visualizing Data</a></li>
+<li><a class="reference external" href="http://wavedatalab.github.io/datawithpython/timeseries.html">Time Series</a></li>
+</ul>
+</div>
+<div class="section" id="exercises-for-new-users">
+<span id="tutorial-exercises-new-users"></span><h2>Exercises for New Users<a class="headerlink" href="#exercises-for-new-users" title="Permalink to this headline">¶</a></h2>
+<p>Practice your skills with real data sets and exercises.
+For more resources, please visit the main <a class="reference external" href="https://github.com/guipsamora/pandas_exercises">repository</a>.</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/guipsamora/pandas_exercises/tree/master/01_Getting_%26_Knowing_Your_Data">01 - Getting &amp; Knowing Your Data</a></li>
+<li><a class="reference external" href="https://github.com/guipsamora/pandas_exercises/tree/master/02_Filtering_%26_Sorting">02 - Filtering &amp; Sorting</a></li>
+<li><a class="reference external" href="https://github.com/guipsamora/pandas_exercises/tree/master/03_Grouping">03 - Grouping</a></li>
+<li><a class="reference external" href="https://github.com/guipsamora/pandas_exercises/tree/master/04_Apply">04 - Apply</a></li>
+<li><a class="reference external" href="https://github.com/guipsamora/pandas_exercises/tree/master/05_Merge">05 - Merge</a></li>
+<li><a class="reference external" href="https://github.com/guipsamora/pandas_exercises/tree/master/06_Stats">06 - Stats</a></li>
+<li><a class="reference external" href="https://github.com/guipsamora/pandas_exercises/tree/master/07_Visualization">07 - Visualization</a></li>
+<li><a class="reference external" href="https://github.com/guipsamora/pandas_exercises/tree/master/08_Creating_Series_and_DataFrames/Pokemon">08 - Creating Series and DataFrames</a></li>
+<li><a class="reference external" href="https://github.com/guipsamora/pandas_exercises/tree/master/09_Time_Series">09 - Time Series</a></li>
+<li><a class="reference external" href="https://github.com/guipsamora/pandas_exercises/tree/master/10_Deleting">10 - Deleting</a></li>
+</ul>
+</div>
+<div class="section" id="modern-pandas">
+<span id="tutorial-modern"></span><h2>Modern Pandas<a class="headerlink" href="#modern-pandas" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://tomaugspurger.github.io/modern-1-intro.html">Modern Pandas</a></li>
+<li><a class="reference external" href="http://tomaugspurger.github.io/method-chaining.html">Method Chaining</a></li>
+<li><a class="reference external" href="http://tomaugspurger.github.io/modern-3-indexes.html">Indexes</a></li>
+<li><a class="reference external" href="http://tomaugspurger.github.io/modern-4-performance.html">Performance</a></li>
+<li><a class="reference external" href="http://tomaugspurger.github.io/modern-5-tidy.html">Tidy Data</a></li>
+<li><a class="reference external" href="http://tomaugspurger.github.io/modern-6-visualization.html">Visualization</a></li>
+</ul>
+</div>
+<div class="section" id="excel-charts-with-pandas-vincent-and-xlsxwriter">
+<h2>Excel charts with pandas, vincent and xlsxwriter<a class="headerlink" href="#excel-charts-with-pandas-vincent-and-xlsxwriter" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://pandas-xlsxwriter-charts.readthedocs.io/">Using Pandas and XlsxWriter to create Excel charts</a></li>
+</ul>
+</div>
+<div class="section" id="various-tutorials">
+<h2>Various Tutorials<a class="headerlink" href="#various-tutorials" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://blog.wesmckinney.com/">Wes McKinney&#8217;s (pandas BDFL) blog</a></li>
+<li><a class="reference external" href="http://www.randalolson.com/2012/08/06/statistical-analysis-made-easy-in-python/">Statistical analysis made easy in Python with SciPy and pandas DataFrames, by Randal Olson</a></li>
+<li><a class="reference external" href="http://conference.scipy.org/scipy2013/tutorial_detail.php?id=109">Statistical Data Analysis in Python, tutorial videos, by Christopher Fonnesbeck from SciPy 2013</a></li>
+<li><a class="reference external" href="http://nbviewer.ipython.org/github/twiecki/financial-analysis-python-tutorial/blob/master/1.%20Pandas%20Basics.ipynb">Financial analysis in python, by Thomas Wiecki</a></li>
+<li><a class="reference external" href="http://www.gregreda.com/2013/10/26/intro-to-pandas-data-structures/">Intro to pandas data structures, by Greg Reda</a></li>
+<li><a class="reference external" href="http://manishamde.github.io/blog/2013/03/07/pandas-and-python-top-10/">Pandas and Python: Top 10, by Manish Amde</a></li>
+<li><a class="reference external" href="http://www.bearrelroll.com/2013/05/python-pandas-tutorial">Pandas Tutorial, by Mikhail Semeniuk</a></li>
+<li><a class="reference external" href="http://www.datacamp.com/community/tutorials/pandas-tutorial-dataframe-python">Pandas DataFrames Tutorial, by Karlijn Willems</a></li>
+<li><a class="reference external" href="https://tutswiki.com/pandas-cookbook/chapter1">A concise tutorial with real life examples</a></li>
+</ul>
+</div>
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="clearer"></div>
+        </div>
+    </div>
+</div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cookbook.html" title="Cookbook"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="10min.html" title="10 Minutes to pandas"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pandas 0.22.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+<style type="text/css">
+    .scrollToTop {
+        text-align: center;
+        font-weight: bold;
+        position: fixed;
+        bottom: 60px;
+        right: 40px;
+        display: none;
+    }
+</style>
+<a href="#" class="scrollToTop">Scroll To Top</a>
+<script type="text/javascript">
+$(document).ready(function() {
+    //Check to see if the window is top if not then display button
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 200) {
+            $('.scrollToTop').fadeIn();
+        } else {
+            $('.scrollToTop').fadeOut();
+        }
+    });
+
+    //Click event to scroll to top
+    $('.scrollToTop').click(function() {
+        $('html, body').animate({
+            scrollTop: 0
+        }, 500);
+        return false;
+    });
+});
+</script>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27880019-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </body>
+</html>

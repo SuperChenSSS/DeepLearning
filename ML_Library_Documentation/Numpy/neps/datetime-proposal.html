@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>A proposal for implementing some date/time types in NumPy &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" >
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../index.html" >
+    <link rel="up" title="NumPy Enhancement Proposals" href="index.html" >
+    <link rel="next" title="A (third) proposal for implementing some date/time types in NumPy" href="datetime-proposal3.html" >
+    <link rel="prev" title="Structured array extensions" href="structured_array_extensions.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="index.html" accesskey="U">NumPy Enhancement Proposals</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="datetime-proposal3.html" title="A (third) proposal for implementing some date/time types in NumPy"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="structured_array_extensions.html" title="Structured array extensions"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">A proposal for implementing some date/time types in NumPy</a><ul>
+<li><a class="reference internal" href="#executive-summary">Executive summary</a></li>
+<li><a class="reference internal" href="#types-proposed">Types proposed</a></li>
+<li><a class="reference internal" href="#time-units">Time units</a></li>
+<li><a class="reference internal" href="#datetime64"><code class="docutils literal"><span class="pre">datetime64</span></code></a><ul>
+<li><a class="reference internal" href="#building-a-datetime64-dtype">Building a <code class="docutils literal"><span class="pre">datetime64</span></code> dtype</a></li>
+<li><a class="reference internal" href="#setting-and-getting-values">Setting and getting values</a></li>
+<li><a class="reference internal" href="#comparisons">Comparisons</a></li>
+<li><a class="reference internal" href="#compatibility-issues">Compatibility issues</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#timedelta64"><code class="docutils literal"><span class="pre">timedelta64</span></code></a><ul>
+<li><a class="reference internal" href="#building-a-timedelta64-dtype">Building a <code class="docutils literal"><span class="pre">timedelta64</span></code> dtype</a></li>
+<li><a class="reference internal" href="#id4">Setting and getting values</a></li>
+<li><a class="reference internal" href="#id5">Comparisons</a></li>
+<li><a class="reference internal" href="#id6">Compatibility issues</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples-of-use">Examples of use</a></li>
+<li><a class="reference internal" href="#operating-with-date-time-arrays">Operating with date/time arrays</a><ul>
+<li><a class="reference internal" href="#datetime64-vs-datetime64"><code class="docutils literal"><span class="pre">datetime64</span></code> vs <code class="docutils literal"><span class="pre">datetime64</span></code></a><ul>
+<li><a class="reference internal" href="#casting-rules">Casting rules</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#datetime64-vs-timedelta64"><code class="docutils literal"><span class="pre">datetime64</span></code> vs <code class="docutils literal"><span class="pre">timedelta64</span></code></a><ul>
+<li><a class="reference internal" href="#id7">Casting rules</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#timedelta64-vs-timedelta64"><code class="docutils literal"><span class="pre">timedelta64</span></code> vs <code class="docutils literal"><span class="pre">timedelta64</span></code></a><ul>
+<li><a class="reference internal" href="#id8">Casting rules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dtype-vs-time-units-conversions">dtype vs time units conversions</a></li>
+<li><a class="reference internal" href="#necessary-changes-to-numpy">Necessary changes to NumPy</a><ul>
+<li><a class="reference internal" href="#addition-of-metadata-to-dtypes">Addition of metadata to dtypes</a></li>
+<li><a class="reference internal" href="#ufunc-interface-extension">Ufunc interface extension</a></li>
+<li><a class="reference internal" href="#array-interface-extensions">Array Interface Extensions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#final-considerations">Final considerations</a><ul>
+<li><a class="reference internal" href="#why-the-fractional-time-and-events-3y-12-50">Why the fractional time and events: [3Y/12]//50</a></li>
+<li><a class="reference internal" href="#why-the-origin-metadata-disappeared">Why the <code class="docutils literal"><span class="pre">origin</span></code> metadata disappeared</a></li>
+<li><a class="reference internal" href="#operations-with-mixed-time-units">Operations with mixed time units</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="structured_array_extensions.html"
+                        title="previous chapter">Structured array extensions</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="datetime-proposal3.html"
+                        title="next chapter">A (third) proposal for implementing some date/time types in NumPy</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="a-proposal-for-implementing-some-date-time-types-in-numpy">
+<h1>A proposal for implementing some date/time types in NumPy<a class="headerlink" href="#a-proposal-for-implementing-some-date-time-types-in-numpy" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Travis Oliphant</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:oliphant&#37;&#52;&#48;enthought&#46;com">oliphant<span>&#64;</span>enthought<span>&#46;</span>com</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2009-06-09</td>
+</tr>
+</tbody>
+</table>
+<p>Revised only slightly from the third proposal by</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Francesc Alted i Abad</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:faltet&#37;&#52;&#48;pytables&#46;com">faltet<span>&#64;</span>pytables<span>&#46;</span>com</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Ivan Vilata i Balaguer</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:ivan&#37;&#52;&#48;selidor&#46;net">ivan<span>&#64;</span>selidor<span>&#46;</span>net</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2008-07-30</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="executive-summary">
+<h2>Executive summary<a class="headerlink" href="#executive-summary" title="Permalink to this headline">¶</a></h2>
+<p>A date/time mark is something very handy to have in many fields where
+one has to deal with data sets.  While Python has several modules that
+define a date/time type (like the integrated <code class="docutils literal"><span class="pre">datetime</span></code> <a class="footnote-reference" href="#id9" id="id1">[1]</a> or
+<code class="docutils literal"><span class="pre">mx.DateTime</span></code> <a class="footnote-reference" href="#id10" id="id2">[2]</a>), NumPy has a lack of them.</p>
+<p>We are proposing the addition of date/time types to fill this gap.
+The requirements for the proposed types are two-fold: 1) they have
+to be fast to operate with and 2) they have to be as compatible as
+possible with the existing <code class="docutils literal"><span class="pre">datetime</span></code> module that comes with Python.</p>
+</div>
+<div class="section" id="types-proposed">
+<h2>Types proposed<a class="headerlink" href="#types-proposed" title="Permalink to this headline">¶</a></h2>
+<p>It is virtually impossible to come up with a single date/time type
+that fills the needs of every use case.  As a result, we propose two
+general date-time types: 1) <code class="docutils literal"><span class="pre">timedelta64</span></code> &#8211; a relative time and 2)
+<code class="docutils literal"><span class="pre">datetime64</span></code> &#8211; an absolute time.</p>
+<p>Each of these times are represented internally as 64-bit signed
+integers that refer to a particular unit (hour, minute, microsecond,
+etc.).  There are several pre-defined units as well as the ability to
+create rational multiples of these units.  A representation is also
+supported such that the stored date-time integer can encode both the
+number of a particular unit as well as a number of sequential events
+tracked for each unit.</p>
+<p>The <code class="docutils literal"><span class="pre">datetime64</span></code> represents an absolute time.  Internally it is
+represented as the number of time units between the intended time and
+the epoch (12:00am on January 1, 1970 &#8212; POSIX time including its
+lack of leap seconds).</p>
+</div>
+<div class="section" id="time-units">
+<h2>Time units<a class="headerlink" href="#time-units" title="Permalink to this headline">¶</a></h2>
+<p>The 64-bit integer time can represent several different basic units as
+well as derived units.  The basic units are listed in the following
+table:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="22%" />
+<col width="32%" />
+<col width="36%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head" colspan="2">Time unit</th>
+<th class="head">Time span</th>
+<th class="head">Time span (years)</th>
+</tr>
+<tr class="row-even"><th class="head">Code</th>
+<th class="head">Meaning</th>
+<th class="head">Relative Time</th>
+<th class="head">Absolute Time</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-odd"><td>Y</td>
+<td>year</td>
+<td>+- 9.2e18 years</td>
+<td>[9.2e18 BC, 9.2e18 AD]</td>
+</tr>
+<tr class="row-even"><td>M</td>
+<td>month</td>
+<td>+- 7.6e17 years</td>
+<td>[7.6e17 BC, 7.6e17 AD]</td>
+</tr>
+<tr class="row-odd"><td>W</td>
+<td>week</td>
+<td>+- 1.7e17 years</td>
+<td>[1.7e17 BC, 1.7e17 AD]</td>
+</tr>
+<tr class="row-even"><td>B</td>
+<td>business day</td>
+<td>+- 3.5e16 years</td>
+<td>[3.5e16 BC, 3.5e16 AD]</td>
+</tr>
+<tr class="row-odd"><td>D</td>
+<td>day</td>
+<td>+- 2.5e16 years</td>
+<td>[2.5e16 BC, 2.5e16 AD]</td>
+</tr>
+<tr class="row-even"><td>h</td>
+<td>hour</td>
+<td>+- 1.0e15 years</td>
+<td>[1.0e15 BC, 1.0e15 AD]</td>
+</tr>
+<tr class="row-odd"><td>m</td>
+<td>minute</td>
+<td>+- 1.7e13 years</td>
+<td>[1.7e13 BC, 1.7e13 AD]</td>
+</tr>
+<tr class="row-even"><td>s</td>
+<td>second</td>
+<td>+- 2.9e12 years</td>
+<td>[ 2.9e9 BC,  2.9e9 AD]</td>
+</tr>
+<tr class="row-odd"><td>ms</td>
+<td>millisecond</td>
+<td>+- 2.9e9 years</td>
+<td>[ 2.9e6 BC,  2.9e6 AD]</td>
+</tr>
+<tr class="row-even"><td>us</td>
+<td>microsecond</td>
+<td>+- 2.9e6 years</td>
+<td>[290301 BC, 294241 AD]</td>
+</tr>
+<tr class="row-odd"><td>ns</td>
+<td>nanosecond</td>
+<td>+- 292 years</td>
+<td>[  1678 AD,   2262 AD]</td>
+</tr>
+<tr class="row-even"><td>ps</td>
+<td>picosecond</td>
+<td>+- 106 days</td>
+<td>[  1969 AD,   1970 AD]</td>
+</tr>
+<tr class="row-odd"><td>fs</td>
+<td>femtosecond</td>
+<td>+- 2.6 hours</td>
+<td>[  1969 AD,   1970 AD]</td>
+</tr>
+<tr class="row-even"><td>as</td>
+<td>attosecond</td>
+<td>+- 9.2 seconds</td>
+<td>[  1969 AD,   1970 AD]</td>
+</tr>
+</tbody>
+</table>
+<p>A time unit is specified by a string consisting of a base-type given in
+the above table</p>
+<p>Besides these basic code units, the user can create derived units
+consisting of multiples of any basic unit: 100ns, 3M, 15m, etc.</p>
+<p>A limited number of divisions of any basic unit can be used to create
+multiples of a higher-resolution unit provided the divisor can be
+divided evenly into the number of higher-resolution units available.
+For example: Y/4 is just short-hand for -&gt; (12M)/4 -&gt; 3M and Y/4 will be
+represented after creation as 3M.  The first lower unit found to have an
+even divisor will be chosen (up to 3 lower units).  The following
+standardized definitions are used in this specific case to find
+acceptable divisors</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="23%" />
+<col width="77%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Code</th>
+<th class="head">Interpreted as</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Y</td>
+<td>12M, 52W, 365D</td>
+</tr>
+<tr class="row-odd"><td>M</td>
+<td>4W, 30D, 720h</td>
+</tr>
+<tr class="row-even"><td>W</td>
+<td>5B, 7D, 168h, 10080m</td>
+</tr>
+<tr class="row-odd"><td>B</td>
+<td>24h, 1440m, 86400s</td>
+</tr>
+<tr class="row-even"><td>D</td>
+<td>24h, 1440m, 86400s</td>
+</tr>
+<tr class="row-odd"><td>h</td>
+<td>60m, 3600s</td>
+</tr>
+<tr class="row-even"><td>m</td>
+<td>60s, 60000ms</td>
+</tr>
+</tbody>
+</table>
+<p>s, ms, us, ns, ps, fs (use 1000 and 1000000 of the next two available
+lower units respectively).</p>
+<p>Finally, a date-time data-type can be created with support for tracking
+sequential events within a basic unit: [D]//100, [Y]//4 (notice the
+required brackets).  These <code class="docutils literal"><span class="pre">modulo</span></code> event units provide the following
+interpretation to the date-time integer:</p>
+<blockquote>
+<div><ul class="simple">
+<li>the divisor is the number of events in each period</li>
+<li>the (integer) quotient is the integer number representing the base units</li>
+<li>the remainder is the particular event in the period.</li>
+</ul>
+</div></blockquote>
+<p>Modulo event-units can be combined with any derived units, but brackets
+are required.  Thus [100ns]//50 which allows recording 50 events for
+every 100ns so that 0 represents the first event in the first 100ns
+tick, 1 represents the second event in the first 100ns tick, while 50
+represents the first event in the second 100ns tick, and 51 represents
+the second event in the second 100ns tick.</p>
+<p>To fully specify a date-time type, the time unit string must be
+combined with either the string for a datetime64 (&#8216;M8&#8217;) or a
+timedelta64 (&#8216;m8&#8217;) using brackets &#8216;[]&#8217;.  Therefore, a fully-specified
+string representing a date-time dtype is &#8216;M8[Y]&#8217; or (for a more
+complicated example) &#8216;M8[7s/9]//5&#8217;.</p>
+<p>If a time unit is not specified, then it defaults to [us].  Thus &#8216;M8&#8217; is
+equivalent to &#8216;M8[us]&#8217; (except when modulo event-units are desired &#8211;
+i.e. you cannot specify &#8216;M8[us]//5&#8217; as &#8216;M8//5&#8217; or as &#8216;//5&#8217;</p>
+</div>
+<div class="section" id="datetime64">
+<h2><code class="docutils literal"><span class="pre">datetime64</span></code><a class="headerlink" href="#datetime64" title="Permalink to this headline">¶</a></h2>
+<p>This dtype represents a time that is absolute (i.e. not relative).  It
+is implemented internally as an <code class="docutils literal"><span class="pre">int64</span></code> type.  The integer represents
+units from the internal POSIX epoch (see <a class="footnote-reference" href="#id11" id="id3">[3]</a>). Like POSIX, the
+representation of a date doesn&#8217;t take leap seconds into account.</p>
+<p>In time unit <em>conversions</em> and time <em>representations</em> (but not in other
+time computations), the value -2**63 (0x8000000000000000) is interpreted
+as an invalid or unknown date, <em>Not a Time</em> or <em>NaT</em>.  See the section
+on time unit conversions for more information.</p>
+<p>The value of an absolute date is thus <em>an integer number of units of
+the chosen time unit</em> passed since the epoch.  If the integer is a
+negative number, then the magnitude of the integer represents the
+number of units prior to the epoch.  When working with business days,
+Saturdays and Sundays are simply ignored from the count (i.e. day 3 in
+business days is not Saturday 1970-01-03, but Monday 1970-01-05).</p>
+<div class="section" id="building-a-datetime64-dtype">
+<h3>Building a <code class="docutils literal"><span class="pre">datetime64</span></code> dtype<a class="headerlink" href="#building-a-datetime64-dtype" title="Permalink to this headline">¶</a></h3>
+<p>The proposed ways to specify the time unit in the dtype constructor are:</p>
+<p>Using the long string notation:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;datetime64[us]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Using the short string notation:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;M8[us]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If a time unit is not specified, then it defaults to [us].  Thus &#8216;M8&#8217;
+is equivalent to &#8216;M8[us]&#8217;.</p>
+</div>
+<div class="section" id="setting-and-getting-values">
+<h3>Setting and getting values<a class="headerlink" href="#setting-and-getting-values" title="Permalink to this headline">¶</a></h3>
+<p>The objects with this dtype can be set in a series of ways:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;M8[s]&#39;</span><span class="p">)</span>
+<span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1199164176</span>    <span class="c1"># assign to July 30th, 2008 at 17:31:00</span>
+<span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2008</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">01</span><span class="p">)</span> <span class="c1"># with datetime module</span>
+<span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;2008-07-30T17:31:02&#39;</span>    <span class="c1"># with ISO 8601</span>
+</pre></div>
+</div>
+<p>And can be get in different ways too:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="o">--&gt;</span>  <span class="mi">2008</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">30</span><span class="n">T17</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">00</span>
+<span class="nb">repr</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">--&gt;</span>  <span class="n">datetime64</span><span class="p">(</span><span class="mi">1199164177</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">)</span>
+<span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">())</span> <span class="o">--&gt;</span> <span class="mi">2008</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">30</span> <span class="mi">17</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">00</span>  <span class="c1"># datetime module object</span>
+<span class="nb">repr</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">())</span> <span class="o">--&gt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2008</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">31</span><span class="p">)</span>  <span class="c1"># idem</span>
+<span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>  <span class="o">--&gt;</span>  <span class="p">[</span><span class="mi">2008</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">30</span><span class="n">T17</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">00</span>  <span class="mi">2008</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">30</span><span class="n">T17</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">01</span>  <span class="mi">2008</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">30</span><span class="n">T17</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">02</span><span class="p">]</span>
+<span class="nb">repr</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>  <span class="o">--&gt;</span>  <span class="n">array</span><span class="p">([</span><span class="mi">1199164176</span><span class="p">,</span> <span class="mi">1199164177</span><span class="p">,</span> <span class="mi">1199164178</span><span class="p">],</span>
+                    <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;datetime64[s]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="comparisons">
+<h3>Comparisons<a class="headerlink" href="#comparisons" title="Permalink to this headline">¶</a></h3>
+<p>The comparisons will be supported too:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;1980&#39;</span><span class="p">],</span> <span class="s1">&#39;M8[Y]&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;1979&#39;</span><span class="p">],</span> <span class="s1">&#39;M8[Y]&#39;</span><span class="p">)</span>
+<span class="o">--&gt;</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>including applying broadcasting:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;1979&#39;</span><span class="p">,</span> <span class="s1">&#39;1980&#39;</span><span class="p">],</span> <span class="s1">&#39;M8[Y]&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">numpy</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;1980&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">)</span>
+<span class="o">--&gt;</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The following should also work:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;1979&#39;</span><span class="p">,</span> <span class="s1">&#39;1980&#39;</span><span class="p">],</span> <span class="s1">&#39;M8[Y]&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;1980-01-01&#39;</span>
+<span class="o">--&gt;</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>because the right hand expression can be broadcasted into an array of 2
+elements of dtype &#8216;M8[Y]&#8217;.</p>
+</div>
+<div class="section" id="compatibility-issues">
+<h3>Compatibility issues<a class="headerlink" href="#compatibility-issues" title="Permalink to this headline">¶</a></h3>
+<p>This will be fully compatible with the <code class="docutils literal"><span class="pre">datetime</span></code> class of the
+<code class="docutils literal"><span class="pre">datetime</span></code> module of Python only when using a time unit of
+microseconds.  For other time units, the conversion process will lose
+precision or will overflow as needed.  The conversion from/to a
+<code class="docutils literal"><span class="pre">datetime</span></code> object doesn&#8217;t take leap seconds into account.</p>
+</div>
+</div>
+<div class="section" id="timedelta64">
+<h2><code class="docutils literal"><span class="pre">timedelta64</span></code><a class="headerlink" href="#timedelta64" title="Permalink to this headline">¶</a></h2>
+<p>It represents a time that is relative (i.e. not absolute).  It is
+implemented internally as an <code class="docutils literal"><span class="pre">int64</span></code> type.</p>
+<p>In time unit <em>conversions</em> and time <em>representations</em> (but not in other
+time computations), the value -2**63 (0x8000000000000000) is interpreted
+as an invalid or unknown time, <em>Not a Time</em> or <em>NaT</em>.  See the section
+on time unit conversions for more information.</p>
+<p>The value of a time delta is <em>an integer number of units of the
+chosen time unit</em>.</p>
+<div class="section" id="building-a-timedelta64-dtype">
+<h3>Building a <code class="docutils literal"><span class="pre">timedelta64</span></code> dtype<a class="headerlink" href="#building-a-timedelta64-dtype" title="Permalink to this headline">¶</a></h3>
+<p>The proposed ways to specify the time unit in the dtype constructor are:</p>
+<p>Using the long string notation:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;timedelta64[us]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Using the short string notation:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;m8[us]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If a time unit is not specified, then a default of [us] is assumed.
+Thus &#8216;m8&#8217; and &#8216;m8[us]&#8217; are equivalent.</p>
+</div>
+<div class="section" id="id4">
+<h3>Setting and getting values<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>The objects with this dtype can be set in a series of ways:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;m8[ms]&#39;</span><span class="p">)</span>
+<span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">12</span>    <span class="c1"># assign to 12 ms</span>
+<span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">13000</span><span class="p">)</span>   <span class="c1"># 13 ms</span>
+<span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0:00:00.014&#39;</span>    <span class="c1"># 14 ms</span>
+</pre></div>
+</div>
+<p>And can be get in different ways too:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="o">--&gt;</span>  <span class="mi">0</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mf">00.012</span>
+<span class="nb">repr</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">--&gt;</span>  <span class="n">timedelta64</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="s1">&#39;ms&#39;</span><span class="p">)</span>
+<span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">())</span> <span class="o">--&gt;</span> <span class="mi">0</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mf">00.012000</span>   <span class="c1"># datetime module object</span>
+<span class="nb">repr</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">())</span> <span class="o">--&gt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12000</span><span class="p">)</span>  <span class="c1"># idem</span>
+<span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>     <span class="o">--&gt;</span>  <span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mf">00.012</span>  <span class="mi">0</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mf">00.014</span>  <span class="mi">0</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mf">00.014</span><span class="p">]</span>
+<span class="nb">repr</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>    <span class="o">--&gt;</span>  <span class="n">array</span><span class="p">([</span><span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;timedelta64[ms]&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id5">
+<h3>Comparisons<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p>The comparisons will be supported too:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">],</span> <span class="s1">&#39;m8[ms]&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="p">],</span> <span class="s1">&#39;m8[ms]&#39;</span><span class="p">)</span>
+<span class="o">--&gt;</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>or by applying broadcasting:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">],</span> <span class="s1">&#39;m8[ms]&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">numpy</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="s1">&#39;ms&#39;</span><span class="p">)</span>
+<span class="o">--&gt;</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The following should work too:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">],</span> <span class="s1">&#39;m8[ms]&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;0:00:00.012&#39;</span>
+<span class="o">--&gt;</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>because the right hand expression can be broadcasted into an array of 3
+elements of dtype &#8216;m8[ms]&#8217;.</p>
+</div>
+<div class="section" id="id6">
+<h3>Compatibility issues<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<p>This will be fully compatible with the <code class="docutils literal"><span class="pre">timedelta</span></code> class of the
+<code class="docutils literal"><span class="pre">datetime</span></code> module of Python only when using a time unit of
+microseconds.  For other units, the conversion process will lose
+precision or will overflow as needed.</p>
+</div>
+</div>
+<div class="section" id="examples-of-use">
+<h2>Examples of use<a class="headerlink" href="#examples-of-use" title="Permalink to this headline">¶</a></h2>
+<p>Here is an example of use for the <code class="docutils literal"><span class="pre">datetime64</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="mi">42</span><span class="p">,</span> <span class="s1">&#39;us&#39;</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="n">datetime64</span><span class="p">(</span><span class="mi">42</span><span class="p">,</span> <span class="s1">&#39;us&#39;</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="nb">print</span> <span class="n">numpy</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="mi">42</span><span class="p">,</span> <span class="s1">&#39;us&#39;</span><span class="p">)</span>
+<span class="mi">1970</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span><span class="n">T00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mf">00.000042</span>  <span class="c1"># representation in ISO 8601 format</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="nb">print</span> <span class="n">numpy</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="mf">367.7</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">)</span>  <span class="c1"># decimal part is lost</span>
+<span class="mi">1971</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">02</span>  <span class="c1"># still ISO 8601 format</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="s1">&#39;2008-07-18T12:23:18&#39;</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">)</span>  <span class="c1"># from ISO 8601</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="n">datetime64</span><span class="p">(</span><span class="mi">20273063</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">9</span><span class="p">]:</span> <span class="nb">print</span> <span class="n">numpy</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="s1">&#39;2008-07-18T12:23:18&#39;</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">9</span><span class="p">]:</span> <span class="mi">2008</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">18</span><span class="n">T12</span><span class="p">:</span><span class="mi">23</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="n">t</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;datetime64[ms]&quot;</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>  <span class="c1"># setter in action</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="nb">print</span> <span class="n">t</span>
+<span class="p">[</span><span class="mi">2008</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">16</span><span class="n">T13</span><span class="p">:</span><span class="mi">39</span><span class="p">:</span><span class="mf">25.315</span>  <span class="mi">1970</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span><span class="n">T00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mf">00.000</span>
+ <span class="mi">1970</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span><span class="n">T00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mf">00.000</span>  <span class="mi">1970</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span><span class="n">T00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mf">00.000</span>
+ <span class="mi">1970</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span><span class="n">T00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mf">00.000</span><span class="p">]</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">13</span><span class="p">]:</span> <span class="nb">repr</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">13</span><span class="p">]:</span> <span class="n">array</span><span class="p">([</span><span class="mi">267859210457</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;datetime64[ms]&quot;</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">14</span><span class="p">]:</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>     <span class="c1"># getter in action</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">14</span><span class="p">]:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2008</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">315000</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">15</span><span class="p">]:</span> <span class="nb">print</span> <span class="n">t</span><span class="o">.</span><span class="n">dtype</span>
+<span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;datetime64[ms]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>And here it goes an example of use for the <code class="docutils literal"><span class="pre">timedelta64</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;us&#39;</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="n">timedelta64</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;us&#39;</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="nb">print</span> <span class="n">numpy</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;us&#39;</span><span class="p">)</span>
+<span class="mi">0</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mf">00.000010</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="nb">print</span> <span class="n">numpy</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">(</span><span class="mf">3600.2</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">)</span>  <span class="c1"># decimal part is lost</span>
+<span class="mi">2</span> <span class="n">days</span><span class="p">,</span> <span class="mi">12</span><span class="p">:</span><span class="mi">00</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="n">t1</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;datetime64[ms]&quot;</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">9</span><span class="p">]:</span> <span class="n">t2</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;datetime64[ms]&quot;</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="n">t</span> <span class="o">=</span> <span class="n">t2</span> <span class="o">-</span> <span class="n">t1</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">24</span><span class="p">)</span>  <span class="c1"># setter in action</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="nb">print</span> <span class="n">t</span>
+<span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mf">24.000</span>  <span class="mi">0</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mf">01.000</span>  <span class="mi">0</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mf">01.000</span>  <span class="mi">0</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mf">01.000</span>  <span class="mi">0</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mf">01.000</span><span class="p">]</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">13</span><span class="p">]:</span> <span class="nb">print</span> <span class="nb">repr</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">13</span><span class="p">]:</span> <span class="n">array</span><span class="p">([</span><span class="mi">24000</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;timedelta64[ms]&quot;</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">14</span><span class="p">]:</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>     <span class="c1"># getter in action</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">14</span><span class="p">]:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">24</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">15</span><span class="p">]:</span> <span class="nb">print</span> <span class="n">t</span><span class="o">.</span><span class="n">dtype</span>
+<span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;timedelta64[s]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="operating-with-date-time-arrays">
+<h2>Operating with date/time arrays<a class="headerlink" href="#operating-with-date-time-arrays" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="datetime64-vs-datetime64">
+<h3><code class="docutils literal"><span class="pre">datetime64</span></code> vs <code class="docutils literal"><span class="pre">datetime64</span></code><a class="headerlink" href="#datetime64-vs-datetime64" title="Permalink to this headline">¶</a></h3>
+<p>The only arithmetic operation allowed between absolute dates is
+subtraction:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;M8[s]&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;M8[s]&quot;</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">timedelta64</span><span class="p">[</span><span class="n">s</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>But not other operations:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;M8[s]&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;M8[s]&quot;</span><span class="p">)</span>
+<span class="ne">TypeError</span><span class="p">:</span> <span class="n">unsupported</span> <span class="n">operand</span> <span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="o">+</span><span class="p">:</span> <span class="s1">&#39;numpy.ndarray&#39;</span> <span class="ow">and</span> <span class="s1">&#39;numpy.ndarray&#39;</span>
+</pre></div>
+</div>
+<p>Comparisons between absolute dates are allowed.</p>
+<div class="section" id="casting-rules">
+<h4>Casting rules<a class="headerlink" href="#casting-rules" title="Permalink to this headline">¶</a></h4>
+<p>When operating (basically, only the subtraction will be allowed) two
+absolute times with different unit times, the outcome would be to raise
+an exception.  This is because the ranges and time-spans of the different
+time units can be very different, and it is not clear at all what time
+unit will be preferred for the user.  For example, this should be
+allowed:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;M8[Y]&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;M8[Y]&quot;</span><span class="p">)</span>
+<span class="go">array([1, 1, 1], dtype=&quot;timedelta64[Y]&quot;)</span>
+</pre></div>
+</div>
+<p>But the next should not:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;M8[Y]&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;M8[ns]&quot;</span><span class="p">)</span>
+<span class="go">raise numpy.IncompatibleUnitError  # what unit to choose?</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="datetime64-vs-timedelta64">
+<h3><code class="docutils literal"><span class="pre">datetime64</span></code> vs <code class="docutils literal"><span class="pre">timedelta64</span></code><a class="headerlink" href="#datetime64-vs-timedelta64" title="Permalink to this headline">¶</a></h3>
+<p>It will be possible to add and subtract relative times from absolute
+dates:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;M8[Y]&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;m8[Y]&quot;</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="n">array</span><span class="p">([</span><span class="mi">1971</span><span class="p">,</span> <span class="mi">1971</span><span class="p">,</span> <span class="mi">1971</span><span class="p">,</span> <span class="mi">1971</span><span class="p">,</span> <span class="mi">1971</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">datetime64</span><span class="p">[</span><span class="n">Y</span><span class="p">])</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;M8[Y]&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;m8[Y]&quot;</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="n">array</span><span class="p">([</span><span class="mi">1969</span><span class="p">,</span> <span class="mi">1969</span><span class="p">,</span> <span class="mi">1969</span><span class="p">,</span> <span class="mi">1969</span><span class="p">,</span> <span class="mi">1969</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">datetime64</span><span class="p">[</span><span class="n">Y</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>But not other operations:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;M8[Y]&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;m8[Y]&quot;</span><span class="p">)</span>
+<span class="ne">TypeError</span><span class="p">:</span> <span class="n">unsupported</span> <span class="n">operand</span> <span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="o">*</span><span class="p">:</span> <span class="s1">&#39;numpy.ndarray&#39;</span> <span class="ow">and</span> <span class="s1">&#39;numpy.ndarray&#39;</span>
+</pre></div>
+</div>
+<div class="section" id="id7">
+<h4>Casting rules<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h4>
+<p>In this case the absolute time should have priority for determining the
+time unit of the outcome.  That would represent what the people wants to
+do most of the times.  For example, this would allow to do:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">series</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;1970-01-01&#39;</span><span class="p">,</span> <span class="s1">&#39;1970-02-01&#39;</span><span class="p">,</span> <span class="s1">&#39;1970-09-01&#39;</span><span class="p">],</span>
+<span class="go">dtype=&#39;datetime64[D]&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">series2</span> <span class="o">=</span> <span class="n">series</span> <span class="o">+</span> <span class="n">numpy</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">)</span>  <span class="c1"># Add 2 relative years</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">series2</span>
+<span class="go">array([&#39;1972-01-01&#39;, &#39;1972-02-01&#39;, &#39;1972-09-01&#39;],</span>
+<span class="go">dtype=&#39;datetime64[D]&#39;)  # the &#39;D&#39;ay time unit has been chosen</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="timedelta64-vs-timedelta64">
+<h3><code class="docutils literal"><span class="pre">timedelta64</span></code> vs <code class="docutils literal"><span class="pre">timedelta64</span></code><a class="headerlink" href="#timedelta64-vs-timedelta64" title="Permalink to this headline">¶</a></h3>
+<p>Finally, it will be possible to operate with relative times as if they
+were regular int64 dtypes <em>as long as</em> the result can be converted back
+into a <code class="docutils literal"><span class="pre">timedelta64</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;m8[us]&#39;</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;timedelta64[us]&quot;</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;m8[M]&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">3</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="n">array</span><span class="p">([</span><span class="mi">27</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">27</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;timedelta64[M]&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>But:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>In [12]: numpy.ones(5, &#39;m8&#39;) + 1j
+TypeError: the result cannot be converted into a ``timedelta64``
+</pre></div>
+</div>
+<div class="section" id="id8">
+<h4>Casting rules<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h4>
+<p>When combining two <code class="docutils literal"><span class="pre">timedelta64</span></code> dtypes with different time units the
+outcome will be the shorter of both (&#8220;keep the precision&#8221; rule).  For
+example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;m8[s]&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;m8[m]&#39;</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="n">array</span><span class="p">([</span><span class="mi">61</span><span class="p">,</span> <span class="mi">61</span><span class="p">,</span> <span class="mi">61</span><span class="p">],</span>  <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;timedelta64[s]&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>However, due to the impossibility to know the exact duration of a
+relative year or a relative month, when these time units appear in one
+of the operands, the operation will not be allowed:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;m8[Y]&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;m8[D]&#39;</span><span class="p">)</span>
+<span class="k">raise</span> <span class="n">numpy</span><span class="o">.</span><span class="n">IncompatibleUnitError</span>  <span class="c1"># how to convert relative years to days?</span>
+</pre></div>
+</div>
+<p>In order to being able to perform the above operation a new NumPy
+function, called <code class="docutils literal"><span class="pre">change_timeunit</span></code> is proposed.  Its signature will
+be:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">change_timeunit</span><span class="p">(</span><span class="n">time_object</span><span class="p">,</span> <span class="n">new_unit</span><span class="p">,</span> <span class="n">reference</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where &#8216;time_object&#8217; is the time object whose unit is to be changed,
+&#8216;new_unit&#8217; is the desired new time unit, and &#8216;reference&#8217; is an absolute
+date (NumPy datetime64 scalar) that will be used to allow the conversion
+of relative times in case of using time units with an uncertain number
+of smaller time units (relative years or months cannot be expressed in
+days).</p>
+<p>With this, the above operation can be done as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="n">t_years</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;m8[Y]&#39;</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="n">t_days</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">change_timeunit</span><span class="p">(</span><span class="n">t_years</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="s1">&#39;2001-01-01&#39;</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="n">t_days</span> <span class="o">+</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;m8[D]&#39;</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="n">array</span><span class="p">([</span><span class="mi">366</span><span class="p">,</span> <span class="mi">366</span><span class="p">,</span> <span class="mi">366</span><span class="p">],</span>  <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;timedelta64[D]&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="dtype-vs-time-units-conversions">
+<h2>dtype vs time units conversions<a class="headerlink" href="#dtype-vs-time-units-conversions" title="Permalink to this headline">¶</a></h2>
+<p>For changing the date/time dtype of an existing array, we propose to use
+the <code class="docutils literal"><span class="pre">.astype()</span></code> method.  This will be mainly useful for changing time
+units.</p>
+<p>For example, for absolute dates:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">In</span><span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="n">t1</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;datetime64[s]&quot;</span><span class="p">)</span>
+
+<span class="n">In</span><span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="nb">print</span> <span class="n">t1</span>
+<span class="p">[</span><span class="mi">1970</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span><span class="n">T00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>  <span class="mi">1970</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span><span class="n">T00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>  <span class="mi">1970</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span><span class="n">T00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+ <span class="mi">1970</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span><span class="n">T00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>  <span class="mi">1970</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span><span class="n">T00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">]</span>
+
+<span class="n">In</span><span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="nb">print</span> <span class="n">t1</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;datetime64[D]&#39;</span><span class="p">)</span>
+<span class="p">[</span><span class="mi">1970</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span>  <span class="mi">1970</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span>  <span class="mi">1970</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span>  <span class="mi">1970</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span>  <span class="mi">1970</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>For relative times:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">In</span><span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="n">t1</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;timedelta64[s]&quot;</span><span class="p">)</span>
+
+<span class="n">In</span><span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="nb">print</span> <span class="n">t1</span>
+<span class="p">[</span><span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="n">In</span><span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="nb">print</span> <span class="n">t1</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;timedelta64[ms]&#39;</span><span class="p">)</span>
+<span class="p">[</span><span class="mi">1000</span> <span class="mi">1000</span> <span class="mi">1000</span> <span class="mi">1000</span> <span class="mi">1000</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Changing directly from/to relative to/from absolute dtypes will not be
+supported:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">In</span><span class="p">[</span><span class="mi">13</span><span class="p">]:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;datetime64[s]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;timedelta64&#39;</span><span class="p">)</span>
+<span class="ne">TypeError</span><span class="p">:</span> <span class="n">data</span> <span class="nb">type</span> <span class="n">cannot</span> <span class="n">be</span> <span class="n">converted</span> <span class="n">to</span> <span class="n">the</span> <span class="n">desired</span> <span class="nb">type</span>
+</pre></div>
+</div>
+<p>Business days have the peculiarity that they do not cover a continuous
+line of time (they have gaps at weekends).  Thus, when converting from
+any ordinary time to business days, it can happen that the original time
+is not representable.  In that case, the result of the conversion is
+<em>Not a Time</em> (<em>NaT</em>):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">In</span><span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="n">t1</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;datetime64[D]&quot;</span><span class="p">)</span>
+
+<span class="n">In</span><span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="nb">print</span> <span class="n">t1</span>
+<span class="p">[</span><span class="mi">1970</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span>  <span class="mi">1970</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">02</span>  <span class="mi">1970</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">03</span>  <span class="mi">1970</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">04</span>  <span class="mi">1970</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">05</span><span class="p">]</span>
+
+<span class="n">In</span><span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="n">t2</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;datetime64[B]&quot;</span><span class="p">)</span>
+
+<span class="n">In</span><span class="p">[</span><span class="mi">13</span><span class="p">]:</span> <span class="nb">print</span> <span class="n">t2</span>  <span class="c1"># 1970 begins in a Thursday</span>
+<span class="p">[</span><span class="mi">1970</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span>  <span class="mi">1970</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">02</span>  <span class="n">NaT</span>  <span class="n">NaT</span>  <span class="mi">1970</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">05</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>When converting back to ordinary days, NaT values are left untouched
+(this happens in all time unit conversions):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">In</span><span class="p">[</span><span class="mi">14</span><span class="p">]:</span> <span class="n">t3</span> <span class="o">=</span> <span class="n">t2</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;datetime64[D]&quot;</span><span class="p">)</span>
+
+<span class="n">In</span><span class="p">[</span><span class="mi">13</span><span class="p">]:</span> <span class="nb">print</span> <span class="n">t3</span>
+<span class="p">[</span><span class="mi">1970</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span>  <span class="mi">1970</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">02</span>  <span class="n">NaT</span>  <span class="n">NaT</span>  <span class="mi">1970</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">05</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="necessary-changes-to-numpy">
+<h2>Necessary changes to NumPy<a class="headerlink" href="#necessary-changes-to-numpy" title="Permalink to this headline">¶</a></h2>
+<p>In order to facilitate the addition of the date-time data-types a few changes
+to NumPy were made:</p>
+<div class="section" id="addition-of-metadata-to-dtypes">
+<h3>Addition of metadata to dtypes<a class="headerlink" href="#addition-of-metadata-to-dtypes" title="Permalink to this headline">¶</a></h3>
+<p>All data-types now have a metadata dictionary. It can be set using the
+metadata keyword during construction of the object.</p>
+<p>Date-time data-types will place the word &#8220;__frequency__&#8221; in the meta-data
+dictionary containing a 4-tuple with the following parameters.</p>
+<dl class="docutils">
+<dt>(basic unit string (str),</dt>
+<dd>number of multiples (int),
+number of sub-divisions (int),
+number of events (int)).</dd>
+</dl>
+<p>Simple time units like &#8216;D&#8217; for days will thus be specified by (&#8216;D&#8217;, 1, 1, 1) in
+the &#8220;__frequency__&#8221; key of the metadata.  More complicated time units (like &#8216;[2W/5]//50&#8217;) will be indicated by (&#8216;D&#8217;, 2, 5, 50).</p>
+<p>The &#8220;__frequency__&#8221; key is reserved for metadata and cannot be set with a
+dtype constructor.</p>
+</div>
+<div class="section" id="ufunc-interface-extension">
+<h3>Ufunc interface extension<a class="headerlink" href="#ufunc-interface-extension" title="Permalink to this headline">¶</a></h3>
+<p>ufuncs that have datetime and timedelta arguments can use the Python API
+during ufunc calls (to raise errors).</p>
+<p>There is a new ufunc C-API call to set the data for a particular
+function pointer (for a particular set of data-types) to be the list of arrays
+passed in to the ufunc.</p>
+</div>
+<div class="section" id="array-interface-extensions">
+<h3>Array Interface Extensions<a class="headerlink" href="#array-interface-extensions" title="Permalink to this headline">¶</a></h3>
+<p>The array interface is extended to both handle datetime and timedelta
+typestr (including extended notation).</p>
+<p>In addition, the typestr element of the __array_interface__ can be a tuple
+as long as the version string is 4.  The tuple is
+(&#8216;typestr&#8217;, metadata dictionary).</p>
+<p>This extension to the typestr concept extends to the descr portion of
+the __array_interface__.  Thus, the second element in the tuple of a
+list of tuples describing a data-format can itself be a tuple of
+(&#8216;typestr&#8217;, metadata dictionary).</p>
+</div>
+</div>
+<div class="section" id="final-considerations">
+<h2>Final considerations<a class="headerlink" href="#final-considerations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="why-the-fractional-time-and-events-3y-12-50">
+<h3>Why the fractional time and events: [3Y/12]//50<a class="headerlink" href="#why-the-fractional-time-and-events-3y-12-50" title="Permalink to this headline">¶</a></h3>
+<p>It is difficult to come up with enough units to satisfy every need.  For
+example, in C# on Windows the fundamental tick of time is 100ns.
+Multiple of basic units are simple to handle.  Divisors of basic units
+are harder to handle arbitrarily, but it is common to mentally think of
+a month as 1/12 of a year, or a day as 1/7 of a week.  Therefore, the
+ability to specify a unit in terms of a fraction of a &#8220;larger&#8221; unit was
+implemented.</p>
+<p>The event notion (//50) was added to solve a use-case of a commercial
+sponsor of this NEP.  The idea is to allow timestamp to carry both event
+number and timestamp information.  The remainder carries the event
+number information, while the quotient carries the timestamp
+information.</p>
+</div>
+<div class="section" id="why-the-origin-metadata-disappeared">
+<h3>Why the <code class="docutils literal"><span class="pre">origin</span></code> metadata disappeared<a class="headerlink" href="#why-the-origin-metadata-disappeared" title="Permalink to this headline">¶</a></h3>
+<p>During the discussion of the date/time dtypes in the NumPy list, the
+idea of having an <code class="docutils literal"><span class="pre">origin</span></code> metadata that complemented the definition
+of the absolute <code class="docutils literal"><span class="pre">datetime64</span></code> was initially found to be useful.</p>
+<p>However, after thinking more about this, we found that the combination
+of an absolute <code class="docutils literal"><span class="pre">datetime64</span></code> with a relative <code class="docutils literal"><span class="pre">timedelta64</span></code> does offer
+the same functionality while removing the need for the additional
+<code class="docutils literal"><span class="pre">origin</span></code> metadata.  This is why we have removed it from this proposal.</p>
+</div>
+<div class="section" id="operations-with-mixed-time-units">
+<h3>Operations with mixed time units<a class="headerlink" href="#operations-with-mixed-time-units" title="Permalink to this headline">¶</a></h3>
+<p>Whenever an operation between two time values of the same dtype with the
+same unit is accepted, the same operation with time values of different
+units should be possible (e.g. adding a time delta in seconds and one in
+microseconds), resulting in an adequate time unit.  The exact semantics
+of this kind of operations is defined int the &#8220;Casting rules&#8221;
+subsections of the &#8220;Operating with date/time arrays&#8221; section.</p>
+<p>Due to the peculiarities of business days, it is most probable that
+operations mixing business days with other time units will not be
+allowed.</p>
+<table class="docutils footnote" frame="void" id="id9" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td><a class="reference external" href="http://docs.python.org/lib/module-datetime.html">http://docs.python.org/lib/module-datetime.html</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id10" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td><a class="reference external" href="http://www.egenix.com/products/python/mxBase/mxDateTime">http://www.egenix.com/products/python/mxBase/mxDateTime</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id11" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td><a class="reference external" href="http://en.wikipedia.org/wiki/Unix_time">http://en.wikipedia.org/wiki/Unix_time</a></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

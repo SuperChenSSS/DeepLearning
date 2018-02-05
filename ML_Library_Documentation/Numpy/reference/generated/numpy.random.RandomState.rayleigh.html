@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.random.RandomState.rayleigh &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="numpy.random.RandomState" href="numpy.random.RandomState.html" >
+    <link rel="next" title="numpy.random.RandomState.seed" href="numpy.random.RandomState.seed.html" >
+    <link rel="prev" title="numpy.random.RandomState.random_sample" href="numpy.random.RandomState.random_sample.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.random.html" >Random sampling (<code class="docutils literal"><span class="pre">numpy.random</span></code>)</a></li>
+          <li class="active"><a href="numpy.random.RandomState.html" accesskey="U">numpy.random.RandomState</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.random.RandomState.seed.html" title="numpy.random.RandomState.seed"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.random.RandomState.random_sample.html" title="numpy.random.RandomState.random_sample"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.random.RandomState.random_sample.html"
+                        title="previous chapter">numpy.random.RandomState.random_sample</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.random.RandomState.seed.html"
+                        title="next chapter">numpy.random.RandomState.seed</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-random-randomstate-rayleigh">
+<h1>numpy.random.RandomState.rayleigh<a class="headerlink" href="#numpy-random-randomstate-rayleigh" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="numpy.random.RandomState.rayleigh">
+<code class="descclassname">RandomState.</code><code class="descname">rayleigh</code><span class="sig-paren">(</span><em>scale=1.0</em>, <em>size=None</em><span class="sig-paren">)</span><a class="headerlink" href="#numpy.random.RandomState.rayleigh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw samples from a Rayleigh distribution.</p>
+<p>The <img class="math" src="../../_images/math/1bc8153a40ba7d2281c26bfe99604ad9e6f34749.svg" alt="\chi"/> and Weibull distributions are generalizations of the
+Rayleigh.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>scale</strong> : float or array_like of floats, optional</p>
+<blockquote>
+<div><p>Scale, also equals the mode. Should be &gt;= 0. Default is 1.</p>
+</div></blockquote>
+<p><strong>size</strong> : int or tuple of ints, optional</p>
+<blockquote>
+<div><p>Output shape.  If the given shape is, e.g., <code class="docutils literal"><span class="pre">(m,</span> <span class="pre">n,</span> <span class="pre">k)</span></code>, then
+<code class="docutils literal"><span class="pre">m</span> <span class="pre">*</span> <span class="pre">n</span> <span class="pre">*</span> <span class="pre">k</span></code> samples are drawn.  If size is <code class="docutils literal"><span class="pre">None</span></code> (default),
+a single value is returned if <code class="docutils literal"><span class="pre">scale</span></code> is a scalar.  Otherwise,
+<code class="docutils literal"><span class="pre">np.array(scale).size</span></code> samples are drawn.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out</strong> : ndarray or scalar</p>
+<blockquote class="last">
+<div><p>Drawn samples from the parameterized Rayleigh distribution.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The probability density function for the Rayleigh distribution is</p>
+<div class="math">
+<p><img src="../../_images/math/2b312693d37fe995b98618dffd6938f58bf7cbc8.svg" alt="P(x;scale) = \frac{x}{scale^2}e^{\frac{-x^2}{2 \cdotp scale^2}}"/></p>
+</div><p>The Rayleigh distribution would arise, for example, if the East
+and North components of the wind velocity had identical zero-mean
+Gaussian distributions.  Then the wind speed would have a Rayleigh
+distribution.</p>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r193" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R193]</a></td><td>Brighton Webs Ltd., &#8220;Rayleigh Distribution,&#8221;
+<a class="reference external" href="http://www.brighton-webs.co.uk/distributions/rayleigh.asp">http://www.brighton-webs.co.uk/distributions/rayleigh.asp</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r194" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[R194]</a></td><td>Wikipedia, &#8220;Rayleigh distribution&#8221;
+<a class="reference external" href="http://en.wikipedia.org/wiki/Rayleigh_distribution">http://en.wikipedia.org/wiki/Rayleigh_distribution</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Draw values from the distribution and plot the histogram</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">values</span> <span class="o">=</span> <span class="n">hist</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rayleigh</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">100000</span><span class="p">),</span> <span class="n">bins</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">normed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Wave heights tend to follow a Rayleigh distribution. If the mean wave
+height is 1 meter, what fraction of waves are likely to be larger than 3
+meters?</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">meanvalue</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">modevalue</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">*</span> <span class="n">meanvalue</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rayleigh</span><span class="p">(</span><span class="n">modevalue</span><span class="p">,</span> <span class="mi">1000000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The percentage of waves larger than 3 meters is:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mf">100.</span><span class="o">*</span><span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">&gt;</span><span class="mi">3</span><span class="p">)</span><span class="o">/</span><span class="mf">1000000.</span>
+<span class="go">0.087300000000000003</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.exp &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="Mathematical functions" href="../routines.math.html" >
+    <link rel="next" title="numpy.expm1" href="numpy.expm1.html" >
+    <link rel="prev" title="numpy.trapz" href="numpy.trapz.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.math.html" accesskey="U">Mathematical functions</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.expm1.html" title="numpy.expm1"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.trapz.html" title="numpy.trapz"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.trapz.html"
+                        title="previous chapter">numpy.trapz</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.expm1.html"
+                        title="next chapter">numpy.expm1</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-exp">
+<h1>numpy.exp<a class="headerlink" href="#numpy-exp" title="Permalink to this headline">¶</a></h1>
+<dl class="data">
+<dt id="numpy.exp">
+<code class="descclassname">numpy.</code><code class="descname">exp</code><span class="sig-paren">(</span><em>x</em>, <em>/</em>, <em>out=None</em>, <em>*</em>, <em>where=True</em>, <em>casting='same_kind'</em>, <em>order='K'</em>, <em>dtype=None</em>, <em>subok=True</em><span class="optional">[</span>, <em>signature</em>, <em>extobj</em><span class="optional">]</span><span class="sig-paren">)</span><em class="property"> = &lt;ufunc 'exp'&gt;</em><a class="headerlink" href="#numpy.exp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the exponential of all elements in the input array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : array_like</p>
+<blockquote>
+<div><p>Input values.</p>
+</div></blockquote>
+<p><strong>out</strong> : ndarray, None, or tuple of ndarray and None, optional</p>
+<blockquote>
+<div><p>A location into which the result is stored. If provided, it must have
+a shape that the inputs broadcast to. If not provided or <em class="xref py py-obj">None</em>,
+a freshly-allocated array is returned. A tuple (possible only as a
+keyword argument) must have length equal to the number of outputs.</p>
+</div></blockquote>
+<p><strong>where</strong> : array_like, optional</p>
+<blockquote>
+<div><p>Values of True indicate to calculate the ufunc at that position, values
+of False indicate to leave the value in the output alone.</p>
+</div></blockquote>
+<p><strong>**kwargs</strong></p>
+<blockquote>
+<div><p>For other keyword-only arguments, see the
+<a class="reference internal" href="../ufuncs.html#ufuncs-kwargs"><span class="std std-ref">ufunc docs</span></a>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Output array, element-wise exponential of <em class="xref py py-obj">x</em>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="numpy.expm1.html#numpy.expm1" title="numpy.expm1"><code class="xref py py-obj docutils literal"><span class="pre">expm1</span></code></a></dt>
+<dd>Calculate <code class="docutils literal"><span class="pre">exp(x)</span> <span class="pre">-</span> <span class="pre">1</span></code> for all elements in the array.</dd>
+<dt><a class="reference internal" href="numpy.exp2.html#numpy.exp2" title="numpy.exp2"><code class="xref py py-obj docutils literal"><span class="pre">exp2</span></code></a></dt>
+<dd>Calculate <code class="docutils literal"><span class="pre">2**x</span></code> for all elements in the array.</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>The irrational number <code class="docutils literal"><span class="pre">e</span></code> is also known as Euler&#8217;s number.  It is
+approximately 2.718281, and is the base of the natural logarithm,
+<code class="docutils literal"><span class="pre">ln</span></code> (this means that, if <img class="math" src="../../_images/math/562c12150ec777140d6e8430a5392f3fdaa9db14.svg" alt="x = \ln y = \log_e y"/>,
+then <img class="math" src="../../_images/math/c29d3d6e1a9dde0418a4a63853354d553790830e.svg" alt="e^x = y"/>. For real input, <code class="docutils literal"><span class="pre">exp(x)</span></code> is always positive.</p>
+<p>For complex arguments, <code class="docutils literal"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">a</span> <span class="pre">+</span> <span class="pre">ib</span></code>, we can write
+<img class="math" src="../../_images/math/be4088a3730c69c9bb363faa4e4eee96a53cd4be.svg" alt="e^x = e^a e^{ib}"/>.  The first term, <img class="math" src="../../_images/math/96bf85292a0a989bb5b154e4eaa4797429ef403d.svg" alt="e^a"/>, is already
+known (it is the real argument, described above).  The second term,
+<img class="math" src="../../_images/math/0cf0e0681a84f958d2bc8bb8a0b10b1494adde94.svg" alt="e^{ib}"/>, is <img class="math" src="../../_images/math/cc8a46ecec81f2cd2b3746dd26410def8e9a9ba6.svg" alt="\cos b + i \sin b"/>, a function with
+magnitude 1 and a periodic phase.</p>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r18" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R18]</a></td><td>Wikipedia, &#8220;Exponential function&#8221;,
+<a class="reference external" href="http://en.wikipedia.org/wiki/Exponential_function">http://en.wikipedia.org/wiki/Exponential_function</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r19" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[R19]</a></td><td>M. Abramovitz and I. A. Stegun, &#8220;Handbook of Mathematical Functions
+with Formulas, Graphs, and Mathematical Tables,&#8221; Dover, 1964, p. 69,
+<a class="reference external" href="http://www.math.sfu.ca/~cbm/aands/page_69.htm">http://www.math.sfu.ca/~cbm/aands/page_69.htm</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Plot the magnitude and phase of <code class="docutils literal"><span class="pre">exp(x)</span></code> in the complex plane:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xx</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">x</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="c1"># a + ib over complex plane</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">out</span><span class="p">),</span>
+<span class="gp">... </span>           <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Magnitude of exp(x)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">out</span><span class="p">),</span>
+<span class="gp">... </span>           <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;hsv&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Phase (angle) of exp(x)&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure">
+<img alt="../../_images/numpy-exp-1.png" src="../../_images/numpy-exp-1.png" />
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,773 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pandas.Panel &#8212; pandas 0.22.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.22.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pandas.Panel.at" href="pandas.Panel.at.html" />
+    <link rel="prev" title="pandas.SparseDataFrame.to_coo" href="pandas.SparseDataFrame.to_coo.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pandas.Panel.at.html" title="pandas.Panel.at"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pandas.SparseDataFrame.to_coo.html" title="pandas.SparseDataFrame.to_coo"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pandas 0.22.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" accesskey="U">API Reference</a> &#187;</li> 
+      </ul>
+    </div>
+<div class="content-wrapper">
+    <div class="content">
+        <div class="document">
+            <div class="sphinxsidebar">
+                <h3>Table Of Contents</h3>
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew.html">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Package overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../10min.html">10 Minutes to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dsintro.html">Intro to Data Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basics.html">Essential Basic Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text.html">Working with Text Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../options.html">Options and Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indexing.html">Indexing and Selecting Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced.html">MultiIndex / Advanced Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../computation.html">Computational tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../missing_data.html">Working with missing data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../groupby.html">Group By: split-apply-combine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../merging.html">Merge, join, and concatenate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reshaping.html">Reshaping and Pivot Tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timeseries.html">Time Series / Date functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timedeltas.html">Time Deltas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../categorical.html">Categorical Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../style.html">Styling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io.html">IO Tools (Text, CSV, HDF5, ...)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../remote_data.html">Remote Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enhancingperf.html">Enhancing Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sparse.html">Sparse data structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gotchas.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../r_interface.html">rpy2 / R interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ecosystem.html">pandas Ecosystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_r.html">Comparison with R / R libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_sql.html">Comparison with SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_sas.html">Comparison with SAS</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#input-output">Input/Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#general-functions">General functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#series">Series</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#dataframe">DataFrame</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#panel">Panel</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../api.html#id14">Constructor</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pandas.Panel</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id15">Attributes and underlying data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id16">Conversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#getting-and-setting">Getting and setting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#indexing-iteration-slicing">Indexing, iteration, slicing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id17">Binary operator functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#function-application-groupby">Function application, GroupBy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#api-panel-stats">Computations / Descriptive Stats</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id19">Reindexing / Selection / Label manipulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id20">Missing data handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id21">Reshaping, sorting, transposing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id22">Combining / joining / merging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id23">Time series-related</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id24">Serialization / IO / Conversion</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#index">Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#numeric-index">Numeric Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#categoricalindex">CategoricalIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#intervalindex">IntervalIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#multiindex">MultiIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#datetimeindex">DatetimeIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#timedeltaindex">TimedeltaIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#periodindex">PeriodIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#scalars">Scalars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#window">Window</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#groupby">GroupBy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#resampling">Resampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#style">Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#general-utility-functions">General utility functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developer.html">Developer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../internals.html">Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release Notes</a></li>
+</ul>
+
+                <h3 style="margin-top: 1.5em;">Search</h3>
+
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18"/>
+                    <input type="submit" value="Go"/>
+                    <input type="hidden" name="check_keywords" value="yes"/>
+                    <input type="hidden" name="area" value="default"/>
+                </form>
+                <p class="searchtip" style="font-size: 90%">
+                    Enter search terms or a module, class or function name.
+                </p>
+
+            </div>
+             
+            <div class="documentwrapper">
+                <div class="bodywrapper">
+                    <div class="body">
+                        
+  <div class="section" id="pandas-panel">
+<h1>pandas.Panel<a class="headerlink" href="#pandas-panel" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pandas.Panel">
+<em class="property">class </em><code class="descclassname">pandas.</code><code class="descname">Panel</code><span class="sig-paren">(</span><em>data=None</em>, <em>items=None</em>, <em>major_axis=None</em>, <em>minor_axis=None</em>, <em>copy=False</em>, <em>dtype=None</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/pandas-dev/pandas/blob/v0.22.0/pandas/core/panel.py#L110-L1601"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pandas.Panel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents wide format panel data, stored as 3-dimensional array</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray (items x major x minor), or dict of DataFrames</p>
+<p><strong>items</strong> : Index or array-like</p>
+<blockquote>
+<div><p>axis=0</p>
+</div></blockquote>
+<p><strong>major_axis</strong> : Index or array-like</p>
+<blockquote>
+<div><p>axis=1</p>
+</div></blockquote>
+<p><strong>minor_axis</strong> : Index or array-like</p>
+<blockquote>
+<div><p>axis=2</p>
+</div></blockquote>
+<p><strong>dtype</strong> : dtype, default None</p>
+<blockquote>
+<div><p>Data type to force, otherwise infer</p>
+</div></blockquote>
+<p><strong>copy</strong> : boolean, default False</p>
+<blockquote class="last">
+<div><p>Copy data from inputs. Only affects DataFrame / 2d ndarray input</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.at.html#pandas.Panel.at" title="pandas.Panel.at"><code class="xref py py-obj docutils literal"><span class="pre">at</span></code></a></td>
+<td>Fast label-based scalar accessor</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.axes.html#pandas.Panel.axes" title="pandas.Panel.axes"><code class="xref py py-obj docutils literal"><span class="pre">axes</span></code></a></td>
+<td>Return index label(s) of the internal NDFrame</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.blocks.html#pandas.Panel.blocks" title="pandas.Panel.blocks"><code class="xref py py-obj docutils literal"><span class="pre">blocks</span></code></a></td>
+<td>Internal property, property synonym for as_blocks()</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.dtypes.html#pandas.Panel.dtypes" title="pandas.Panel.dtypes"><code class="xref py py-obj docutils literal"><span class="pre">dtypes</span></code></a></td>
+<td>Return the dtypes in this object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.empty.html#pandas.Panel.empty" title="pandas.Panel.empty"><code class="xref py py-obj docutils literal"><span class="pre">empty</span></code></a></td>
+<td>True if NDFrame is entirely empty [no items], meaning any of the axes are of length 0.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.ftypes.html#pandas.Panel.ftypes" title="pandas.Panel.ftypes"><code class="xref py py-obj docutils literal"><span class="pre">ftypes</span></code></a></td>
+<td>Return the ftypes (indication of sparse/dense and dtype) in this object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.iat.html#pandas.Panel.iat" title="pandas.Panel.iat"><code class="xref py py-obj docutils literal"><span class="pre">iat</span></code></a></td>
+<td>Fast integer location scalar accessor.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.iloc.html#pandas.Panel.iloc" title="pandas.Panel.iloc"><code class="xref py py-obj docutils literal"><span class="pre">iloc</span></code></a></td>
+<td>Purely integer-location based indexing for selection by position.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.is_copy.html#pandas.Panel.is_copy" title="pandas.Panel.is_copy"><code class="xref py py-obj docutils literal"><span class="pre">is_copy</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.ix.html#pandas.Panel.ix" title="pandas.Panel.ix"><code class="xref py py-obj docutils literal"><span class="pre">ix</span></code></a></td>
+<td>A primarily label-location based indexer, with integer position fallback.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.loc.html#pandas.Panel.loc" title="pandas.Panel.loc"><code class="xref py py-obj docutils literal"><span class="pre">loc</span></code></a></td>
+<td>Purely label-location based indexer for selection by label.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.ndim.html#pandas.Panel.ndim" title="pandas.Panel.ndim"><code class="xref py py-obj docutils literal"><span class="pre">ndim</span></code></a></td>
+<td>Number of axes / array dimensions</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.shape.html#pandas.Panel.shape" title="pandas.Panel.shape"><code class="xref py py-obj docutils literal"><span class="pre">shape</span></code></a></td>
+<td>Return a tuple of axis dimensions</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.size.html#pandas.Panel.size" title="pandas.Panel.size"><code class="xref py py-obj docutils literal"><span class="pre">size</span></code></a></td>
+<td>number of elements in the NDFrame</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.values.html#pandas.Panel.values" title="pandas.Panel.values"><code class="xref py py-obj docutils literal"><span class="pre">values</span></code></a></td>
+<td>Numpy representation of NDFrame</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.abs.html#pandas.Panel.abs" title="pandas.Panel.abs"><code class="xref py py-obj docutils literal"><span class="pre">abs</span></code></a>()</td>
+<td>Return an object with absolute value taken&#8211;only applicable to objects that are all numeric.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.add.html#pandas.Panel.add" title="pandas.Panel.add"><code class="xref py py-obj docutils literal"><span class="pre">add</span></code></a>(other[,&nbsp;axis])</td>
+<td>Addition of series and other, element-wise (binary operator <cite>add</cite>).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.add_prefix.html#pandas.Panel.add_prefix" title="pandas.Panel.add_prefix"><code class="xref py py-obj docutils literal"><span class="pre">add_prefix</span></code></a>(prefix)</td>
+<td>Concatenate prefix string with panel items names.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.add_suffix.html#pandas.Panel.add_suffix" title="pandas.Panel.add_suffix"><code class="xref py py-obj docutils literal"><span class="pre">add_suffix</span></code></a>(suffix)</td>
+<td>Concatenate suffix string with panel items names.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.agg.html#pandas.Panel.agg" title="pandas.Panel.agg"><code class="xref py py-obj docutils literal"><span class="pre">agg</span></code></a>(func,&nbsp;*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.aggregate.html#pandas.Panel.aggregate" title="pandas.Panel.aggregate"><code class="xref py py-obj docutils literal"><span class="pre">aggregate</span></code></a>(func,&nbsp;*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.align.html#pandas.Panel.align" title="pandas.Panel.align"><code class="xref py py-obj docutils literal"><span class="pre">align</span></code></a>(other,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.all.html#pandas.Panel.all" title="pandas.Panel.all"><code class="xref py py-obj docutils literal"><span class="pre">all</span></code></a>([axis,&nbsp;bool_only,&nbsp;skipna,&nbsp;level])</td>
+<td>Return whether all elements are True over requested axis</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.any.html#pandas.Panel.any" title="pandas.Panel.any"><code class="xref py py-obj docutils literal"><span class="pre">any</span></code></a>([axis,&nbsp;bool_only,&nbsp;skipna,&nbsp;level])</td>
+<td>Return whether any element is True over requested axis</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.apply.html#pandas.Panel.apply" title="pandas.Panel.apply"><code class="xref py py-obj docutils literal"><span class="pre">apply</span></code></a>(func[,&nbsp;axis])</td>
+<td>Applies function along axis (or axes) of the Panel</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.as_blocks.html#pandas.Panel.as_blocks" title="pandas.Panel.as_blocks"><code class="xref py py-obj docutils literal"><span class="pre">as_blocks</span></code></a>([copy])</td>
+<td>Convert the frame to a dict of dtype -&gt; Constructor Types that each has a homogeneous dtype.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.as_matrix.html#pandas.Panel.as_matrix" title="pandas.Panel.as_matrix"><code class="xref py py-obj docutils literal"><span class="pre">as_matrix</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.asfreq.html#pandas.Panel.asfreq" title="pandas.Panel.asfreq"><code class="xref py py-obj docutils literal"><span class="pre">asfreq</span></code></a>(freq[,&nbsp;method,&nbsp;how,&nbsp;normalize,&nbsp;...])</td>
+<td>Convert TimeSeries to specified frequency.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.asof.html#pandas.Panel.asof" title="pandas.Panel.asof"><code class="xref py py-obj docutils literal"><span class="pre">asof</span></code></a>(where[,&nbsp;subset])</td>
+<td>The last row without any NaN is taken (or the last row without</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.astype.html#pandas.Panel.astype" title="pandas.Panel.astype"><code class="xref py py-obj docutils literal"><span class="pre">astype</span></code></a>(dtype[,&nbsp;copy,&nbsp;errors])</td>
+<td>Cast a pandas object to a specified dtype <code class="docutils literal"><span class="pre">dtype</span></code>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.at_time.html#pandas.Panel.at_time" title="pandas.Panel.at_time"><code class="xref py py-obj docutils literal"><span class="pre">at_time</span></code></a>(time[,&nbsp;asof])</td>
+<td>Select values at particular time of day (e.g.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.between_time.html#pandas.Panel.between_time" title="pandas.Panel.between_time"><code class="xref py py-obj docutils literal"><span class="pre">between_time</span></code></a>(start_time,&nbsp;end_time[,&nbsp;...])</td>
+<td>Select values between particular times of the day (e.g., 9:00-9:30 AM).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.bfill.html#pandas.Panel.bfill" title="pandas.Panel.bfill"><code class="xref py py-obj docutils literal"><span class="pre">bfill</span></code></a>([axis,&nbsp;inplace,&nbsp;limit,&nbsp;downcast])</td>
+<td>Synonym for <a class="reference internal" href="pandas.DataFrame.fillna.html#pandas.DataFrame.fillna" title="pandas.DataFrame.fillna"><code class="xref py py-meth docutils literal"><span class="pre">DataFrame.fillna(method='bfill')</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.bool.html#pandas.Panel.bool" title="pandas.Panel.bool"><code class="xref py py-obj docutils literal"><span class="pre">bool</span></code></a>()</td>
+<td>Return the bool of a single element PandasObject.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.clip.html#pandas.Panel.clip" title="pandas.Panel.clip"><code class="xref py py-obj docutils literal"><span class="pre">clip</span></code></a>([lower,&nbsp;upper,&nbsp;axis,&nbsp;inplace])</td>
+<td>Trim values at input threshold(s).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.clip_lower.html#pandas.Panel.clip_lower" title="pandas.Panel.clip_lower"><code class="xref py py-obj docutils literal"><span class="pre">clip_lower</span></code></a>(threshold[,&nbsp;axis,&nbsp;inplace])</td>
+<td>Return copy of the input with values below given value(s) truncated.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.clip_upper.html#pandas.Panel.clip_upper" title="pandas.Panel.clip_upper"><code class="xref py py-obj docutils literal"><span class="pre">clip_upper</span></code></a>(threshold[,&nbsp;axis,&nbsp;inplace])</td>
+<td>Return copy of input with values above given value(s) truncated.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.compound.html#pandas.Panel.compound" title="pandas.Panel.compound"><code class="xref py py-obj docutils literal"><span class="pre">compound</span></code></a>([axis,&nbsp;skipna,&nbsp;level])</td>
+<td>Return the compound percentage of the values for the requested axis</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.conform.html#pandas.Panel.conform" title="pandas.Panel.conform"><code class="xref py py-obj docutils literal"><span class="pre">conform</span></code></a>(frame[,&nbsp;axis])</td>
+<td>Conform input DataFrame to align with chosen axis pair.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.consolidate.html#pandas.Panel.consolidate" title="pandas.Panel.consolidate"><code class="xref py py-obj docutils literal"><span class="pre">consolidate</span></code></a>([inplace])</td>
+<td>DEPRECATED: consolidate will be an internal implementation only.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.convert_objects.html#pandas.Panel.convert_objects" title="pandas.Panel.convert_objects"><code class="xref py py-obj docutils literal"><span class="pre">convert_objects</span></code></a>([convert_dates,&nbsp;...])</td>
+<td>Deprecated.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.copy.html#pandas.Panel.copy" title="pandas.Panel.copy"><code class="xref py py-obj docutils literal"><span class="pre">copy</span></code></a>([deep])</td>
+<td>Make a copy of this objects data.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.count.html#pandas.Panel.count" title="pandas.Panel.count"><code class="xref py py-obj docutils literal"><span class="pre">count</span></code></a>([axis])</td>
+<td>Return number of observations over requested axis.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.cummax.html#pandas.Panel.cummax" title="pandas.Panel.cummax"><code class="xref py py-obj docutils literal"><span class="pre">cummax</span></code></a>([axis,&nbsp;skipna])</td>
+<td>Return cumulative max over requested axis.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.cummin.html#pandas.Panel.cummin" title="pandas.Panel.cummin"><code class="xref py py-obj docutils literal"><span class="pre">cummin</span></code></a>([axis,&nbsp;skipna])</td>
+<td>Return cumulative minimum over requested axis.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.cumprod.html#pandas.Panel.cumprod" title="pandas.Panel.cumprod"><code class="xref py py-obj docutils literal"><span class="pre">cumprod</span></code></a>([axis,&nbsp;skipna])</td>
+<td>Return cumulative product over requested axis.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.cumsum.html#pandas.Panel.cumsum" title="pandas.Panel.cumsum"><code class="xref py py-obj docutils literal"><span class="pre">cumsum</span></code></a>([axis,&nbsp;skipna])</td>
+<td>Return cumulative sum over requested axis.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.describe.html#pandas.Panel.describe" title="pandas.Panel.describe"><code class="xref py py-obj docutils literal"><span class="pre">describe</span></code></a>([percentiles,&nbsp;include,&nbsp;exclude])</td>
+<td>Generates descriptive statistics that summarize the central tendency, dispersion and shape of a dataset&#8217;s distribution, excluding <code class="docutils literal"><span class="pre">NaN</span></code> values.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.div.html#pandas.Panel.div" title="pandas.Panel.div"><code class="xref py py-obj docutils literal"><span class="pre">div</span></code></a>(other[,&nbsp;axis])</td>
+<td>Floating division of series and other, element-wise (binary operator <cite>truediv</cite>).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.divide.html#pandas.Panel.divide" title="pandas.Panel.divide"><code class="xref py py-obj docutils literal"><span class="pre">divide</span></code></a>(other[,&nbsp;axis])</td>
+<td>Floating division of series and other, element-wise (binary operator <cite>truediv</cite>).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.drop.html#pandas.Panel.drop" title="pandas.Panel.drop"><code class="xref py py-obj docutils literal"><span class="pre">drop</span></code></a>([labels,&nbsp;axis,&nbsp;index,&nbsp;columns,&nbsp;level,&nbsp;...])</td>
+<td>Return new object with labels in requested axis removed.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.dropna.html#pandas.Panel.dropna" title="pandas.Panel.dropna"><code class="xref py py-obj docutils literal"><span class="pre">dropna</span></code></a>([axis,&nbsp;how,&nbsp;inplace])</td>
+<td>Drop 2D from panel, holding passed axis constant</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.eq.html#pandas.Panel.eq" title="pandas.Panel.eq"><code class="xref py py-obj docutils literal"><span class="pre">eq</span></code></a>(other[,&nbsp;axis])</td>
+<td>Wrapper for comparison method eq</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.equals.html#pandas.Panel.equals" title="pandas.Panel.equals"><code class="xref py py-obj docutils literal"><span class="pre">equals</span></code></a>(other)</td>
+<td>Determines if two NDFrame objects contain the same elements.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.ffill.html#pandas.Panel.ffill" title="pandas.Panel.ffill"><code class="xref py py-obj docutils literal"><span class="pre">ffill</span></code></a>([axis,&nbsp;inplace,&nbsp;limit,&nbsp;downcast])</td>
+<td>Synonym for <a class="reference internal" href="pandas.DataFrame.fillna.html#pandas.DataFrame.fillna" title="pandas.DataFrame.fillna"><code class="xref py py-meth docutils literal"><span class="pre">DataFrame.fillna(method='ffill')</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.fillna.html#pandas.Panel.fillna" title="pandas.Panel.fillna"><code class="xref py py-obj docutils literal"><span class="pre">fillna</span></code></a>([value,&nbsp;method,&nbsp;axis,&nbsp;inplace,&nbsp;...])</td>
+<td>Fill NA/NaN values using the specified method</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.filter.html#pandas.Panel.filter" title="pandas.Panel.filter"><code class="xref py py-obj docutils literal"><span class="pre">filter</span></code></a>([items,&nbsp;like,&nbsp;regex,&nbsp;axis])</td>
+<td>Subset rows or columns of dataframe according to labels in the specified index.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.first.html#pandas.Panel.first" title="pandas.Panel.first"><code class="xref py py-obj docutils literal"><span class="pre">first</span></code></a>(offset)</td>
+<td>Convenience method for subsetting initial periods of time series data based on a date offset.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.floordiv.html#pandas.Panel.floordiv" title="pandas.Panel.floordiv"><code class="xref py py-obj docutils literal"><span class="pre">floordiv</span></code></a>(other[,&nbsp;axis])</td>
+<td>Integer division of series and other, element-wise (binary operator <cite>floordiv</cite>).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.fromDict.html#pandas.Panel.fromDict" title="pandas.Panel.fromDict"><code class="xref py py-obj docutils literal"><span class="pre">fromDict</span></code></a>(data[,&nbsp;intersect,&nbsp;orient,&nbsp;dtype])</td>
+<td>Construct Panel from dict of DataFrame objects</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.from_dict.html#pandas.Panel.from_dict" title="pandas.Panel.from_dict"><code class="xref py py-obj docutils literal"><span class="pre">from_dict</span></code></a>(data[,&nbsp;intersect,&nbsp;orient,&nbsp;dtype])</td>
+<td>Construct Panel from dict of DataFrame objects</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.ge.html#pandas.Panel.ge" title="pandas.Panel.ge"><code class="xref py py-obj docutils literal"><span class="pre">ge</span></code></a>(other[,&nbsp;axis])</td>
+<td>Wrapper for comparison method ge</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.get.html#pandas.Panel.get" title="pandas.Panel.get"><code class="xref py py-obj docutils literal"><span class="pre">get</span></code></a>(key[,&nbsp;default])</td>
+<td>Get item from object for given key (DataFrame column, Panel slice, etc.).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.get_dtype_counts.html#pandas.Panel.get_dtype_counts" title="pandas.Panel.get_dtype_counts"><code class="xref py py-obj docutils literal"><span class="pre">get_dtype_counts</span></code></a>()</td>
+<td>Return the counts of dtypes in this object.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.get_ftype_counts.html#pandas.Panel.get_ftype_counts" title="pandas.Panel.get_ftype_counts"><code class="xref py py-obj docutils literal"><span class="pre">get_ftype_counts</span></code></a>()</td>
+<td>Return the counts of ftypes in this object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.get_value.html#pandas.Panel.get_value" title="pandas.Panel.get_value"><code class="xref py py-obj docutils literal"><span class="pre">get_value</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td>Quickly retrieve single value at (item, major, minor) location</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.get_values.html#pandas.Panel.get_values" title="pandas.Panel.get_values"><code class="xref py py-obj docutils literal"><span class="pre">get_values</span></code></a>()</td>
+<td>same as values (but handles sparseness conversions)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.groupby.html#pandas.Panel.groupby" title="pandas.Panel.groupby"><code class="xref py py-obj docutils literal"><span class="pre">groupby</span></code></a>(function[,&nbsp;axis])</td>
+<td>Group data on given axis, returning GroupBy object</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.gt.html#pandas.Panel.gt" title="pandas.Panel.gt"><code class="xref py py-obj docutils literal"><span class="pre">gt</span></code></a>(other[,&nbsp;axis])</td>
+<td>Wrapper for comparison method gt</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.head.html#pandas.Panel.head" title="pandas.Panel.head"><code class="xref py py-obj docutils literal"><span class="pre">head</span></code></a>([n])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.infer_objects.html#pandas.Panel.infer_objects" title="pandas.Panel.infer_objects"><code class="xref py py-obj docutils literal"><span class="pre">infer_objects</span></code></a>()</td>
+<td>Attempt to infer better dtypes for object columns.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.interpolate.html#pandas.Panel.interpolate" title="pandas.Panel.interpolate"><code class="xref py py-obj docutils literal"><span class="pre">interpolate</span></code></a>([method,&nbsp;axis,&nbsp;limit,&nbsp;inplace,&nbsp;...])</td>
+<td>Interpolate values according to different methods.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.isna.html#pandas.Panel.isna" title="pandas.Panel.isna"><code class="xref py py-obj docutils literal"><span class="pre">isna</span></code></a>()</td>
+<td>Return a boolean same-sized object indicating if the values are NA.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.isnull.html#pandas.Panel.isnull" title="pandas.Panel.isnull"><code class="xref py py-obj docutils literal"><span class="pre">isnull</span></code></a>()</td>
+<td>Return a boolean same-sized object indicating if the values are NA.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.iteritems.html#pandas.Panel.iteritems" title="pandas.Panel.iteritems"><code class="xref py py-obj docutils literal"><span class="pre">iteritems</span></code></a>()</td>
+<td>Iterate over (label, values) on info axis</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.join.html#pandas.Panel.join" title="pandas.Panel.join"><code class="xref py py-obj docutils literal"><span class="pre">join</span></code></a>(other[,&nbsp;how,&nbsp;lsuffix,&nbsp;rsuffix])</td>
+<td>Join items with other Panel either on major and minor axes column</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.keys.html#pandas.Panel.keys" title="pandas.Panel.keys"><code class="xref py py-obj docutils literal"><span class="pre">keys</span></code></a>()</td>
+<td>Get the &#8216;info axis&#8217; (see Indexing for more)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.kurt.html#pandas.Panel.kurt" title="pandas.Panel.kurt"><code class="xref py py-obj docutils literal"><span class="pre">kurt</span></code></a>([axis,&nbsp;skipna,&nbsp;level,&nbsp;numeric_only])</td>
+<td>Return unbiased kurtosis over requested axis using Fisher&#8217;s definition of kurtosis (kurtosis of normal == 0.0).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.kurtosis.html#pandas.Panel.kurtosis" title="pandas.Panel.kurtosis"><code class="xref py py-obj docutils literal"><span class="pre">kurtosis</span></code></a>([axis,&nbsp;skipna,&nbsp;level,&nbsp;numeric_only])</td>
+<td>Return unbiased kurtosis over requested axis using Fisher&#8217;s definition of kurtosis (kurtosis of normal == 0.0).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.last.html#pandas.Panel.last" title="pandas.Panel.last"><code class="xref py py-obj docutils literal"><span class="pre">last</span></code></a>(offset)</td>
+<td>Convenience method for subsetting final periods of time series data based on a date offset.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.le.html#pandas.Panel.le" title="pandas.Panel.le"><code class="xref py py-obj docutils literal"><span class="pre">le</span></code></a>(other[,&nbsp;axis])</td>
+<td>Wrapper for comparison method le</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.lt.html#pandas.Panel.lt" title="pandas.Panel.lt"><code class="xref py py-obj docutils literal"><span class="pre">lt</span></code></a>(other[,&nbsp;axis])</td>
+<td>Wrapper for comparison method lt</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.mad.html#pandas.Panel.mad" title="pandas.Panel.mad"><code class="xref py py-obj docutils literal"><span class="pre">mad</span></code></a>([axis,&nbsp;skipna,&nbsp;level])</td>
+<td>Return the mean absolute deviation of the values for the requested axis</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.major_xs.html#pandas.Panel.major_xs" title="pandas.Panel.major_xs"><code class="xref py py-obj docutils literal"><span class="pre">major_xs</span></code></a>(key)</td>
+<td>Return slice of panel along major axis</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.mask.html#pandas.Panel.mask" title="pandas.Panel.mask"><code class="xref py py-obj docutils literal"><span class="pre">mask</span></code></a>(cond[,&nbsp;other,&nbsp;inplace,&nbsp;axis,&nbsp;level,&nbsp;...])</td>
+<td>Return an object of same shape as self and whose corresponding entries are from self where <cite>cond</cite> is False and otherwise are from <cite>other</cite>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.max.html#pandas.Panel.max" title="pandas.Panel.max"><code class="xref py py-obj docutils literal"><span class="pre">max</span></code></a>([axis,&nbsp;skipna,&nbsp;level,&nbsp;numeric_only])</td>
+<td>This method returns the maximum of the values in the object.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.mean.html#pandas.Panel.mean" title="pandas.Panel.mean"><code class="xref py py-obj docutils literal"><span class="pre">mean</span></code></a>([axis,&nbsp;skipna,&nbsp;level,&nbsp;numeric_only])</td>
+<td>Return the mean of the values for the requested axis</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.median.html#pandas.Panel.median" title="pandas.Panel.median"><code class="xref py py-obj docutils literal"><span class="pre">median</span></code></a>([axis,&nbsp;skipna,&nbsp;level,&nbsp;numeric_only])</td>
+<td>Return the median of the values for the requested axis</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.min.html#pandas.Panel.min" title="pandas.Panel.min"><code class="xref py py-obj docutils literal"><span class="pre">min</span></code></a>([axis,&nbsp;skipna,&nbsp;level,&nbsp;numeric_only])</td>
+<td>This method returns the minimum of the values in the object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.minor_xs.html#pandas.Panel.minor_xs" title="pandas.Panel.minor_xs"><code class="xref py py-obj docutils literal"><span class="pre">minor_xs</span></code></a>(key)</td>
+<td>Return slice of panel along minor axis</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.mod.html#pandas.Panel.mod" title="pandas.Panel.mod"><code class="xref py py-obj docutils literal"><span class="pre">mod</span></code></a>(other[,&nbsp;axis])</td>
+<td>Modulo of series and other, element-wise (binary operator <cite>mod</cite>).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.mul.html#pandas.Panel.mul" title="pandas.Panel.mul"><code class="xref py py-obj docutils literal"><span class="pre">mul</span></code></a>(other[,&nbsp;axis])</td>
+<td>Multiplication of series and other, element-wise (binary operator <cite>mul</cite>).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.multiply.html#pandas.Panel.multiply" title="pandas.Panel.multiply"><code class="xref py py-obj docutils literal"><span class="pre">multiply</span></code></a>(other[,&nbsp;axis])</td>
+<td>Multiplication of series and other, element-wise (binary operator <cite>mul</cite>).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.ne.html#pandas.Panel.ne" title="pandas.Panel.ne"><code class="xref py py-obj docutils literal"><span class="pre">ne</span></code></a>(other[,&nbsp;axis])</td>
+<td>Wrapper for comparison method ne</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.notna.html#pandas.Panel.notna" title="pandas.Panel.notna"><code class="xref py py-obj docutils literal"><span class="pre">notna</span></code></a>()</td>
+<td>Return a boolean same-sized object indicating if the values are not NA.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.notnull.html#pandas.Panel.notnull" title="pandas.Panel.notnull"><code class="xref py py-obj docutils literal"><span class="pre">notnull</span></code></a>()</td>
+<td>Return a boolean same-sized object indicating if the values are not NA.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.pct_change.html#pandas.Panel.pct_change" title="pandas.Panel.pct_change"><code class="xref py py-obj docutils literal"><span class="pre">pct_change</span></code></a>([periods,&nbsp;fill_method,&nbsp;limit,&nbsp;freq])</td>
+<td>Percent change over given number of periods.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.pipe.html#pandas.Panel.pipe" title="pandas.Panel.pipe"><code class="xref py py-obj docutils literal"><span class="pre">pipe</span></code></a>(func,&nbsp;*args,&nbsp;**kwargs)</td>
+<td>Apply func(self, *args, **kwargs)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.pop.html#pandas.Panel.pop" title="pandas.Panel.pop"><code class="xref py py-obj docutils literal"><span class="pre">pop</span></code></a>(item)</td>
+<td>Return item and drop from frame.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.pow.html#pandas.Panel.pow" title="pandas.Panel.pow"><code class="xref py py-obj docutils literal"><span class="pre">pow</span></code></a>(other[,&nbsp;axis])</td>
+<td>Exponential power of series and other, element-wise (binary operator <cite>pow</cite>).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.prod.html#pandas.Panel.prod" title="pandas.Panel.prod"><code class="xref py py-obj docutils literal"><span class="pre">prod</span></code></a>([axis,&nbsp;skipna,&nbsp;level,&nbsp;numeric_only,&nbsp;...])</td>
+<td>Return the product of the values for the requested axis</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.product.html#pandas.Panel.product" title="pandas.Panel.product"><code class="xref py py-obj docutils literal"><span class="pre">product</span></code></a>([axis,&nbsp;skipna,&nbsp;level,&nbsp;numeric_only,&nbsp;...])</td>
+<td>Return the product of the values for the requested axis</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.radd.html#pandas.Panel.radd" title="pandas.Panel.radd"><code class="xref py py-obj docutils literal"><span class="pre">radd</span></code></a>(other[,&nbsp;axis])</td>
+<td>Addition of series and other, element-wise (binary operator <cite>radd</cite>).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.rank.html#pandas.Panel.rank" title="pandas.Panel.rank"><code class="xref py py-obj docutils literal"><span class="pre">rank</span></code></a>([axis,&nbsp;method,&nbsp;numeric_only,&nbsp;...])</td>
+<td>Compute numerical data ranks (1 through n) along axis.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.rdiv.html#pandas.Panel.rdiv" title="pandas.Panel.rdiv"><code class="xref py py-obj docutils literal"><span class="pre">rdiv</span></code></a>(other[,&nbsp;axis])</td>
+<td>Floating division of series and other, element-wise (binary operator <cite>rtruediv</cite>).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.reindex.html#pandas.Panel.reindex" title="pandas.Panel.reindex"><code class="xref py py-obj docutils literal"><span class="pre">reindex</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td>Conform Panel to new index with optional filling logic, placing NA/NaN in locations having no value in the previous index.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.reindex_axis.html#pandas.Panel.reindex_axis" title="pandas.Panel.reindex_axis"><code class="xref py py-obj docutils literal"><span class="pre">reindex_axis</span></code></a>(labels[,&nbsp;axis,&nbsp;method,&nbsp;level,&nbsp;...])</td>
+<td>Conform input object to new index with optional filling logic, placing NA/NaN in locations having no value in the previous index.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.reindex_like.html#pandas.Panel.reindex_like" title="pandas.Panel.reindex_like"><code class="xref py py-obj docutils literal"><span class="pre">reindex_like</span></code></a>(other[,&nbsp;method,&nbsp;copy,&nbsp;limit,&nbsp;...])</td>
+<td>Return an object with matching indices to myself.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.rename.html#pandas.Panel.rename" title="pandas.Panel.rename"><code class="xref py py-obj docutils literal"><span class="pre">rename</span></code></a>([items,&nbsp;major_axis,&nbsp;minor_axis])</td>
+<td>Alter axes input function or functions.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.rename_axis.html#pandas.Panel.rename_axis" title="pandas.Panel.rename_axis"><code class="xref py py-obj docutils literal"><span class="pre">rename_axis</span></code></a>(mapper[,&nbsp;axis,&nbsp;copy,&nbsp;inplace])</td>
+<td>Alter the name of the index or columns.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.replace.html#pandas.Panel.replace" title="pandas.Panel.replace"><code class="xref py py-obj docutils literal"><span class="pre">replace</span></code></a>([to_replace,&nbsp;value,&nbsp;inplace,&nbsp;limit,&nbsp;...])</td>
+<td>Replace values given in &#8216;to_replace&#8217; with &#8216;value&#8217;.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.resample.html#pandas.Panel.resample" title="pandas.Panel.resample"><code class="xref py py-obj docutils literal"><span class="pre">resample</span></code></a>(rule[,&nbsp;how,&nbsp;axis,&nbsp;fill_method,&nbsp;...])</td>
+<td>Convenience method for frequency conversion and resampling of time series.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.rfloordiv.html#pandas.Panel.rfloordiv" title="pandas.Panel.rfloordiv"><code class="xref py py-obj docutils literal"><span class="pre">rfloordiv</span></code></a>(other[,&nbsp;axis])</td>
+<td>Integer division of series and other, element-wise (binary operator <cite>rfloordiv</cite>).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.rmod.html#pandas.Panel.rmod" title="pandas.Panel.rmod"><code class="xref py py-obj docutils literal"><span class="pre">rmod</span></code></a>(other[,&nbsp;axis])</td>
+<td>Modulo of series and other, element-wise (binary operator <cite>rmod</cite>).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.rmul.html#pandas.Panel.rmul" title="pandas.Panel.rmul"><code class="xref py py-obj docutils literal"><span class="pre">rmul</span></code></a>(other[,&nbsp;axis])</td>
+<td>Multiplication of series and other, element-wise (binary operator <cite>rmul</cite>).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.round.html#pandas.Panel.round" title="pandas.Panel.round"><code class="xref py py-obj docutils literal"><span class="pre">round</span></code></a>([decimals])</td>
+<td>Round each value in Panel to a specified number of decimal places.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.rpow.html#pandas.Panel.rpow" title="pandas.Panel.rpow"><code class="xref py py-obj docutils literal"><span class="pre">rpow</span></code></a>(other[,&nbsp;axis])</td>
+<td>Exponential power of series and other, element-wise (binary operator <cite>rpow</cite>).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.rsub.html#pandas.Panel.rsub" title="pandas.Panel.rsub"><code class="xref py py-obj docutils literal"><span class="pre">rsub</span></code></a>(other[,&nbsp;axis])</td>
+<td>Subtraction of series and other, element-wise (binary operator <cite>rsub</cite>).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.rtruediv.html#pandas.Panel.rtruediv" title="pandas.Panel.rtruediv"><code class="xref py py-obj docutils literal"><span class="pre">rtruediv</span></code></a>(other[,&nbsp;axis])</td>
+<td>Floating division of series and other, element-wise (binary operator <cite>rtruediv</cite>).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.sample.html#pandas.Panel.sample" title="pandas.Panel.sample"><code class="xref py py-obj docutils literal"><span class="pre">sample</span></code></a>([n,&nbsp;frac,&nbsp;replace,&nbsp;weights,&nbsp;...])</td>
+<td>Returns a random sample of items from an axis of object.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.select.html#pandas.Panel.select" title="pandas.Panel.select"><code class="xref py py-obj docutils literal"><span class="pre">select</span></code></a>(crit[,&nbsp;axis])</td>
+<td>Return data corresponding to axis labels matching criteria</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.sem.html#pandas.Panel.sem" title="pandas.Panel.sem"><code class="xref py py-obj docutils literal"><span class="pre">sem</span></code></a>([axis,&nbsp;skipna,&nbsp;level,&nbsp;ddof,&nbsp;numeric_only])</td>
+<td>Return unbiased standard error of the mean over requested axis.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.set_axis.html#pandas.Panel.set_axis" title="pandas.Panel.set_axis"><code class="xref py py-obj docutils literal"><span class="pre">set_axis</span></code></a>(labels[,&nbsp;axis,&nbsp;inplace])</td>
+<td>Assign desired index to given axis</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.set_value.html#pandas.Panel.set_value" title="pandas.Panel.set_value"><code class="xref py py-obj docutils literal"><span class="pre">set_value</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td>Quickly set single value at (item, major, minor) location</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.shift.html#pandas.Panel.shift" title="pandas.Panel.shift"><code class="xref py py-obj docutils literal"><span class="pre">shift</span></code></a>([periods,&nbsp;freq,&nbsp;axis])</td>
+<td>Shift index by desired number of periods with an optional time freq.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.skew.html#pandas.Panel.skew" title="pandas.Panel.skew"><code class="xref py py-obj docutils literal"><span class="pre">skew</span></code></a>([axis,&nbsp;skipna,&nbsp;level,&nbsp;numeric_only])</td>
+<td>Return unbiased skew over requested axis</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.slice_shift.html#pandas.Panel.slice_shift" title="pandas.Panel.slice_shift"><code class="xref py py-obj docutils literal"><span class="pre">slice_shift</span></code></a>([periods,&nbsp;axis])</td>
+<td>Equivalent to <cite>shift</cite> without copying data.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.sort_index.html#pandas.Panel.sort_index" title="pandas.Panel.sort_index"><code class="xref py py-obj docutils literal"><span class="pre">sort_index</span></code></a>([axis,&nbsp;level,&nbsp;ascending,&nbsp;...])</td>
+<td>Sort object by labels (along an axis)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.sort_values.html#pandas.Panel.sort_values" title="pandas.Panel.sort_values"><code class="xref py py-obj docutils literal"><span class="pre">sort_values</span></code></a>([by,&nbsp;axis,&nbsp;ascending,&nbsp;inplace,&nbsp;...])</td>
+<td>NOT IMPLEMENTED: do not call this method, as sorting values is not supported for Panel objects and will raise an error.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.squeeze.html#pandas.Panel.squeeze" title="pandas.Panel.squeeze"><code class="xref py py-obj docutils literal"><span class="pre">squeeze</span></code></a>([axis])</td>
+<td>Squeeze length 1 dimensions.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.std.html#pandas.Panel.std" title="pandas.Panel.std"><code class="xref py py-obj docutils literal"><span class="pre">std</span></code></a>([axis,&nbsp;skipna,&nbsp;level,&nbsp;ddof,&nbsp;numeric_only])</td>
+<td>Return sample standard deviation over requested axis.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.sub.html#pandas.Panel.sub" title="pandas.Panel.sub"><code class="xref py py-obj docutils literal"><span class="pre">sub</span></code></a>(other[,&nbsp;axis])</td>
+<td>Subtraction of series and other, element-wise (binary operator <cite>sub</cite>).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.subtract.html#pandas.Panel.subtract" title="pandas.Panel.subtract"><code class="xref py py-obj docutils literal"><span class="pre">subtract</span></code></a>(other[,&nbsp;axis])</td>
+<td>Subtraction of series and other, element-wise (binary operator <cite>sub</cite>).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.sum.html#pandas.Panel.sum" title="pandas.Panel.sum"><code class="xref py py-obj docutils literal"><span class="pre">sum</span></code></a>([axis,&nbsp;skipna,&nbsp;level,&nbsp;numeric_only,&nbsp;...])</td>
+<td>Return the sum of the values for the requested axis</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.swapaxes.html#pandas.Panel.swapaxes" title="pandas.Panel.swapaxes"><code class="xref py py-obj docutils literal"><span class="pre">swapaxes</span></code></a>(axis1,&nbsp;axis2[,&nbsp;copy])</td>
+<td>Interchange axes and swap values axes appropriately</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.swaplevel.html#pandas.Panel.swaplevel" title="pandas.Panel.swaplevel"><code class="xref py py-obj docutils literal"><span class="pre">swaplevel</span></code></a>([i,&nbsp;j,&nbsp;axis])</td>
+<td>Swap levels i and j in a MultiIndex on a particular axis</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.tail.html#pandas.Panel.tail" title="pandas.Panel.tail"><code class="xref py py-obj docutils literal"><span class="pre">tail</span></code></a>([n])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.take.html#pandas.Panel.take" title="pandas.Panel.take"><code class="xref py py-obj docutils literal"><span class="pre">take</span></code></a>(indices[,&nbsp;axis,&nbsp;convert,&nbsp;is_copy])</td>
+<td>Return the elements in the given <em>positional</em> indices along an axis.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.toLong.html#pandas.Panel.toLong" title="pandas.Panel.toLong"><code class="xref py py-obj docutils literal"><span class="pre">toLong</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.to_clipboard.html#pandas.Panel.to_clipboard" title="pandas.Panel.to_clipboard"><code class="xref py py-obj docutils literal"><span class="pre">to_clipboard</span></code></a>([excel,&nbsp;sep])</td>
+<td>Attempt to write text representation of object to the system clipboard This can be pasted into Excel, for example.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.to_dense.html#pandas.Panel.to_dense" title="pandas.Panel.to_dense"><code class="xref py py-obj docutils literal"><span class="pre">to_dense</span></code></a>()</td>
+<td>Return dense representation of NDFrame (as opposed to sparse)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.to_excel.html#pandas.Panel.to_excel" title="pandas.Panel.to_excel"><code class="xref py py-obj docutils literal"><span class="pre">to_excel</span></code></a>(path[,&nbsp;na_rep,&nbsp;engine])</td>
+<td>Write each DataFrame in Panel to a separate excel sheet</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.to_frame.html#pandas.Panel.to_frame" title="pandas.Panel.to_frame"><code class="xref py py-obj docutils literal"><span class="pre">to_frame</span></code></a>([filter_observations])</td>
+<td>Transform wide format into long (stacked) format as DataFrame whose columns are the Panel&#8217;s items and whose index is a MultiIndex formed of the Panel&#8217;s major and minor axes.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.to_hdf.html#pandas.Panel.to_hdf" title="pandas.Panel.to_hdf"><code class="xref py py-obj docutils literal"><span class="pre">to_hdf</span></code></a>(path_or_buf,&nbsp;key,&nbsp;**kwargs)</td>
+<td>Write the contained data to an HDF5 file using HDFStore.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.to_json.html#pandas.Panel.to_json" title="pandas.Panel.to_json"><code class="xref py py-obj docutils literal"><span class="pre">to_json</span></code></a>([path_or_buf,&nbsp;orient,&nbsp;date_format,&nbsp;...])</td>
+<td>Convert the object to a JSON string.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.to_latex.html#pandas.Panel.to_latex" title="pandas.Panel.to_latex"><code class="xref py py-obj docutils literal"><span class="pre">to_latex</span></code></a>([buf,&nbsp;columns,&nbsp;col_space,&nbsp;header,&nbsp;...])</td>
+<td>Render an object to a tabular environment table.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.to_long.html#pandas.Panel.to_long" title="pandas.Panel.to_long"><code class="xref py py-obj docutils literal"><span class="pre">to_long</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.to_msgpack.html#pandas.Panel.to_msgpack" title="pandas.Panel.to_msgpack"><code class="xref py py-obj docutils literal"><span class="pre">to_msgpack</span></code></a>([path_or_buf,&nbsp;encoding])</td>
+<td>msgpack (serialize) object to input file path</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.to_pickle.html#pandas.Panel.to_pickle" title="pandas.Panel.to_pickle"><code class="xref py py-obj docutils literal"><span class="pre">to_pickle</span></code></a>(path[,&nbsp;compression,&nbsp;protocol])</td>
+<td>Pickle (serialize) object to input file path.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.to_sparse.html#pandas.Panel.to_sparse" title="pandas.Panel.to_sparse"><code class="xref py py-obj docutils literal"><span class="pre">to_sparse</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td>NOT IMPLEMENTED: do not call this method, as sparsifying is not supported for Panel objects and will raise an error.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.to_sql.html#pandas.Panel.to_sql" title="pandas.Panel.to_sql"><code class="xref py py-obj docutils literal"><span class="pre">to_sql</span></code></a>(name,&nbsp;con[,&nbsp;flavor,&nbsp;schema,&nbsp;...])</td>
+<td>Write records stored in a DataFrame to a SQL database.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.to_xarray.html#pandas.Panel.to_xarray" title="pandas.Panel.to_xarray"><code class="xref py py-obj docutils literal"><span class="pre">to_xarray</span></code></a>()</td>
+<td>Return an xarray object from the pandas object.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.transpose.html#pandas.Panel.transpose" title="pandas.Panel.transpose"><code class="xref py py-obj docutils literal"><span class="pre">transpose</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td>Permute the dimensions of the Panel</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.truediv.html#pandas.Panel.truediv" title="pandas.Panel.truediv"><code class="xref py py-obj docutils literal"><span class="pre">truediv</span></code></a>(other[,&nbsp;axis])</td>
+<td>Floating division of series and other, element-wise (binary operator <cite>truediv</cite>).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.truncate.html#pandas.Panel.truncate" title="pandas.Panel.truncate"><code class="xref py py-obj docutils literal"><span class="pre">truncate</span></code></a>([before,&nbsp;after,&nbsp;axis,&nbsp;copy])</td>
+<td>Truncates a sorted DataFrame/Series before and/or after some particular index value.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.tshift.html#pandas.Panel.tshift" title="pandas.Panel.tshift"><code class="xref py py-obj docutils literal"><span class="pre">tshift</span></code></a>([periods,&nbsp;freq,&nbsp;axis])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.tz_convert.html#pandas.Panel.tz_convert" title="pandas.Panel.tz_convert"><code class="xref py py-obj docutils literal"><span class="pre">tz_convert</span></code></a>(tz[,&nbsp;axis,&nbsp;level,&nbsp;copy])</td>
+<td>Convert tz-aware axis to target time zone.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.tz_localize.html#pandas.Panel.tz_localize" title="pandas.Panel.tz_localize"><code class="xref py py-obj docutils literal"><span class="pre">tz_localize</span></code></a>(tz[,&nbsp;axis,&nbsp;level,&nbsp;copy,&nbsp;ambiguous])</td>
+<td>Localize tz-naive TimeSeries to target time zone.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.update.html#pandas.Panel.update" title="pandas.Panel.update"><code class="xref py py-obj docutils literal"><span class="pre">update</span></code></a>(other[,&nbsp;join,&nbsp;overwrite,&nbsp;...])</td>
+<td>Modify Panel in place using non-NA values from passed Panel, or object coercible to Panel.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.var.html#pandas.Panel.var" title="pandas.Panel.var"><code class="xref py py-obj docutils literal"><span class="pre">var</span></code></a>([axis,&nbsp;skipna,&nbsp;level,&nbsp;ddof,&nbsp;numeric_only])</td>
+<td>Return unbiased variance over requested axis.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pandas.Panel.where.html#pandas.Panel.where" title="pandas.Panel.where"><code class="xref py py-obj docutils literal"><span class="pre">where</span></code></a>(cond[,&nbsp;other,&nbsp;inplace,&nbsp;axis,&nbsp;level,&nbsp;...])</td>
+<td>Return an object of same shape as self and whose corresponding entries are from self where <cite>cond</cite> is True and otherwise are from <cite>other</cite>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pandas.Panel.xs.html#pandas.Panel.xs" title="pandas.Panel.xs"><code class="xref py py-obj docutils literal"><span class="pre">xs</span></code></a>(key[,&nbsp;axis])</td>
+<td>Return slice of panel along selected axis</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="clearer"></div>
+        </div>
+    </div>
+</div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pandas.Panel.at.html" title="pandas.Panel.at"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pandas.SparseDataFrame.to_coo.html" title="pandas.SparseDataFrame.to_coo"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pandas 0.22.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API Reference</a> &#187;</li> 
+      </ul>
+    </div>
+<style type="text/css">
+    .scrollToTop {
+        text-align: center;
+        font-weight: bold;
+        position: fixed;
+        bottom: 60px;
+        right: 40px;
+        display: none;
+    }
+</style>
+<a href="#" class="scrollToTop">Scroll To Top</a>
+<script type="text/javascript">
+$(document).ready(function() {
+    //Check to see if the window is top if not then display button
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 200) {
+            $('.scrollToTop').fadeIn();
+        } else {
+            $('.scrollToTop').fadeOut();
+        }
+    });
+
+    //Click event to scroll to top
+    $('.scrollToTop').click(function() {
+        $('html, body').animate({
+            scrollTop: 0
+        }, 500);
+        return false;
+    });
+});
+</script>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27880019-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </body>
+</html>

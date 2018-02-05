@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.core.defchararray.chararray.setflags &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="numpy.core.defchararray.chararray" href="numpy.core.defchararray.chararray.html" >
+    <link rel="next" title="numpy.core.defchararray.chararray.sort" href="numpy.core.defchararray.chararray.sort.html" >
+    <link rel="prev" title="numpy.core.defchararray.chararray.setfield" href="numpy.core.defchararray.chararray.setfield.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.char.html" >String operations</a></li>
+          <li class="active"><a href="numpy.core.defchararray.chararray.html" accesskey="U">numpy.core.defchararray.chararray</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.core.defchararray.chararray.sort.html" title="numpy.core.defchararray.chararray.sort"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.core.defchararray.chararray.setfield.html" title="numpy.core.defchararray.chararray.setfield"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.core.defchararray.chararray.setfield.html"
+                        title="previous chapter">numpy.core.defchararray.chararray.setfield</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.core.defchararray.chararray.sort.html"
+                        title="next chapter">numpy.core.defchararray.chararray.sort</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-core-defchararray-chararray-setflags">
+<h1>numpy.core.defchararray.chararray.setflags<a class="headerlink" href="#numpy-core-defchararray-chararray-setflags" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="numpy.core.defchararray.chararray.setflags">
+<code class="descclassname">chararray.</code><code class="descname">setflags</code><span class="sig-paren">(</span><em>write=None</em>, <em>align=None</em>, <em>uic=None</em><span class="sig-paren">)</span><a class="headerlink" href="#numpy.core.defchararray.chararray.setflags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set array flags WRITEABLE, ALIGNED, (WRITEBACKIFCOPY and UPDATEIFCOPY),
+respectively.</p>
+<p>These Boolean-valued flags affect how numpy interprets the memory
+area used by <em class="xref py py-obj">a</em> (see Notes below). The ALIGNED flag can only
+be set to True if the data is actually aligned according to the type.
+The WRITEBACKIFCOPY and (deprecated) UPDATEIFCOPY flags can never be set
+to True. The flag WRITEABLE can only be set to True if the array owns its
+own memory, or the ultimate owner of the memory exposes a writeable buffer
+interface, or is a string. (The exception for string is made so that
+unpickling can be done without copying memory.)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>write</strong> : bool, optional</p>
+<blockquote>
+<div><p>Describes whether or not <em class="xref py py-obj">a</em> can be written to.</p>
+</div></blockquote>
+<p><strong>align</strong> : bool, optional</p>
+<blockquote>
+<div><p>Describes whether or not <em class="xref py py-obj">a</em> is aligned properly for its type.</p>
+</div></blockquote>
+<p><strong>uic</strong> : bool, optional</p>
+<blockquote class="last">
+<div><p>Describes whether or not <em class="xref py py-obj">a</em> is a copy of another &#8220;base&#8221; array.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Array flags provide information about how the memory area used
+for the array is to be interpreted. There are 7 Boolean flags
+in use, only four of which can be changed by the user:
+WRITEBACKIFCOPY, UPDATEIFCOPY, WRITEABLE, and ALIGNED.</p>
+<p>WRITEABLE (W) the data area can be written to;</p>
+<p>ALIGNED (A) the data and strides are aligned appropriately for the hardware
+(as determined by the compiler);</p>
+<p>UPDATEIFCOPY (U) (deprecated), replaced by WRITEBACKIFCOPY;</p>
+<p>WRITEBACKIFCOPY (X) this array is a copy of some other array (referenced
+by .base). When the C-API function PyArray_ResolveWritebackIfCopy is
+called, the base array will be updated with the contents of this array.</p>
+<p>All flags can be accessed using the single (upper case) letter as well
+as the full name.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">y</span>
+<span class="go">array([[3, 1, 7],</span>
+<span class="go">       [2, 0, 0],</span>
+<span class="go">       [8, 5, 9]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span><span class="o">.</span><span class="n">flags</span>
+<span class="go">  C_CONTIGUOUS : True</span>
+<span class="go">  F_CONTIGUOUS : False</span>
+<span class="go">  OWNDATA : True</span>
+<span class="go">  WRITEABLE : True</span>
+<span class="go">  ALIGNED : True</span>
+<span class="go">  WRITEBACKIFCOPY : False</span>
+<span class="go">  UPDATEIFCOPY : False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span><span class="o">.</span><span class="n">setflags</span><span class="p">(</span><span class="n">write</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span><span class="o">.</span><span class="n">flags</span>
+<span class="go">  C_CONTIGUOUS : True</span>
+<span class="go">  F_CONTIGUOUS : False</span>
+<span class="go">  OWNDATA : True</span>
+<span class="go">  WRITEABLE : False</span>
+<span class="go">  ALIGNED : False</span>
+<span class="go">  WRITEBACKIFCOPY : False</span>
+<span class="go">  UPDATEIFCOPY : False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span><span class="o">.</span><span class="n">setflags</span><span class="p">(</span><span class="n">uic</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+<span class="gr">ValueError</span>: <span class="n">cannot set WRITEBACKIFCOPY flag to True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

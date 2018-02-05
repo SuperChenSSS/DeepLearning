@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.generic.newbyteorder &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="numpy.generic" href="numpy.generic.html" >
+    <link rel="next" title="numpy.generic.nonzero" href="numpy.generic.nonzero.html" >
+    <link rel="prev" title="numpy.generic.min" href="numpy.generic.min.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../arrays.html" >Array objects</a></li>
+          <li class="active"><a href="../arrays.scalars.html" >Scalars</a></li>
+          <li class="active"><a href="numpy.generic.html" accesskey="U">numpy.generic</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.generic.nonzero.html" title="numpy.generic.nonzero"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.generic.min.html" title="numpy.generic.min"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.generic.min.html"
+                        title="previous chapter">numpy.generic.min</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.generic.nonzero.html"
+                        title="next chapter">numpy.generic.nonzero</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-generic-newbyteorder">
+<h1>numpy.generic.newbyteorder<a class="headerlink" href="#numpy-generic-newbyteorder" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="numpy.generic.newbyteorder">
+<code class="descclassname">generic.</code><code class="descname">newbyteorder</code><span class="sig-paren">(</span><em>new_order='S'</em><span class="sig-paren">)</span><a class="headerlink" href="#numpy.generic.newbyteorder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new <a class="reference internal" href="numpy.dtype.html#numpy.dtype" title="numpy.dtype"><code class="xref py py-obj docutils literal"><span class="pre">dtype</span></code></a> with a different byte order.</p>
+<p>Changes are also made in all fields and sub-arrays of the data type.</p>
+<p>The <em class="xref py py-obj">new_order</em> code can be any from the following:</p>
+<ul class="simple">
+<li>&#8216;S&#8217; - swap dtype from current to opposite endian</li>
+<li>{&#8216;&lt;&#8217;, &#8216;L&#8217;} - little endian</li>
+<li>{&#8216;&gt;&#8217;, &#8216;B&#8217;} - big endian</li>
+<li>{&#8216;=&#8217;, &#8216;N&#8217;} - native order</li>
+<li>{&#8216;|&#8217;, &#8216;I&#8217;} - ignore (no change to byte order)</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>new_order</strong> : str, optional</p>
+<blockquote>
+<div><p>Byte order to force; a value from the byte order specifications
+above.  The default value (&#8216;S&#8217;) results in swapping the current
+byte order. The code does a case-insensitive check on the first
+letter of <em class="xref py py-obj">new_order</em> for the alternatives above.  For example,
+any of &#8216;B&#8217; or &#8216;b&#8217; or &#8216;biggish&#8217; are valid to specify big-endian.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>new_dtype</strong> : dtype</p>
+<blockquote class="last">
+<div><p>New <a class="reference internal" href="numpy.dtype.html#numpy.dtype" title="numpy.dtype"><code class="xref py py-obj docutils literal"><span class="pre">dtype</span></code></a> object with the given change to the byte order.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

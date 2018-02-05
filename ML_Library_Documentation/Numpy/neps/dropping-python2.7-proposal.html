@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Plan for dropping Python 2.7 support &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" >
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../index.html" >
+    <link rel="up" title="NumPy Enhancement Proposals" href="index.html" >
+    <link rel="next" title="Release Notes" href="../release.html" >
+    <link rel="prev" title="A (third) proposal for implementing some date/time types in NumPy" href="datetime-proposal3.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="index.html" accesskey="U">NumPy Enhancement Proposals</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../release.html" title="Release Notes"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="datetime-proposal3.html" title="A (third) proposal for implementing some date/time types in NumPy"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="datetime-proposal3.html"
+                        title="previous chapter">A (third) proposal for implementing some date/time types in NumPy</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../release.html"
+                        title="next chapter">Release Notes</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="plan-for-dropping-python-2-7-support">
+<h1>Plan for dropping Python 2.7 support<a class="headerlink" href="#plan-for-dropping-python-2-7-support" title="Permalink to this headline">¶</a></h1>
+<p>The Python core team plans to stop supporting Python 2 in 2020. The NumPy
+project has supported both Python 2 and Python 3 in parallel since 2010, and
+has found that supporting Python 2 is an increasing burden on our limited
+resources; thus, we plan to eventually drop Python 2 support as well. Now that
+we&#8217;re entering the final years of community-supported Python 2, the NumPy
+project wants to clarify our plans, with the goal of to helping our downstream
+ecosystem make plans and accomplish the transition with as little disruption as
+possible.</p>
+<p>Our current plan is as follows.</p>
+<p>Until <strong>December 31, 2018</strong>, all NumPy releases will fully support both
+Python2 and Python3.</p>
+<p>Starting on <strong>January 1, 2019</strong>, any new feature releases will support only
+Python3.</p>
+<p>The last Python2 supporting release will be designated as a long term support
+(LTS) release, meaning that we will continue to merge bug fixes and make bug
+fix releases for a longer period than usual.  Specifically, it will be
+supported by the community until <strong>December 31, 2019</strong>.</p>
+<p>On <strong>January 1, 2020</strong> we will raise a toast to Python2, and community support
+for the last Python2 supporting release will come to an end. However, it will
+continue to be available on PyPI indefinitely, and if any commercial vendors
+wish to extend the LTS support past this point then we are open to letting them
+use the LTS branch in the official NumPy repository to coordinate that.</p>
+<p>If you are a NumPy user who requires ongoing Python2 support in 2020 or later,
+then please contact your vendor. If you are a vendor who wishes to continue to
+support NumPy on Python2 in 2020+, please get in touch; ideally we&#8217;d like you
+to get involved in maintaining the LTS before it actually hits end of life so
+that we can make a clean handoff.</p>
+<p>To minimize disruption, running <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">numpy</span></code> on Python 2 will continue
+to give the last working release in perpetuity, but after January 1, 2019 it
+may not contain the latest features, and after January 1, 2020 it may not
+contain the latest bug fixes.</p>
+<p>For more information on the scientific Python ecosystem&#8217;s transition
+to Python3 only, see the <a class="reference external" href="http://www.python3statement.org/">python3-statement</a>.</p>
+<p>For more information on porting your code to run on Python 3, see the
+<a class="reference external" href="https://docs.python.org/3/howto/pyporting.html">python3-howto</a>.</p>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

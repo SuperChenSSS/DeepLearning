@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.random.multivariate_normal &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="Random sampling (numpy.random)" href="../routines.random.html" >
+    <link rel="next" title="numpy.random.negative_binomial" href="numpy.random.negative_binomial.html" >
+    <link rel="prev" title="numpy.random.multinomial" href="numpy.random.multinomial.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.random.html" accesskey="U">Random sampling (<code class="docutils literal"><span class="pre">numpy.random</span></code>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.random.negative_binomial.html" title="numpy.random.negative_binomial"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.random.multinomial.html" title="numpy.random.multinomial"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.random.multinomial.html"
+                        title="previous chapter">numpy.random.multinomial</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.random.negative_binomial.html"
+                        title="next chapter">numpy.random.negative_binomial</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-random-multivariate-normal">
+<h1>numpy.random.multivariate_normal<a class="headerlink" href="#numpy-random-multivariate-normal" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="numpy.random.multivariate_normal">
+<code class="descclassname">numpy.random.</code><code class="descname">multivariate_normal</code><span class="sig-paren">(</span><em>mean</em>, <em>cov</em><span class="optional">[</span>, <em>size</em>, <em>check_valid</em>, <em>tol</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#numpy.random.multivariate_normal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw random samples from a multivariate normal distribution.</p>
+<p>The multivariate normal, multinormal or Gaussian distribution is a
+generalization of the one-dimensional normal distribution to higher
+dimensions.  Such a distribution is specified by its mean and
+covariance matrix.  These parameters are analogous to the mean
+(average or &#8220;center&#8221;) and variance (standard deviation, or &#8220;width,&#8221;
+squared) of the one-dimensional normal distribution.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mean</strong> : 1-D array_like, of length N</p>
+<blockquote>
+<div><p>Mean of the N-dimensional distribution.</p>
+</div></blockquote>
+<p><strong>cov</strong> : 2-D array_like, of shape (N, N)</p>
+<blockquote>
+<div><p>Covariance matrix of the distribution. It must be symmetric and
+positive-semidefinite for proper sampling.</p>
+</div></blockquote>
+<p><strong>size</strong> : int or tuple of ints, optional</p>
+<blockquote>
+<div><p>Given a shape of, for example, <code class="docutils literal"><span class="pre">(m,n,k)</span></code>, <code class="docutils literal"><span class="pre">m*n*k</span></code> samples are
+generated, and packed in an <em class="xref py py-obj">m</em>-by-<em class="xref py py-obj">n</em>-by-<em class="xref py py-obj">k</em> arrangement.  Because
+each sample is <em class="xref py py-obj">N</em>-dimensional, the output shape is <code class="docutils literal"><span class="pre">(m,n,k,N)</span></code>.
+If no shape is specified, a single (<em class="xref py py-obj">N</em>-D) sample is returned.</p>
+</div></blockquote>
+<p><strong>check_valid</strong> : { &#8216;warn&#8217;, &#8216;raise&#8217;, &#8216;ignore&#8217; }, optional</p>
+<blockquote>
+<div><p>Behavior when the covariance matrix is not positive semidefinite.</p>
+</div></blockquote>
+<p><strong>tol</strong> : float, optional</p>
+<blockquote>
+<div><p>Tolerance when checking the singular values in covariance matrix.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>The drawn samples, of shape <em>size</em>, if that was provided.  If not,
+the shape is <code class="docutils literal"><span class="pre">(N,)</span></code>.</p>
+<p>In other words, each entry <code class="docutils literal"><span class="pre">out[i,j,...,:]</span></code> is an N-dimensional
+value drawn from the distribution.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The mean is a coordinate in N-dimensional space, which represents the
+location where samples are most likely to be generated.  This is
+analogous to the peak of the bell curve for the one-dimensional or
+univariate normal distribution.</p>
+<p>Covariance indicates the level to which two variables vary together.
+From the multivariate normal distribution, we draw N-dimensional
+samples, <img class="math" src="../../_images/math/9391bf1d850e8ba701b49624b0ade07272831afd.svg" alt="X = [x_1, x_2, ... x_N]"/>.  The covariance matrix
+element <img class="math" src="../../_images/math/4ed77223efc2c4d9753baa716e137897ded9d6a6.svg" alt="C_{ij}"/> is the covariance of <img class="math" src="../../_images/math/7720e563212e11bf72de255ab82c2a3b97c1a7f5.svg" alt="x_i"/> and <img class="math" src="../../_images/math/bdb2d04d69b82c2288f5ef46664d548355e130af.svg" alt="x_j"/>.
+The element <img class="math" src="../../_images/math/559d3e41d69c86f7dcb2ad7d0adbdb43d00ad259.svg" alt="C_{ii}"/> is the variance of <img class="math" src="../../_images/math/7720e563212e11bf72de255ab82c2a3b97c1a7f5.svg" alt="x_i"/> (i.e. its
+&#8220;spread&#8221;).</p>
+<p>Instead of specifying the full covariance matrix, popular
+approximations include:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Spherical covariance (<em class="xref py py-obj">cov</em> is a multiple of the identity matrix)</li>
+<li>Diagonal covariance (<em class="xref py py-obj">cov</em> has non-negative elements, and only on
+the diagonal)</li>
+</ul>
+</div></blockquote>
+<p>This geometrical property can be seen in two dimensions by plotting
+generated data-points:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cov</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">]]</span>  <span class="c1"># diagonal covariance</span>
+</pre></div>
+</div>
+<p>Diagonal covariance means that points are oriented along x or y-axis:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="mi">5000</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Note that the covariance matrix must be positive semidefinite (a.k.a.
+nonnegative-definite). Otherwise, the behavior of this method is
+undefined and backwards compatibility is not guaranteed.</p>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r246" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R246]</a></td><td>Papoulis, A., &#8220;Probability, Random Variables, and Stochastic
+Processes,&#8221; 3rd ed., New York: McGraw-Hill, 1991.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r247" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[R247]</a></td><td>Duda, R. O., Hart, P. E., and Stork, D. G., &#8220;Pattern
+Classification,&#8221; 2nd ed., New York: Wiley, 2001.</td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cov</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(3, 3, 2)</span>
+</pre></div>
+</div>
+<p>The following is probably true, given that 0.6 is roughly twice the
+standard deviation:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">-</span> <span class="n">mean</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.6</span><span class="p">)</span>
+<span class="go">[True, True]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

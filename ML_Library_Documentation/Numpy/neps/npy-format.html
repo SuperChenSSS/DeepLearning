@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>A Simple File Format for NumPy Arrays &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" >
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../index.html" >
+    <link rel="up" title="NumPy Enhancement Proposals" href="index.html" >
+    <link rel="next" title="Missing Data Functionality in NumPy" href="missing-data.html" >
+    <link rel="prev" title="Optimizing Iterator/UFunc Performance" href="new-iterator-ufunc.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="index.html" accesskey="U">NumPy Enhancement Proposals</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="missing-data.html" title="Missing Data Functionality in NumPy"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="new-iterator-ufunc.html" title="Optimizing Iterator/UFunc Performance"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">A Simple File Format for NumPy Arrays</a><ul>
+<li><a class="reference internal" href="#abstract">Abstract</a></li>
+<li><a class="reference internal" href="#rationale">Rationale</a></li>
+<li><a class="reference internal" href="#use-cases">Use Cases</a></li>
+<li><a class="reference internal" href="#requirements">Requirements</a></li>
+<li><a class="reference internal" href="#format-specification-version-1-0">Format Specification: Version 1.0</a></li>
+<li><a class="reference internal" href="#format-specification-version-2-0">Format Specification: Version 2.0</a></li>
+<li><a class="reference internal" href="#conventions">Conventions</a></li>
+<li><a class="reference internal" href="#alternatives">Alternatives</a></li>
+<li><a class="reference internal" href="#implementation">Implementation</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+<li><a class="reference internal" href="#copyright">Copyright</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="new-iterator-ufunc.html"
+                        title="previous chapter">Optimizing Iterator/UFunc Performance</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="missing-data.html"
+                        title="next chapter">Missing Data Functionality in NumPy</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="a-simple-file-format-for-numpy-arrays">
+<h1>A Simple File Format for NumPy Arrays<a class="headerlink" href="#a-simple-file-format-for-numpy-arrays" title="Permalink to this headline">¶</a></h1>
+<p>Author: Robert Kern &lt;<a class="reference external" href="mailto:robert&#46;kern&#37;&#52;&#48;gmail&#46;com">robert<span>&#46;</span>kern<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;
+Status: Draft
+Created: 20-Dec-2007</p>
+<div class="section" id="abstract">
+<h2>Abstract<a class="headerlink" href="#abstract" title="Permalink to this headline">¶</a></h2>
+<p>We propose a standard binary file format (NPY) for persisting
+a single arbitrary NumPy array on disk.  The format stores all of
+the shape and dtype information necessary to reconstruct the array
+correctly even on another machine with a different architecture.
+The format is designed to be as simple as possible while achieving
+its limited goals.  The implementation is intended to be pure
+Python and distributed as part of the main numpy package.</p>
+</div>
+<div class="section" id="rationale">
+<h2>Rationale<a class="headerlink" href="#rationale" title="Permalink to this headline">¶</a></h2>
+<p>A lightweight, omnipresent system for saving NumPy arrays to disk
+is a frequent need.  Python in general has pickle [1] for saving
+most Python objects to disk.  This often works well enough with
+NumPy arrays for many purposes, but it has a few drawbacks:</p>
+<ul class="simple">
+<li>Dumping or loading a pickle file require the duplication of the
+data in memory.  For large arrays, this can be a showstopper.</li>
+<li>The array data is not directly accessible through
+memory-mapping.  Now that numpy has that capability, it has
+proved very useful for loading large amounts of data (or more to
+the point: avoiding loading large amounts of data when you only
+need a small part).</li>
+</ul>
+<p>Both of these problems can be addressed by dumping the raw bytes
+to disk using ndarray.tofile() and numpy.fromfile().  However,
+these have their own problems:</p>
+<ul class="simple">
+<li>The data which is written has no information about the shape or
+dtype of the array.</li>
+<li>It is incapable of handling object arrays.</li>
+</ul>
+<p>The NPY file format is an evolutionary advance over these two
+approaches.  Its design is mostly limited to solving the problems
+with pickles and tofile()/fromfile().  It does not intend to solve
+more complicated problems for which more complicated formats like
+HDF5 [2] are a better solution.</p>
+</div>
+<div class="section" id="use-cases">
+<h2>Use Cases<a class="headerlink" href="#use-cases" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Neville Newbie has just started to pick up Python and NumPy.  He
+has not installed many packages, yet, nor learned the standard
+library, but he has been playing with NumPy at the interactive
+prompt to do small tasks.  He gets a result that he wants to
+save.</li>
+<li>Annie Analyst has been using large nested record arrays to
+represent her statistical data.  She wants to convince her
+R-using colleague, David Doubter, that Python and NumPy are
+awesome by sending him her analysis code and data.  She needs
+the data to load at interactive speeds.  Since David does not
+use Python usually, needing to install large packages would turn
+him off.</li>
+<li>Simon Seismologist is developing new seismic processing tools.
+One of his algorithms requires large amounts of intermediate
+data to be written to disk.  The data does not really fit into
+the industry-standard SEG-Y schema, but he already has a nice
+record-array dtype for using it internally.</li>
+<li>Polly Parallel wants to split up a computation on her multicore
+machine as simply as possible.  Parts of the computation can be
+split up among different processes without any communication
+between processes; they just need to fill in the appropriate
+portion of a large array with their results.  Having several
+child processes memory-mapping a common array is a good way to
+achieve this.</li>
+</ul>
+</div>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>The format MUST be able to:</p>
+<ul class="simple">
+<li>Represent all NumPy arrays including nested record
+arrays and object arrays.</li>
+<li>Represent the data in its native binary form.</li>
+<li>Be contained in a single file.</li>
+<li>Support Fortran-contiguous arrays directly.</li>
+<li>Store all of the necessary information to reconstruct the array
+including shape and dtype on a machine of a different
+architecture.  Both little-endian and big-endian arrays must be
+supported and a file with little-endian numbers will yield
+a little-endian array on any machine reading the file.  The
+types must be described in terms of their actual sizes.  For
+example, if a machine with a 64-bit C &#8220;long int&#8221; writes out an
+array with &#8220;long ints&#8221;, a reading machine with 32-bit C &#8220;long
+ints&#8221; will yield an array with 64-bit integers.</li>
+<li>Be reverse engineered.  Datasets often live longer than the
+programs that created them.  A competent developer should be
+able to create a solution in his preferred programming language to
+read most NPY files that he has been given without much
+documentation.</li>
+<li>Allow memory-mapping of the data.</li>
+<li>Be read from a filelike stream object instead of an actual file.
+This allows the implementation to be tested easily and makes the
+system more flexible.  NPY files can be stored in ZIP files and
+easily read from a ZipFile object.</li>
+<li>Store object arrays.  Since general Python objects are
+complicated and can only be reliably serialized by pickle (if at
+all), many of the other requirements are waived for files
+containing object arrays.  Files with object arrays do not have
+to be mmapable since that would be technically impossible.  We
+cannot expect the pickle format to be reverse engineered without
+knowledge of pickle.  However, one should at least be able to
+read and write object arrays with the same generic interface as
+other arrays.</li>
+<li>Be read and written using APIs provided in the numpy package
+itself without any other libraries.  The implementation inside
+numpy may be in C if necessary.</li>
+</ul>
+<p>The format explicitly <em>does not</em> need to:</p>
+<ul class="simple">
+<li>Support multiple arrays in a file.  Since we require filelike
+objects to be supported, one could use the API to build an ad
+hoc format that supported multiple arrays.  However, solving the
+general problem and use cases is beyond the scope of the format
+and the API for numpy.</li>
+<li>Fully handle arbitrary subclasses of numpy.ndarray.  Subclasses
+will be accepted for writing, but only the array data will be
+written out.  A regular numpy.ndarray object will be created
+upon reading the file.  The API can be used to build a format
+for a particular subclass, but that is out of scope for the
+general NPY format.</li>
+</ul>
+</div>
+<div class="section" id="format-specification-version-1-0">
+<h2>Format Specification: Version 1.0<a class="headerlink" href="#format-specification-version-1-0" title="Permalink to this headline">¶</a></h2>
+<p>The first 6 bytes are a magic string: exactly &#8220;x93NUMPY&#8221;.</p>
+<p>The next 1 byte is an unsigned byte: the major version number of
+the file format, e.g. x01.</p>
+<p>The next 1 byte is an unsigned byte: the minor version number of
+the file format, e.g. x00.  Note: the version of the file format
+is not tied to the version of the numpy package.</p>
+<p>The next 2 bytes form a little-endian unsigned short int: the
+length of the header data HEADER_LEN.</p>
+<p>The next HEADER_LEN bytes form the header data describing the
+array&#8217;s format.  It is an ASCII string which contains a Python
+literal expression of a dictionary.  It is terminated by a newline
+(&#8216;n&#8217;) and padded with spaces (&#8216;x20&#8217;) to make the total length of
+the magic string + 4 + HEADER_LEN be evenly divisible by 16 for
+alignment purposes.</p>
+<p>The dictionary contains three keys:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>&#8220;descr&#8221; <span class="classifier-delimiter">:</span> <span class="classifier">dtype.descr</span></dt>
+<dd>An object that can be passed as an argument to the
+numpy.dtype() constructor to create the array&#8217;s dtype.</dd>
+<dt>&#8220;fortran_order&#8221; <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd>Whether the array data is Fortran-contiguous or not.
+Since Fortran-contiguous arrays are a common form of
+non-C-contiguity, we allow them to be written directly to
+disk for efficiency.</dd>
+<dt>&#8220;shape&#8221; <span class="classifier-delimiter">:</span> <span class="classifier">tuple of int</span></dt>
+<dd>The shape of the array.</dd>
+</dl>
+</div></blockquote>
+<p>For repeatability and readability, this dictionary is formatted
+using pprint.pformat() so the keys are in alphabetic order.</p>
+<p>Following the header comes the array data.  If the dtype contains
+Python objects (i.e. dtype.hasobject is True), then the data is
+a Python pickle of the array.  Otherwise the data is the
+contiguous (either C- or Fortran-, depending on fortran_order)
+bytes of the array.  Consumers can figure out the number of bytes
+by multiplying the number of elements given by the shape (noting
+that shape=() means there is 1 element) by dtype.itemsize.</p>
+</div>
+<div class="section" id="format-specification-version-2-0">
+<h2>Format Specification: Version 2.0<a class="headerlink" href="#format-specification-version-2-0" title="Permalink to this headline">¶</a></h2>
+<p>The version 1.0 format only allowed the array header to have a
+total size of 65535 bytes.  This can be exceeded by structured
+arrays with a large number of columns.  The version 2.0 format
+extends the header size to 4 GiB.  <a class="reference internal" href="../reference/generated/numpy.save.html#numpy.save" title="numpy.save"><code class="xref py py-obj docutils literal"><span class="pre">numpy.save</span></code></a> will automatically
+save in 2.0 format if the data requires it, else it will always use
+the more compatible 1.0 format.</p>
+<p>The description of the fourth element of the header therefore has
+become:</p>
+<blockquote>
+<div>The next 4 bytes form a little-endian unsigned int: the length
+of the header data HEADER_LEN.</div></blockquote>
+</div>
+<div class="section" id="conventions">
+<h2>Conventions<a class="headerlink" href="#conventions" title="Permalink to this headline">¶</a></h2>
+<p>We recommend using the &#8221;.npy&#8221; extension for files following this
+format.  This is by no means a requirement; applications may wish
+to use this file format but use an extension specific to the
+application.  In the absence of an obvious alternative, however,
+we suggest using &#8221;.npy&#8221;.</p>
+<p>For a simple way to combine multiple arrays into a single file,
+one can use ZipFile to contain multiple &#8221;.npy&#8221; files.  We
+recommend using the file extension &#8221;.npz&#8221; for these archives.</p>
+</div>
+<div class="section" id="alternatives">
+<h2>Alternatives<a class="headerlink" href="#alternatives" title="Permalink to this headline">¶</a></h2>
+<p>The author believes that this system (or one along these lines) is
+about the simplest system that satisfies all of the requirements.
+However, one must always be wary of introducing a new binary
+format to the world.</p>
+<p>HDF5 [2] is a very flexible format that should be able to
+represent all of NumPy&#8217;s arrays in some fashion.  It is probably
+the only widely-used format that can faithfully represent all of
+NumPy&#8217;s array features.  It has seen substantial adoption by the
+scientific community in general and the NumPy community in
+particular.  It is an excellent solution for a wide variety of
+array storage problems with or without NumPy.</p>
+<p>HDF5 is a complicated format that more or less implements
+a hierarchical filesystem-in-a-file.  This fact makes satisfying
+some of the Requirements difficult.  To the author&#8217;s knowledge, as
+of this writing, there is no application or library that reads or
+writes even a subset of HDF5 files that does not use the canonical
+libhdf5 implementation.  This implementation is a large library
+that is not always easy to build.  It would be infeasible to
+include it in numpy.</p>
+<p>It might be feasible to target an extremely limited subset of
+HDF5.  Namely, there would be only one object in it: the array.
+Using contiguous storage for the data, one should be able to
+implement just enough of the format to provide the same metadata
+that the proposed format does.  One could still meet all of the
+technical requirements like mmapability.</p>
+<p>We would accrue a substantial benefit by being able to generate
+files that could be read by other HDF5 software.  Furthermore, by
+providing the first non-libhdf5 implementation of HDF5, we would
+be able to encourage more adoption of simple HDF5 in applications
+where it was previously infeasible because of the size of the
+library.  The basic work may encourage similar dead-simple
+implementations in other languages and further expand the
+community.</p>
+<p>The remaining concern is about reverse engineerability of the
+format.  Even the simple subset of HDF5 would be very difficult to
+reverse engineer given just a file by itself.  However, given the
+prominence of HDF5, this might not be a substantial concern.</p>
+<p>In conclusion, we are going forward with the design laid out in
+this document.  If someone writes code to handle the simple subset
+of HDF5 that would be useful to us, we may consider a revision of
+the file format.</p>
+</div>
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<p>The version 1.0 implementation was first included in the 1.0.5 release of
+numpy, and remains available.  The version 2.0 implementation was first
+included in the 1.9.0 release of numpy.</p>
+<p>Specifically, the file format.py in this directory implements the
+format as described here.</p>
+<blockquote>
+<div><a class="reference external" href="http://github.com/numpy/numpy/blob/master/numpy/lib/format.py">http://github.com/numpy/numpy/blob/master/numpy/lib/format.py</a></div></blockquote>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<p>[1] <a class="reference external" href="http://docs.python.org/lib/module-pickle.html">http://docs.python.org/lib/module-pickle.html</a></p>
+<p>[2] <a class="reference external" href="http://hdf.ncsa.uiuc.edu/products/hdf5/index.html">http://hdf.ncsa.uiuc.edu/products/hdf5/index.html</a></p>
+</div>
+<div class="section" id="copyright">
+<h2>Copyright<a class="headerlink" href="#copyright" title="Permalink to this headline">¶</a></h2>
+<p>This document has been placed in the public domain.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

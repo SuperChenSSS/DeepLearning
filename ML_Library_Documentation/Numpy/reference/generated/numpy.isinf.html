@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.isinf &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="Logic functions" href="../routines.logic.html" >
+    <link rel="next" title="numpy.isnan" href="numpy.isnan.html" >
+    <link rel="prev" title="numpy.isfinite" href="numpy.isfinite.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.logic.html" accesskey="U">Logic functions</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.isnan.html" title="numpy.isnan"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.isfinite.html" title="numpy.isfinite"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.isfinite.html"
+                        title="previous chapter">numpy.isfinite</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.isnan.html"
+                        title="next chapter">numpy.isnan</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-isinf">
+<h1>numpy.isinf<a class="headerlink" href="#numpy-isinf" title="Permalink to this headline">¶</a></h1>
+<dl class="data">
+<dt id="numpy.isinf">
+<code class="descclassname">numpy.</code><code class="descname">isinf</code><span class="sig-paren">(</span><em>x</em>, <em>/</em>, <em>out=None</em>, <em>*</em>, <em>where=True</em>, <em>casting='same_kind'</em>, <em>order='K'</em>, <em>dtype=None</em>, <em>subok=True</em><span class="optional">[</span>, <em>signature</em>, <em>extobj</em><span class="optional">]</span><span class="sig-paren">)</span><em class="property"> = &lt;ufunc 'isinf'&gt;</em><a class="headerlink" href="#numpy.isinf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test element-wise for positive or negative infinity.</p>
+<p>Returns a boolean array of the same shape as <em class="xref py py-obj">x</em>, True where <code class="docutils literal"><span class="pre">x</span> <span class="pre">==</span>
+<span class="pre">+/-inf</span></code>, otherwise False.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : array_like</p>
+<blockquote>
+<div><p>Input values</p>
+</div></blockquote>
+<p><strong>out</strong> : ndarray, None, or tuple of ndarray and None, optional</p>
+<blockquote>
+<div><p>A location into which the result is stored. If provided, it must have
+a shape that the inputs broadcast to. If not provided or <em class="xref py py-obj">None</em>,
+a freshly-allocated array is returned. A tuple (possible only as a
+keyword argument) must have length equal to the number of outputs.</p>
+</div></blockquote>
+<p><strong>where</strong> : array_like, optional</p>
+<blockquote>
+<div><p>Values of True indicate to calculate the ufunc at that position, values
+of False indicate to leave the value in the output alone.</p>
+</div></blockquote>
+<p><strong>**kwargs</strong></p>
+<blockquote>
+<div><p>For other keyword-only arguments, see the
+<a class="reference internal" href="../ufuncs.html#ufuncs-kwargs"><span class="std std-ref">ufunc docs</span></a>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>y</strong> : bool (scalar) or boolean ndarray</p>
+<blockquote class="last">
+<div><p>For scalar input, the result is a new boolean with value True if
+the input is positive or negative infinity; otherwise the value is
+False.</p>
+<p>For array input, the result is a boolean array with the same shape
+as the input and the values are True where the corresponding
+element of the input is positive or negative infinity; elsewhere
+the values are False.  If a second argument was supplied the result
+is stored there.  If the type of that array is a numeric type the
+result is represented as zeros and ones, if the type is boolean
+then as False and True, respectively.  The return value <em class="xref py py-obj">y</em> is then
+a reference to that array.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="numpy.isneginf.html#numpy.isneginf" title="numpy.isneginf"><code class="xref py py-obj docutils literal"><span class="pre">isneginf</span></code></a>, <a class="reference internal" href="numpy.isposinf.html#numpy.isposinf" title="numpy.isposinf"><code class="xref py py-obj docutils literal"><span class="pre">isposinf</span></code></a>, <a class="reference internal" href="numpy.isnan.html#numpy.isnan" title="numpy.isnan"><code class="xref py py-obj docutils literal"><span class="pre">isnan</span></code></a>, <a class="reference internal" href="numpy.isfinite.html#numpy.isfinite" title="numpy.isfinite"><code class="xref py py-obj docutils literal"><span class="pre">isfinite</span></code></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p>NumPy uses the IEEE Standard for Binary Floating-Point for Arithmetic
+(IEEE 754).</p>
+<p>Errors result if the second argument is supplied when the first
+argument is a scalar, or if the first and second arguments have
+different shapes.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">NINF</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">])</span>
+<span class="go">array([ True,  True, False, False])</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="go">array([1, 0, 1])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span>
+<span class="go">array([1, 0, 1])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

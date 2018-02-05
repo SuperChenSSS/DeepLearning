@@ -1,0 +1,162 @@
+pandas\.MultiIndex
+==================
+
+.. currentmodule:: pandas
+
+.. autoclass:: MultiIndex
+
+   
+
+
+..
+   HACK -- the point here is that we don't want this to appear in the output, but the autosummary should still generate the pages.
+   .. autosummary::
+      :toctree:
+      
+      MultiIndex.all
+      MultiIndex.any
+      MultiIndex.append
+      MultiIndex.argmax
+      MultiIndex.argmin
+      MultiIndex.argsort
+      MultiIndex.asof
+      MultiIndex.asof_locs
+      MultiIndex.astype
+      MultiIndex.contains
+      MultiIndex.copy
+      MultiIndex.delete
+      MultiIndex.difference
+      MultiIndex.drop
+      MultiIndex.drop_duplicates
+      MultiIndex.droplevel
+      MultiIndex.dropna
+      MultiIndex.duplicated
+      MultiIndex.equal_levels
+      MultiIndex.equals
+      MultiIndex.factorize
+      MultiIndex.fillna
+      MultiIndex.format
+      MultiIndex.from_arrays
+      MultiIndex.from_product
+      MultiIndex.from_tuples
+      MultiIndex.get_duplicates
+      MultiIndex.get_indexer
+      MultiIndex.get_indexer_for
+      MultiIndex.get_indexer_non_unique
+      MultiIndex.get_level_values
+      MultiIndex.get_loc
+      MultiIndex.get_loc_level
+      MultiIndex.get_locs
+      MultiIndex.get_major_bounds
+      MultiIndex.get_slice_bound
+      MultiIndex.get_value
+      MultiIndex.get_values
+      MultiIndex.groupby
+      MultiIndex.holds_integer
+      MultiIndex.identical
+      MultiIndex.insert
+      MultiIndex.intersection
+      MultiIndex.is_
+      MultiIndex.is_boolean
+      MultiIndex.is_categorical
+      MultiIndex.is_floating
+      MultiIndex.is_integer
+      MultiIndex.is_interval
+      MultiIndex.is_lexsorted
+      MultiIndex.is_lexsorted_for_tuple
+      MultiIndex.is_mixed
+      MultiIndex.is_numeric
+      MultiIndex.is_object
+      MultiIndex.is_type_compatible
+      MultiIndex.isin
+      MultiIndex.isna
+      MultiIndex.isnull
+      MultiIndex.item
+      MultiIndex.join
+      MultiIndex.map
+      MultiIndex.max
+      MultiIndex.memory_usage
+      MultiIndex.min
+      MultiIndex.notna
+      MultiIndex.notnull
+      MultiIndex.nunique
+      MultiIndex.putmask
+      MultiIndex.ravel
+      MultiIndex.reindex
+      MultiIndex.remove_unused_levels
+      MultiIndex.rename
+      MultiIndex.reorder_levels
+      MultiIndex.repeat
+      MultiIndex.reshape
+      MultiIndex.searchsorted
+      MultiIndex.set_labels
+      MultiIndex.set_levels
+      MultiIndex.set_names
+      MultiIndex.set_value
+      MultiIndex.shift
+      MultiIndex.slice_indexer
+      MultiIndex.slice_locs
+      MultiIndex.sort
+      MultiIndex.sort_values
+      MultiIndex.sortlevel
+      MultiIndex.summary
+      MultiIndex.swaplevel
+      MultiIndex.symmetric_difference
+      MultiIndex.take
+      MultiIndex.to_datetime
+      MultiIndex.to_frame
+      MultiIndex.to_hierarchical
+      MultiIndex.to_native_types
+      MultiIndex.to_series
+      MultiIndex.tolist
+      MultiIndex.transpose
+      MultiIndex.truncate
+      MultiIndex.union
+      MultiIndex.unique
+      MultiIndex.value_counts
+      MultiIndex.view
+      MultiIndex.where
+
+
+
+
+   
+
+
+..
+   HACK -- the point here is that we don't want this to appear in the output, but the autosummary should still generate the pages.
+   .. autosummary::
+      :toctree:
+      
+      MultiIndex.T
+      MultiIndex.asi8
+      MultiIndex.base
+      MultiIndex.data
+      MultiIndex.dtype
+      MultiIndex.dtype_str
+      MultiIndex.empty
+      MultiIndex.flags
+      MultiIndex.has_duplicates
+      MultiIndex.hasnans
+      MultiIndex.inferred_type
+      MultiIndex.is_all_dates
+      MultiIndex.is_monotonic
+      MultiIndex.is_monotonic_decreasing
+      MultiIndex.is_monotonic_increasing
+      MultiIndex.is_unique
+      MultiIndex.itemsize
+      MultiIndex.labels
+      MultiIndex.levels
+      MultiIndex.levshape
+      MultiIndex.lexsort_depth
+      MultiIndex.name
+      MultiIndex.names
+      MultiIndex.nbytes
+      MultiIndex.ndim
+      MultiIndex.nlevels
+      MultiIndex.shape
+      MultiIndex.size
+      MultiIndex.strides
+      MultiIndex.values
+
+

@@ -1,0 +1,6 @@
+pandas\.DatetimeIndex\.isna
+===========================
+
+.. currentmodule:: pandas
+
+.. automethod:: DatetimeIndex.isna

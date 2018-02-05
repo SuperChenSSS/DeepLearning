@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.ma.MaskedArray.ctypes &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="Constants of the numpy.ma module" href="../maskedarray.baseclass.html" >
+    <link rel="next" title="numpy.ma.MaskedArray.dtype" href="numpy.ma.MaskedArray.dtype.html" >
+    <link rel="prev" title="numpy.ma.MaskedArray.base" href="numpy.ma.MaskedArray.base.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../arrays.html" >Array objects</a></li>
+          <li class="active"><a href="../maskedarray.html" >Masked arrays</a></li>
+          <li class="active"><a href="../maskedarray.baseclass.html" accesskey="U">Constants of the <code class="docutils literal"><span class="pre">numpy.ma</span></code> module</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.ma.MaskedArray.dtype.html" title="numpy.ma.MaskedArray.dtype"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.ma.MaskedArray.base.html" title="numpy.ma.MaskedArray.base"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.ma.MaskedArray.base.html"
+                        title="previous chapter">numpy.ma.MaskedArray.base</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.ma.MaskedArray.dtype.html"
+                        title="next chapter">numpy.ma.MaskedArray.dtype</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-ma-maskedarray-ctypes">
+<h1>numpy.ma.MaskedArray.ctypes<a class="headerlink" href="#numpy-ma-maskedarray-ctypes" title="Permalink to this headline">¶</a></h1>
+<dl class="attribute">
+<dt id="numpy.ma.MaskedArray.ctypes">
+<code class="descclassname">MaskedArray.</code><code class="descname">ctypes</code><a class="headerlink" href="#numpy.ma.MaskedArray.ctypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>An object to simplify the interaction of the array with the ctypes
+module.</p>
+<p>This attribute creates an object that makes it easier to use arrays
+when calling shared libraries with the ctypes module. The returned
+object has, among others, data, shape, and strides attributes (see
+Notes below) which themselves return ctypes objects that can be used
+as arguments to a shared library.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>None</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>c</strong> : Python object</p>
+<blockquote class="last">
+<div><p>Possessing attributes data, shape, strides, etc.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">numpy.ctypeslib</span></code></p>
+</div>
+<p class="rubric">Notes</p>
+<p>Below are the public attributes of this object which were documented
+in &#8220;Guide to NumPy&#8221; (we have omitted undocumented public attributes,
+as well as documented private attributes):</p>
+<ul class="simple">
+<li>data: A pointer to the memory area of the array as a Python integer.
+This memory area may contain data that is not aligned, or not in correct
+byte-order. The memory area may not even be writeable. The array
+flags and data-type of this array should be respected when passing this
+attribute to arbitrary C-code to avoid trouble that can include Python
+crashing. User Beware! The value of this attribute is exactly the same
+as self._array_interface_[&#8216;data&#8217;][0].</li>
+<li>shape (c_intp*self.ndim): A ctypes array of length self.ndim where
+the basetype is the C-integer corresponding to dtype(&#8216;p&#8217;) on this
+platform. This base-type could be c_int, c_long, or c_longlong
+depending on the platform. The c_intp type is defined accordingly in
+numpy.ctypeslib. The ctypes array contains the shape of the underlying
+array.</li>
+<li>strides (c_intp*self.ndim): A ctypes array of length self.ndim where
+the basetype is the same as for the shape attribute. This ctypes array
+contains the strides information from the underlying array. This strides
+information is important for showing how many bytes must be jumped to
+get to the next element in the array.</li>
+<li>data_as(obj): Return the data pointer cast to a particular c-types object.
+For example, calling self._as_parameter_ is equivalent to
+self.data_as(ctypes.c_void_p). Perhaps you want to use the data as a
+pointer to a ctypes array of floating-point data:
+self.data_as(ctypes.POINTER(ctypes.c_double)).</li>
+<li>shape_as(obj): Return the shape tuple as an array of some other c-types
+type. For example: self.shape_as(ctypes.c_short).</li>
+<li>strides_as(obj): Return the strides tuple as an array of some other
+c-types type. For example: self.strides_as(ctypes.c_longlong).</li>
+</ul>
+<p>Be careful using the ctypes attribute - especially on temporary
+arrays or arrays constructed on the fly. For example, calling
+<code class="docutils literal"><span class="pre">(a+b).ctypes.data_as(ctypes.c_void_p)</span></code> returns a pointer to memory
+that is invalid because the array created as (a+b) is deallocated
+before the next Python statement. You can avoid this problem using
+either <code class="docutils literal"><span class="pre">c=a+b</span></code> or <code class="docutils literal"><span class="pre">ct=(a+b).ctypes</span></code>. In the latter case, ct will
+hold a reference to the array until ct is deleted or re-assigned.</p>
+<p>If the ctypes module is not available, then the ctypes attribute
+of array objects still returns something useful, but ctypes objects
+are not returned and errors may be raised instead. In particular,
+the object will still have the as parameter attribute which will
+return an integer equal to the data attribute.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ctypes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+<span class="go">array([[0, 1],</span>
+<span class="go">       [2, 3]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data</span>
+<span class="go">30439712</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_long</span><span class="p">))</span>
+<span class="go">&lt;ctypes.LP_c_long object at 0x01F01300&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_long</span><span class="p">))</span><span class="o">.</span><span class="n">contents</span>
+<span class="go">c_long(0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_longlong</span><span class="p">))</span><span class="o">.</span><span class="n">contents</span>
+<span class="go">c_longlong(4294967296L)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">&lt;numpy.core._internal.c_long_Array_2 object at 0x01FFD580&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">shape_as</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_long</span><span class="p">)</span>
+<span class="go">&lt;numpy.core._internal.c_long_Array_2 object at 0x01FCE620&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">strides</span>
+<span class="go">&lt;numpy.core._internal.c_long_Array_2 object at 0x01FCE620&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">strides_as</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_longlong</span><span class="p">)</span>
+<span class="go">&lt;numpy.core._internal.c_longlong_Array_2 object at 0x01F01300&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

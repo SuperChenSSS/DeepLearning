@@ -1,0 +1,365 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pandas.MultiIndex.get_indexer_for &#8212; pandas 0.22.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.22.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pandas.MultiIndex.get_indexer_non_unique" href="pandas.MultiIndex.get_indexer_non_unique.html" />
+    <link rel="prev" title="pandas.MultiIndex.get_indexer" href="pandas.MultiIndex.get_indexer.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pandas.MultiIndex.get_indexer_non_unique.html" title="pandas.MultiIndex.get_indexer_non_unique"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pandas.MultiIndex.get_indexer.html" title="pandas.MultiIndex.get_indexer"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pandas 0.22.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="pandas.MultiIndex.html" accesskey="U">pandas.MultiIndex</a> &#187;</li> 
+      </ul>
+    </div>
+<div class="content-wrapper">
+    <div class="content">
+        <div class="document">
+            <div class="sphinxsidebar">
+                <h3>Table Of Contents</h3>
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew.html">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Package overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../10min.html">10 Minutes to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dsintro.html">Intro to Data Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basics.html">Essential Basic Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text.html">Working with Text Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../options.html">Options and Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indexing.html">Indexing and Selecting Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced.html">MultiIndex / Advanced Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../computation.html">Computational tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../missing_data.html">Working with missing data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../groupby.html">Group By: split-apply-combine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../merging.html">Merge, join, and concatenate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reshaping.html">Reshaping and Pivot Tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timeseries.html">Time Series / Date functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timedeltas.html">Time Deltas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../categorical.html">Categorical Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../style.html">Styling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io.html">IO Tools (Text, CSV, HDF5, ...)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../remote_data.html">Remote Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enhancingperf.html">Enhancing Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sparse.html">Sparse data structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gotchas.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../r_interface.html">rpy2 / R interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ecosystem.html">pandas Ecosystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_r.html">Comparison with R / R libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_sql.html">Comparison with SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_sas.html">Comparison with SAS</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#input-output">Input/Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#general-functions">General functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#series">Series</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#dataframe">DataFrame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#panel">Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#index">Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#numeric-index">Numeric Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#categoricalindex">CategoricalIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#intervalindex">IntervalIndex</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#multiindex">MultiIndex</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pandas.MultiIndex.html">pandas.MultiIndex</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.T.html">pandas.MultiIndex.T</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.asi8.html">pandas.MultiIndex.asi8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.base.html">pandas.MultiIndex.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.data.html">pandas.MultiIndex.data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.dtype.html">pandas.MultiIndex.dtype</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.dtype_str.html">pandas.MultiIndex.dtype_str</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.empty.html">pandas.MultiIndex.empty</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.flags.html">pandas.MultiIndex.flags</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.has_duplicates.html">pandas.MultiIndex.has_duplicates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.hasnans.html">pandas.MultiIndex.hasnans</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.inferred_type.html">pandas.MultiIndex.inferred_type</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_all_dates.html">pandas.MultiIndex.is_all_dates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_monotonic.html">pandas.MultiIndex.is_monotonic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_monotonic_decreasing.html">pandas.MultiIndex.is_monotonic_decreasing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_monotonic_increasing.html">pandas.MultiIndex.is_monotonic_increasing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_unique.html">pandas.MultiIndex.is_unique</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.itemsize.html">pandas.MultiIndex.itemsize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.labels.html">pandas.MultiIndex.labels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.levels.html">pandas.MultiIndex.levels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.levshape.html">pandas.MultiIndex.levshape</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.lexsort_depth.html">pandas.MultiIndex.lexsort_depth</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.name.html">pandas.MultiIndex.name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.names.html">pandas.MultiIndex.names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.nbytes.html">pandas.MultiIndex.nbytes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.ndim.html">pandas.MultiIndex.ndim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.nlevels.html">pandas.MultiIndex.nlevels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.shape.html">pandas.MultiIndex.shape</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.size.html">pandas.MultiIndex.size</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.strides.html">pandas.MultiIndex.strides</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.values.html">pandas.MultiIndex.values</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.all.html">pandas.MultiIndex.all</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.any.html">pandas.MultiIndex.any</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.append.html">pandas.MultiIndex.append</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.argmax.html">pandas.MultiIndex.argmax</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.argmin.html">pandas.MultiIndex.argmin</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.argsort.html">pandas.MultiIndex.argsort</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.asof.html">pandas.MultiIndex.asof</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.asof_locs.html">pandas.MultiIndex.asof_locs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.astype.html">pandas.MultiIndex.astype</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.contains.html">pandas.MultiIndex.contains</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.copy.html">pandas.MultiIndex.copy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.delete.html">pandas.MultiIndex.delete</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.difference.html">pandas.MultiIndex.difference</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.drop.html">pandas.MultiIndex.drop</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.drop_duplicates.html">pandas.MultiIndex.drop_duplicates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.droplevel.html">pandas.MultiIndex.droplevel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.dropna.html">pandas.MultiIndex.dropna</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.duplicated.html">pandas.MultiIndex.duplicated</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.equal_levels.html">pandas.MultiIndex.equal_levels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.equals.html">pandas.MultiIndex.equals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.factorize.html">pandas.MultiIndex.factorize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.fillna.html">pandas.MultiIndex.fillna</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.format.html">pandas.MultiIndex.format</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.from_arrays.html">pandas.MultiIndex.from_arrays</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.from_product.html">pandas.MultiIndex.from_product</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.from_tuples.html">pandas.MultiIndex.from_tuples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.get_duplicates.html">pandas.MultiIndex.get_duplicates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.get_indexer.html">pandas.MultiIndex.get_indexer</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pandas.MultiIndex.get_indexer_for</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.get_indexer_non_unique.html">pandas.MultiIndex.get_indexer_non_unique</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.get_level_values.html">pandas.MultiIndex.get_level_values</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.get_loc.html">pandas.MultiIndex.get_loc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.get_loc_level.html">pandas.MultiIndex.get_loc_level</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.get_locs.html">pandas.MultiIndex.get_locs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.get_major_bounds.html">pandas.MultiIndex.get_major_bounds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.get_slice_bound.html">pandas.MultiIndex.get_slice_bound</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.get_value.html">pandas.MultiIndex.get_value</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.get_values.html">pandas.MultiIndex.get_values</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.groupby.html">pandas.MultiIndex.groupby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.holds_integer.html">pandas.MultiIndex.holds_integer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.identical.html">pandas.MultiIndex.identical</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.insert.html">pandas.MultiIndex.insert</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.intersection.html">pandas.MultiIndex.intersection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_.html">pandas.MultiIndex.is_</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_boolean.html">pandas.MultiIndex.is_boolean</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_categorical.html">pandas.MultiIndex.is_categorical</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_floating.html">pandas.MultiIndex.is_floating</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_integer.html">pandas.MultiIndex.is_integer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_interval.html">pandas.MultiIndex.is_interval</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_lexsorted.html">pandas.MultiIndex.is_lexsorted</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_lexsorted_for_tuple.html">pandas.MultiIndex.is_lexsorted_for_tuple</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_mixed.html">pandas.MultiIndex.is_mixed</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_numeric.html">pandas.MultiIndex.is_numeric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_object.html">pandas.MultiIndex.is_object</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.is_type_compatible.html">pandas.MultiIndex.is_type_compatible</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.isin.html">pandas.MultiIndex.isin</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.isna.html">pandas.MultiIndex.isna</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.isnull.html">pandas.MultiIndex.isnull</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.item.html">pandas.MultiIndex.item</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.join.html">pandas.MultiIndex.join</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.map.html">pandas.MultiIndex.map</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.max.html">pandas.MultiIndex.max</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.memory_usage.html">pandas.MultiIndex.memory_usage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.min.html">pandas.MultiIndex.min</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.notna.html">pandas.MultiIndex.notna</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.notnull.html">pandas.MultiIndex.notnull</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.nunique.html">pandas.MultiIndex.nunique</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.putmask.html">pandas.MultiIndex.putmask</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.ravel.html">pandas.MultiIndex.ravel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.reindex.html">pandas.MultiIndex.reindex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.remove_unused_levels.html">pandas.MultiIndex.remove_unused_levels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.rename.html">pandas.MultiIndex.rename</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.reorder_levels.html">pandas.MultiIndex.reorder_levels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.repeat.html">pandas.MultiIndex.repeat</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.reshape.html">pandas.MultiIndex.reshape</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.searchsorted.html">pandas.MultiIndex.searchsorted</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.set_labels.html">pandas.MultiIndex.set_labels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.set_levels.html">pandas.MultiIndex.set_levels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.set_names.html">pandas.MultiIndex.set_names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.set_value.html">pandas.MultiIndex.set_value</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.shift.html">pandas.MultiIndex.shift</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.slice_indexer.html">pandas.MultiIndex.slice_indexer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.slice_locs.html">pandas.MultiIndex.slice_locs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.sort.html">pandas.MultiIndex.sort</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.sort_values.html">pandas.MultiIndex.sort_values</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.sortlevel.html">pandas.MultiIndex.sortlevel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.str.html">pandas.MultiIndex.str</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.summary.html">pandas.MultiIndex.summary</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.swaplevel.html">pandas.MultiIndex.swaplevel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.symmetric_difference.html">pandas.MultiIndex.symmetric_difference</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.take.html">pandas.MultiIndex.take</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.to_datetime.html">pandas.MultiIndex.to_datetime</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.to_frame.html">pandas.MultiIndex.to_frame</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.to_hierarchical.html">pandas.MultiIndex.to_hierarchical</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.to_native_types.html">pandas.MultiIndex.to_native_types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.to_series.html">pandas.MultiIndex.to_series</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.tolist.html">pandas.MultiIndex.tolist</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.transpose.html">pandas.MultiIndex.transpose</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.truncate.html">pandas.MultiIndex.truncate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.union.html">pandas.MultiIndex.union</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.unique.html">pandas.MultiIndex.unique</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.value_counts.html">pandas.MultiIndex.value_counts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.view.html">pandas.MultiIndex.view</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.MultiIndex.where.html">pandas.MultiIndex.where</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pandas.IndexSlice.html">pandas.IndexSlice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#multiindex-components">MultiIndex Components</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#datetimeindex">DatetimeIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#timedeltaindex">TimedeltaIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#periodindex">PeriodIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#scalars">Scalars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#window">Window</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#groupby">GroupBy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#resampling">Resampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#style">Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#general-utility-functions">General utility functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developer.html">Developer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../internals.html">Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release Notes</a></li>
+</ul>
+
+                <h3 style="margin-top: 1.5em;">Search</h3>
+
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18"/>
+                    <input type="submit" value="Go"/>
+                    <input type="hidden" name="check_keywords" value="yes"/>
+                    <input type="hidden" name="area" value="default"/>
+                </form>
+                <p class="searchtip" style="font-size: 90%">
+                    Enter search terms or a module, class or function name.
+                </p>
+
+            </div>
+             
+            <div class="documentwrapper">
+                <div class="bodywrapper">
+                    <div class="body">
+                        
+  <div class="section" id="pandas-multiindex-get-indexer-for">
+<h1>pandas.MultiIndex.get_indexer_for<a class="headerlink" href="#pandas-multiindex-get-indexer-for" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pandas.MultiIndex.get_indexer_for">
+<code class="descclassname">MultiIndex.</code><code class="descname">get_indexer_for</code><span class="sig-paren">(</span><em>target</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/pandas-dev/pandas/blob/v0.22.0/pandas/core/indexes/base.py#L2819-L2827"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pandas.MultiIndex.get_indexer_for" title="Permalink to this definition">¶</a></dt>
+<dd><p>guaranteed return of an indexer even when non-unique
+This dispatches to get_indexer or get_indexer_nonunique as appropriate</p>
+</dd></dl>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="clearer"></div>
+        </div>
+    </div>
+</div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pandas.MultiIndex.get_indexer_non_unique.html" title="pandas.MultiIndex.get_indexer_non_unique"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pandas.MultiIndex.get_indexer.html" title="pandas.MultiIndex.get_indexer"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pandas 0.22.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="pandas.MultiIndex.html" >pandas.MultiIndex</a> &#187;</li> 
+      </ul>
+    </div>
+<style type="text/css">
+    .scrollToTop {
+        text-align: center;
+        font-weight: bold;
+        position: fixed;
+        bottom: 60px;
+        right: 40px;
+        display: none;
+    }
+</style>
+<a href="#" class="scrollToTop">Scroll To Top</a>
+<script type="text/javascript">
+$(document).ready(function() {
+    //Check to see if the window is top if not then display button
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 200) {
+            $('.scrollToTop').fadeIn();
+        } else {
+            $('.scrollToTop').fadeOut();
+        }
+    });
+
+    //Click event to scroll to top
+    $('.scrollToTop').click(function() {
+        $('html, body').animate({
+            scrollTop: 0
+        }, 500);
+        return false;
+    });
+});
+</script>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27880019-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </body>
+</html>

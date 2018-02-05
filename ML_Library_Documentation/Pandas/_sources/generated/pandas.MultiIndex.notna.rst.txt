@@ -1,0 +1,6 @@
+pandas\.MultiIndex\.notna
+=========================
+
+.. currentmodule:: pandas
+
+.. automethod:: MultiIndex.notna

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.polynomial.polynomial.Polynomial.basis &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="numpy.polynomial.polynomial.Polynomial" href="numpy.polynomial.polynomial.Polynomial.html" >
+    <link rel="next" title="numpy.polynomial.polynomial.Polynomial.cast" href="numpy.polynomial.polynomial.Polynomial.cast.html" >
+    <link rel="prev" title="numpy.polynomial.polynomial.Polynomial.__call__" href="numpy.polynomial.polynomial.Polynomial.__call__.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.polynomials.html" >Polynomials</a></li>
+          <li class="active"><a href="../routines.polynomials.package.html" >Polynomial Package</a></li>
+          <li class="active"><a href="../routines.polynomials.polynomial.html" >Polynomial Module (<code class="docutils literal"><span class="pre">numpy.polynomial.polynomial</span></code>)</a></li>
+          <li class="active"><a href="numpy.polynomial.polynomial.Polynomial.html" accesskey="U">numpy.polynomial.polynomial.Polynomial</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.polynomial.polynomial.Polynomial.cast.html" title="numpy.polynomial.polynomial.Polynomial.cast"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.polynomial.polynomial.Polynomial.__call__.html" title="numpy.polynomial.polynomial.Polynomial.__call__"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.polynomial.polynomial.Polynomial.__call__.html"
+                        title="previous chapter">numpy.polynomial.polynomial.Polynomial.__call__</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.polynomial.polynomial.Polynomial.cast.html"
+                        title="next chapter">numpy.polynomial.polynomial.Polynomial.cast</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-polynomial-polynomial-polynomial-basis">
+<h1>numpy.polynomial.polynomial.Polynomial.basis<a class="headerlink" href="#numpy-polynomial-polynomial-polynomial-basis" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="numpy.polynomial.polynomial.Polynomial.basis">
+<code class="descclassname">Polynomial.</code><code class="descname">basis</code><span class="sig-paren">(</span><em>deg</em>, <em>domain=None</em>, <em>window=None</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/numpy/numpy/blob/v1.14.0/numpy/polynomial/_polybase.py#L880-L917"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy.polynomial.polynomial.Polynomial.basis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Series basis polynomial of degree <em class="xref py py-obj">deg</em>.</p>
+<p>Returns the series representing the basis polynomial of degree <em class="xref py py-obj">deg</em>.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.7.0.</span></p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>deg</strong> : int</p>
+<blockquote>
+<div><p>Degree of the basis polynomial for the series. Must be &gt;= 0.</p>
+</div></blockquote>
+<p><strong>domain</strong> : {None, array_like}, optional</p>
+<blockquote>
+<div><p>If given, the array must be of the form <code class="docutils literal"><span class="pre">[beg,</span> <span class="pre">end]</span></code>, where
+<code class="docutils literal"><span class="pre">beg</span></code> and <code class="docutils literal"><span class="pre">end</span></code> are the endpoints of the domain. If None is
+given then the class domain is used. The default is None.</p>
+</div></blockquote>
+<p><strong>window</strong> : {None, array_like}, optional</p>
+<blockquote>
+<div><p>If given, the resulting array must be if the form
+<code class="docutils literal"><span class="pre">[beg,</span> <span class="pre">end]</span></code>, where <code class="docutils literal"><span class="pre">beg</span></code> and <code class="docutils literal"><span class="pre">end</span></code> are the endpoints of
+the window. If None is given then the class window is used. The
+default is None.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>new_series</strong> : series</p>
+<blockquote class="last">
+<div><p>A series with the coefficient of the <em class="xref py py-obj">deg</em> term set to one and
+all others zero.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

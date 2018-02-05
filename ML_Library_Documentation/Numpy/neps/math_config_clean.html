@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Cleaning the math configuration of numpy.core &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" >
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../index.html" >
+    <link rel="up" title="NumPy Enhancement Proposals" href="index.html" >
+    <link rel="next" title="A proposal for adding groupby functionality to NumPy" href="groupby_additions.html" >
+    <link rel="prev" title="Missing Data Functionality in NumPy" href="missing-data.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="index.html" accesskey="U">NumPy Enhancement Proposals</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="groupby_additions.html" title="A proposal for adding groupby functionality to NumPy"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="missing-data.html" title="Missing Data Functionality in NumPy"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Cleaning the math configuration of numpy.core</a><ul>
+<li><a class="reference internal" href="#executive-summary">Executive summary</a></li>
+<li><a class="reference internal" href="#current-problems">Current problems</a></li>
+<li><a class="reference internal" href="#requirements">Requirements</a></li>
+<li><a class="reference internal" href="#proposal">Proposal</a></li>
+<li><a class="reference internal" href="#issues">Issues</a></li>
+<li><a class="reference internal" href="#license">License</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="missing-data.html"
+                        title="previous chapter">Missing Data Functionality in NumPy</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="groupby_additions.html"
+                        title="next chapter">A proposal for adding groupby functionality to NumPy</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="cleaning-the-math-configuration-of-numpy-core">
+<h1>Cleaning the math configuration of numpy.core<a class="headerlink" href="#cleaning-the-math-configuration-of-numpy-core" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">David Cournapeau</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:david&#37;&#52;&#48;ar&#46;media&#46;kyoto-u&#46;ac&#46;jp">david<span>&#64;</span>ar<span>&#46;</span>media<span>&#46;</span>kyoto-u<span>&#46;</span>ac<span>&#46;</span>jp</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2008-09-04</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="executive-summary">
+<h2>Executive summary<a class="headerlink" href="#executive-summary" title="Permalink to this headline">¶</a></h2>
+<p>Before building numpy.core, we use some configuration tests to gather some
+information about available math functions. Over the years, the configuration
+became convoluted, to the point it became difficult to support new platforms
+easily.</p>
+<p>The goal of this proposal is to clean the configuration of the math
+capabilities for easier maintenance.</p>
+</div>
+<div class="section" id="current-problems">
+<h2>Current problems<a class="headerlink" href="#current-problems" title="Permalink to this headline">¶</a></h2>
+<p>Currently, the math configuration mainly test for some math functions, and
+configure numpy accordingly. But instead of testing each desired function
+independently, the current system has been developed more as workarounds
+particular platform oddities, using platform implicit knowledge. This is
+against the normal philosophy of testing for capabilities only, which is the
+autoconf philosophy, which showed the path toward portability (on Unix at
+least) [1] This causes problems because modifying or adding configuration on
+existing platforms break the implicit assumption, without a clear solution.</p>
+<p>For example, on windows, when numpy is built with mingw, it would be nice to
+enforce the configuration sizeof(long double) == sizeof(double) because mingw
+uses the MS runtime, and the MS runtime does not support long double.
+Unfortunately, doing so breaks the mingw math function detection, because of
+the implicit assumption that mingw has a configuration sizeof(long double) !=
+sizeof(double).</p>
+<p>Another example is the testing for set of functions using only one function: if
+expf is found, it is assumed that all basic float functions are available.
+Instead, each function should be tested independently (expf, sinf, etc...).</p>
+</div>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>We have two strong requirements:</dt>
+<dd><ul class="first last simple">
+<li>it should not break any currently supported platform</li>
+<li>it should not make the configuration much slower (1-2 seconds are
+acceptable)</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="proposal">
+<h2>Proposal<a class="headerlink" href="#proposal" title="Permalink to this headline">¶</a></h2>
+<p>We suggest to break any implicit assumption, and test each math function
+independently from each other, as usually done by autoconf. Since testing for a
+vast set of functions can be time consuming, we will use a scheme similar to
+AC_CHECK_FUNCS_ONCE in autoconf, that is test for a set of function at once,
+and only in the case it breaks, do the per function check. When the first check
+works, it should be as fast as the current scheme, except that the assumptions
+are explicitly checked (all functions implied by HAVE_LONGDOUBLE_FUNCS would
+be checked together, for example).</p>
+</div>
+<div class="section" id="issues">
+<h2>Issues<a class="headerlink" href="#issues" title="Permalink to this headline">¶</a></h2>
+<p>Static vs non static ? For basic functions, shall we define them static or not ?</p>
+</div>
+<div class="section" id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p>This document has been placed in the public domain.</p>
+<p>[1]: Autobook here</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

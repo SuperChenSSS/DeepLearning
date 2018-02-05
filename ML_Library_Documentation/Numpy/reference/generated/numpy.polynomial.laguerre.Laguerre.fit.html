@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.polynomial.laguerre.Laguerre.fit &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="numpy.polynomial.laguerre.Laguerre" href="numpy.polynomial.laguerre.Laguerre.html" >
+    <link rel="next" title="numpy.polynomial.laguerre.Laguerre.fromroots" href="numpy.polynomial.laguerre.Laguerre.fromroots.html" >
+    <link rel="prev" title="numpy.polynomial.laguerre.Laguerre.deriv" href="numpy.polynomial.laguerre.Laguerre.deriv.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.polynomials.html" >Polynomials</a></li>
+          <li class="active"><a href="../routines.polynomials.package.html" >Polynomial Package</a></li>
+          <li class="active"><a href="../routines.polynomials.laguerre.html" >Laguerre Module (<code class="docutils literal"><span class="pre">numpy.polynomial.laguerre</span></code>)</a></li>
+          <li class="active"><a href="numpy.polynomial.laguerre.Laguerre.html" accesskey="U">numpy.polynomial.laguerre.Laguerre</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.polynomial.laguerre.Laguerre.fromroots.html" title="numpy.polynomial.laguerre.Laguerre.fromroots"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.polynomial.laguerre.Laguerre.deriv.html" title="numpy.polynomial.laguerre.Laguerre.deriv"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.polynomial.laguerre.Laguerre.deriv.html"
+                        title="previous chapter">numpy.polynomial.laguerre.Laguerre.deriv</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.polynomial.laguerre.Laguerre.fromroots.html"
+                        title="next chapter">numpy.polynomial.laguerre.Laguerre.fromroots</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-polynomial-laguerre-laguerre-fit">
+<h1>numpy.polynomial.laguerre.Laguerre.fit<a class="headerlink" href="#numpy-polynomial-laguerre-laguerre-fit" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="numpy.polynomial.laguerre.Laguerre.fit">
+<code class="descclassname">Laguerre.</code><code class="descname">fit</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>deg</em>, <em>domain=None</em>, <em>rcond=None</em>, <em>full=False</em>, <em>w=None</em>, <em>window=None</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/numpy/numpy/blob/v1.14.0/numpy/polynomial/_polybase.py#L718-L804"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy.polynomial.laguerre.Laguerre.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Least squares fit to data.</p>
+<p>Return a series instance that is the least squares fit to the data
+<em class="xref py py-obj">y</em> sampled at <em class="xref py py-obj">x</em>. The domain of the returned instance can be
+specified and this will often result in a superior fit with less
+chance of ill conditioning.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : array_like, shape (M,)</p>
+<blockquote>
+<div><p>x-coordinates of the M sample points <code class="docutils literal"><span class="pre">(x[i],</span> <span class="pre">y[i])</span></code>.</p>
+</div></blockquote>
+<p><strong>y</strong> : array_like, shape (M,) or (M, K)</p>
+<blockquote>
+<div><p>y-coordinates of the sample points. Several data sets of sample
+points sharing the same x-coordinates can be fitted at once by
+passing in a 2D-array that contains one dataset per column.</p>
+</div></blockquote>
+<p><strong>deg</strong> : int or 1-D array_like</p>
+<blockquote>
+<div><p>Degree(s) of the fitting polynomials. If <em class="xref py py-obj">deg</em> is a single integer
+all terms up to and including the <em class="xref py py-obj">deg</em>&#8216;th term are included in the
+fit. For NumPy versions &gt;= 1.11.0 a list of integers specifying the
+degrees of the terms to include may be used instead.</p>
+</div></blockquote>
+<p><strong>domain</strong> : {None, [beg, end], []}, optional</p>
+<blockquote>
+<div><p>Domain to use for the returned series. If <code class="docutils literal"><span class="pre">None</span></code>,
+then a minimal domain that covers the points <em class="xref py py-obj">x</em> is chosen.  If
+<code class="docutils literal"><span class="pre">[]</span></code> the class domain is used. The default value was the
+class domain in NumPy 1.4 and <code class="docutils literal"><span class="pre">None</span></code> in later versions.
+The <code class="docutils literal"><span class="pre">[]</span></code> option was added in numpy 1.5.0.</p>
+</div></blockquote>
+<p><strong>rcond</strong> : float, optional</p>
+<blockquote>
+<div><p>Relative condition number of the fit. Singular values smaller
+than this relative to the largest singular value will be
+ignored. The default value is len(x)*eps, where eps is the
+relative precision of the float type, about 2e-16 in most
+cases.</p>
+</div></blockquote>
+<p><strong>full</strong> : bool, optional</p>
+<blockquote>
+<div><p>Switch determining nature of return value. When it is False
+(the default) just the coefficients are returned, when True
+diagnostic information from the singular value decomposition is
+also returned.</p>
+</div></blockquote>
+<p><strong>w</strong> : array_like, shape (M,), optional</p>
+<blockquote>
+<div><p>Weights. If not None the contribution of each point
+<code class="docutils literal"><span class="pre">(x[i],y[i])</span></code> to the fit is weighted by <em class="xref py py-obj">w[i]</em>. Ideally the
+weights are chosen so that the errors of the products
+<code class="docutils literal"><span class="pre">w[i]*y[i]</span></code> all have the same variance.  The default value is
+None.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.5.0.</span></p>
+</div>
+</div></blockquote>
+<p><strong>window</strong> : {[beg, end]}, optional</p>
+<blockquote>
+<div><p>Window to use for the returned series. The default
+value is the default class domain</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.6.0.</span></p>
+</div>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>new_series</strong> : series</p>
+<blockquote>
+<div><p>A series that represents the least squares fit to the data and
+has the domain specified in the call.</p>
+</div></blockquote>
+<p><strong>[resid, rank, sv, rcond]</strong> : list</p>
+<blockquote class="last">
+<div><p>These values are only returned if <em class="xref py py-obj">full</em> = True</p>
+<p>resid &#8211; sum of squared residuals of the least squares fit
+rank &#8211; the numerical rank of the scaled Vandermonde matrix
+sv &#8211; singular values of the scaled Vandermonde matrix
+rcond &#8211; value of <em class="xref py py-obj">rcond</em>.</p>
+<p>For more details, see <em class="xref py py-obj">linalg.lstsq</em>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

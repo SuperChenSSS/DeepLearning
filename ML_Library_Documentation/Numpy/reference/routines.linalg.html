@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Linear algebra (numpy.linalg) &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" >
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../index.html" >
+    <link rel="up" title="Routines" href="routines.html" >
+    <link rel="next" title="numpy.dot" href="generated/numpy.dot.html" >
+    <link rel="prev" title="numpy.DataSource.open" href="generated/numpy.DataSource.open.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="routines.html" accesskey="U">Routines</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="generated/numpy.dot.html" title="numpy.dot"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="generated/numpy.DataSource.open.html" title="numpy.DataSource.open"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Linear algebra (<code class="docutils literal"><span class="pre">numpy.linalg</span></code>)</a><ul>
+<li><a class="reference internal" href="#matrix-and-vector-products">Matrix and vector products</a></li>
+<li><a class="reference internal" href="#decompositions">Decompositions</a></li>
+<li><a class="reference internal" href="#matrix-eigenvalues">Matrix eigenvalues</a></li>
+<li><a class="reference internal" href="#norms-and-other-numbers">Norms and other numbers</a></li>
+<li><a class="reference internal" href="#solving-equations-and-inverting-matrices">Solving equations and inverting matrices</a></li>
+<li><a class="reference internal" href="#exceptions">Exceptions</a></li>
+<li><a class="reference internal" href="#linear-algebra-on-several-matrices-at-once">Linear algebra on several matrices at once</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="generated/numpy.DataSource.open.html"
+                        title="previous chapter">numpy.DataSource.open</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="generated/numpy.dot.html"
+                        title="next chapter">numpy.dot</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="linear-algebra-numpy-linalg">
+<span id="routines-linalg"></span><h1>Linear algebra (<code class="xref py py-mod docutils literal"><span class="pre">numpy.linalg</span></code>)<a class="headerlink" href="#linear-algebra-numpy-linalg" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="matrix-and-vector-products">
+<h2>Matrix and vector products<a class="headerlink" href="#matrix-and-vector-products" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.dot.html#numpy.dot" title="numpy.dot"><code class="xref py py-obj docutils literal"><span class="pre">dot</span></code></a>(a,&nbsp;b[,&nbsp;out])</td>
+<td>Dot product of two arrays.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.linalg.multi_dot.html#numpy.linalg.multi_dot" title="numpy.linalg.multi_dot"><code class="xref py py-obj docutils literal"><span class="pre">linalg.multi_dot</span></code></a>(arrays)</td>
+<td>Compute the dot product of two or more arrays in a single function call, while automatically selecting the fastest evaluation order.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.vdot.html#numpy.vdot" title="numpy.vdot"><code class="xref py py-obj docutils literal"><span class="pre">vdot</span></code></a>(a,&nbsp;b)</td>
+<td>Return the dot product of two vectors.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.inner.html#numpy.inner" title="numpy.inner"><code class="xref py py-obj docutils literal"><span class="pre">inner</span></code></a>(a,&nbsp;b)</td>
+<td>Inner product of two arrays.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.outer.html#numpy.outer" title="numpy.outer"><code class="xref py py-obj docutils literal"><span class="pre">outer</span></code></a>(a,&nbsp;b[,&nbsp;out])</td>
+<td>Compute the outer product of two vectors.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.matmul.html#numpy.matmul" title="numpy.matmul"><code class="xref py py-obj docutils literal"><span class="pre">matmul</span></code></a>(a,&nbsp;b[,&nbsp;out])</td>
+<td>Matrix product of two arrays.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.tensordot.html#numpy.tensordot" title="numpy.tensordot"><code class="xref py py-obj docutils literal"><span class="pre">tensordot</span></code></a>(a,&nbsp;b[,&nbsp;axes])</td>
+<td>Compute tensor dot product along specified axes for arrays &gt;= 1-D.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.einsum.html#numpy.einsum" title="numpy.einsum"><code class="xref py py-obj docutils literal"><span class="pre">einsum</span></code></a>(subscripts,&nbsp;*operands[,&nbsp;out,&nbsp;dtype,&nbsp;...])</td>
+<td>Evaluates the Einstein summation convention on the operands.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.einsum_path.html#numpy.einsum_path" title="numpy.einsum_path"><code class="xref py py-obj docutils literal"><span class="pre">einsum_path</span></code></a>(subscripts,&nbsp;*operands[,&nbsp;optimize])</td>
+<td>Evaluates the lowest cost contraction order for an einsum expression by considering the creation of intermediate arrays.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.linalg.matrix_power.html#numpy.linalg.matrix_power" title="numpy.linalg.matrix_power"><code class="xref py py-obj docutils literal"><span class="pre">linalg.matrix_power</span></code></a>(M,&nbsp;n)</td>
+<td>Raise a square matrix to the (integer) power <em class="xref py py-obj">n</em>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.kron.html#numpy.kron" title="numpy.kron"><code class="xref py py-obj docutils literal"><span class="pre">kron</span></code></a>(a,&nbsp;b)</td>
+<td>Kronecker product of two arrays.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="decompositions">
+<h2>Decompositions<a class="headerlink" href="#decompositions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.linalg.cholesky.html#numpy.linalg.cholesky" title="numpy.linalg.cholesky"><code class="xref py py-obj docutils literal"><span class="pre">linalg.cholesky</span></code></a>(a)</td>
+<td>Cholesky decomposition.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.linalg.qr.html#numpy.linalg.qr" title="numpy.linalg.qr"><code class="xref py py-obj docutils literal"><span class="pre">linalg.qr</span></code></a>(a[,&nbsp;mode])</td>
+<td>Compute the qr factorization of a matrix.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.linalg.svd.html#numpy.linalg.svd" title="numpy.linalg.svd"><code class="xref py py-obj docutils literal"><span class="pre">linalg.svd</span></code></a>(a[,&nbsp;full_matrices,&nbsp;compute_uv])</td>
+<td>Singular Value Decomposition.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="matrix-eigenvalues">
+<h2>Matrix eigenvalues<a class="headerlink" href="#matrix-eigenvalues" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.linalg.eig.html#numpy.linalg.eig" title="numpy.linalg.eig"><code class="xref py py-obj docutils literal"><span class="pre">linalg.eig</span></code></a>(a)</td>
+<td>Compute the eigenvalues and right eigenvectors of a square array.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.linalg.eigh.html#numpy.linalg.eigh" title="numpy.linalg.eigh"><code class="xref py py-obj docutils literal"><span class="pre">linalg.eigh</span></code></a>(a[,&nbsp;UPLO])</td>
+<td>Return the eigenvalues and eigenvectors of a Hermitian or symmetric matrix.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.linalg.eigvals.html#numpy.linalg.eigvals" title="numpy.linalg.eigvals"><code class="xref py py-obj docutils literal"><span class="pre">linalg.eigvals</span></code></a>(a)</td>
+<td>Compute the eigenvalues of a general matrix.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.linalg.eigvalsh.html#numpy.linalg.eigvalsh" title="numpy.linalg.eigvalsh"><code class="xref py py-obj docutils literal"><span class="pre">linalg.eigvalsh</span></code></a>(a[,&nbsp;UPLO])</td>
+<td>Compute the eigenvalues of a Hermitian or real symmetric matrix.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="norms-and-other-numbers">
+<h2>Norms and other numbers<a class="headerlink" href="#norms-and-other-numbers" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.linalg.norm.html#numpy.linalg.norm" title="numpy.linalg.norm"><code class="xref py py-obj docutils literal"><span class="pre">linalg.norm</span></code></a>(x[,&nbsp;ord,&nbsp;axis,&nbsp;keepdims])</td>
+<td>Matrix or vector norm.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.linalg.cond.html#numpy.linalg.cond" title="numpy.linalg.cond"><code class="xref py py-obj docutils literal"><span class="pre">linalg.cond</span></code></a>(x[,&nbsp;p])</td>
+<td>Compute the condition number of a matrix.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.linalg.det.html#numpy.linalg.det" title="numpy.linalg.det"><code class="xref py py-obj docutils literal"><span class="pre">linalg.det</span></code></a>(a)</td>
+<td>Compute the determinant of an array.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.linalg.matrix_rank.html#numpy.linalg.matrix_rank" title="numpy.linalg.matrix_rank"><code class="xref py py-obj docutils literal"><span class="pre">linalg.matrix_rank</span></code></a>(M[,&nbsp;tol,&nbsp;hermitian])</td>
+<td>Return matrix rank of array using SVD method</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.linalg.slogdet.html#numpy.linalg.slogdet" title="numpy.linalg.slogdet"><code class="xref py py-obj docutils literal"><span class="pre">linalg.slogdet</span></code></a>(a)</td>
+<td>Compute the sign and (natural) logarithm of the determinant of an array.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.trace.html#numpy.trace" title="numpy.trace"><code class="xref py py-obj docutils literal"><span class="pre">trace</span></code></a>(a[,&nbsp;offset,&nbsp;axis1,&nbsp;axis2,&nbsp;dtype,&nbsp;out])</td>
+<td>Return the sum along diagonals of the array.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="solving-equations-and-inverting-matrices">
+<h2>Solving equations and inverting matrices<a class="headerlink" href="#solving-equations-and-inverting-matrices" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.linalg.solve.html#numpy.linalg.solve" title="numpy.linalg.solve"><code class="xref py py-obj docutils literal"><span class="pre">linalg.solve</span></code></a>(a,&nbsp;b)</td>
+<td>Solve a linear matrix equation, or system of linear scalar equations.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.linalg.tensorsolve.html#numpy.linalg.tensorsolve" title="numpy.linalg.tensorsolve"><code class="xref py py-obj docutils literal"><span class="pre">linalg.tensorsolve</span></code></a>(a,&nbsp;b[,&nbsp;axes])</td>
+<td>Solve the tensor equation <code class="docutils literal"><span class="pre">a</span> <span class="pre">x</span> <span class="pre">=</span> <span class="pre">b</span></code> for x.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.linalg.lstsq.html#numpy.linalg.lstsq" title="numpy.linalg.lstsq"><code class="xref py py-obj docutils literal"><span class="pre">linalg.lstsq</span></code></a>(a,&nbsp;b[,&nbsp;rcond])</td>
+<td>Return the least-squares solution to a linear matrix equation.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.linalg.inv.html#numpy.linalg.inv" title="numpy.linalg.inv"><code class="xref py py-obj docutils literal"><span class="pre">linalg.inv</span></code></a>(a)</td>
+<td>Compute the (multiplicative) inverse of a matrix.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.linalg.pinv.html#numpy.linalg.pinv" title="numpy.linalg.pinv"><code class="xref py py-obj docutils literal"><span class="pre">linalg.pinv</span></code></a>(a[,&nbsp;rcond])</td>
+<td>Compute the (Moore-Penrose) pseudo-inverse of a matrix.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.linalg.tensorinv.html#numpy.linalg.tensorinv" title="numpy.linalg.tensorinv"><code class="xref py py-obj docutils literal"><span class="pre">linalg.tensorinv</span></code></a>(a[,&nbsp;ind])</td>
+<td>Compute the &#8216;inverse&#8217; of an N-dimensional array.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.linalg.LinAlgError.html#numpy.linalg.LinAlgError" title="numpy.linalg.LinAlgError"><code class="xref py py-obj docutils literal"><span class="pre">linalg.LinAlgError</span></code></a></td>
+<td>Generic Python-exception-derived object raised by linalg functions.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="linear-algebra-on-several-matrices-at-once">
+<span id="routines-linalg-broadcasting"></span><h2>Linear algebra on several matrices at once<a class="headerlink" href="#linear-algebra-on-several-matrices-at-once" title="Permalink to this headline">¶</a></h2>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.8.0.</span></p>
+</div>
+<p>Several of the linear algebra routines listed above are able to
+compute results for several matrices at once, if they are stacked into
+the same array.</p>
+<p>This is indicated in the documentation via input parameter
+specifications such as <code class="docutils literal"><span class="pre">a</span> <span class="pre">:</span> <span class="pre">(...,</span> <span class="pre">M,</span> <span class="pre">M)</span> <span class="pre">array_like</span></code>. This means that
+if for instance given an input array <code class="docutils literal"><span class="pre">a.shape</span> <span class="pre">==</span> <span class="pre">(N,</span> <span class="pre">M,</span> <span class="pre">M)</span></code>, it is
+interpreted as a &#8220;stack&#8221; of N matrices, each of size M-by-M. Similar
+specification applies to return values, for instance the determinant
+has <code class="docutils literal"><span class="pre">det</span> <span class="pre">:</span> <span class="pre">(...)</span></code> and will in this case return an array of shape
+<code class="docutils literal"><span class="pre">det(a).shape</span> <span class="pre">==</span> <span class="pre">(N,)</span></code>. This generalizes to linear algebra
+operations on higher-dimensional arrays: the last 1 or 2 dimensions of
+a multidimensional array are interpreted as vectors or matrices, as
+appropriate for each operation.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

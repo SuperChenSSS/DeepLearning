@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.MachAr &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="Data type routines" href="../routines.dtype.html" >
+    <link rel="next" title="numpy.issctype" href="numpy.issctype.html" >
+    <link rel="prev" title="numpy.iinfo.max" href="numpy.iinfo.max.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.dtype.html" accesskey="U">Data type routines</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.issctype.html" title="numpy.issctype"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.iinfo.max.html" title="numpy.iinfo.max"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.iinfo.max.html"
+                        title="previous chapter">numpy.iinfo.max</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.issctype.html"
+                        title="next chapter">numpy.issctype</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-machar">
+<h1>numpy.MachAr<a class="headerlink" href="#numpy-machar" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="numpy.MachAr">
+<em class="property">class </em><code class="descclassname">numpy.</code><code class="descname">MachAr</code><span class="sig-paren">(</span><em>float_conv=&lt;type 'float'&gt;</em>, <em>int_conv=&lt;type 'int'&gt;</em>, <em>float_to_float=&lt;type 'float'&gt;</em>, <em>float_to_str=&lt;function &lt;lambda&gt;&gt;</em>, <em>title='Python floating point number'</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/numpy/numpy/blob/v1.14.0/numpy/core/machar.py#L17-L338"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy.MachAr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Diagnosing machine parameters.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>float_conv</strong> : function, optional</p>
+<blockquote>
+<div><p>Function that converts an integer or integer array to a float
+or float array. Default is <a class="reference external" href="https://docs.python.org/dev/library/functions.html#float" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">float</span></code></a>.</p>
+</div></blockquote>
+<p><strong>int_conv</strong> : function, optional</p>
+<blockquote>
+<div><p>Function that converts a float or float array to an integer or
+integer array. Default is <a class="reference external" href="https://docs.python.org/dev/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a>.</p>
+</div></blockquote>
+<p><strong>float_to_float</strong> : function, optional</p>
+<blockquote>
+<div><p>Function that converts a float array to float. Default is <a class="reference external" href="https://docs.python.org/dev/library/functions.html#float" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">float</span></code></a>.
+Note that this does not seem to do anything useful in the current
+implementation.</p>
+</div></blockquote>
+<p><strong>float_to_str</strong> : function, optional</p>
+<blockquote>
+<div><p>Function that converts a single float to a string. Default is
+<code class="docutils literal"><span class="pre">lambda</span> <span class="pre">v:'%24.16e'</span> <span class="pre">%v</span></code>.</p>
+</div></blockquote>
+<p><strong>title</strong> : str, optional</p>
+<blockquote class="last">
+<div><p>Title that is printed in the string representation of <a class="reference internal" href="#numpy.MachAr" title="numpy.MachAr"><code class="xref py py-obj docutils literal"><span class="pre">MachAr</span></code></a>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="numpy.finfo.html#numpy.finfo" title="numpy.finfo"><code class="xref py py-obj docutils literal"><span class="pre">finfo</span></code></a></dt>
+<dd>Machine limits for floating point types.</dd>
+<dt><a class="reference internal" href="numpy.iinfo.html#numpy.iinfo" title="numpy.iinfo"><code class="xref py py-obj docutils literal"><span class="pre">iinfo</span></code></a></dt>
+<dd>Machine limits for integer types.</dd>
+</dl>
+</div>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R1]</a></td><td>Press, Teukolsky, Vetterling and Flannery,
+&#8220;Numerical Recipes in C++,&#8221; 2nd ed,
+Cambridge University Press, 2002, p. 31.</td></tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="92%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>ibeta</td>
+<td>(int) Radix in which numbers are represented.</td>
+</tr>
+<tr class="row-even"><td>it</td>
+<td>(int) Number of base-<em class="xref py py-obj">ibeta</em> digits in the floating point mantissa M.</td>
+</tr>
+<tr class="row-odd"><td>machep</td>
+<td>(int) Exponent of the smallest (most negative) power of <em class="xref py py-obj">ibeta</em> that, added to 1.0, gives something different from 1.0</td>
+</tr>
+<tr class="row-even"><td>eps</td>
+<td>(float) Floating-point number <code class="docutils literal"><span class="pre">beta**machep</span></code> (floating point precision)</td>
+</tr>
+<tr class="row-odd"><td>negep</td>
+<td>(int) Exponent of the smallest power of <em class="xref py py-obj">ibeta</em> that, subtracted from 1.0, gives something different from 1.0.</td>
+</tr>
+<tr class="row-even"><td>epsneg</td>
+<td>(float) Floating-point number <code class="docutils literal"><span class="pre">beta**negep</span></code>.</td>
+</tr>
+<tr class="row-odd"><td>iexp</td>
+<td>(int) Number of bits in the exponent (including its sign and bias).</td>
+</tr>
+<tr class="row-even"><td>minexp</td>
+<td>(int) Smallest (most negative) power of <em class="xref py py-obj">ibeta</em> consistent with there being no leading zeros in the mantissa.</td>
+</tr>
+<tr class="row-odd"><td>xmin</td>
+<td>(float) Floating point number <code class="docutils literal"><span class="pre">beta**minexp</span></code> (the smallest [in magnitude] usable floating value).</td>
+</tr>
+<tr class="row-even"><td>maxexp</td>
+<td>(int) Smallest (positive) power of <em class="xref py py-obj">ibeta</em> that causes overflow.</td>
+</tr>
+<tr class="row-odd"><td>xmax</td>
+<td>(float) <code class="docutils literal"><span class="pre">(1-epsneg)</span> <span class="pre">*</span> <span class="pre">beta**maxexp</span></code> (the largest [in magnitude] usable floating value).</td>
+</tr>
+<tr class="row-even"><td>irnd</td>
+<td>(int) In <code class="docutils literal"><span class="pre">range(6)</span></code>, information on what kind of rounding is done in addition, and on how underflow is handled.</td>
+</tr>
+<tr class="row-odd"><td>ngrd</td>
+<td>(int) Number of &#8216;guard digits&#8217; used when truncating the product of two mantissas to fit the representation.</td>
+</tr>
+<tr class="row-even"><td>epsilon</td>
+<td>(float) Same as <em class="xref py py-obj">eps</em>.</td>
+</tr>
+<tr class="row-odd"><td>tiny</td>
+<td>(float) Same as <em class="xref py py-obj">xmin</em>.</td>
+</tr>
+<tr class="row-even"><td>huge</td>
+<td>(float) Same as <em class="xref py py-obj">xmax</em>.</td>
+</tr>
+<tr class="row-odd"><td>precision</td>
+<td>(float) <code class="docutils literal"><span class="pre">-</span> <span class="pre">int(-log10(eps))</span></code></td>
+</tr>
+<tr class="row-even"><td>resolution</td>
+<td>(float) <code class="docutils literal"><span class="pre">-</span> <span class="pre">10**(-precision)</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.distutils.exec_command &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="Packaging (numpy.distutils)" href="../distutils.html" >
+    <link rel="next" title="NumPy C-API" href="../c-api.html" >
+    <link rel="prev" title="numpy.distutils.log.set_verbosity" href="numpy.distutils.log.set_verbosity.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../distutils.html" accesskey="U">Packaging (<code class="docutils literal"><span class="pre">numpy.distutils</span></code>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../c-api.html" title="NumPy C-API"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.distutils.log.set_verbosity.html" title="numpy.distutils.log.set_verbosity"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.distutils.log.set_verbosity.html"
+                        title="previous chapter">numpy.distutils.log.set_verbosity</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../c-api.html"
+                        title="next chapter">NumPy C-API</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-numpy.distutils.exec_command">
+<span id="numpy-distutils-exec-command"></span><h1>numpy.distutils.exec_command<a class="headerlink" href="#module-numpy.distutils.exec_command" title="Permalink to this headline">¶</a></h1>
+<p>exec_command</p>
+<p>Implements exec_command function that is (almost) equivalent to
+commands.getstatusoutput function but on NT, DOS systems the
+returned status is actually correct (though, the returned status
+values may be different by a factor). In addition, exec_command
+takes keyword arguments for (re-)defining environment variables.</p>
+<p>Provides functions:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>exec_command  &#8212; execute command in a specified directory and</dt>
+<dd>in the modified environment.</dd>
+<dt>find_executable &#8212; locate a command using info from environment</dt>
+<dd>variable PATH. Equivalent to posix <em class="xref py py-obj">which</em>
+command.</dd>
+</dl>
+</div></blockquote>
+<p>Author: Pearu Peterson &lt;<a class="reference external" href="mailto:pearu&#37;&#52;&#48;cens&#46;ioc&#46;ee">pearu<span>&#64;</span>cens<span>&#46;</span>ioc<span>&#46;</span>ee</a>&gt;
+Created: 11 January 2003</p>
+<p>Requires: Python 2.x</p>
+<p>Successfully tested on:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="12%" />
+<col width="17%" />
+<col width="71%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">os.name</th>
+<th class="head">sys.platform</th>
+<th class="head">comments</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>posix</td>
+<td>linux2</td>
+<td>Debian (sid) Linux, Python 2.1.3+, 2.2.3+, 2.3.3
+PyCrust 0.9.3, Idle 1.0.2</td>
+</tr>
+<tr class="row-odd"><td>posix</td>
+<td>linux2</td>
+<td>Red Hat 9 Linux, Python 2.1.3, 2.2.2, 2.3.2</td>
+</tr>
+<tr class="row-even"><td>posix</td>
+<td>sunos5</td>
+<td>SunOS 5.9, Python 2.2, 2.3.2</td>
+</tr>
+<tr class="row-odd"><td>posix</td>
+<td>darwin</td>
+<td>Darwin 7.2.0, Python 2.3</td>
+</tr>
+<tr class="row-even"><td>nt</td>
+<td>win32</td>
+<td>Windows Me
+Python 2.3(EE), Idle 1.0, PyCrust 0.7.2
+Python 2.1.1 Idle 0.8</td>
+</tr>
+<tr class="row-odd"><td>nt</td>
+<td>win32</td>
+<td>Windows 98, Python 2.1.1. Idle 0.8</td>
+</tr>
+<tr class="row-even"><td>nt</td>
+<td>win32</td>
+<td>Cygwin 98-4.10, Python 2.1.1(MSC) - echo tests
+fail i.e. redefining environment variables may
+not work. FIXED: don&#8217;t use cygwin echo!
+Comment: also <em class="xref py py-obj">cmd /c echo</em> will not work
+but redefining environment variables do work.</td>
+</tr>
+<tr class="row-odd"><td>posix</td>
+<td>cygwin</td>
+<td>Cygwin 98-4.10, Python 2.3.3(cygming special)</td>
+</tr>
+<tr class="row-even"><td>nt</td>
+<td>win32</td>
+<td>Windows XP, Python 2.3.3</td>
+</tr>
+</tbody>
+</table>
+<p>Known bugs:</p>
+<ul class="simple">
+<li>Tests, that send messages to stderr, fail when executed from MSYS prompt
+because the messages are lost at some point.</li>
+</ul>
+<p class="rubric">Functions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">exec_command</span></code>(command[,&nbsp;execute_in,&nbsp;...])</td>
+<td>Return (status,output) of executed command.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">find_executable</span></code>(exe[,&nbsp;path,&nbsp;_cache])</td>
+<td>Return full path of a executable or None.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">get_pythonexe</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">is_sequence</span></code>(seq)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">make_temp_file</span></code>([suffix,&nbsp;prefix,&nbsp;text])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">temp_file_name</span></code>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.sinc &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="Mathematical functions" href="../routines.math.html" >
+    <link rel="next" title="numpy.signbit" href="numpy.signbit.html" >
+    <link rel="prev" title="numpy.i0" href="numpy.i0.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.math.html" accesskey="U">Mathematical functions</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.signbit.html" title="numpy.signbit"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.i0.html" title="numpy.i0"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.i0.html"
+                        title="previous chapter">numpy.i0</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.signbit.html"
+                        title="next chapter">numpy.signbit</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-sinc">
+<h1>numpy.sinc<a class="headerlink" href="#numpy-sinc" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="numpy.sinc">
+<code class="descclassname">numpy.</code><code class="descname">sinc</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/numpy/numpy/blob/v1.14.0/numpy/lib/function_base.py#L3875-L3951"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy.sinc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the sinc function.</p>
+<p>The sinc function is <img class="math" src="../../_images/math/082fdd75779dc65766b24e3fb30ea357308cf13c.svg" alt="\sin(\pi x)/(\pi x)"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : ndarray</p>
+<blockquote>
+<div><p>Array (possibly multi-dimensional) of values for which to to
+calculate <code class="docutils literal"><span class="pre">sinc(x)</span></code>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out</strong> : ndarray</p>
+<blockquote class="last">
+<div><p><code class="docutils literal"><span class="pre">sinc(x)</span></code>, which has the same shape as the input.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p><code class="docutils literal"><span class="pre">sinc(0)</span></code> is the limit value 1.</p>
+<p>The name sinc is short for &#8220;sine cardinal&#8221; or &#8220;sinus cardinalis&#8221;.</p>
+<p>The sinc function is used in various signal processing applications,
+including in anti-aliasing, in the construction of a Lanczos resampling
+filter, and in interpolation.</p>
+<p>For bandlimited interpolation of discrete-time signals, the ideal
+interpolation kernel is proportional to the sinc function.</p>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r287" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R287]</a></td><td>Weisstein, Eric W. &#8220;Sinc Function.&#8221; From MathWorld&#8211;A Wolfram Web
+Resource. <a class="reference external" href="http://mathworld.wolfram.com/SincFunction.html">http://mathworld.wolfram.com/SincFunction.html</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r288" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[R288]</a></td><td>Wikipedia, &#8220;Sinc function&#8221;,
+<a class="reference external" href="http://en.wikipedia.org/wiki/Sinc_function">http://en.wikipedia.org/wiki/Sinc_function</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">41</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">sinc</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">array([ -3.89804309e-17,  -4.92362781e-02,  -8.40918587e-02,</span>
+<span class="go">        -8.90384387e-02,  -5.84680802e-02,   3.89804309e-17,</span>
+<span class="go">         6.68206631e-02,   1.16434881e-01,   1.26137788e-01,</span>
+<span class="go">         8.50444803e-02,  -3.89804309e-17,  -1.03943254e-01,</span>
+<span class="go">        -1.89206682e-01,  -2.16236208e-01,  -1.55914881e-01,</span>
+<span class="go">         3.89804309e-17,   2.33872321e-01,   5.04551152e-01,</span>
+<span class="go">         7.56826729e-01,   9.35489284e-01,   1.00000000e+00,</span>
+<span class="go">         9.35489284e-01,   7.56826729e-01,   5.04551152e-01,</span>
+<span class="go">         2.33872321e-01,   3.89804309e-17,  -1.55914881e-01,</span>
+<span class="go">        -2.16236208e-01,  -1.89206682e-01,  -1.03943254e-01,</span>
+<span class="go">        -3.89804309e-17,   8.50444803e-02,   1.26137788e-01,</span>
+<span class="go">         1.16434881e-01,   6.68206631e-02,   3.89804309e-17,</span>
+<span class="go">        -5.84680802e-02,  -8.90384387e-02,  -8.40918587e-02,</span>
+<span class="go">        -4.92362781e-02,  -3.89804309e-17])</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sinc</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="go">[&lt;matplotlib.lines.Line2D object at 0x...&gt;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Sinc Function&quot;</span><span class="p">)</span>
+<span class="go">&lt;matplotlib.text.Text object at 0x...&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Amplitude&quot;</span><span class="p">)</span>
+<span class="go">&lt;matplotlib.text.Text object at 0x...&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">)</span>
+<span class="go">&lt;matplotlib.text.Text object at 0x...&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>It works in 2-D as well:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">401</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sinc</span><span class="p">(</span><span class="n">xx</span><span class="p">))</span>
+<span class="go">&lt;matplotlib.image.AxesImage object at 0x...&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

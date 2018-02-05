@@ -1,0 +1,1971 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Categorical Data &#8212; pandas 0.22.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.22.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Visualization" href="visualization.html" />
+    <link rel="prev" title="Time Deltas" href="timedeltas.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="visualization.html" title="Visualization"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="timedeltas.html" title="Time Deltas"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pandas 0.22.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+<div class="content-wrapper">
+    <div class="content">
+        <div class="document">
+            <div class="sphinxsidebar">
+                <h3>Table Of Contents</h3>
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Package overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10min.html">10 Minutes to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dsintro.html">Intro to Data Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basics.html">Essential Basic Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="text.html">Working with Text Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="options.html">Options and Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indexing.html">Indexing and Selecting Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">MultiIndex / Advanced Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="computation.html">Computational tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="missing_data.html">Working with missing data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="groupby.html">Group By: split-apply-combine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="merging.html">Merge, join, and concatenate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reshaping.html">Reshaping and Pivot Tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timeseries.html">Time Series / Date functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timedeltas.html">Time Deltas</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Categorical Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#object-creation">Object Creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#categoricaldtype">CategoricalDtype</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#equality-semantics">Equality Semantics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#working-with-categories">Working with categories</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#renaming-categories">Renaming categories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#appending-new-categories">Appending new categories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#removing-categories">Removing categories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#removing-unused-categories">Removing unused categories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#setting-categories">Setting categories</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#sorting-and-order">Sorting and Order</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#reordering">Reordering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#multi-column-sorting">Multi Column Sorting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#comparisons">Comparisons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#operations">Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-munging">Data munging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#getting">Getting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#string-and-datetime-accessors">String and datetime accessors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#setting">Setting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#merging">Merging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#unioning">Unioning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#concatenation">Concatenation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-data-in-out">Getting Data In/Out</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#missing-data">Missing Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#differences-to-r-s-factor">Differences to R&#8217;s <cite>factor</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gotchas">Gotchas</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#memory-usage">Memory Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#categorical-is-not-a-numpy-array"><cite>Categorical</cite> is not a <cite>numpy</cite> array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dtype-in-apply">dtype in apply</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#categorical-index">Categorical Index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#side-effects">Side Effects</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style.html">Styling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">IO Tools (Text, CSV, HDF5, ...)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="remote_data.html">Remote Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="enhancingperf.html">Enhancing Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sparse.html">Sparse data structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gotchas.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="r_interface.html">rpy2 / R interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ecosystem.html">pandas Ecosystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comparison_with_r.html">Comparison with R / R libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comparison_with_sql.html">Comparison with SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comparison_with_sas.html">Comparison with SAS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer.html">Developer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals.html">Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release.html">Release Notes</a></li>
+</ul>
+
+                <h3 style="margin-top: 1.5em;">Search</h3>
+
+                <form class="search" action="search.html" method="get">
+                    <input type="text" name="q" size="18"/>
+                    <input type="submit" value="Go"/>
+                    <input type="hidden" name="check_keywords" value="yes"/>
+                    <input type="hidden" name="area" value="default"/>
+                </form>
+                <p class="searchtip" style="font-size: 90%">
+                    Enter search terms or a module, class or function name.
+                </p>
+
+            </div>
+             
+            <div class="documentwrapper">
+                <div class="bodywrapper">
+                    <div class="body">
+                        
+  <div class="section" id="categorical-data">
+<span id="categorical"></span><h1>Categorical Data<a class="headerlink" href="#categorical-data" title="Permalink to this headline">¶</a></h1>
+<p>This is an introduction to pandas categorical data type, including a short comparison
+with R&#8217;s <code class="docutils literal"><span class="pre">factor</span></code>.</p>
+<p><cite>Categoricals</cite> are a pandas data type, which correspond to categorical variables in
+statistics: a variable, which can take on only a limited, and usually fixed,
+number of possible values (<cite>categories</cite>; <cite>levels</cite> in R). Examples are gender, social class,
+blood types, country affiliations, observation time or ratings via Likert scales.</p>
+<p>In contrast to statistical categorical variables, categorical data might have an order (e.g.
+&#8216;strongly agree&#8217; vs &#8216;agree&#8217; or &#8216;first observation&#8217; vs. &#8216;second observation&#8217;), but numerical
+operations (additions, divisions, ...) are not possible.</p>
+<p>All values of categorical data are either in <cite>categories</cite> or <cite>np.nan</cite>. Order is defined by
+the order of <cite>categories</cite>, not lexical order of the values. Internally, the data structure
+consists of a <cite>categories</cite> array and an integer array of <cite>codes</cite> which point to the real value in
+the <cite>categories</cite> array.</p>
+<p>The categorical data type is useful in the following cases:</p>
+<ul class="simple">
+<li>A string variable consisting of only a few different values. Converting such a string
+variable to a categorical variable will save some memory, see <a class="reference internal" href="#categorical-memory"><span class="std std-ref">here</span></a>.</li>
+<li>The lexical order of a variable is not the same as the logical order (&#8220;one&#8221;, &#8220;two&#8221;, &#8220;three&#8221;).
+By converting to a categorical and specifying an order on the categories, sorting and
+min/max will use the logical order instead of the lexical order, see <a class="reference internal" href="#categorical-sort"><span class="std std-ref">here</span></a>.</li>
+<li>As a signal to other python libraries that this column should be treated as a categorical
+variable (e.g. to use suitable statistical methods or plot types).</li>
+</ul>
+<p>See also the <a class="reference internal" href="api.html#api-categorical"><span class="std std-ref">API docs on categoricals</span></a>.</p>
+<div class="section" id="object-creation">
+<h2>Object Creation<a class="headerlink" href="#object-creation" title="Permalink to this headline">¶</a></h2>
+<p>Categorical <cite>Series</cite> or columns in a <cite>DataFrame</cite> can be created in several ways:</p>
+<p>By specifying <code class="docutils literal"><span class="pre">dtype=&quot;category&quot;</span></code> when constructing a <cite>Series</cite>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">)</span>
+
+<span class="gp">In [2]: </span><span class="n">s</span>
+<span class="gh">Out[2]: </span><span class="go"></span>
+<span class="go">0    a</span>
+<span class="go">1    b</span>
+<span class="go">2    c</span>
+<span class="go">3    a</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (3, object): [a, b, c]</span>
+</pre></div>
+</div>
+<p>By converting an existing <cite>Series</cite> or column to a <code class="docutils literal"><span class="pre">category</span></code> dtype:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [3]: </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;A&quot;</span><span class="p">:[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">]})</span>
+
+<span class="gp">In [4]: </span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;B&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">df</span>
+<span class="gh">Out[5]: </span><span class="go"></span>
+<span class="go">   A  B</span>
+<span class="go">0  a  a</span>
+<span class="go">1  b  b</span>
+<span class="go">2  c  c</span>
+<span class="go">3  a  a</span>
+</pre></div>
+</div>
+<p>By using some special functions:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">20</span><span class="p">)})</span>
+
+<span class="gp">In [7]: </span><span class="n">labels</span> <span class="o">=</span> <span class="p">[</span> <span class="s2">&quot;{0} - {1}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">9</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="p">]</span>
+
+<span class="gp">In [8]: </span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;group&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">105</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">right</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
+
+<span class="gp">In [9]: </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gh">Out[9]: </span><span class="go"></span>
+<span class="go">   value    group</span>
+<span class="go">0     65  60 - 69</span>
+<span class="go">1     49  40 - 49</span>
+<span class="go">2     56  50 - 59</span>
+<span class="go">3     43  40 - 49</span>
+<span class="go">4     43  40 - 49</span>
+<span class="go">5     91  90 - 99</span>
+<span class="go">6     32  30 - 39</span>
+<span class="go">7     87  80 - 89</span>
+<span class="go">8     36  30 - 39</span>
+<span class="go">9      8    0 - 9</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="reshaping.html#reshaping-tile-cut"><span class="std std-ref">documentation</span></a> for <a class="reference internal" href="generated/pandas.cut.html#pandas.cut" title="pandas.cut"><code class="xref py py-func docutils literal"><span class="pre">cut()</span></code></a>.</p>
+<p>By passing a <a class="reference internal" href="generated/pandas.Categorical.html#pandas.Categorical" title="pandas.Categorical"><code class="xref py py-class docutils literal"><span class="pre">pandas.Categorical</span></code></a> object to a <cite>Series</cite> or assigning it to a <cite>DataFrame</cite>.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">raw_cat</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">],</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;d&quot;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                         <span class="n">ordered</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [11]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">raw_cat</span><span class="p">)</span>
+
+<span class="gp">In [12]: </span><span class="n">s</span>
+<span class="gh">Out[12]: </span><span class="go"></span>
+<span class="go">0    NaN</span>
+<span class="go">1      b</span>
+<span class="go">2      c</span>
+<span class="go">3    NaN</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (3, object): [b, c, d]</span>
+
+<span class="gp">In [13]: </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;A&quot;</span><span class="p">:[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">]})</span>
+
+<span class="gp">In [14]: </span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;B&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">raw_cat</span>
+
+<span class="gp">In [15]: </span><span class="n">df</span>
+<span class="gh">Out[15]: </span><span class="go"></span>
+<span class="go">   A    B</span>
+<span class="go">0  a  NaN</span>
+<span class="go">1  b    b</span>
+<span class="go">2  c    c</span>
+<span class="go">3  a  NaN</span>
+</pre></div>
+</div>
+<p>Anywhere above we passed a keyword <code class="docutils literal"><span class="pre">dtype='category'</span></code>, we used the default behavior of</p>
+<ol class="arabic simple">
+<li>categories are inferred from the data</li>
+<li>categories are unordered.</li>
+</ol>
+<p>To control those behaviors, instead of passing <code class="docutils literal"><span class="pre">'category'</span></code>, use an instance
+of <a class="reference internal" href="generated/pandas.api.types.CategoricalDtype.html#pandas.api.types.CategoricalDtype" title="pandas.api.types.CategoricalDtype"><code class="xref py py-class docutils literal"><span class="pre">CategoricalDtype</span></code></a>.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [16]: </span><span class="kn">from</span> <span class="nn">pandas.api.types</span> <span class="kn">import</span> <span class="n">CategoricalDtype</span>
+
+<span class="gp">In [17]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">])</span>
+
+<span class="gp">In [18]: </span><span class="n">cat_type</span> <span class="o">=</span> <span class="n">CategoricalDtype</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                            <span class="n">ordered</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [19]: </span><span class="n">s_cat</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">cat_type</span><span class="p">)</span>
+
+<span class="gp">In [20]: </span><span class="n">s_cat</span>
+<span class="gh">Out[20]: </span><span class="go"></span>
+<span class="go">0    NaN</span>
+<span class="go">1      b</span>
+<span class="go">2      c</span>
+<span class="go">3    NaN</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (3, object): [b &lt; c &lt; d]</span>
+</pre></div>
+</div>
+<p>Categorical data has a specific <code class="docutils literal"><span class="pre">category</span></code> <a class="reference internal" href="basics.html#basics-dtypes"><span class="std std-ref">dtype</span></a>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [21]: </span><span class="n">df</span><span class="o">.</span><span class="n">dtypes</span>
+<span class="gh">Out[21]: </span><span class="go"></span>
+<span class="go">A      object</span>
+<span class="go">B    category</span>
+<span class="go">dtype: object</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In contrast to R&#8217;s <cite>factor</cite> function, categorical data is not converting input values to
+strings and categories will end up the same data type as the original values.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In contrast to R&#8217;s <cite>factor</cite> function, there is currently no way to assign/change labels at
+creation time. Use <cite>categories</cite> to change the categories after creation time.</p>
+</div>
+<p>To get back to the original Series or <cite>numpy</cite> array, use <code class="docutils literal"><span class="pre">Series.astype(original_dtype)</span></code> or
+<code class="docutils literal"><span class="pre">np.asarray(categorical)</span></code>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [22]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">])</span>
+
+<span class="gp">In [23]: </span><span class="n">s</span>
+<span class="gh">Out[23]: </span><span class="go"></span>
+<span class="go">0    a</span>
+<span class="go">1    b</span>
+<span class="go">2    c</span>
+<span class="go">3    a</span>
+<span class="go">dtype: object</span>
+
+<span class="gp">In [24]: </span><span class="n">s2</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span>
+
+<span class="gp">In [25]: </span><span class="n">s2</span>
+<span class="gh">Out[25]: </span><span class="go"></span>
+<span class="go">0    a</span>
+<span class="go">1    b</span>
+<span class="go">2    c</span>
+<span class="go">3    a</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (3, object): [a, b, c]</span>
+
+<span class="gp">In [26]: </span><span class="n">s2</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+<span class="go">                                                                                        Out[26]: </span>
+<span class="go">0    a</span>
+<span class="go">1    b</span>
+<span class="go">2    c</span>
+<span class="go">3    a</span>
+<span class="go">dtype: object</span>
+
+<span class="gp">In [27]: </span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span>
+<span class="go">                                                                                                                                            Out[27]: array([&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;], dtype=object)</span>
+</pre></div>
+</div>
+<p>If you have already <cite>codes</cite> and <cite>categories</cite>, you can use the <a class="reference internal" href="generated/pandas.Categorical.from_codes.html#pandas.Categorical.from_codes" title="pandas.Categorical.from_codes"><code class="xref py py-func docutils literal"><span class="pre">from_codes()</span></code></a>
+constructor to save the factorize step during normal constructor mode:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [28]: </span><span class="n">splitter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="mi">5</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">])</span>
+
+<span class="gp">In [29]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="o">.</span><span class="n">from_codes</span><span class="p">(</span><span class="n">splitter</span><span class="p">,</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="categoricaldtype">
+<span id="categorical-categoricaldtype"></span><h2>CategoricalDtype<a class="headerlink" href="#categoricaldtype" title="Permalink to this headline">¶</a></h2>
+<div class="versionchanged">
+<p><span class="versionmodified">Changed in version 0.21.0.</span></p>
+</div>
+<p>A categorical&#8217;s type is fully described by</p>
+<ol class="arabic simple">
+<li><code class="docutils literal"><span class="pre">categories</span></code>: a sequence of unique values and no missing values</li>
+<li><code class="docutils literal"><span class="pre">ordered</span></code>: a boolean</li>
+</ol>
+<p>This information can be stored in a <a class="reference internal" href="generated/pandas.api.types.CategoricalDtype.html#pandas.api.types.CategoricalDtype" title="pandas.api.types.CategoricalDtype"><code class="xref py py-class docutils literal"><span class="pre">CategoricalDtype</span></code></a>.
+The <code class="docutils literal"><span class="pre">categories</span></code> argument is optional, which implies that the actual categories
+should be inferred from whatever is present in the data when the
+<a class="reference internal" href="generated/pandas.Categorical.html#pandas.Categorical" title="pandas.Categorical"><code class="xref py py-class docutils literal"><span class="pre">pandas.Categorical</span></code></a> is created. The categories are assumed to be unordered
+by default.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [30]: </span><span class="kn">from</span> <span class="nn">pandas.api.types</span> <span class="kn">import</span> <span class="n">CategoricalDtype</span>
+
+<span class="gp">In [31]: </span><span class="n">CategoricalDtype</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">])</span>
+<span class="gh">Out[31]: </span><span class="go">CategoricalDtype(categories=[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;], ordered=False)</span>
+
+<span class="gp">In [32]: </span><span class="n">CategoricalDtype</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">                                                                     Out[32]: CategoricalDtype(categories=[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;], ordered=True)</span>
+
+<span class="gp">In [33]: </span><span class="n">CategoricalDtype</span><span class="p">()</span>
+<span class="go">                                                                                                                                         Out[33]: CategoricalDtype(categories=None, ordered=False)</span>
+</pre></div>
+</div>
+<p>A <a class="reference internal" href="generated/pandas.api.types.CategoricalDtype.html#pandas.api.types.CategoricalDtype" title="pandas.api.types.CategoricalDtype"><code class="xref py py-class docutils literal"><span class="pre">CategoricalDtype</span></code></a> can be used in any place pandas
+expects a <cite>dtype</cite>. For example <a class="reference internal" href="generated/pandas.read_csv.html#pandas.read_csv" title="pandas.read_csv"><code class="xref py py-func docutils literal"><span class="pre">pandas.read_csv()</span></code></a>,
+<a class="reference internal" href="generated/pandas.DataFrame.astype.html#pandas.DataFrame.astype" title="pandas.DataFrame.astype"><code class="xref py py-func docutils literal"><span class="pre">pandas.DataFrame.astype()</span></code></a>, or in the Series constructor.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">As a convenience, you can use the string <code class="docutils literal"><span class="pre">'category'</span></code> in place of a
+<a class="reference internal" href="generated/pandas.api.types.CategoricalDtype.html#pandas.api.types.CategoricalDtype" title="pandas.api.types.CategoricalDtype"><code class="xref py py-class docutils literal"><span class="pre">CategoricalDtype</span></code></a> when you want the default behavior of
+the categories being unordered, and equal to the set values present in the
+array. In other words, <code class="docutils literal"><span class="pre">dtype='category'</span></code> is equivalent to
+<code class="docutils literal"><span class="pre">dtype=CategoricalDtype()</span></code>.</p>
+</div>
+<div class="section" id="equality-semantics">
+<h3>Equality Semantics<a class="headerlink" href="#equality-semantics" title="Permalink to this headline">¶</a></h3>
+<p>Two instances of <a class="reference internal" href="generated/pandas.api.types.CategoricalDtype.html#pandas.api.types.CategoricalDtype" title="pandas.api.types.CategoricalDtype"><code class="xref py py-class docutils literal"><span class="pre">CategoricalDtype</span></code></a> compare equal
+whenever they have the same categories and orderedness. When comparing two
+unordered categoricals, the order of the <code class="docutils literal"><span class="pre">categories</span></code> is not considered</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [34]: </span><span class="n">c1</span> <span class="o">=</span> <span class="n">CategoricalDtype</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="go"># Equal, since order is not considered when ordered=False</span>
+<span class="gp">In [35]: </span><span class="n">c1</span> <span class="o">==</span> <span class="n">CategoricalDtype</span><span class="p">([</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gh">Out[35]: </span><span class="go">True</span>
+
+<span class="go"># Unequal, since the second CategoricalDtype is ordered</span>
+<span class="gp">In [36]: </span><span class="n">c1</span> <span class="o">==</span> <span class="n">CategoricalDtype</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span>  <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">              Out[36]: False</span>
+</pre></div>
+</div>
+<p>All instances of <code class="docutils literal"><span class="pre">CategoricalDtype</span></code> compare equal to the string <code class="docutils literal"><span class="pre">'category'</span></code></p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [37]: </span><span class="n">c1</span> <span class="o">==</span> <span class="s1">&#39;category&#39;</span>
+<span class="gh">Out[37]: </span><span class="go">True</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Since <code class="docutils literal"><span class="pre">dtype='category'</span></code> is essentially <code class="docutils literal"><span class="pre">CategoricalDtype(None,</span> <span class="pre">False)</span></code>,
+and since all instances <code class="docutils literal"><span class="pre">CategoricalDtype</span></code> compare equal to <code class="docutils literal"><span class="pre">'category'</span></code>,
+all instances of <code class="docutils literal"><span class="pre">CategoricalDtype</span></code> compare equal to a
+<code class="docutils literal"><span class="pre">CategoricalDtype(None,</span> <span class="pre">False)</span></code>, regardless of <code class="docutils literal"><span class="pre">categories</span></code> or
+<code class="docutils literal"><span class="pre">ordered</span></code>.</p>
+</div>
+</div>
+</div>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>Using <code class="docutils literal"><span class="pre">.describe()</span></code> on categorical data will produce similar output to a <cite>Series</cite> or
+<cite>DataFrame</cite> of type <code class="docutils literal"><span class="pre">string</span></code>.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [38]: </span><span class="n">cat</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">],</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">])</span>
+
+<span class="gp">In [39]: </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;cat&quot;</span><span class="p">:</span><span class="n">cat</span><span class="p">,</span> <span class="s2">&quot;s&quot;</span><span class="p">:[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]})</span>
+
+<span class="gp">In [40]: </span><span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+<span class="gh">Out[40]: </span><span class="go"></span>
+<span class="go">       cat  s</span>
+<span class="go">count    3  3</span>
+<span class="go">unique   2  2</span>
+<span class="go">top      c  c</span>
+<span class="go">freq     2  2</span>
+
+<span class="gp">In [41]: </span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;cat&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+<span class="go">                                                                                Out[41]: </span>
+<span class="go">count     3</span>
+<span class="go">unique    2</span>
+<span class="go">top       c</span>
+<span class="go">freq      2</span>
+<span class="go">Name: cat, dtype: object</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="working-with-categories">
+<span id="categorical-cat"></span><h2>Working with categories<a class="headerlink" href="#working-with-categories" title="Permalink to this headline">¶</a></h2>
+<p>Categorical data has a <cite>categories</cite> and a <cite>ordered</cite> property, which list their possible values and
+whether the ordering matters or not. These properties are exposed as <code class="docutils literal"><span class="pre">s.cat.categories</span></code> and
+<code class="docutils literal"><span class="pre">s.cat.ordered</span></code>. If you don&#8217;t manually specify categories and ordering, they are inferred from the
+passed in values.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [42]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">)</span>
+
+<span class="gp">In [43]: </span><span class="n">s</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span>
+<span class="gh">Out[43]: </span><span class="go">Index([&#39;a&#39;, &#39;b&#39;, &#39;c&#39;], dtype=&#39;object&#39;)</span>
+
+<span class="gp">In [44]: </span><span class="n">s</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">ordered</span>
+<span class="go">                                                Out[44]: False</span>
+</pre></div>
+</div>
+<p>It&#8217;s also possible to pass in the categories in a specific order:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [45]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">],</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">]))</span>
+
+<span class="gp">In [46]: </span><span class="n">s</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span>
+<span class="gh">Out[46]: </span><span class="go">Index([&#39;c&#39;, &#39;b&#39;, &#39;a&#39;], dtype=&#39;object&#39;)</span>
+
+<span class="gp">In [47]: </span><span class="n">s</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">ordered</span>
+<span class="go">                                                Out[47]: False</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">New categorical data are NOT automatically ordered. You must explicitly pass <code class="docutils literal"><span class="pre">ordered=True</span></code> to
+indicate an ordered <code class="docutils literal"><span class="pre">Categorical</span></code>.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The result of <code class="docutils literal"><span class="pre">Series.unique()</span></code> is not always the same as <code class="docutils literal"><span class="pre">Series.cat.categories</span></code>,
+because <code class="docutils literal"><span class="pre">Series.unique()</span></code> has a couple of guarantees, namely that it returns categories
+in the order of appearance, and it only includes values that are actually present.</p>
+<div class="last highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [48]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="s1">&#39;babc&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">CategoricalDtype</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="s1">&#39;abcd&#39;</span><span class="p">)))</span>
+
+<span class="gp">In [49]: </span><span class="n">s</span>
+<span class="gh">Out[49]: </span><span class="go"></span>
+<span class="go">0    b</span>
+<span class="go">1    a</span>
+<span class="go">2    b</span>
+<span class="go">3    c</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (4, object): [a, b, c, d]</span>
+
+<span class="go"># categories</span>
+<span class="gp">In [50]: </span><span class="n">s</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span>
+<span class="go">                                                                                           Out[50]: Index([&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;], dtype=&#39;object&#39;)</span>
+
+<span class="go"># uniques</span>
+<span class="gp">In [51]: </span><span class="n">s</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+<span class="go">                                                                                                                                                Out[51]: </span>
+<span class="go">[b, a, c]</span>
+<span class="go">Categories (3, object): [b, a, c]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="renaming-categories">
+<h3>Renaming categories<a class="headerlink" href="#renaming-categories" title="Permalink to this headline">¶</a></h3>
+<p>Renaming categories is done by assigning new values to the <code class="docutils literal"><span class="pre">Series.cat.categories</span></code> property or
+by using the <code class="xref py py-func docutils literal"><span class="pre">Categorical.rename_categories()</span></code> method:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [52]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">)</span>
+
+<span class="gp">In [53]: </span><span class="n">s</span>
+<span class="gh">Out[53]: </span><span class="go"></span>
+<span class="go">0    a</span>
+<span class="go">1    b</span>
+<span class="go">2    c</span>
+<span class="go">3    a</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (3, object): [a, b, c]</span>
+
+<span class="gp">In [54]: </span><span class="n">s</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Group </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">g</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span><span class="p">]</span>
+
+<span class="gp">In [55]: </span><span class="n">s</span>
+<span class="gh">Out[55]: </span><span class="go"></span>
+<span class="go">0    Group a</span>
+<span class="go">1    Group b</span>
+<span class="go">2    Group c</span>
+<span class="go">3    Group a</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (3, object): [Group a, Group b, Group c]</span>
+
+<span class="gp">In [56]: </span><span class="n">s</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">rename_categories</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="go">                                                                                                                                  Out[56]: </span>
+<span class="go">0    1</span>
+<span class="go">1    2</span>
+<span class="go">2    3</span>
+<span class="go">3    1</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (3, int64): [1, 2, 3]</span>
+
+<span class="gp">In [57]: </span><span class="n">s</span>
+<span class="go">                                                                                                                                                                                                                         Out[57]: </span>
+<span class="go">0    Group a</span>
+<span class="go">1    Group b</span>
+<span class="go">2    Group c</span>
+<span class="go">3    Group a</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (3, object): [Group a, Group b, Group c]</span>
+
+<span class="go"># You can also pass a dict-like object to map the renaming</span>
+<span class="gp">In [58]: </span><span class="n">s</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">rename_categories</span><span class="p">({</span><span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="s1">&#39;z&#39;</span><span class="p">})</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                           Out[58]: </span>
+<span class="go">0    Group a</span>
+<span class="go">1    Group b</span>
+<span class="go">2    Group c</span>
+<span class="go">3    Group a</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (3, object): [Group a, Group b, Group c]</span>
+
+<span class="gp">In [59]: </span><span class="n">s</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             Out[59]: </span>
+<span class="go">0    Group a</span>
+<span class="go">1    Group b</span>
+<span class="go">2    Group c</span>
+<span class="go">3    Group a</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (3, object): [Group a, Group b, Group c]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In contrast to R&#8217;s <cite>factor</cite>, categorical data can have categories of other types than string.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Be aware that assigning new categories is an inplace operations, while most other operation
+under <code class="docutils literal"><span class="pre">Series.cat</span></code> per default return a new Series of dtype <cite>category</cite>.</p>
+</div>
+<p>Categories must be unique or a <cite>ValueError</cite> is raised:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [60]: </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">   ....: </span>    <span class="n">s</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">   ....: </span><span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="gp">   ....: </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;ValueError: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+<span class="gp">   ....: </span>
+<span class="go">ValueError: Categorical categories must be unique</span>
+</pre></div>
+</div>
+<p>Categories must also not be <code class="docutils literal"><span class="pre">NaN</span></code> or a <cite>ValueError</cite> is raised:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [61]: </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">   ....: </span>    <span class="n">s</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span>
+<span class="gp">   ....: </span><span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="gp">   ....: </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;ValueError: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+<span class="gp">   ....: </span>
+<span class="go">ValueError: Categorial categories cannot be null</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="appending-new-categories">
+<h3>Appending new categories<a class="headerlink" href="#appending-new-categories" title="Permalink to this headline">¶</a></h3>
+<p>Appending categories can be done by using the <code class="xref py py-func docutils literal"><span class="pre">Categorical.add_categories()</span></code> method:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [62]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">add_categories</span><span class="p">([</span><span class="mi">4</span><span class="p">])</span>
+
+<span class="gp">In [63]: </span><span class="n">s</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span>
+<span class="gh">Out[63]: </span><span class="go">Index([&#39;Group a&#39;, &#39;Group b&#39;, &#39;Group c&#39;, 4], dtype=&#39;object&#39;)</span>
+
+<span class="gp">In [64]: </span><span class="n">s</span>
+<span class="go">                                                                     Out[64]: </span>
+<span class="go">0    Group a</span>
+<span class="go">1    Group b</span>
+<span class="go">2    Group c</span>
+<span class="go">3    Group a</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (4, object): [Group a, Group b, Group c, 4]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="removing-categories">
+<h3>Removing categories<a class="headerlink" href="#removing-categories" title="Permalink to this headline">¶</a></h3>
+<p>Removing categories can be done by using the <code class="xref py py-func docutils literal"><span class="pre">Categorical.remove_categories()</span></code> method. Values
+which are removed are replaced by <code class="docutils literal"><span class="pre">np.nan</span></code>.:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [65]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">remove_categories</span><span class="p">([</span><span class="mi">4</span><span class="p">])</span>
+
+<span class="gp">In [66]: </span><span class="n">s</span>
+<span class="gh">Out[66]: </span><span class="go"></span>
+<span class="go">0    Group a</span>
+<span class="go">1    Group b</span>
+<span class="go">2    Group c</span>
+<span class="go">3    Group a</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (3, object): [Group a, Group b, Group c]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="removing-unused-categories">
+<h3>Removing unused categories<a class="headerlink" href="#removing-unused-categories" title="Permalink to this headline">¶</a></h3>
+<p>Removing unused categories can also be done:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [67]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">],</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;d&quot;</span><span class="p">]))</span>
+
+<span class="gp">In [68]: </span><span class="n">s</span>
+<span class="gh">Out[68]: </span><span class="go"></span>
+<span class="go">0    a</span>
+<span class="go">1    b</span>
+<span class="go">2    a</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (4, object): [a, b, c, d]</span>
+
+<span class="gp">In [69]: </span><span class="n">s</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">remove_unused_categories</span><span class="p">()</span>
+<span class="go">                                                                                    Out[69]: </span>
+<span class="go">0    a</span>
+<span class="go">1    b</span>
+<span class="go">2    a</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (2, object): [a, b]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-categories">
+<h3>Setting categories<a class="headerlink" href="#setting-categories" title="Permalink to this headline">¶</a></h3>
+<p>If you want to do remove and add new categories in one step (which has some speed advantage),
+or simply set the categories to a predefined scale, use <code class="xref py py-func docutils literal"><span class="pre">Categorical.set_categories()</span></code>.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [70]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s2">&quot;one&quot;</span><span class="p">,</span><span class="s2">&quot;two&quot;</span><span class="p">,</span><span class="s2">&quot;four&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">)</span>
+
+<span class="gp">In [71]: </span><span class="n">s</span>
+<span class="gh">Out[71]: </span><span class="go"></span>
+<span class="go">0     one</span>
+<span class="go">1     two</span>
+<span class="go">2    four</span>
+<span class="go">3       -</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (4, object): [-, four, one, two]</span>
+
+<span class="gp">In [72]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">set_categories</span><span class="p">([</span><span class="s2">&quot;one&quot;</span><span class="p">,</span><span class="s2">&quot;two&quot;</span><span class="p">,</span><span class="s2">&quot;three&quot;</span><span class="p">,</span><span class="s2">&quot;four&quot;</span><span class="p">])</span>
+
+<span class="gp">In [73]: </span><span class="n">s</span>
+<span class="gh">Out[73]: </span><span class="go"></span>
+<span class="go">0     one</span>
+<span class="go">1     two</span>
+<span class="go">2    four</span>
+<span class="go">3     NaN</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (4, object): [one, two, three, four]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Be aware that <code class="xref py py-func docutils literal"><span class="pre">Categorical.set_categories()</span></code> cannot know whether some category is omitted
+intentionally or because it is misspelled or (under Python3) due to a type difference (e.g.,
+numpys S1 dtype and python strings). This can result in surprising behaviour!</p>
+</div>
+</div>
+</div>
+<div class="section" id="sorting-and-order">
+<h2>Sorting and Order<a class="headerlink" href="#sorting-and-order" title="Permalink to this headline">¶</a></h2>
+<p id="categorical-sort">If categorical data is ordered (<code class="docutils literal"><span class="pre">s.cat.ordered</span> <span class="pre">==</span> <span class="pre">True</span></code>), then the order of the categories has a
+meaning and certain operations are possible. If the categorical is unordered, <code class="docutils literal"><span class="pre">.min()/.max()</span></code> will raise a <cite>TypeError</cite>.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [74]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="bp">False</span><span class="p">))</span>
+
+<span class="gp">In [75]: </span><span class="n">s</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="gp">In [76]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span>
+<span class="gp">   ....: </span>    <span class="n">CategoricalDtype</span><span class="p">(</span><span class="n">ordered</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">   ....: </span><span class="p">)</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [77]: </span><span class="n">s</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="gp">In [78]: </span><span class="n">s</span>
+<span class="gh">Out[78]: </span><span class="go"></span>
+<span class="go">0    a</span>
+<span class="go">3    a</span>
+<span class="go">1    b</span>
+<span class="go">2    c</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (3, object): [a &lt; b &lt; c]</span>
+
+<span class="gp">In [79]: </span><span class="n">s</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">s</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="go">                                                                                          Out[79]: (&#39;a&#39;, &#39;c&#39;)</span>
+</pre></div>
+</div>
+<p>You can set categorical data to be ordered by using <code class="docutils literal"><span class="pre">as_ordered()</span></code> or unordered by using <code class="docutils literal"><span class="pre">as_unordered()</span></code>. These will by
+default return a <em>new</em> object.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [80]: </span><span class="n">s</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">as_ordered</span><span class="p">()</span>
+<span class="gh">Out[80]: </span><span class="go"></span>
+<span class="go">0    a</span>
+<span class="go">3    a</span>
+<span class="go">1    b</span>
+<span class="go">2    c</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (3, object): [a &lt; b &lt; c]</span>
+
+<span class="gp">In [81]: </span><span class="n">s</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">as_unordered</span><span class="p">()</span>
+<span class="go">                                                                                          Out[81]: </span>
+<span class="go">0    a</span>
+<span class="go">3    a</span>
+<span class="go">1    b</span>
+<span class="go">2    c</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (3, object): [a, b, c]</span>
+</pre></div>
+</div>
+<p>Sorting will use the order defined by categories, not any lexical order present on the data type.
+This is even true for strings and numeric data:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [82]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">)</span>
+
+<span class="gp">In [83]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">set_categories</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="gp">In [84]: </span><span class="n">s</span>
+<span class="gh">Out[84]: </span><span class="go"></span>
+<span class="go">0    1</span>
+<span class="go">1    2</span>
+<span class="go">2    3</span>
+<span class="go">3    1</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (3, int64): [2 &lt; 3 &lt; 1]</span>
+
+<span class="gp">In [85]: </span><span class="n">s</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="gp">In [86]: </span><span class="n">s</span>
+<span class="gh">Out[86]: </span><span class="go"></span>
+<span class="go">1    2</span>
+<span class="go">2    3</span>
+<span class="go">0    1</span>
+<span class="go">3    1</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (3, int64): [2 &lt; 3 &lt; 1]</span>
+
+<span class="gp">In [87]: </span><span class="n">s</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">s</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="go">                                                                                         Out[87]: (2, 1)</span>
+</pre></div>
+</div>
+<div class="section" id="reordering">
+<h3>Reordering<a class="headerlink" href="#reordering" title="Permalink to this headline">¶</a></h3>
+<p>Reordering the categories is possible via the <code class="xref py py-func docutils literal"><span class="pre">Categorical.reorder_categories()</span></code> and
+the <code class="xref py py-func docutils literal"><span class="pre">Categorical.set_categories()</span></code> methods. For <code class="xref py py-func docutils literal"><span class="pre">Categorical.reorder_categories()</span></code>, all
+old categories must be included in the new categories and no new categories are allowed. This will
+necessarily make the sort order the same as the categories order.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [88]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">)</span>
+
+<span class="gp">In [89]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">reorder_categories</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="gp">In [90]: </span><span class="n">s</span>
+<span class="gh">Out[90]: </span><span class="go"></span>
+<span class="go">0    1</span>
+<span class="go">1    2</span>
+<span class="go">2    3</span>
+<span class="go">3    1</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (3, int64): [2 &lt; 3 &lt; 1]</span>
+
+<span class="gp">In [91]: </span><span class="n">s</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="gp">In [92]: </span><span class="n">s</span>
+<span class="gh">Out[92]: </span><span class="go"></span>
+<span class="go">1    2</span>
+<span class="go">2    3</span>
+<span class="go">0    1</span>
+<span class="go">3    1</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (3, int64): [2 &lt; 3 &lt; 1]</span>
+
+<span class="gp">In [93]: </span><span class="n">s</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">s</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="go">                                                                                         Out[93]: (2, 1)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Note the difference between assigning new categories and reordering the categories: the first
+renames categories and therefore the individual values in the <cite>Series</cite>, but if the first
+position was sorted last, the renamed value will still be sorted last. Reordering means that the
+way values are sorted is different afterwards, but not that individual values in the
+<cite>Series</cite> are changed.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If the <cite>Categorical</cite> is not ordered, <code class="docutils literal"><span class="pre">Series.min()</span></code> and <code class="docutils literal"><span class="pre">Series.max()</span></code> will raise
+<code class="docutils literal"><span class="pre">TypeError</span></code>. Numeric operations like <code class="docutils literal"><span class="pre">+</span></code>, <code class="docutils literal"><span class="pre">-</span></code>, <code class="docutils literal"><span class="pre">*</span></code>, <code class="docutils literal"><span class="pre">/</span></code> and operations based on them
+(e.g. <code class="docutils literal"><span class="pre">Series.median()</span></code>, which would need to compute the mean between two values if the length
+of an array is even) do not work and raise a <code class="docutils literal"><span class="pre">TypeError</span></code>.</p>
+</div>
+</div>
+<div class="section" id="multi-column-sorting">
+<h3>Multi Column Sorting<a class="headerlink" href="#multi-column-sorting" title="Permalink to this headline">¶</a></h3>
+<p>A categorical dtyped column will participate in a multi-column sort in a similar manner to other columns.
+The ordering of the categorical is determined by the <code class="docutils literal"><span class="pre">categories</span></code> of that column.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [94]: </span><span class="n">dfs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span> <span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="s1">&#39;bbeebbaa&#39;</span><span class="p">),</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+<span class="gp">   ....: </span>                    <span class="s1">&#39;B&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="p">})</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [95]: </span><span class="n">dfs</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">])</span>
+<span class="gh">Out[95]: </span><span class="go"></span>
+<span class="go">   A  B</span>
+<span class="go">2  e  1</span>
+<span class="go">3  e  2</span>
+<span class="go">7  a  1</span>
+<span class="go">6  a  2</span>
+<span class="go">0  b  1</span>
+<span class="go">5  b  1</span>
+<span class="go">1  b  2</span>
+<span class="go">4  b  2</span>
+</pre></div>
+</div>
+<p>Reordering the <code class="docutils literal"><span class="pre">categories</span></code> changes a future sort.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [96]: </span><span class="n">dfs</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dfs</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">reorder_categories</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;e&#39;</span><span class="p">])</span>
+
+<span class="gp">In [97]: </span><span class="n">dfs</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span><span class="s1">&#39;B&#39;</span><span class="p">])</span>
+<span class="gh">Out[97]: </span><span class="go"></span>
+<span class="go">   A  B</span>
+<span class="go">7  a  1</span>
+<span class="go">6  a  2</span>
+<span class="go">0  b  1</span>
+<span class="go">5  b  1</span>
+<span class="go">1  b  2</span>
+<span class="go">4  b  2</span>
+<span class="go">2  e  1</span>
+<span class="go">3  e  2</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="comparisons">
+<h2>Comparisons<a class="headerlink" href="#comparisons" title="Permalink to this headline">¶</a></h2>
+<p>Comparing categorical data with other objects is possible in three cases:</p>
+<blockquote>
+<div><ul class="simple">
+<li>comparing equality (<code class="docutils literal"><span class="pre">==</span></code> and <code class="docutils literal"><span class="pre">!=</span></code>) to a list-like object (list, Series, array,
+...) of the same length as the categorical data.</li>
+<li>all comparisons (<code class="docutils literal"><span class="pre">==</span></code>, <code class="docutils literal"><span class="pre">!=</span></code>, <code class="docutils literal"><span class="pre">&gt;</span></code>, <code class="docutils literal"><span class="pre">&gt;=</span></code>, <code class="docutils literal"><span class="pre">&lt;</span></code>, and <code class="docutils literal"><span class="pre">&lt;=</span></code>) of categorical data to
+another categorical Series, when <code class="docutils literal"><span class="pre">ordered==True</span></code> and the <cite>categories</cite> are the same.</li>
+<li>all comparisons of a categorical data to a scalar.</li>
+</ul>
+</div></blockquote>
+<p>All other comparisons, especially &#8220;non-equality&#8221; comparisons of two categoricals with different
+categories or a categorical with any list-like object, will raise a TypeError.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Any &#8220;non-equality&#8221; comparisons of categorical data with a <cite>Series</cite>, <cite>np.array</cite>, <cite>list</cite> or
+categorical data with different categories or ordering will raise an <cite>TypeError</cite> because custom
+categories ordering could be interpreted in two ways: one with taking into account the
+ordering and one without.</p>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [98]: </span><span class="n">cat</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span>
+<span class="gp">   ....: </span>    <span class="n">CategoricalDtype</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">   ....: </span><span class="p">)</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [99]: </span><span class="n">cat_base</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span>
+<span class="gp">   ....: </span>    <span class="n">CategoricalDtype</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">   ....: </span><span class="p">)</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [100]: </span><span class="n">cat_base2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span>
+<span class="gp">   .....: </span>    <span class="n">CategoricalDtype</span><span class="p">(</span><span class="n">ordered</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">   .....: </span><span class="p">)</span>
+<span class="gp">   .....: </span>
+
+<span class="gp">In [101]: </span><span class="n">cat</span>
+<span class="gh">Out[101]: </span><span class="go"></span>
+<span class="go">0    1</span>
+<span class="go">1    2</span>
+<span class="go">2    3</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (3, int64): [3 &lt; 2 &lt; 1]</span>
+
+<span class="gp">In [102]: </span><span class="n">cat_base</span>
+<span class="go">                                                                                   Out[102]: </span>
+<span class="go">0    2</span>
+<span class="go">1    2</span>
+<span class="go">2    2</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (3, int64): [3 &lt; 2 &lt; 1]</span>
+
+<span class="gp">In [103]: </span><span class="n">cat_base2</span>
+<span class="go">                                                                                                                                                                      Out[103]: </span>
+<span class="go">0    2</span>
+<span class="go">1    2</span>
+<span class="go">2    2</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (1, int64): [2]</span>
+</pre></div>
+</div>
+<p>Comparing to a categorical with the same categories and ordering or to a scalar works:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [104]: </span><span class="n">cat</span> <span class="o">&gt;</span> <span class="n">cat_base</span>
+<span class="gh">Out[104]: </span><span class="go"></span>
+<span class="go">0     True</span>
+<span class="go">1    False</span>
+<span class="go">2    False</span>
+<span class="go">dtype: bool</span>
+
+<span class="gp">In [105]: </span><span class="n">cat</span> <span class="o">&gt;</span> <span class="mi">2</span>
+<span class="go">                                                        Out[105]: </span>
+<span class="go">0     True</span>
+<span class="go">1    False</span>
+<span class="go">2    False</span>
+<span class="go">dtype: bool</span>
+</pre></div>
+</div>
+<p>Equality comparisons work with any list-like object of same length and scalars:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [106]: </span><span class="n">cat</span> <span class="o">==</span> <span class="n">cat_base</span>
+<span class="gh">Out[106]: </span><span class="go"></span>
+<span class="go">0    False</span>
+<span class="go">1     True</span>
+<span class="go">2    False</span>
+<span class="go">dtype: bool</span>
+
+<span class="gp">In [107]: </span><span class="n">cat</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="go">                                                        Out[107]: </span>
+<span class="go">0    True</span>
+<span class="go">1    True</span>
+<span class="go">2    True</span>
+<span class="go">dtype: bool</span>
+
+<span class="gp">In [108]: </span><span class="n">cat</span> <span class="o">==</span> <span class="mi">2</span>
+<span class="go">                                                                                                             Out[108]: </span>
+<span class="go">0    False</span>
+<span class="go">1     True</span>
+<span class="go">2    False</span>
+<span class="go">dtype: bool</span>
+</pre></div>
+</div>
+<p>This doesn&#8217;t work because the categories are not the same:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [109]: </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">   .....: </span>    <span class="n">cat</span> <span class="o">&gt;</span> <span class="n">cat_base2</span>
+<span class="gp">   .....: </span><span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="gp">   .....: </span>     <span class="k">print</span><span class="p">(</span><span class="s2">&quot;TypeError: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+<span class="gp">   .....: </span>
+<span class="go">TypeError: Categoricals can only be compared if &#39;categories&#39; are the same. Categories are different lengths</span>
+</pre></div>
+</div>
+<p>If you want to do a &#8220;non-equality&#8221; comparison of a categorical series with a list-like object
+which is not categorical data, you need to be explicit and convert the categorical data back to
+the original values:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [110]: </span><span class="n">base</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+
+<span class="gp">In [111]: </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">   .....: </span>    <span class="n">cat</span> <span class="o">&gt;</span> <span class="n">base</span>
+<span class="gp">   .....: </span><span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="gp">   .....: </span>     <span class="k">print</span><span class="p">(</span><span class="s2">&quot;TypeError: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+<span class="gp">   .....: </span>
+<span class="go">TypeError: Cannot compare a Categorical for op __gt__ with type &lt;class &#39;numpy.ndarray&#39;&gt;.</span>
+<span class="go">If you want to compare values, use &#39;np.asarray(cat) &lt;op&gt; other&#39;.</span>
+
+<span class="gp">In [112]: </span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">cat</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">base</span>
+<span class="go">                                                                                                                                                          Out[112]: array([False, False, False], dtype=bool)</span>
+</pre></div>
+</div>
+<p>When you compare two unordered categoricals with the same categories, the order is not considered:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [113]: </span><span class="n">c1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">],</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="gp">In [114]: </span><span class="n">c2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">],</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="gp">In [115]: </span><span class="n">c1</span> <span class="o">==</span> <span class="n">c2</span>
+<span class="gh">Out[115]: </span><span class="go">array([ True,  True], dtype=bool)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="operations">
+<h2>Operations<a class="headerlink" href="#operations" title="Permalink to this headline">¶</a></h2>
+<p>Apart from <code class="docutils literal"><span class="pre">Series.min()</span></code>, <code class="docutils literal"><span class="pre">Series.max()</span></code> and <code class="docutils literal"><span class="pre">Series.mode()</span></code>, the following operations are
+possible with categorical data:</p>
+<p><cite>Series</cite> methods like <cite>Series.value_counts()</cite> will use all categories, even if some categories are not
+present in the data:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [116]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">],</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;d&quot;</span><span class="p">]))</span>
+
+<span class="gp">In [117]: </span><span class="n">s</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+<span class="gh">Out[117]: </span><span class="go"></span>
+<span class="go">c    2</span>
+<span class="go">b    1</span>
+<span class="go">a    1</span>
+<span class="go">d    0</span>
+<span class="go">dtype: int64</span>
+</pre></div>
+</div>
+<p>Groupby will also show &#8220;unused&#8221; categories:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [118]: </span><span class="n">cats</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">],</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;d&quot;</span><span class="p">])</span>
+
+<span class="gp">In [119]: </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;cats&quot;</span><span class="p">:</span><span class="n">cats</span><span class="p">,</span><span class="s2">&quot;values&quot;</span><span class="p">:[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]})</span>
+
+<span class="gp">In [120]: </span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;cats&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="gh">Out[120]: </span><span class="go"></span>
+<span class="go">      values</span>
+<span class="go">cats        </span>
+<span class="go">a        1.0</span>
+<span class="go">b        2.0</span>
+<span class="go">c        4.0</span>
+<span class="go">d        NaN</span>
+
+<span class="gp">In [121]: </span><span class="n">cats2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">],</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">])</span>
+
+<span class="gp">In [122]: </span><span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;cats&quot;</span><span class="p">:</span><span class="n">cats2</span><span class="p">,</span><span class="s2">&quot;B&quot;</span><span class="p">:[</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;d&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;d&quot;</span><span class="p">],</span> <span class="s2">&quot;values&quot;</span><span class="p">:[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]})</span>
+
+<span class="gp">In [123]: </span><span class="n">df2</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;cats&quot;</span><span class="p">,</span><span class="s2">&quot;B&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="gh">Out[123]: </span><span class="go"></span>
+<span class="go">        values</span>
+<span class="go">cats B        </span>
+<span class="go">a    c     1.0</span>
+<span class="go">     d     2.0</span>
+<span class="go">b    c     3.0</span>
+<span class="go">     d     4.0</span>
+<span class="go">c    c     NaN</span>
+<span class="go">     d     NaN</span>
+</pre></div>
+</div>
+<p>Pivot tables:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [124]: </span><span class="n">raw_cat</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">],</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">])</span>
+
+<span class="gp">In [125]: </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;A&quot;</span><span class="p">:</span><span class="n">raw_cat</span><span class="p">,</span><span class="s2">&quot;B&quot;</span><span class="p">:[</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;d&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;d&quot;</span><span class="p">],</span> <span class="s2">&quot;values&quot;</span><span class="p">:[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]})</span>
+
+<span class="gp">In [126]: </span><span class="n">pd</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s1">&#39;values&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">])</span>
+<span class="gh">Out[126]: </span><span class="go"></span>
+<span class="go">     values</span>
+<span class="go">A B        </span>
+<span class="go">a c     1.0</span>
+<span class="go">  d     2.0</span>
+<span class="go">b c     3.0</span>
+<span class="go">  d     4.0</span>
+<span class="go">c c     NaN</span>
+<span class="go">  d     NaN</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="data-munging">
+<h2>Data munging<a class="headerlink" href="#data-munging" title="Permalink to this headline">¶</a></h2>
+<p>The optimized pandas data access methods  <code class="docutils literal"><span class="pre">.loc</span></code>, <code class="docutils literal"><span class="pre">.iloc</span></code>, <code class="docutils literal"><span class="pre">.at</span></code>, and <code class="docutils literal"><span class="pre">.iat</span></code>,
+work as normal. The only difference is the return type (for getting) and
+that only values already in <cite>categories</cite> can be assigned.</p>
+<div class="section" id="getting">
+<h3>Getting<a class="headerlink" href="#getting" title="Permalink to this headline">¶</a></h3>
+<p>If the slicing operation returns either a <cite>DataFrame</cite> or a column of type <cite>Series</cite>,
+the <code class="docutils literal"><span class="pre">category</span></code> dtype is preserved.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [127]: </span><span class="n">idx</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">([</span><span class="s2">&quot;h&quot;</span><span class="p">,</span><span class="s2">&quot;i&quot;</span><span class="p">,</span><span class="s2">&quot;j&quot;</span><span class="p">,</span><span class="s2">&quot;k&quot;</span><span class="p">,</span><span class="s2">&quot;l&quot;</span><span class="p">,</span><span class="s2">&quot;m&quot;</span><span class="p">,</span><span class="s2">&quot;n&quot;</span><span class="p">,])</span>
+
+<span class="gp">In [128]: </span><span class="n">cats</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">idx</span><span class="p">)</span>
+
+<span class="gp">In [129]: </span><span class="n">values</span><span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+
+<span class="gp">In [130]: </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;cats&quot;</span><span class="p">:</span><span class="n">cats</span><span class="p">,</span><span class="s2">&quot;values&quot;</span><span class="p">:</span><span class="n">values</span><span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="n">idx</span><span class="p">)</span>
+
+<span class="gp">In [131]: </span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">,:]</span>
+<span class="gh">Out[131]: </span><span class="go"></span>
+<span class="go">  cats  values</span>
+<span class="go">j    b       2</span>
+<span class="go">k    b       2</span>
+
+<span class="gp">In [132]: </span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">,:]</span><span class="o">.</span><span class="n">dtypes</span>
+<span class="go">                                                        Out[132]: </span>
+<span class="go">cats      category</span>
+<span class="go">values       int64</span>
+<span class="go">dtype: object</span>
+
+<span class="gp">In [133]: </span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;h&quot;</span><span class="p">:</span><span class="s2">&quot;j&quot;</span><span class="p">,</span><span class="s2">&quot;cats&quot;</span><span class="p">]</span>
+<span class="go">                                                                                                                       Out[133]: </span>
+<span class="go">h    a</span>
+<span class="go">i    b</span>
+<span class="go">j    b</span>
+<span class="go">Name: cats, dtype: category</span>
+<span class="go">Categories (3, object): [a, b, c]</span>
+
+<span class="gp">In [134]: </span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;cats&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;b&quot;</span><span class="p">]</span>
+<span class="go">                                                                                                                                                                                                                     Out[134]: </span>
+<span class="go">  cats  values</span>
+<span class="go">i    b       2</span>
+<span class="go">j    b       2</span>
+<span class="go">k    b       2</span>
+</pre></div>
+</div>
+<p>An example where the category type is not preserved is if you take one single row: the
+resulting <cite>Series</cite> is of dtype <code class="docutils literal"><span class="pre">object</span></code>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="go"># get the complete &quot;h&quot; row as a Series</span>
+<span class="gp">In [135]: </span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="p">:]</span>
+<span class="gh">Out[135]: </span><span class="go"></span>
+<span class="go">cats      a</span>
+<span class="go">values    1</span>
+<span class="go">Name: h, dtype: object</span>
+</pre></div>
+</div>
+<p>Returning a single item from categorical data will also return the value, not a categorical
+of length &#8220;1&#8221;.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [136]: </span><span class="n">df</span><span class="o">.</span><span class="n">iat</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<span class="gh">Out[136]: </span><span class="go">&#39;a&#39;</span>
+
+<span class="gp">In [137]: </span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;cats&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span><span class="s2">&quot;y&quot;</span><span class="p">,</span><span class="s2">&quot;z&quot;</span><span class="p">]</span>
+
+<span class="gp">In [138]: </span><span class="n">df</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="s2">&quot;h&quot;</span><span class="p">,</span><span class="s2">&quot;cats&quot;</span><span class="p">]</span> <span class="c1"># returns a string</span>
+<span class="gh">Out[138]: </span><span class="go">&#39;x&#39;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is a difference to R&#8217;s <cite>factor</cite> function, where <code class="docutils literal"><span class="pre">factor(c(1,2,3))[1]</span></code>
+returns a single value <cite>factor</cite>.</p>
+</div>
+<p>To get a single value <cite>Series</cite> of type <code class="docutils literal"><span class="pre">category</span></code> pass in a list with a single value:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [139]: </span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="s2">&quot;h&quot;</span><span class="p">],</span><span class="s2">&quot;cats&quot;</span><span class="p">]</span>
+<span class="gh">Out[139]: </span><span class="go"></span>
+<span class="go">h    x</span>
+<span class="go">Name: cats, dtype: category</span>
+<span class="go">Categories (3, object): [x, y, z]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="string-and-datetime-accessors">
+<h3>String and datetime accessors<a class="headerlink" href="#string-and-datetime-accessors" title="Permalink to this headline">¶</a></h3>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.17.1.</span></p>
+</div>
+<p>The accessors  <code class="docutils literal"><span class="pre">.dt</span></code> and <code class="docutils literal"><span class="pre">.str</span></code> will work if the <code class="docutils literal"><span class="pre">s.cat.categories</span></code> are of an appropriate
+type:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [140]: </span><span class="n">str_s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="s1">&#39;aabb&#39;</span><span class="p">))</span>
+
+<span class="gp">In [141]: </span><span class="n">str_cat</span> <span class="o">=</span> <span class="n">str_s</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span>
+
+<span class="gp">In [142]: </span><span class="n">str_cat</span>
+<span class="gh">Out[142]: </span><span class="go"></span>
+<span class="go">0    a</span>
+<span class="go">1    a</span>
+<span class="go">2    b</span>
+<span class="go">3    b</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (2, object): [a, b]</span>
+
+<span class="gp">In [143]: </span><span class="n">str_cat</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<span class="go">                                                                                      Out[143]: </span>
+<span class="go">0     True</span>
+<span class="go">1     True</span>
+<span class="go">2    False</span>
+<span class="go">3    False</span>
+<span class="go">dtype: bool</span>
+
+<span class="gp">In [144]: </span><span class="n">date_s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="s1">&#39;1/1/2015&#39;</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="gp">In [145]: </span><span class="n">date_cat</span> <span class="o">=</span> <span class="n">date_s</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span>
+
+<span class="gp">In [146]: </span><span class="n">date_cat</span>
+<span class="gh">Out[146]: </span><span class="go"></span>
+<span class="go">0   2015-01-01</span>
+<span class="go">1   2015-01-02</span>
+<span class="go">2   2015-01-03</span>
+<span class="go">3   2015-01-04</span>
+<span class="go">4   2015-01-05</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (5, datetime64[ns]): [2015-01-01, 2015-01-02, 2015-01-03, 2015-01-04, 2015-01-05]</span>
+
+<span class="gp">In [147]: </span><span class="n">date_cat</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">day</span>
+<span class="go">                                                                                                                                                                                                   Out[147]: </span>
+<span class="go">0    1</span>
+<span class="go">1    2</span>
+<span class="go">2    3</span>
+<span class="go">3    4</span>
+<span class="go">4    5</span>
+<span class="go">dtype: int64</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The returned <code class="docutils literal"><span class="pre">Series</span></code> (or <code class="docutils literal"><span class="pre">DataFrame</span></code>) is of the same type as if you used the
+<code class="docutils literal"><span class="pre">.str.&lt;method&gt;</span></code> / <code class="docutils literal"><span class="pre">.dt.&lt;method&gt;</span></code> on a <code class="docutils literal"><span class="pre">Series</span></code> of that type (and not of
+type <code class="docutils literal"><span class="pre">category</span></code>!).</p>
+</div>
+<p>That means, that the returned values from methods and properties on the accessors of a
+<code class="docutils literal"><span class="pre">Series</span></code> and the returned values from methods and properties on the accessors of this
+<code class="docutils literal"><span class="pre">Series</span></code> transformed to one of type <cite>category</cite> will be equal:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [148]: </span><span class="n">ret_s</span> <span class="o">=</span> <span class="n">str_s</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+
+<span class="gp">In [149]: </span><span class="n">ret_cat</span> <span class="o">=</span> <span class="n">str_cat</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+
+<span class="gp">In [150]: </span><span class="n">ret_s</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">ret_cat</span><span class="o">.</span><span class="n">dtype</span>
+<span class="gh">Out[150]: </span><span class="go">True</span>
+
+<span class="gp">In [151]: </span><span class="n">ret_s</span> <span class="o">==</span> <span class="n">ret_cat</span>
+<span class="go">               Out[151]: </span>
+<span class="go">0    True</span>
+<span class="go">1    True</span>
+<span class="go">2    True</span>
+<span class="go">3    True</span>
+<span class="go">dtype: bool</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The work is done on the <code class="docutils literal"><span class="pre">categories</span></code> and then a new <code class="docutils literal"><span class="pre">Series</span></code> is constructed. This has
+some performance implication if you have a <code class="docutils literal"><span class="pre">Series</span></code> of type string, where lots of elements
+are repeated (i.e. the number of unique elements in the <code class="docutils literal"><span class="pre">Series</span></code> is a lot smaller than the
+length of the <code class="docutils literal"><span class="pre">Series</span></code>). In this case it can be faster to convert the original <code class="docutils literal"><span class="pre">Series</span></code>
+to one of type <code class="docutils literal"><span class="pre">category</span></code> and use <code class="docutils literal"><span class="pre">.str.&lt;method&gt;</span></code> or <code class="docutils literal"><span class="pre">.dt.&lt;property&gt;</span></code> on that.</p>
+</div>
+</div>
+<div class="section" id="setting">
+<h3>Setting<a class="headerlink" href="#setting" title="Permalink to this headline">¶</a></h3>
+<p>Setting values in a categorical column (or <cite>Series</cite>) works as long as the value is included in the
+<cite>categories</cite>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [152]: </span><span class="n">idx</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">([</span><span class="s2">&quot;h&quot;</span><span class="p">,</span><span class="s2">&quot;i&quot;</span><span class="p">,</span><span class="s2">&quot;j&quot;</span><span class="p">,</span><span class="s2">&quot;k&quot;</span><span class="p">,</span><span class="s2">&quot;l&quot;</span><span class="p">,</span><span class="s2">&quot;m&quot;</span><span class="p">,</span><span class="s2">&quot;n&quot;</span><span class="p">])</span>
+
+<span class="gp">In [153]: </span><span class="n">cats</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">],</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">])</span>
+
+<span class="gp">In [154]: </span><span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="gp">In [155]: </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;cats&quot;</span><span class="p">:</span><span class="n">cats</span><span class="p">,</span><span class="s2">&quot;values&quot;</span><span class="p">:</span><span class="n">values</span><span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="n">idx</span><span class="p">)</span>
+
+<span class="gp">In [156]: </span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">,:]</span> <span class="o">=</span> <span class="p">[[</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="mi">2</span><span class="p">]]</span>
+
+<span class="gp">In [157]: </span><span class="n">df</span>
+<span class="gh">Out[157]: </span><span class="go"></span>
+<span class="go">  cats  values</span>
+<span class="go">h    a       1</span>
+<span class="go">i    a       1</span>
+<span class="go">j    b       2</span>
+<span class="go">k    b       2</span>
+<span class="go">l    a       1</span>
+<span class="go">m    a       1</span>
+<span class="go">n    a       1</span>
+
+<span class="gp">In [158]: </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">   .....: </span>    <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">,:]</span> <span class="o">=</span> <span class="p">[[</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="mi">3</span><span class="p">]]</span>
+<span class="gp">   .....: </span><span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="gp">   .....: </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;ValueError: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+<span class="gp">   .....: </span>
+<span class="go">                                                                                                                                   ValueError: Cannot setitem on a Categorical with a new category, set the categories first</span>
+</pre></div>
+</div>
+<p>Setting values by assigning categorical data will also check that the <cite>categories</cite> match:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [159]: </span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;j&quot;</span><span class="p">:</span><span class="s2">&quot;k&quot;</span><span class="p">,</span><span class="s2">&quot;cats&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">],</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">])</span>
+
+<span class="gp">In [160]: </span><span class="n">df</span>
+<span class="gh">Out[160]: </span><span class="go"></span>
+<span class="go">  cats  values</span>
+<span class="go">h    a       1</span>
+<span class="go">i    a       1</span>
+<span class="go">j    a       2</span>
+<span class="go">k    a       2</span>
+<span class="go">l    a       1</span>
+<span class="go">m    a       1</span>
+<span class="go">n    a       1</span>
+
+<span class="gp">In [161]: </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">   .....: </span>    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;j&quot;</span><span class="p">:</span><span class="s2">&quot;k&quot;</span><span class="p">,</span><span class="s2">&quot;cats&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">],</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">])</span>
+<span class="gp">   .....: </span><span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="gp">   .....: </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;ValueError: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+<span class="gp">   .....: </span>
+<span class="go">                                                                                                                                   ValueError: Cannot set a Categorical with another, without identical categories</span>
+</pre></div>
+</div>
+<p>Assigning a <cite>Categorical</cite> to parts of a column of other types will use the values:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [162]: </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;b&quot;</span><span class="p">:[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">]})</span>
+
+<span class="gp">In [163]: </span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">],</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">])</span>
+
+<span class="gp">In [164]: </span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">],</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">])</span>
+
+<span class="gp">In [165]: </span><span class="n">df</span>
+<span class="gh">Out[165]: </span><span class="go"></span>
+<span class="go">   a  b</span>
+<span class="go">0  1  a</span>
+<span class="go">1  b  a</span>
+<span class="go">2  b  b</span>
+<span class="go">3  1  b</span>
+<span class="go">4  1  a</span>
+
+<span class="gp">In [166]: </span><span class="n">df</span><span class="o">.</span><span class="n">dtypes</span>
+<span class="go">                                                           Out[166]: </span>
+<span class="go">a    object</span>
+<span class="go">b    object</span>
+<span class="go">dtype: object</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="merging">
+<span id="categorical-merge"></span><h3>Merging<a class="headerlink" href="#merging" title="Permalink to this headline">¶</a></h3>
+<p>You can concat two <cite>DataFrames</cite> containing categorical data together,
+but the categories of these categoricals need to be the same:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [167]: </span><span class="n">cat</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">)</span>
+
+<span class="gp">In [168]: </span><span class="n">vals</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+
+<span class="gp">In [169]: </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;cats&quot;</span><span class="p">:</span><span class="n">cat</span><span class="p">,</span> <span class="s2">&quot;vals&quot;</span><span class="p">:</span><span class="n">vals</span><span class="p">})</span>
+
+<span class="gp">In [170]: </span><span class="n">res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span><span class="n">df</span><span class="p">])</span>
+
+<span class="gp">In [171]: </span><span class="n">res</span>
+<span class="gh">Out[171]: </span><span class="go"></span>
+<span class="go">  cats  vals</span>
+<span class="go">0    a     1</span>
+<span class="go">1    b     2</span>
+<span class="go">0    a     1</span>
+<span class="go">1    b     2</span>
+
+<span class="gp">In [172]: </span><span class="n">res</span><span class="o">.</span><span class="n">dtypes</span>
+<span class="go">                                                                            Out[172]: </span>
+<span class="go">cats    category</span>
+<span class="go">vals       int64</span>
+<span class="go">dtype: object</span>
+</pre></div>
+</div>
+<p>In this case the categories are not the same and so an error is raised:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [173]: </span><span class="n">df_different</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="gp">In [174]: </span><span class="n">df_different</span><span class="p">[</span><span class="s2">&quot;cats&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;d&quot;</span><span class="p">]</span>
+
+<span class="gp">In [175]: </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">   .....: </span>    <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span><span class="n">df_different</span><span class="p">])</span>
+<span class="gp">   .....: </span><span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="gp">   .....: </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;ValueError: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+<span class="gp">   .....: </span>
+</pre></div>
+</div>
+<p>The same applies to <code class="docutils literal"><span class="pre">df.append(df_different)</span></code>.</p>
+<p>See also the section on <a class="reference internal" href="merging.html#merging-dtypes"><span class="std std-ref">merge dtypes</span></a> for notes about preserving merge dtypes and performance.</p>
+</div>
+<div class="section" id="unioning">
+<span id="categorical-union"></span><h3>Unioning<a class="headerlink" href="#unioning" title="Permalink to this headline">¶</a></h3>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.19.0.</span></p>
+</div>
+<p>If you want to combine categoricals that do not necessarily have
+the same categories, the <code class="docutils literal"><span class="pre">union_categoricals</span></code> function will
+combine a list-like of categoricals. The new categories
+will be the union of the categories being combined.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [176]: </span><span class="kn">from</span> <span class="nn">pandas.api.types</span> <span class="kn">import</span> <span class="n">union_categoricals</span>
+
+<span class="gp">In [177]: </span><span class="n">a</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">])</span>
+
+<span class="gp">In [178]: </span><span class="n">b</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">])</span>
+
+<span class="gp">In [179]: </span><span class="n">union_categoricals</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">])</span>
+<span class="gh">Out[179]: </span><span class="go"></span>
+<span class="go">[b, c, a, b]</span>
+<span class="go">Categories (3, object): [b, c, a]</span>
+</pre></div>
+</div>
+<p>By default, the resulting categories will be ordered as
+they appear in the data. If you want the categories to
+be lexsorted, use <code class="docutils literal"><span class="pre">sort_categories=True</span></code> argument.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [180]: </span><span class="n">union_categoricals</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">],</span> <span class="n">sort_categories</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gh">Out[180]: </span><span class="go"></span>
+<span class="go">[b, c, a, b]</span>
+<span class="go">Categories (3, object): [a, b, c]</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">union_categoricals</span></code> also works with the &#8220;easy&#8221; case of combining two
+categoricals of the same categories and order information
+(e.g. what you could also <code class="docutils literal"><span class="pre">append</span></code> for).</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [181]: </span><span class="n">a</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="gp">In [182]: </span><span class="n">b</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="gp">In [183]: </span><span class="n">union_categoricals</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">])</span>
+<span class="gh">Out[183]: </span><span class="go"></span>
+<span class="go">[a, b, a, b, a]</span>
+<span class="go">Categories (2, object): [a &lt; b]</span>
+</pre></div>
+</div>
+<p>The below raises <code class="docutils literal"><span class="pre">TypeError</span></code> because the categories are ordered and not identical.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">a</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">In [2]: </span><span class="n">b</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">In [3]: </span><span class="n">union_categoricals</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">])</span>
+<span class="gh">Out[3]:</span>
+<span class="go">TypeError: to union ordered Categoricals, all categories must be the same</span>
+</pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.20.0.</span></p>
+</div>
+<p>Ordered categoricals with different categories or orderings can be combined by
+using the <code class="docutils literal"><span class="pre">ignore_ordered=True</span></code> argument.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [184]: </span><span class="n">a</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="gp">In [185]: </span><span class="n">b</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="gp">In [186]: </span><span class="n">union_categoricals</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">],</span> <span class="n">ignore_order</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gh">Out[186]: </span><span class="go"></span>
+<span class="go">[a, b, c, c, b, a]</span>
+<span class="go">Categories (3, object): [a, b, c]</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">union_categoricals</span></code> also works with a <code class="docutils literal"><span class="pre">CategoricalIndex</span></code>, or <code class="docutils literal"><span class="pre">Series</span></code> containing
+categorical data, but note that the resulting array will always be a plain <code class="docutils literal"><span class="pre">Categorical</span></code></p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [187]: </span><span class="n">a</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;category&#39;</span><span class="p">)</span>
+
+<span class="gp">In [188]: </span><span class="n">b</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;category&#39;</span><span class="p">)</span>
+
+<span class="gp">In [189]: </span><span class="n">union_categoricals</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">])</span>
+<span class="gh">Out[189]: </span><span class="go"></span>
+<span class="go">[b, c, a, b]</span>
+<span class="go">Categories (3, object): [b, c, a]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p><code class="docutils literal"><span class="pre">union_categoricals</span></code> may recode the integer codes for categories
+when combining categoricals.  This is likely what you want,
+but if you are relying on the exact numbering of the categories, be
+aware.</p>
+<div class="last highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [190]: </span><span class="n">c1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">])</span>
+
+<span class="gp">In [191]: </span><span class="n">c2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">])</span>
+
+<span class="gp">In [192]: </span><span class="n">c1</span>
+<span class="gh">Out[192]: </span><span class="go"></span>
+<span class="go">[b, c]</span>
+<span class="go">Categories (2, object): [b, c]</span>
+
+<span class="go"># &quot;b&quot; is coded to 0</span>
+<span class="gp">In [193]: </span><span class="n">c1</span><span class="o">.</span><span class="n">codes</span>
+<span class="go">                                                 Out[193]: array([0, 1], dtype=int8)</span>
+
+<span class="gp">In [194]: </span><span class="n">c2</span>
+<span class="go">                                                                                     Out[194]: </span>
+<span class="go">[a, b]</span>
+<span class="go">Categories (2, object): [a, b]</span>
+
+<span class="go"># &quot;b&quot; is coded to 1</span>
+<span class="gp">In [195]: </span><span class="n">c2</span><span class="o">.</span><span class="n">codes</span>
+<span class="go">                                                                                                                                      Out[195]: array([0, 1], dtype=int8)</span>
+
+<span class="gp">In [196]: </span><span class="n">c</span> <span class="o">=</span> <span class="n">union_categoricals</span><span class="p">([</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">])</span>
+
+<span class="gp">In [197]: </span><span class="n">c</span>
+<span class="gh">Out[197]: </span><span class="go"></span>
+<span class="go">[b, c, a, b]</span>
+<span class="go">Categories (3, object): [b, c, a]</span>
+
+<span class="go"># &quot;b&quot; is coded to 0 throughout, same as c1, different from c2</span>
+<span class="gp">In [198]: </span><span class="n">c</span><span class="o">.</span><span class="n">codes</span>
+<span class="go">                                                          Out[198]: array([0, 1, 2, 0], dtype=int8)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="concatenation">
+<span id="categorical-concat"></span><h3>Concatenation<a class="headerlink" href="#concatenation" title="Permalink to this headline">¶</a></h3>
+<p>This section describes concatenations specific to <code class="docutils literal"><span class="pre">category</span></code> dtype. See <a class="reference internal" href="merging.html#merging-concat"><span class="std std-ref">Concatenating objects</span></a> for general description.</p>
+<p>By default, <code class="docutils literal"><span class="pre">Series</span></code> or <code class="docutils literal"><span class="pre">DataFrame</span></code> concatenation which contains the same categories
+results in <code class="docutils literal"><span class="pre">category</span></code> dtype, otherwise results in <code class="docutils literal"><span class="pre">object</span></code> dtype.
+Use <code class="docutils literal"><span class="pre">.astype</span></code> or <code class="docutils literal"><span class="pre">union_categoricals</span></code> to get <code class="docutils literal"><span class="pre">category</span></code> result.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="go"># same categories</span>
+<span class="gp">In [199]: </span><span class="n">s1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;category&#39;</span><span class="p">)</span>
+
+<span class="gp">In [200]: </span><span class="n">s2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;category&#39;</span><span class="p">)</span>
+
+<span class="gp">In [201]: </span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">])</span>
+<span class="gh">Out[201]: </span><span class="go"></span>
+<span class="go">0    a</span>
+<span class="go">1    b</span>
+<span class="go">0    a</span>
+<span class="go">1    b</span>
+<span class="go">2    a</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (2, object): [a, b]</span>
+
+<span class="go"># different categories</span>
+<span class="gp">In [202]: </span><span class="n">s3</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;category&#39;</span><span class="p">)</span>
+
+<span class="gp">In [203]: </span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">s1</span><span class="p">,</span> <span class="n">s3</span><span class="p">])</span>
+<span class="gh">Out[203]: </span><span class="go"></span>
+<span class="go">0    a</span>
+<span class="go">1    b</span>
+<span class="go">0    b</span>
+<span class="go">1    c</span>
+<span class="go">dtype: object</span>
+
+<span class="gp">In [204]: </span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">s1</span><span class="p">,</span> <span class="n">s3</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span>
+<span class="go">                                                     Out[204]: </span>
+<span class="go">0    a</span>
+<span class="go">1    b</span>
+<span class="go">0    b</span>
+<span class="go">1    c</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (3, object): [a, b, c]</span>
+
+<span class="gp">In [205]: </span><span class="n">union_categoricals</span><span class="p">([</span><span class="n">s1</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">s3</span><span class="o">.</span><span class="n">values</span><span class="p">])</span>
+<span class="go">                                                                                                                                              Out[205]: </span>
+<span class="go">[a, b, b, c]</span>
+<span class="go">Categories (3, object): [a, b, c]</span>
+</pre></div>
+</div>
+<p>Following table summarizes the results of <code class="docutils literal"><span class="pre">Categoricals</span></code> related concatenations.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="60%" />
+<col width="30%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">arg1</th>
+<th class="head">arg2</th>
+<th class="head">result</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>category</td>
+<td>category (identical categories)</td>
+<td>category</td>
+</tr>
+<tr class="row-odd"><td>category</td>
+<td>category (different categories, both not ordered)</td>
+<td>object (dtype is inferred)</td>
+</tr>
+<tr class="row-even"><td>category</td>
+<td>category (different categories, either one is ordered)</td>
+<td>object (dtype is inferred)</td>
+</tr>
+<tr class="row-odd"><td>category</td>
+<td>not category</td>
+<td>object (dtype is inferred)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="getting-data-in-out">
+<h2>Getting Data In/Out<a class="headerlink" href="#getting-data-in-out" title="Permalink to this headline">¶</a></h2>
+<p>You can write data that contains <code class="docutils literal"><span class="pre">category</span></code> dtypes to a <code class="docutils literal"><span class="pre">HDFStore</span></code>.
+See <a class="reference internal" href="io.html#io-hdf5-categorical"><span class="std std-ref">here</span></a> for an example and caveats.</p>
+<p>It is also possible to write data to and reading data from <em>Stata</em> format files.
+See <a class="reference internal" href="io.html#io-stata-categorical"><span class="std std-ref">here</span></a> for an example and caveats.</p>
+<p>Writing to a CSV file will convert the data, effectively removing any information about the
+categorical (categories and ordering). So if you read back the CSV file you have to convert the
+relevant columns back to <cite>category</cite> and assign the right categories and categories ordering.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [206]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">]))</span>
+
+<span class="go"># rename the categories</span>
+<span class="gp">In [207]: </span><span class="n">s</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;very good&quot;</span><span class="p">,</span> <span class="s2">&quot;good&quot;</span><span class="p">,</span> <span class="s2">&quot;bad&quot;</span><span class="p">]</span>
+
+<span class="go"># reorder the categories and add missing categories</span>
+<span class="gp">In [208]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">set_categories</span><span class="p">([</span><span class="s2">&quot;very bad&quot;</span><span class="p">,</span> <span class="s2">&quot;bad&quot;</span><span class="p">,</span> <span class="s2">&quot;medium&quot;</span><span class="p">,</span> <span class="s2">&quot;good&quot;</span><span class="p">,</span> <span class="s2">&quot;very good&quot;</span><span class="p">])</span>
+
+<span class="gp">In [209]: </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;cats&quot;</span><span class="p">:</span><span class="n">s</span><span class="p">,</span> <span class="s2">&quot;vals&quot;</span><span class="p">:[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]})</span>
+
+<span class="gp">In [210]: </span><span class="n">csv</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">()</span>
+
+<span class="gp">In [211]: </span><span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">csv</span><span class="p">)</span>
+
+<span class="gp">In [212]: </span><span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="n">csv</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()))</span>
+
+<span class="gp">In [213]: </span><span class="n">df2</span><span class="o">.</span><span class="n">dtypes</span>
+<span class="gh">Out[213]: </span><span class="go"></span>
+<span class="go">Unnamed: 0     int64</span>
+<span class="go">cats          object</span>
+<span class="go">vals           int64</span>
+<span class="go">dtype: object</span>
+
+<span class="gp">In [214]: </span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;cats&quot;</span><span class="p">]</span>
+<span class="go">                                                                                        Out[214]: </span>
+<span class="go">0    very good</span>
+<span class="go">1         good</span>
+<span class="go">2         good</span>
+<span class="go">3    very good</span>
+<span class="go">4    very good</span>
+<span class="go">5          bad</span>
+<span class="go">Name: cats, dtype: object</span>
+
+<span class="go"># Redo the category</span>
+<span class="gp">In [215]: </span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;cats&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df2</span><span class="p">[</span><span class="s2">&quot;cats&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">)</span>
+
+<span class="gp">In [216]: </span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;cats&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">set_categories</span><span class="p">([</span><span class="s2">&quot;very bad&quot;</span><span class="p">,</span> <span class="s2">&quot;bad&quot;</span><span class="p">,</span> <span class="s2">&quot;medium&quot;</span><span class="p">,</span> <span class="s2">&quot;good&quot;</span><span class="p">,</span> <span class="s2">&quot;very good&quot;</span><span class="p">],</span>
+<span class="gp">   .....: </span>                               <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">   .....: </span>
+
+<span class="gp">In [217]: </span><span class="n">df2</span><span class="o">.</span><span class="n">dtypes</span>
+<span class="gh">Out[217]: </span><span class="go"></span>
+<span class="go">Unnamed: 0       int64</span>
+<span class="go">cats          category</span>
+<span class="go">vals             int64</span>
+<span class="go">dtype: object</span>
+
+<span class="gp">In [218]: </span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;cats&quot;</span><span class="p">]</span>
+<span class="go">                                                                                              Out[218]: </span>
+<span class="go">0    very good</span>
+<span class="go">1         good</span>
+<span class="go">2         good</span>
+<span class="go">3    very good</span>
+<span class="go">4    very good</span>
+<span class="go">5          bad</span>
+<span class="go">Name: cats, dtype: category</span>
+<span class="go">Categories (5, object): [very bad, bad, medium, good, very good]</span>
+</pre></div>
+</div>
+<p>The same holds for writing to a SQL database with <code class="docutils literal"><span class="pre">to_sql</span></code>.</p>
+</div>
+<div class="section" id="missing-data">
+<h2>Missing Data<a class="headerlink" href="#missing-data" title="Permalink to this headline">¶</a></h2>
+<p>pandas primarily uses the value <cite>np.nan</cite> to represent missing data. It is by
+default not included in computations. See the <a class="reference internal" href="missing_data.html#missing-data"><span class="std std-ref">Missing Data section</span></a>.</p>
+<p>Missing values should <strong>not</strong> be included in the Categorical&#8217;s <code class="docutils literal"><span class="pre">categories</span></code>,
+only in the <code class="docutils literal"><span class="pre">values</span></code>.
+Instead, it is understood that NaN is different, and is always a possibility.
+When working with the Categorical&#8217;s <code class="docutils literal"><span class="pre">codes</span></code>, missing values will always have
+a code of <code class="docutils literal"><span class="pre">-1</span></code>.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [219]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">)</span>
+
+<span class="go"># only two categories</span>
+<span class="gp">In [220]: </span><span class="n">s</span>
+<span class="gh">Out[220]: </span><span class="go"></span>
+<span class="go">0      a</span>
+<span class="go">1      b</span>
+<span class="go">2    NaN</span>
+<span class="go">3      a</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (2, object): [a, b]</span>
+
+<span class="gp">In [221]: </span><span class="n">s</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">codes</span>
+<span class="go">                                                                                              Out[221]: </span>
+<span class="go">0    0</span>
+<span class="go">1    1</span>
+<span class="go">2   -1</span>
+<span class="go">3    0</span>
+<span class="go">dtype: int8</span>
+</pre></div>
+</div>
+<p>Methods for working with missing data, e.g. <a class="reference internal" href="generated/pandas.Series.isna.html#pandas.Series.isna" title="pandas.Series.isna"><code class="xref py py-meth docutils literal"><span class="pre">isna()</span></code></a>, <a class="reference internal" href="generated/pandas.Series.fillna.html#pandas.Series.fillna" title="pandas.Series.fillna"><code class="xref py py-meth docutils literal"><span class="pre">fillna()</span></code></a>,
+<a class="reference internal" href="generated/pandas.Series.dropna.html#pandas.Series.dropna" title="pandas.Series.dropna"><code class="xref py py-meth docutils literal"><span class="pre">dropna()</span></code></a>, all work normally:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [222]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">)</span>
+
+<span class="gp">In [223]: </span><span class="n">s</span>
+<span class="gh">Out[223]: </span><span class="go"></span>
+<span class="go">0      a</span>
+<span class="go">1      b</span>
+<span class="go">2    NaN</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (2, object): [a, b]</span>
+
+<span class="gp">In [224]: </span><span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="go">                                                                                     Out[224]: </span>
+<span class="go">0    False</span>
+<span class="go">1    False</span>
+<span class="go">2     True</span>
+<span class="go">dtype: bool</span>
+
+<span class="gp">In [225]: </span><span class="n">s</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<span class="go">                                                                                                                                             Out[225]: </span>
+<span class="go">0    a</span>
+<span class="go">1    b</span>
+<span class="go">2    a</span>
+<span class="go">dtype: category</span>
+<span class="go">Categories (2, object): [a, b]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="differences-to-r-s-factor">
+<h2>Differences to R&#8217;s <cite>factor</cite><a class="headerlink" href="#differences-to-r-s-factor" title="Permalink to this headline">¶</a></h2>
+<p>The following differences to R&#8217;s factor functions can be observed:</p>
+<ul class="simple">
+<li>R&#8217;s <cite>levels</cite> are named <cite>categories</cite></li>
+<li>R&#8217;s <cite>levels</cite> are always of type string, while <cite>categories</cite> in pandas can be of any dtype.</li>
+<li>It&#8217;s not possible to specify labels at creation time. Use <code class="docutils literal"><span class="pre">s.cat.rename_categories(new_labels)</span></code>
+afterwards.</li>
+<li>In contrast to R&#8217;s <cite>factor</cite> function, using categorical data as the sole input to create a
+new categorical series will <em>not</em> remove unused categories but create a new categorical series
+which is equal to the passed in one!</li>
+<li>R allows for missing values to be included in its <cite>levels</cite> (pandas&#8217; <cite>categories</cite>). Pandas
+does not allow <cite>NaN</cite> categories, but missing values can still be in the <cite>values</cite>.</li>
+</ul>
+</div>
+<div class="section" id="gotchas">
+<h2>Gotchas<a class="headerlink" href="#gotchas" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="memory-usage">
+<span id="categorical-rfactor"></span><h3>Memory Usage<a class="headerlink" href="#memory-usage" title="Permalink to this headline">¶</a></h3>
+<p id="categorical-memory">The memory usage of a <code class="docutils literal"><span class="pre">Categorical</span></code> is proportional to the number of categories plus the length of the data. In contrast,
+an <code class="docutils literal"><span class="pre">object</span></code> dtype is a constant times the length of the data.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [226]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span><span class="s1">&#39;bar&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="go"># object dtype</span>
+<span class="gp">In [227]: </span><span class="n">s</span><span class="o">.</span><span class="n">nbytes</span>
+<span class="gh">Out[227]: </span><span class="go">16000</span>
+
+<span class="go"># category dtype</span>
+<span class="gp">In [228]: </span><span class="n">s</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">nbytes</span>
+<span class="go">                Out[228]: 2016</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>If the number of categories approaches the length of the data, the <code class="docutils literal"><span class="pre">Categorical</span></code> will use nearly the same or
+more memory than an equivalent <code class="docutils literal"><span class="pre">object</span></code> dtype representation.</p>
+<div class="last highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [229]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;foo</span><span class="si">%04d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2000</span><span class="p">)])</span>
+
+<span class="go"># object dtype</span>
+<span class="gp">In [230]: </span><span class="n">s</span><span class="o">.</span><span class="n">nbytes</span>
+<span class="gh">Out[230]: </span><span class="go">16000</span>
+
+<span class="go"># category dtype</span>
+<span class="gp">In [231]: </span><span class="n">s</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">nbytes</span>
+<span class="go">                Out[231]: 20000</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="categorical-is-not-a-numpy-array">
+<h3><cite>Categorical</cite> is not a <cite>numpy</cite> array<a class="headerlink" href="#categorical-is-not-a-numpy-array" title="Permalink to this headline">¶</a></h3>
+<p>Currently, categorical data and the underlying <cite>Categorical</cite> is implemented as a python
+object and not as a low-level <cite>numpy</cite> array dtype. This leads to some problems.</p>
+<p><cite>numpy</cite> itself doesn&#8217;t know about the new <cite>dtype</cite>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [232]: </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">   .....: </span>    <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">)</span>
+<span class="gp">   .....: </span><span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="gp">   .....: </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;TypeError: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+<span class="gp">   .....: </span>
+<span class="go">TypeError: data type &quot;category&quot; not understood</span>
+
+<span class="gp">In [233]: </span><span class="n">dtype</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">dtype</span>
+
+<span class="gp">In [234]: </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">   .....: </span>    <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+<span class="gp">   .....: </span><span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="gp">   .....: </span>     <span class="k">print</span><span class="p">(</span><span class="s2">&quot;TypeError: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+<span class="gp">   .....: </span>
+<span class="go">TypeError: data type not understood</span>
+</pre></div>
+</div>
+<p>Dtype comparisons work:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [235]: </span><span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">str_</span>
+<span class="gh">Out[235]: </span><span class="go">False</span>
+
+<span class="gp">In [236]: </span><span class="n">np</span><span class="o">.</span><span class="n">str_</span> <span class="o">==</span> <span class="n">dtype</span>
+<span class="go">                Out[236]: False</span>
+</pre></div>
+</div>
+<p>To check if a Series contains Categorical data, use <code class="docutils literal"><span class="pre">hasattr(s,</span> <span class="pre">'cat')</span></code>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [237]: </span><span class="nb">hasattr</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;category&#39;</span><span class="p">),</span> <span class="s1">&#39;cat&#39;</span><span class="p">)</span>
+<span class="gh">Out[237]: </span><span class="go">True</span>
+
+<span class="gp">In [238]: </span><span class="nb">hasattr</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">]),</span> <span class="s1">&#39;cat&#39;</span><span class="p">)</span>
+<span class="go">               Out[238]: False</span>
+</pre></div>
+</div>
+<p>Using <cite>numpy</cite> functions on a <cite>Series</cite> of type <code class="docutils literal"><span class="pre">category</span></code> should not work as <cite>Categoricals</cite>
+are not numeric data (even in the case that <code class="docutils literal"><span class="pre">.categories</span></code> is numeric).</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [239]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]))</span>
+
+<span class="gp">In [240]: </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">   .....: </span>    <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="gp">   .....: </span><span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="gp">   .....: </span>     <span class="k">print</span><span class="p">(</span><span class="s2">&quot;TypeError: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+<span class="gp">   .....: </span>
+<span class="go">TypeError: Categorical cannot perform the operation sum</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If such a function works, please file a bug at <a class="reference external" href="https://github.com/pandas-dev/pandas">https://github.com/pandas-dev/pandas</a>!</p>
+</div>
+</div>
+<div class="section" id="dtype-in-apply">
+<h3>dtype in apply<a class="headerlink" href="#dtype-in-apply" title="Permalink to this headline">¶</a></h3>
+<p>Pandas currently does not preserve the dtype in apply functions: If you apply along rows you get
+a <cite>Series</cite> of <code class="docutils literal"><span class="pre">object</span></code> <cite>dtype</cite> (same as getting a row -&gt; getting one element will return a
+basic type) and applying along columns will also convert to object.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [241]: </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span>
+<span class="gp">   .....: </span>                   <span class="s2">&quot;b&quot;</span><span class="p">:[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;d&quot;</span><span class="p">],</span>
+<span class="gp">   .....: </span>                   <span class="s2">&quot;cats&quot;</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">])})</span>
+<span class="gp">   .....: </span>
+
+<span class="gp">In [242]: </span><span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="nb">type</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;cats&quot;</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gh">Out[242]: </span><span class="go"></span>
+<span class="go">0    &lt;class &#39;int&#39;&gt;</span>
+<span class="go">1    &lt;class &#39;int&#39;&gt;</span>
+<span class="go">2    &lt;class &#39;int&#39;&gt;</span>
+<span class="go">3    &lt;class &#39;int&#39;&gt;</span>
+<span class="go">dtype: object</span>
+
+<span class="gp">In [243]: </span><span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">col</span><span class="p">:</span> <span class="n">col</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">                                                                                                     Out[243]: </span>
+<span class="go">a       object</span>
+<span class="go">b       object</span>
+<span class="go">cats    object</span>
+<span class="go">dtype: object</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="categorical-index">
+<h3>Categorical Index<a class="headerlink" href="#categorical-index" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">CategoricalIndex</span></code> is a type of index that is useful for supporting
+indexing with duplicates. This is a container around a <code class="docutils literal"><span class="pre">Categorical</span></code>
+and allows efficient indexing and storage of an index with a large number of duplicated elements.
+See the <a class="reference internal" href="advanced.html#indexing-categoricalindex"><span class="std std-ref">advanced indexing docs</span></a> for a more detailed
+explanation.</p>
+<p>Setting the index will create a <code class="docutils literal"><span class="pre">CategoricalIndex</span></code></p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [244]: </span><span class="n">cats</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="gp">In [245]: </span><span class="n">strings</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;d&quot;</span><span class="p">]</span>
+
+<span class="gp">In [246]: </span><span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="gp">In [247]: </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;strings&quot;</span><span class="p">:</span><span class="n">strings</span><span class="p">,</span> <span class="s2">&quot;values&quot;</span><span class="p">:</span><span class="n">values</span><span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="n">cats</span><span class="p">)</span>
+
+<span class="gp">In [248]: </span><span class="n">df</span><span class="o">.</span><span class="n">index</span>
+<span class="gh">Out[248]: </span><span class="go">CategoricalIndex([1, 2, 3, 4], categories=[4, 2, 3, 1], ordered=False, dtype=&#39;category&#39;)</span>
+
+<span class="go"># This now sorts by the categories order</span>
+<span class="gp">In [249]: </span><span class="n">df</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
+<span class="go">                                                                                                   Out[249]: </span>
+<span class="go">  strings  values</span>
+<span class="go">4       d       1</span>
+<span class="go">2       b       2</span>
+<span class="go">3       c       3</span>
+<span class="go">1       a       4</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="side-effects">
+<h3>Side Effects<a class="headerlink" href="#side-effects" title="Permalink to this headline">¶</a></h3>
+<p>Constructing a <cite>Series</cite> from a <cite>Categorical</cite> will not copy the input <cite>Categorical</cite>. This
+means that changes to the <cite>Series</cite> will in most cases change the original <cite>Categorical</cite>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [250]: </span><span class="n">cat</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">10</span><span class="p">],</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">10</span><span class="p">])</span>
+
+<span class="gp">In [251]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">cat</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;cat&quot;</span><span class="p">)</span>
+
+<span class="gp">In [252]: </span><span class="n">cat</span>
+<span class="gh">Out[252]: </span><span class="go"></span>
+<span class="go">[1, 2, 3, 10]</span>
+<span class="go">Categories (5, int64): [1, 2, 3, 4, 10]</span>
+
+<span class="gp">In [253]: </span><span class="n">s</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="gp">In [254]: </span><span class="n">cat</span>
+<span class="gh">Out[254]: </span><span class="go"></span>
+<span class="go">[10, 10, 3, 10]</span>
+<span class="go">Categories (5, int64): [1, 2, 3, 4, 10]</span>
+
+<span class="gp">In [255]: </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+<span class="gp">In [256]: </span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;cat&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+
+<span class="gp">In [257]: </span><span class="n">cat</span>
+<span class="gh">Out[257]: </span><span class="go"></span>
+<span class="go">[5, 5, 3, 5]</span>
+<span class="go">Categories (5, int64): [1, 2, 3, 4, 5]</span>
+</pre></div>
+</div>
+<p>Use <code class="docutils literal"><span class="pre">copy=True</span></code> to prevent such a behaviour or simply don&#8217;t reuse <cite>Categoricals</cite>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [258]: </span><span class="n">cat</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">10</span><span class="p">],</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">10</span><span class="p">])</span>
+
+<span class="gp">In [259]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">cat</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;cat&quot;</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="gp">In [260]: </span><span class="n">cat</span>
+<span class="gh">Out[260]: </span><span class="go"></span>
+<span class="go">[1, 2, 3, 10]</span>
+<span class="go">Categories (5, int64): [1, 2, 3, 4, 10]</span>
+
+<span class="gp">In [261]: </span><span class="n">s</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="gp">In [262]: </span><span class="n">cat</span>
+<span class="gh">Out[262]: </span><span class="go"></span>
+<span class="go">[1, 2, 3, 10]</span>
+<span class="go">Categories (5, int64): [1, 2, 3, 4, 10]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This also happens in some cases when you supply a <cite>numpy</cite> array instead of a <cite>Categorical</cite>:
+using an int array (e.g. <code class="docutils literal"><span class="pre">np.array([1,2,3,4])</span></code>) will exhibit the same behaviour, while using
+a string array (e.g. <code class="docutils literal"><span class="pre">np.array([&quot;a&quot;,&quot;b&quot;,&quot;c&quot;,&quot;a&quot;])</span></code>) will not.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="clearer"></div>
+        </div>
+    </div>
+</div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="visualization.html" title="Visualization"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="timedeltas.html" title="Time Deltas"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pandas 0.22.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+<style type="text/css">
+    .scrollToTop {
+        text-align: center;
+        font-weight: bold;
+        position: fixed;
+        bottom: 60px;
+        right: 40px;
+        display: none;
+    }
+</style>
+<a href="#" class="scrollToTop">Scroll To Top</a>
+<script type="text/javascript">
+$(document).ready(function() {
+    //Check to see if the window is top if not then display button
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 200) {
+            $('.scrollToTop').fadeIn();
+        } else {
+            $('.scrollToTop').fadeOut();
+        }
+    });
+
+    //Click event to scroll to top
+    $('.scrollToTop').click(function() {
+        $('html, body').animate({
+            scrollTop: 0
+        }, 500);
+        return false;
+    });
+});
+</script>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27880019-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </body>
+</html>

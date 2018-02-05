@@ -1,0 +1,323 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pandas.api.types.is_extension_type &#8212; pandas 0.22.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.22.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pandas.api.types.is_float_dtype" href="pandas.api.types.is_float_dtype.html" />
+    <link rel="prev" title="pandas.api.types.is_datetime64tz_dtype" href="pandas.api.types.is_datetime64tz_dtype.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pandas.api.types.is_float_dtype.html" title="pandas.api.types.is_float_dtype"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pandas.api.types.is_datetime64tz_dtype.html" title="pandas.api.types.is_datetime64tz_dtype"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pandas 0.22.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" accesskey="U">API Reference</a> &#187;</li> 
+      </ul>
+    </div>
+<div class="content-wrapper">
+    <div class="content">
+        <div class="document">
+            <div class="sphinxsidebar">
+                <h3>Table Of Contents</h3>
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew.html">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Package overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../10min.html">10 Minutes to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dsintro.html">Intro to Data Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basics.html">Essential Basic Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text.html">Working with Text Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../options.html">Options and Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indexing.html">Indexing and Selecting Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced.html">MultiIndex / Advanced Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../computation.html">Computational tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../missing_data.html">Working with missing data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../groupby.html">Group By: split-apply-combine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../merging.html">Merge, join, and concatenate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reshaping.html">Reshaping and Pivot Tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timeseries.html">Time Series / Date functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timedeltas.html">Time Deltas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../categorical.html">Categorical Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../style.html">Styling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io.html">IO Tools (Text, CSV, HDF5, ...)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../remote_data.html">Remote Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enhancingperf.html">Enhancing Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sparse.html">Sparse data structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gotchas.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../r_interface.html">rpy2 / R interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ecosystem.html">pandas Ecosystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_r.html">Comparison with R / R libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_sql.html">Comparison with SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_sas.html">Comparison with SAS</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#input-output">Input/Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#general-functions">General functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#series">Series</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#dataframe">DataFrame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#panel">Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#index">Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#numeric-index">Numeric Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#categoricalindex">CategoricalIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#intervalindex">IntervalIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#multiindex">MultiIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#datetimeindex">DatetimeIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#timedeltaindex">TimedeltaIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#periodindex">PeriodIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#scalars">Scalars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#window">Window</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#groupby">GroupBy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#resampling">Resampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#style">Style</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#general-utility-functions">General utility functions</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../api.html#working-with-options">Working with options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#testing-functions">Testing functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#exceptions-and-warnings">Exceptions and warnings</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../api.html#data-types-related-functionality">Data types related functionality</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.union_categoricals.html">pandas.api.types.union_categoricals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.infer_dtype.html">pandas.api.types.infer_dtype</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.pandas_dtype.html">pandas.api.types.pandas_dtype</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_bool_dtype.html">pandas.api.types.is_bool_dtype</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_categorical_dtype.html">pandas.api.types.is_categorical_dtype</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_complex_dtype.html">pandas.api.types.is_complex_dtype</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_datetime64_any_dtype.html">pandas.api.types.is_datetime64_any_dtype</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_datetime64_dtype.html">pandas.api.types.is_datetime64_dtype</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_datetime64_ns_dtype.html">pandas.api.types.is_datetime64_ns_dtype</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_datetime64tz_dtype.html">pandas.api.types.is_datetime64tz_dtype</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pandas.api.types.is_extension_type</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_float_dtype.html">pandas.api.types.is_float_dtype</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_int64_dtype.html">pandas.api.types.is_int64_dtype</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_integer_dtype.html">pandas.api.types.is_integer_dtype</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_interval_dtype.html">pandas.api.types.is_interval_dtype</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_numeric_dtype.html">pandas.api.types.is_numeric_dtype</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_object_dtype.html">pandas.api.types.is_object_dtype</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_period_dtype.html">pandas.api.types.is_period_dtype</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_signed_integer_dtype.html">pandas.api.types.is_signed_integer_dtype</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_string_dtype.html">pandas.api.types.is_string_dtype</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_timedelta64_dtype.html">pandas.api.types.is_timedelta64_dtype</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_timedelta64_ns_dtype.html">pandas.api.types.is_timedelta64_ns_dtype</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_unsigned_integer_dtype.html">pandas.api.types.is_unsigned_integer_dtype</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_sparse.html">pandas.api.types.is_sparse</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_dict_like.html">pandas.api.types.is_dict_like</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_file_like.html">pandas.api.types.is_file_like</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_list_like.html">pandas.api.types.is_list_like</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_named_tuple.html">pandas.api.types.is_named_tuple</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_iterator.html">pandas.api.types.is_iterator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_bool.html">pandas.api.types.is_bool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_categorical.html">pandas.api.types.is_categorical</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_complex.html">pandas.api.types.is_complex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_datetimetz.html">pandas.api.types.is_datetimetz</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_float.html">pandas.api.types.is_float</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_hashable.html">pandas.api.types.is_hashable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_integer.html">pandas.api.types.is_integer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_interval.html">pandas.api.types.is_interval</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_number.html">pandas.api.types.is_number</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_period.html">pandas.api.types.is_period</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_re.html">pandas.api.types.is_re</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_re_compilable.html">pandas.api.types.is_re_compilable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.api.types.is_scalar.html">pandas.api.types.is_scalar</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developer.html">Developer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../internals.html">Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release Notes</a></li>
+</ul>
+
+                <h3 style="margin-top: 1.5em;">Search</h3>
+
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18"/>
+                    <input type="submit" value="Go"/>
+                    <input type="hidden" name="check_keywords" value="yes"/>
+                    <input type="hidden" name="area" value="default"/>
+                </form>
+                <p class="searchtip" style="font-size: 90%">
+                    Enter search terms or a module, class or function name.
+                </p>
+
+            </div>
+             
+            <div class="documentwrapper">
+                <div class="bodywrapper">
+                    <div class="body">
+                        
+  <div class="section" id="pandas-api-types-is-extension-type">
+<h1>pandas.api.types.is_extension_type<a class="headerlink" href="#pandas-api-types-is-extension-type" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pandas.api.types.is_extension_type">
+<code class="descclassname">pandas.api.types.</code><code class="descname">is_extension_type</code><span class="sig-paren">(</span><em>arr</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/pandas-dev/pandas/blob/v0.22.0/pandas/core/dtypes/common.py#L1596-L1652"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pandas.api.types.is_extension_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether an array-like is of a pandas extension class instance.</p>
+<p>Extension classes include categoricals, pandas sparse objects (i.e.
+classes represented within the pandas library and not ones external
+to it like scipy sparse matrices), and datetime-like arrays.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>arr</strong> : array-like</p>
+<blockquote>
+<div><p>The array-like to check.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>boolean</strong> : Whether or not the array-like is of a pandas</p>
+<blockquote class="last">
+<div><p>extension class instance.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">is_extension_type</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_extension_type</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]))</span>
+<span class="go">False</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cat</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_extension_type</span><span class="p">(</span><span class="n">cat</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_extension_type</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">cat</span><span class="p">))</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_extension_type</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">SparseArray</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]))</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_extension_type</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">SparseSeries</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]))</span>
+<span class="go">True</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">bsr_matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_extension_type</span><span class="p">(</span><span class="n">bsr_matrix</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]))</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_extension_type</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]))</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_extension_type</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">tz</span><span class="o">=</span><span class="s2">&quot;US/Eastern&quot;</span><span class="p">))</span>
+<span class="go">True</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dtype</span> <span class="o">=</span> <span class="n">DatetimeTZDtype</span><span class="p">(</span><span class="s2">&quot;ns&quot;</span><span class="p">,</span> <span class="n">tz</span><span class="o">=</span><span class="s2">&quot;US/Eastern&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_extension_type</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="clearer"></div>
+        </div>
+    </div>
+</div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pandas.api.types.is_float_dtype.html" title="pandas.api.types.is_float_dtype"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pandas.api.types.is_datetime64tz_dtype.html" title="pandas.api.types.is_datetime64tz_dtype"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pandas 0.22.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API Reference</a> &#187;</li> 
+      </ul>
+    </div>
+<style type="text/css">
+    .scrollToTop {
+        text-align: center;
+        font-weight: bold;
+        position: fixed;
+        bottom: 60px;
+        right: 40px;
+        display: none;
+    }
+</style>
+<a href="#" class="scrollToTop">Scroll To Top</a>
+<script type="text/javascript">
+$(document).ready(function() {
+    //Check to see if the window is top if not then display button
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 200) {
+            $('.scrollToTop').fadeIn();
+        } else {
+            $('.scrollToTop').fadeOut();
+        }
+    });
+
+    //Click event to scroll to top
+    $('.scrollToTop').click(function() {
+        $('html, body').animate({
+            scrollTop: 0
+        }, 500);
+        return false;
+    });
+});
+</script>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27880019-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </body>
+</html>

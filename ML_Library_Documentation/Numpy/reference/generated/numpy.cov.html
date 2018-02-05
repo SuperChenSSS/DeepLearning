@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.cov &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="Statistics" href="../routines.statistics.html" >
+    <link rel="next" title="numpy.histogram" href="numpy.histogram.html" >
+    <link rel="prev" title="numpy.correlate" href="numpy.correlate.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.statistics.html" accesskey="U">Statistics</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.histogram.html" title="numpy.histogram"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.correlate.html" title="numpy.correlate"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.correlate.html"
+                        title="previous chapter">numpy.correlate</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.histogram.html"
+                        title="next chapter">numpy.histogram</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-cov">
+<h1>numpy.cov<a class="headerlink" href="#numpy-cov" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="numpy.cov">
+<code class="descclassname">numpy.</code><code class="descname">cov</code><span class="sig-paren">(</span><em>m</em>, <em>y=None</em>, <em>rowvar=True</em>, <em>bias=False</em>, <em>ddof=None</em>, <em>fweights=None</em>, <em>aweights=None</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/numpy/numpy/blob/v1.14.0/numpy/lib/function_base.py#L2904-L3110"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy.cov" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate a covariance matrix, given data and weights.</p>
+<p>Covariance indicates the level to which two variables vary together.
+If we examine N-dimensional samples, <img class="math" src="../../_images/math/b3ab85e218058b4c30da2e0a11924c92136f0aa6.svg" alt="X = [x_1, x_2, ... x_N]^T"/>,
+then the covariance matrix element <img class="math" src="../../_images/math/4ed77223efc2c4d9753baa716e137897ded9d6a6.svg" alt="C_{ij}"/> is the covariance of
+<img class="math" src="../../_images/math/7720e563212e11bf72de255ab82c2a3b97c1a7f5.svg" alt="x_i"/> and <img class="math" src="../../_images/math/bdb2d04d69b82c2288f5ef46664d548355e130af.svg" alt="x_j"/>. The element <img class="math" src="../../_images/math/559d3e41d69c86f7dcb2ad7d0adbdb43d00ad259.svg" alt="C_{ii}"/> is the variance
+of <img class="math" src="../../_images/math/7720e563212e11bf72de255ab82c2a3b97c1a7f5.svg" alt="x_i"/>.</p>
+<p>See the notes for an outline of the algorithm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>m</strong> : array_like</p>
+<blockquote>
+<div><p>A 1-D or 2-D array containing multiple variables and observations.
+Each row of <em class="xref py py-obj">m</em> represents a variable, and each column a single
+observation of all those variables. Also see <em class="xref py py-obj">rowvar</em> below.</p>
+</div></blockquote>
+<p><strong>y</strong> : array_like, optional</p>
+<blockquote>
+<div><p>An additional set of variables and observations. <em class="xref py py-obj">y</em> has the same form
+as that of <em class="xref py py-obj">m</em>.</p>
+</div></blockquote>
+<p><strong>rowvar</strong> : bool, optional</p>
+<blockquote>
+<div><p>If <em class="xref py py-obj">rowvar</em> is True (default), then each row represents a
+variable, with observations in the columns. Otherwise, the relationship
+is transposed: each column represents a variable, while the rows
+contain observations.</p>
+</div></blockquote>
+<p><strong>bias</strong> : bool, optional</p>
+<blockquote>
+<div><p>Default normalization (False) is by <code class="docutils literal"><span class="pre">(N</span> <span class="pre">-</span> <span class="pre">1)</span></code>, where <code class="docutils literal"><span class="pre">N</span></code> is the
+number of observations given (unbiased estimate). If <em class="xref py py-obj">bias</em> is True,
+then normalization is by <code class="docutils literal"><span class="pre">N</span></code>. These values can be overridden by using
+the keyword <code class="docutils literal"><span class="pre">ddof</span></code> in numpy versions &gt;= 1.5.</p>
+</div></blockquote>
+<p><strong>ddof</strong> : int, optional</p>
+<blockquote>
+<div><p>If not <code class="docutils literal"><span class="pre">None</span></code> the default value implied by <em class="xref py py-obj">bias</em> is overridden.
+Note that <code class="docutils literal"><span class="pre">ddof=1</span></code> will return the unbiased estimate, even if both
+<em class="xref py py-obj">fweights</em> and <em class="xref py py-obj">aweights</em> are specified, and <code class="docutils literal"><span class="pre">ddof=0</span></code> will return
+the simple average. See the notes for the details. The default value
+is <code class="docutils literal"><span class="pre">None</span></code>.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.5.</span></p>
+</div>
+</div></blockquote>
+<p><strong>fweights</strong> : array_like, int, optional</p>
+<blockquote>
+<div><p>1-D array of integer freguency weights; the number of times each
+observation vector should be repeated.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.10.</span></p>
+</div>
+</div></blockquote>
+<p><strong>aweights</strong> : array_like, optional</p>
+<blockquote>
+<div><p>1-D array of observation vector weights. These relative weights are
+typically large for observations considered &#8220;important&#8221; and smaller for
+observations considered less &#8220;important&#8221;. If <code class="docutils literal"><span class="pre">ddof=0</span></code> the array of
+weights can be used to assign probabilities to observation vectors.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.10.</span></p>
+</div>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>The covariance matrix of the variables.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="numpy.corrcoef.html#numpy.corrcoef" title="numpy.corrcoef"><code class="xref py py-obj docutils literal"><span class="pre">corrcoef</span></code></a></dt>
+<dd>Normalized covariance matrix</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>Assume that the observations are in the columns of the observation
+array <em class="xref py py-obj">m</em> and let <code class="docutils literal"><span class="pre">f</span> <span class="pre">=</span> <span class="pre">fweights</span></code> and <code class="docutils literal"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">aweights</span></code> for brevity. The
+steps to compute the weighted covariance are as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">f</span> <span class="o">*</span> <span class="n">a</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">m</span> <span class="o">*</span> <span class="n">w</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">/</span> <span class="n">v1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">m</span> <span class="o">*</span> <span class="n">w</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">*</span> <span class="n">v1</span> <span class="o">/</span> <span class="p">(</span><span class="n">v1</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">ddof</span> <span class="o">*</span> <span class="n">v2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that when <code class="docutils literal"><span class="pre">a</span> <span class="pre">==</span> <span class="pre">1</span></code>, the normalization factor
+<code class="docutils literal"><span class="pre">v1</span> <span class="pre">/</span> <span class="pre">(v1**2</span> <span class="pre">-</span> <span class="pre">ddof</span> <span class="pre">*</span> <span class="pre">v2)</span></code> goes over to <code class="docutils literal"><span class="pre">1</span> <span class="pre">/</span> <span class="pre">(np.sum(f)</span> <span class="pre">-</span> <span class="pre">ddof)</span></code>
+as it should.</p>
+<p class="rubric">Examples</p>
+<p>Consider two variables, <img class="math" src="../../_images/math/307e583980f527b3f26e1e159435e0a8d262736b.svg" alt="x_0"/> and <img class="math" src="../../_images/math/fdf6501bec5987984965f15d09235c645fe06ccb.svg" alt="x_1"/>, which
+correlate perfectly, but in opposite directions:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span><span class="o">.</span><span class="n">T</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+<span class="go">array([[0, 1, 2],</span>
+<span class="go">       [2, 1, 0]])</span>
+</pre></div>
+</div>
+<p>Note how <img class="math" src="../../_images/math/307e583980f527b3f26e1e159435e0a8d262736b.svg" alt="x_0"/> increases while <img class="math" src="../../_images/math/fdf6501bec5987984965f15d09235c645fe06ccb.svg" alt="x_1"/> decreases. The covariance
+matrix shows this clearly:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">array([[ 1., -1.],</span>
+<span class="go">       [-1.,  1.]])</span>
+</pre></div>
+</div>
+<p>Note that element <img class="math" src="../../_images/math/495bbd585c230cf7bec09029cf05dfe3af27a9b4.svg" alt="C_{0,1}"/>, which shows the correlation between
+<img class="math" src="../../_images/math/307e583980f527b3f26e1e159435e0a8d262736b.svg" alt="x_0"/> and <img class="math" src="../../_images/math/fdf6501bec5987984965f15d09235c645fe06ccb.svg" alt="x_1"/>, is negative.</p>
+<p>Further, note how <em class="xref py py-obj">x</em> and <em class="xref py py-obj">y</em> are combined:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">2.1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="mf">4.3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span>  <span class="mf">1.1</span><span class="p">,</span>  <span class="mf">0.12</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+<span class="go">[[ 11.71        -4.286     ]</span>
+<span class="go"> [ -4.286        2.14413333]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+<span class="go">[[ 11.71        -4.286     ]</span>
+<span class="go"> [ -4.286        2.14413333]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="go">11.71</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

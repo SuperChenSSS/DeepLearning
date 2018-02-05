@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.polynomial.hermite.Hermite &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="Hermite Module, “Physicists’” (numpy.polynomial.hermite)" href="../routines.polynomials.hermite.html" >
+    <link rel="next" title="numpy.polynomial.hermite.Hermite.__call__" href="numpy.polynomial.hermite.Hermite.__call__.html" >
+    <link rel="prev" title="Hermite Module, “Physicists’” (numpy.polynomial.hermite)" href="../routines.polynomials.hermite.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.polynomials.html" >Polynomials</a></li>
+          <li class="active"><a href="../routines.polynomials.package.html" >Polynomial Package</a></li>
+          <li class="active"><a href="../routines.polynomials.hermite.html" accesskey="U">Hermite Module, &#8220;Physicists&#8217;&#8221; (<code class="docutils literal"><span class="pre">numpy.polynomial.hermite</span></code>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.polynomial.hermite.Hermite.__call__.html" title="numpy.polynomial.hermite.Hermite.__call__"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../routines.polynomials.hermite.html" title="Hermite Module, “Physicists’” (numpy.polynomial.hermite)"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../routines.polynomials.hermite.html"
+                        title="previous chapter">Hermite Module, &#8220;Physicists&#8217;&#8221; (<code class="docutils literal"><span class="pre">numpy.polynomial.hermite</span></code>)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.polynomial.hermite.Hermite.__call__.html"
+                        title="next chapter">numpy.polynomial.hermite.Hermite.__call__</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-polynomial-hermite-hermite">
+<h1>numpy.polynomial.hermite.Hermite<a class="headerlink" href="#numpy-polynomial-hermite-hermite" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="numpy.polynomial.hermite.Hermite">
+<em class="property">class </em><code class="descclassname">numpy.polynomial.hermite.</code><code class="descname">Hermite</code><span class="sig-paren">(</span><em>coef</em>, <em>domain=None</em>, <em>window=None</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/numpy/numpy/blob/v1.14.0/numpy/polynomial/hermite.py#L1814-L1853"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy.polynomial.hermite.Hermite" title="Permalink to this definition">¶</a></dt>
+<dd><p>An Hermite series class.</p>
+<p>The Hermite class provides the standard Python numerical methods
+&#8216;+&#8217;, &#8216;-&#8216;, &#8216;*&#8217;, &#8216;//&#8217;, &#8216;%&#8217;, &#8216;divmod&#8217;, &#8216;**&#8217;, and &#8216;()&#8217; as well as the
+attributes and methods listed in the <code class="xref py py-obj docutils literal"><span class="pre">ABCPolyBase</span></code> documentation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coef</strong> : array_like</p>
+<blockquote>
+<div><p>Hermite coefficients in order of increasing degree, i.e,
+<code class="docutils literal"><span class="pre">(1,</span> <span class="pre">2,</span> <span class="pre">3)</span></code> gives <code class="docutils literal"><span class="pre">1*H_0(x)</span> <span class="pre">+</span> <span class="pre">2*H_1(X)</span> <span class="pre">+</span> <span class="pre">3*H_2(x)</span></code>.</p>
+</div></blockquote>
+<p><strong>domain</strong> : (2,) array_like, optional</p>
+<blockquote>
+<div><p>Domain to use. The interval <code class="docutils literal"><span class="pre">[domain[0],</span> <span class="pre">domain[1]]</span></code> is mapped
+to the interval <code class="docutils literal"><span class="pre">[window[0],</span> <span class="pre">window[1]]</span></code> by shifting and scaling.
+The default value is [-1, 1].</p>
+</div></blockquote>
+<p><strong>window</strong> : (2,) array_like, optional</p>
+<blockquote class="last">
+<div><p>Window, see <a class="reference internal" href="numpy.polynomial.hermite.Hermite.domain.html#numpy.polynomial.hermite.Hermite.domain" title="numpy.polynomial.hermite.Hermite.domain"><code class="xref py py-obj docutils literal"><span class="pre">domain</span></code></a> for its use. The default value is [-1, 1].</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.6.0.</span></p>
+</div>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="numpy.polynomial.hermite.Hermite.__call__.html#numpy.polynomial.hermite.Hermite.__call__" title="numpy.polynomial.hermite.Hermite.__call__"><code class="xref py py-obj docutils literal"><span class="pre">__call__</span></code></a>(arg)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.polynomial.hermite.Hermite.basis.html#numpy.polynomial.hermite.Hermite.basis" title="numpy.polynomial.hermite.Hermite.basis"><code class="xref py py-obj docutils literal"><span class="pre">basis</span></code></a>(deg[,&nbsp;domain,&nbsp;window])</td>
+<td>Series basis polynomial of degree <em class="xref py py-obj">deg</em>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.polynomial.hermite.Hermite.cast.html#numpy.polynomial.hermite.Hermite.cast" title="numpy.polynomial.hermite.Hermite.cast"><code class="xref py py-obj docutils literal"><span class="pre">cast</span></code></a>(series[,&nbsp;domain,&nbsp;window])</td>
+<td>Convert series to series of this class.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.polynomial.hermite.Hermite.convert.html#numpy.polynomial.hermite.Hermite.convert" title="numpy.polynomial.hermite.Hermite.convert"><code class="xref py py-obj docutils literal"><span class="pre">convert</span></code></a>([domain,&nbsp;kind,&nbsp;window])</td>
+<td>Convert series to a different kind and/or domain and/or window.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.polynomial.hermite.Hermite.copy.html#numpy.polynomial.hermite.Hermite.copy" title="numpy.polynomial.hermite.Hermite.copy"><code class="xref py py-obj docutils literal"><span class="pre">copy</span></code></a>()</td>
+<td>Return a copy.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.polynomial.hermite.Hermite.cutdeg.html#numpy.polynomial.hermite.Hermite.cutdeg" title="numpy.polynomial.hermite.Hermite.cutdeg"><code class="xref py py-obj docutils literal"><span class="pre">cutdeg</span></code></a>(deg)</td>
+<td>Truncate series to the given degree.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.polynomial.hermite.Hermite.degree.html#numpy.polynomial.hermite.Hermite.degree" title="numpy.polynomial.hermite.Hermite.degree"><code class="xref py py-obj docutils literal"><span class="pre">degree</span></code></a>()</td>
+<td>The degree of the series.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.polynomial.hermite.Hermite.deriv.html#numpy.polynomial.hermite.Hermite.deriv" title="numpy.polynomial.hermite.Hermite.deriv"><code class="xref py py-obj docutils literal"><span class="pre">deriv</span></code></a>([m])</td>
+<td>Differentiate.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.polynomial.hermite.Hermite.fit.html#numpy.polynomial.hermite.Hermite.fit" title="numpy.polynomial.hermite.Hermite.fit"><code class="xref py py-obj docutils literal"><span class="pre">fit</span></code></a>(x,&nbsp;y,&nbsp;deg[,&nbsp;domain,&nbsp;rcond,&nbsp;full,&nbsp;w,&nbsp;window])</td>
+<td>Least squares fit to data.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.polynomial.hermite.Hermite.fromroots.html#numpy.polynomial.hermite.Hermite.fromroots" title="numpy.polynomial.hermite.Hermite.fromroots"><code class="xref py py-obj docutils literal"><span class="pre">fromroots</span></code></a>(roots[,&nbsp;domain,&nbsp;window])</td>
+<td>Return series instance that has the specified roots.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.polynomial.hermite.Hermite.has_samecoef.html#numpy.polynomial.hermite.Hermite.has_samecoef" title="numpy.polynomial.hermite.Hermite.has_samecoef"><code class="xref py py-obj docutils literal"><span class="pre">has_samecoef</span></code></a>(other)</td>
+<td>Check if coefficients match.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.polynomial.hermite.Hermite.has_samedomain.html#numpy.polynomial.hermite.Hermite.has_samedomain" title="numpy.polynomial.hermite.Hermite.has_samedomain"><code class="xref py py-obj docutils literal"><span class="pre">has_samedomain</span></code></a>(other)</td>
+<td>Check if domains match.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.polynomial.hermite.Hermite.has_sametype.html#numpy.polynomial.hermite.Hermite.has_sametype" title="numpy.polynomial.hermite.Hermite.has_sametype"><code class="xref py py-obj docutils literal"><span class="pre">has_sametype</span></code></a>(other)</td>
+<td>Check if types match.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.polynomial.hermite.Hermite.has_samewindow.html#numpy.polynomial.hermite.Hermite.has_samewindow" title="numpy.polynomial.hermite.Hermite.has_samewindow"><code class="xref py py-obj docutils literal"><span class="pre">has_samewindow</span></code></a>(other)</td>
+<td>Check if windows match.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.polynomial.hermite.Hermite.identity.html#numpy.polynomial.hermite.Hermite.identity" title="numpy.polynomial.hermite.Hermite.identity"><code class="xref py py-obj docutils literal"><span class="pre">identity</span></code></a>([domain,&nbsp;window])</td>
+<td>Identity function.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.polynomial.hermite.Hermite.integ.html#numpy.polynomial.hermite.Hermite.integ" title="numpy.polynomial.hermite.Hermite.integ"><code class="xref py py-obj docutils literal"><span class="pre">integ</span></code></a>([m,&nbsp;k,&nbsp;lbnd])</td>
+<td>Integrate.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.polynomial.hermite.Hermite.linspace.html#numpy.polynomial.hermite.Hermite.linspace" title="numpy.polynomial.hermite.Hermite.linspace"><code class="xref py py-obj docutils literal"><span class="pre">linspace</span></code></a>([n,&nbsp;domain])</td>
+<td>Return x, y values at equally spaced points in domain.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.polynomial.hermite.Hermite.mapparms.html#numpy.polynomial.hermite.Hermite.mapparms" title="numpy.polynomial.hermite.Hermite.mapparms"><code class="xref py py-obj docutils literal"><span class="pre">mapparms</span></code></a>()</td>
+<td>Return the mapping parameters.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.polynomial.hermite.Hermite.roots.html#numpy.polynomial.hermite.Hermite.roots" title="numpy.polynomial.hermite.Hermite.roots"><code class="xref py py-obj docutils literal"><span class="pre">roots</span></code></a>()</td>
+<td>Return the roots of the series polynomial.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="numpy.polynomial.hermite.Hermite.trim.html#numpy.polynomial.hermite.Hermite.trim" title="numpy.polynomial.hermite.Hermite.trim"><code class="xref py py-obj docutils literal"><span class="pre">trim</span></code></a>([tol])</td>
+<td>Remove trailing coefficients</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="numpy.polynomial.hermite.Hermite.truncate.html#numpy.polynomial.hermite.Hermite.truncate" title="numpy.polynomial.hermite.Hermite.truncate"><code class="xref py py-obj docutils literal"><span class="pre">truncate</span></code></a>(size)</td>
+<td>Truncate series to length <em class="xref py py-obj">size</em>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

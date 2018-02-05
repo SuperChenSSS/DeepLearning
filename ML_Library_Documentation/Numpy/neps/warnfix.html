@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>A proposal to build numpy without warning with a big set of warning flags &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" >
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../index.html" >
+    <link rel="up" title="NumPy Enhancement Proposals" href="index.html" >
+    <link rel="next" title="Replacing Trac with a different bug tracker" href="newbugtracker.html" >
+    <link rel="prev" title="A proposal for adding groupby functionality to NumPy" href="groupby_additions.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="index.html" accesskey="U">NumPy Enhancement Proposals</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="newbugtracker.html" title="Replacing Trac with a different bug tracker"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="groupby_additions.html" title="A proposal for adding groupby functionality to NumPy"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">A proposal to build numpy without warning with a big set of warning flags</a><ul>
+<li><a class="reference internal" href="#executive-summary">Executive summary</a></li>
+<li><a class="reference internal" href="#warning-flags">Warning flags</a></li>
+<li><a class="reference internal" href="#kind-of-warnings">Kind of warnings</a><ul>
+<li><a class="reference internal" href="#unused-parameter">unused parameter</a></li>
+<li><a class="reference internal" href="#signed-unsigned-comparison">signed/unsigned comparison</a></li>
+<li><a class="reference internal" href="#half-initialized-structures">half-initialized structures</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="groupby_additions.html"
+                        title="previous chapter">A proposal for adding groupby functionality to NumPy</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="newbugtracker.html"
+                        title="next chapter">Replacing Trac with a different bug tracker</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="a-proposal-to-build-numpy-without-warning-with-a-big-set-of-warning-flags">
+<h1>A proposal to build numpy without warning with a big set of warning flags<a class="headerlink" href="#a-proposal-to-build-numpy-without-warning-with-a-big-set-of-warning-flags" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">David Cournapeau</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:david&#37;&#52;&#48;ar&#46;media&#46;kyoto-u&#46;ac&#46;jp">david<span>&#64;</span>ar<span>&#46;</span>media<span>&#46;</span>kyoto-u<span>&#46;</span>ac<span>&#46;</span>jp</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2008-09-04</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="executive-summary">
+<h2>Executive summary<a class="headerlink" href="#executive-summary" title="Permalink to this headline">¶</a></h2>
+<p>When building numpy and scipy, we are limited to a quite restricted set of
+warning compilers, thus missing a large class of potential bugs which could be
+detected with stronger warning flags. The goal of this NEP is present the
+various methods used to clean the code and implement some policy to make numpy
+buildable with a  bigger set of warning flags, while keeping the build warnings
+free.</p>
+</div>
+<div class="section" id="warning-flags">
+<h2>Warning flags<a class="headerlink" href="#warning-flags" title="Permalink to this headline">¶</a></h2>
+<p>Each compiler detects a different set of potential errors. The baseline will
+be gcc -Wall -W -Wextra. Ideally, a complete set would be nice:</p>
+<p>-W -Wall -Wextra -Wstrict-prototypes -Wmissing-prototypes -Waggregate-return
+-Wcast-align -Wcast-qual -Wnested-externs -Wshadow -Wbad-function-cast
+-Wwrite-strings &#8220;</p>
+<p>Intel compiler, VS with /W3 /Wall, Sun compilers have extra warnings too.</p>
+</div>
+<div class="section" id="kind-of-warnings">
+<h2>Kind of warnings<a class="headerlink" href="#kind-of-warnings" title="Permalink to this headline">¶</a></h2>
+<p>C Python extension code tends to naturally generate a lot of spurious warnings.
+The goal is to have some facilities to tag some typical C-Python code so that
+the compilers do not generate warnings in those cases; the tag process has to
+be clean, readable, and be robust. In particular, it should not make the code
+more obscure or worse, break working code.</p>
+<div class="section" id="unused-parameter">
+<h3>unused parameter<a class="headerlink" href="#unused-parameter" title="Permalink to this headline">¶</a></h3>
+<p>This one appears often: any python-callable C function takes two arguments,
+of which the first is not used for functions (only for methods). One way to
+solve it is to tag the function argument with a macro NPY_UNUSED. This macro
+uses compiler specific code to tag the variable, and mangle it such as it is
+not possible to use it accidentally once it is tagged.</p>
+<p>The code to apply compiler specific option could be:</p>
+<dl class="docutils">
+<dt>#if defined(__GNUC__)</dt>
+<dd>#define __COMP_NPY_UNUSED __attribute__ ((__unused__))</dd>
+<dt># elif defined(__ICC)</dt>
+<dd>#define __COMP_NPY_UNUSED __attribute__ ((__unused__))</dd>
+<dt>#else</dt>
+<dd>#define __COMP_NPY_UNUSED</dd>
+</dl>
+<p>#endif</p>
+<p>The variable mangling would be:</p>
+<p>#define NPY_UNUSED(x) (__NPY_UNUSED_TAGGED ## x) __COMP_NPY_UNUSED</p>
+<p>When applied to a variable, one would get:</p>
+<p>int foo(int * NPY_UNUSED(dummy))</p>
+<p>expanded to</p>
+<p>int foo(int * __NPY_UNUSED_TAGGEDdummy __COMP_NPY_UNUSED)</p>
+<p>Thus avoiding any accidental use of the variable. The mangling is pure C, and
+thuse portable. The per-variable warning disabling is compiler specific.</p>
+</div>
+<div class="section" id="signed-unsigned-comparison">
+<h3>signed/unsigned comparison<a class="headerlink" href="#signed-unsigned-comparison" title="Permalink to this headline">¶</a></h3>
+<p>More tricky: not always clear what to do</p>
+</div>
+<div class="section" id="half-initialized-structures">
+<h3>half-initialized structures<a class="headerlink" href="#half-initialized-structures" title="Permalink to this headline">¶</a></h3>
+<p>Just put the elements with NULL in it.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

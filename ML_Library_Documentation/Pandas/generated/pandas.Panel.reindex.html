@@ -1,0 +1,466 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pandas.Panel.reindex &#8212; pandas 0.22.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.22.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pandas.Panel.reindex_axis" href="pandas.Panel.reindex_axis.html" />
+    <link rel="prev" title="pandas.Panel.rdiv" href="pandas.Panel.rdiv.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pandas.Panel.reindex_axis.html" title="pandas.Panel.reindex_axis"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pandas.Panel.rdiv.html" title="pandas.Panel.rdiv"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pandas 0.22.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="pandas.Panel.html" accesskey="U">pandas.Panel</a> &#187;</li> 
+      </ul>
+    </div>
+<div class="content-wrapper">
+    <div class="content">
+        <div class="document">
+            <div class="sphinxsidebar">
+                <h3>Table Of Contents</h3>
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew.html">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Package overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../10min.html">10 Minutes to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dsintro.html">Intro to Data Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basics.html">Essential Basic Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text.html">Working with Text Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../options.html">Options and Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indexing.html">Indexing and Selecting Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced.html">MultiIndex / Advanced Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../computation.html">Computational tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../missing_data.html">Working with missing data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../groupby.html">Group By: split-apply-combine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../merging.html">Merge, join, and concatenate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reshaping.html">Reshaping and Pivot Tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timeseries.html">Time Series / Date functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timedeltas.html">Time Deltas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../categorical.html">Categorical Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../style.html">Styling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io.html">IO Tools (Text, CSV, HDF5, ...)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../remote_data.html">Remote Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enhancingperf.html">Enhancing Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sparse.html">Sparse data structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gotchas.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../r_interface.html">rpy2 / R interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ecosystem.html">pandas Ecosystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_r.html">Comparison with R / R libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_sql.html">Comparison with SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_sas.html">Comparison with SAS</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#input-output">Input/Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#general-functions">General functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#series">Series</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#dataframe">DataFrame</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#panel">Panel</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../api.html#id14">Constructor</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="pandas.Panel.html">pandas.Panel</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id15">Attributes and underlying data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id16">Conversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#getting-and-setting">Getting and setting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#indexing-iteration-slicing">Indexing, iteration, slicing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id17">Binary operator functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#function-application-groupby">Function application, GroupBy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#api-panel-stats">Computations / Descriptive Stats</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../api.html#id19">Reindexing / Selection / Label manipulation</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pandas.Panel.add_prefix.html">pandas.Panel.add_prefix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Panel.add_suffix.html">pandas.Panel.add_suffix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Panel.drop.html">pandas.Panel.drop</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Panel.equals.html">pandas.Panel.equals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Panel.filter.html">pandas.Panel.filter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Panel.first.html">pandas.Panel.first</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Panel.last.html">pandas.Panel.last</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pandas.Panel.reindex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Panel.reindex_axis.html">pandas.Panel.reindex_axis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Panel.reindex_like.html">pandas.Panel.reindex_like</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Panel.rename.html">pandas.Panel.rename</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Panel.sample.html">pandas.Panel.sample</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Panel.select.html">pandas.Panel.select</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Panel.take.html">pandas.Panel.take</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.Panel.truncate.html">pandas.Panel.truncate</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id20">Missing data handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id21">Reshaping, sorting, transposing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id22">Combining / joining / merging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id23">Time series-related</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id24">Serialization / IO / Conversion</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#index">Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#numeric-index">Numeric Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#categoricalindex">CategoricalIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#intervalindex">IntervalIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#multiindex">MultiIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#datetimeindex">DatetimeIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#timedeltaindex">TimedeltaIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#periodindex">PeriodIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#scalars">Scalars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#window">Window</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#groupby">GroupBy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#resampling">Resampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#style">Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#general-utility-functions">General utility functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developer.html">Developer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../internals.html">Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release Notes</a></li>
+</ul>
+
+                <h3 style="margin-top: 1.5em;">Search</h3>
+
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18"/>
+                    <input type="submit" value="Go"/>
+                    <input type="hidden" name="check_keywords" value="yes"/>
+                    <input type="hidden" name="area" value="default"/>
+                </form>
+                <p class="searchtip" style="font-size: 90%">
+                    Enter search terms or a module, class or function name.
+                </p>
+
+            </div>
+             
+            <div class="documentwrapper">
+                <div class="bodywrapper">
+                    <div class="body">
+                        
+  <div class="section" id="pandas-panel-reindex">
+<h1>pandas.Panel.reindex<a class="headerlink" href="#pandas-panel-reindex" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pandas.Panel.reindex">
+<code class="descclassname">Panel.</code><code class="descname">reindex</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/pandas-dev/pandas/blob/v0.22.0/pandas/core/panel.py#L1202-L1224"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pandas.Panel.reindex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conform Panel to new index with optional filling logic, placing
+NA/NaN in locations having no value in the previous index. A new object
+is produced unless the new index is equivalent to the current one and
+copy=False</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>items, major_axis, minor_axis</strong> : array-like, optional (should be specified using keywords)</p>
+<blockquote>
+<div><p>New labels / index to conform to. Preferably an Index object to
+avoid duplicating data</p>
+</div></blockquote>
+<p><strong>method</strong> : {None, &#8216;backfill&#8217;/&#8217;bfill&#8217;, &#8216;pad&#8217;/&#8217;ffill&#8217;, &#8216;nearest&#8217;}, optional</p>
+<blockquote>
+<div><p>method to use for filling holes in reindexed DataFrame.
+Please note: this is only  applicable to DataFrames/Series with a
+monotonically increasing/decreasing index.</p>
+<ul class="simple">
+<li>default: don&#8217;t fill gaps</li>
+<li>pad / ffill: propagate last valid observation forward to next
+valid</li>
+<li>backfill / bfill: use next valid observation to fill gap</li>
+<li>nearest: use nearest valid observations to fill gap</li>
+</ul>
+</div></blockquote>
+<p><strong>copy</strong> : boolean, default True</p>
+<blockquote>
+<div><p>Return a new object, even if the passed indexes are the same</p>
+</div></blockquote>
+<p><strong>level</strong> : int or name</p>
+<blockquote>
+<div><p>Broadcast across a level, matching Index values on the
+passed MultiIndex level</p>
+</div></blockquote>
+<p><strong>fill_value</strong> : scalar, default np.NaN</p>
+<blockquote>
+<div><p>Value to use for missing values. Defaults to NaN, but can be any
+&#8220;compatible&#8221; value</p>
+</div></blockquote>
+<p><strong>limit</strong> : int, default None</p>
+<blockquote>
+<div><p>Maximum number of consecutive elements to forward or backward fill</p>
+</div></blockquote>
+<p><strong>tolerance</strong> : optional</p>
+<blockquote>
+<div><p>Maximum distance between original and new labels for inexact
+matches. The values of the index at the matching locations most
+satisfy the equation <code class="docutils literal"><span class="pre">abs(index[indexer]</span> <span class="pre">-</span> <span class="pre">target)</span> <span class="pre">&lt;=</span> <span class="pre">tolerance</span></code>.</p>
+<p>Tolerance may be a scalar value, which applies the same tolerance
+to all values, or list-like, which applies variable tolerance per
+element. List-like includes list, tuple, array, Series, and must be
+the same size as the index and its dtype must exactly match the
+index&#8217;s type.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.17.0.</span></p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.21.0: </span>(list-like tolerance)</p>
+</div>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>reindexed</strong> : Panel</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal"><span class="pre">DataFrame.reindex</span></code> supports two calling conventions</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">(index=index_labels,</span> <span class="pre">columns=column_labels,</span> <span class="pre">...)</span></code></li>
+<li><code class="docutils literal"><span class="pre">(labels,</span> <span class="pre">axis={'index',</span> <span class="pre">'columns'},</span> <span class="pre">...)</span></code></li>
+</ul>
+<p>We <em>highly</em> recommend using keyword arguments to clarify your
+intent.</p>
+<p>Create a dataframe with some fictional data.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Firefox&#39;</span><span class="p">,</span> <span class="s1">&#39;Chrome&#39;</span><span class="p">,</span> <span class="s1">&#39;Safari&#39;</span><span class="p">,</span> <span class="s1">&#39;IE10&#39;</span><span class="p">,</span> <span class="s1">&#39;Konqueror&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>     <span class="s1">&#39;http_status&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">200</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">404</span><span class="p">,</span><span class="mi">404</span><span class="p">,</span><span class="mi">301</span><span class="p">],</span>
+<span class="gp">... </span>     <span class="s1">&#39;response_time&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.04</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.07</span><span class="p">,</span> <span class="mf">0.08</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]},</span>
+<span class="gp">... </span>      <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
+<span class="go">           http_status  response_time</span>
+<span class="go">Firefox            200           0.04</span>
+<span class="go">Chrome             200           0.02</span>
+<span class="go">Safari             404           0.07</span>
+<span class="go">IE10               404           0.08</span>
+<span class="go">Konqueror          301           1.00</span>
+</pre></div>
+</div>
+<p>Create a new index and reindex the dataframe. By default
+values in the new index that do not have corresponding
+records in the dataframe are assigned <code class="docutils literal"><span class="pre">NaN</span></code>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">new_index</span><span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Safari&#39;</span><span class="p">,</span> <span class="s1">&#39;Iceweasel&#39;</span><span class="p">,</span> <span class="s1">&#39;Comodo Dragon&#39;</span><span class="p">,</span> <span class="s1">&#39;IE10&#39;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s1">&#39;Chrome&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">new_index</span><span class="p">)</span>
+<span class="go">               http_status  response_time</span>
+<span class="go">Safari               404.0           0.07</span>
+<span class="go">Iceweasel              NaN            NaN</span>
+<span class="go">Comodo Dragon          NaN            NaN</span>
+<span class="go">IE10                 404.0           0.08</span>
+<span class="go">Chrome               200.0           0.02</span>
+</pre></div>
+</div>
+<p>We can fill in the missing values by passing a value to
+the keyword <code class="docutils literal"><span class="pre">fill_value</span></code>. Because the index is not monotonically
+increasing or decreasing, we cannot use arguments to the keyword
+<code class="docutils literal"><span class="pre">method</span></code> to fill the <code class="docutils literal"><span class="pre">NaN</span></code> values.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">new_index</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">               http_status  response_time</span>
+<span class="go">Safari                 404           0.07</span>
+<span class="go">Iceweasel                0           0.00</span>
+<span class="go">Comodo Dragon            0           0.00</span>
+<span class="go">IE10                   404           0.08</span>
+<span class="go">Chrome                 200           0.02</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">new_index</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="s1">&#39;missing&#39;</span><span class="p">)</span>
+<span class="go">              http_status response_time</span>
+<span class="go">Safari                404          0.07</span>
+<span class="go">Iceweasel         missing       missing</span>
+<span class="go">Comodo Dragon     missing       missing</span>
+<span class="go">IE10                  404          0.08</span>
+<span class="go">Chrome                200          0.02</span>
+</pre></div>
+</div>
+<p>We can also reindex the columns.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;http_status&#39;</span><span class="p">,</span> <span class="s1">&#39;user_agent&#39;</span><span class="p">])</span>
+<span class="go">           http_status  user_agent</span>
+<span class="go">Firefox            200         NaN</span>
+<span class="go">Chrome             200         NaN</span>
+<span class="go">Safari             404         NaN</span>
+<span class="go">IE10               404         NaN</span>
+<span class="go">Konqueror          301         NaN</span>
+</pre></div>
+</div>
+<p>Or we can use &#8220;axis-style&#8221; keyword arguments</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">reindex</span><span class="p">([</span><span class="s1">&#39;http_status&#39;</span><span class="p">,</span> <span class="s1">&#39;user_agent&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;columns&quot;</span><span class="p">)</span>
+<span class="go">           http_status  user_agent</span>
+<span class="go">Firefox            200         NaN</span>
+<span class="go">Chrome             200         NaN</span>
+<span class="go">Safari             404         NaN</span>
+<span class="go">IE10               404         NaN</span>
+<span class="go">Konqueror          301         NaN</span>
+</pre></div>
+</div>
+<p>To further illustrate the filling functionality in
+<code class="docutils literal"><span class="pre">reindex</span></code>, we will create a dataframe with a
+monotonically increasing index (for example, a sequence
+of dates).</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">date_index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="s1">&#39;1/1/2010&#39;</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;prices&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">88</span><span class="p">]},</span>
+<span class="gp">... </span>                   <span class="n">index</span><span class="o">=</span><span class="n">date_index</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df2</span>
+<span class="go">            prices</span>
+<span class="go">2010-01-01     100</span>
+<span class="go">2010-01-02     101</span>
+<span class="go">2010-01-03     NaN</span>
+<span class="go">2010-01-04     100</span>
+<span class="go">2010-01-05      89</span>
+<span class="go">2010-01-06      88</span>
+</pre></div>
+</div>
+<p>Suppose we decide to expand the dataframe to cover a wider
+date range.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">date_index2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="s1">&#39;12/29/2009&#39;</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df2</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">date_index2</span><span class="p">)</span>
+<span class="go">            prices</span>
+<span class="go">2009-12-29     NaN</span>
+<span class="go">2009-12-30     NaN</span>
+<span class="go">2009-12-31     NaN</span>
+<span class="go">2010-01-01     100</span>
+<span class="go">2010-01-02     101</span>
+<span class="go">2010-01-03     NaN</span>
+<span class="go">2010-01-04     100</span>
+<span class="go">2010-01-05      89</span>
+<span class="go">2010-01-06      88</span>
+<span class="go">2010-01-07     NaN</span>
+</pre></div>
+</div>
+<p>The index entries that did not have a value in the original data frame
+(for example, &#8216;2009-12-29&#8217;) are by default filled with <code class="docutils literal"><span class="pre">NaN</span></code>.
+If desired, we can fill in the missing values using one of several
+options.</p>
+<p>For example, to backpropagate the last valid value to fill the <code class="docutils literal"><span class="pre">NaN</span></code>
+values, pass <code class="docutils literal"><span class="pre">bfill</span></code> as an argument to the <code class="docutils literal"><span class="pre">method</span></code> keyword.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df2</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">date_index2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;bfill&#39;</span><span class="p">)</span>
+<span class="go">            prices</span>
+<span class="go">2009-12-29     100</span>
+<span class="go">2009-12-30     100</span>
+<span class="go">2009-12-31     100</span>
+<span class="go">2010-01-01     100</span>
+<span class="go">2010-01-02     101</span>
+<span class="go">2010-01-03     NaN</span>
+<span class="go">2010-01-04     100</span>
+<span class="go">2010-01-05      89</span>
+<span class="go">2010-01-06      88</span>
+<span class="go">2010-01-07     NaN</span>
+</pre></div>
+</div>
+<p>Please note that the <code class="docutils literal"><span class="pre">NaN</span></code> value present in the original dataframe
+(at index value 2010-01-03) will not be filled by any of the
+value propagation schemes. This is because filling while reindexing
+does not look at dataframe values, but only compares the original and
+desired indexes. If you do want to fill in the <code class="docutils literal"><span class="pre">NaN</span></code> values present
+in the original dataframe, use the <code class="docutils literal"><span class="pre">fillna()</span></code> method.</p>
+<p>See the <a class="reference internal" href="../basics.html#basics-reindexing"><span class="std std-ref">user guide</span></a> for more.</p>
+</dd></dl>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="clearer"></div>
+        </div>
+    </div>
+</div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pandas.Panel.reindex_axis.html" title="pandas.Panel.reindex_axis"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pandas.Panel.rdiv.html" title="pandas.Panel.rdiv"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pandas 0.22.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="pandas.Panel.html" >pandas.Panel</a> &#187;</li> 
+      </ul>
+    </div>
+<style type="text/css">
+    .scrollToTop {
+        text-align: center;
+        font-weight: bold;
+        position: fixed;
+        bottom: 60px;
+        right: 40px;
+        display: none;
+    }
+</style>
+<a href="#" class="scrollToTop">Scroll To Top</a>
+<script type="text/javascript">
+$(document).ready(function() {
+    //Check to see if the window is top if not then display button
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 200) {
+            $('.scrollToTop').fadeIn();
+        } else {
+            $('.scrollToTop').fadeOut();
+        }
+    });
+
+    //Click event to scroll to top
+    $('.scrollToTop').click(function() {
+        $('html, body').animate({
+            scrollTop: 0
+        }, 500);
+        return false;
+    });
+});
+</script>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27880019-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </body>
+</html>

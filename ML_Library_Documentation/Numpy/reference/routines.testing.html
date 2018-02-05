@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Test Support (numpy.testing) &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" >
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../index.html" >
+    <link rel="up" title="Routines" href="routines.html" >
+    <link rel="next" title="numpy.testing.assert_almost_equal" href="generated/numpy.testing.assert_almost_equal.html" >
+    <link rel="prev" title="numpy.digitize" href="generated/numpy.digitize.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="routines.html" accesskey="U">Routines</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="generated/numpy.testing.assert_almost_equal.html" title="numpy.testing.assert_almost_equal"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="generated/numpy.digitize.html" title="numpy.digitize"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Test Support (<code class="docutils literal"><span class="pre">numpy.testing</span></code>)</a><ul>
+<li><a class="reference internal" href="#asserts">Asserts</a></li>
+<li><a class="reference internal" href="#decorators">Decorators</a></li>
+<li><a class="reference internal" href="#test-running">Test Running</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="generated/numpy.digitize.html"
+                        title="previous chapter">numpy.digitize</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="generated/numpy.testing.assert_almost_equal.html"
+                        title="next chapter">numpy.testing.assert_almost_equal</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="test-support-numpy-testing">
+<h1>Test Support (<code class="xref py py-mod docutils literal"><span class="pre">numpy.testing</span></code>)<a class="headerlink" href="#test-support-numpy-testing" title="Permalink to this headline">¶</a></h1>
+<p>Common test support for all numpy test scripts.</p>
+<p>This single module should provide all the common functionality for numpy
+tests in a single location, so that test scripts can just import it and
+work right away.</p>
+<div class="section" id="asserts">
+<h2>Asserts<a class="headerlink" href="#asserts" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.testing.assert_almost_equal.html#numpy.testing.assert_almost_equal" title="numpy.testing.assert_almost_equal"><code class="xref py py-obj docutils literal"><span class="pre">assert_almost_equal</span></code></a>(actual,&nbsp;desired[,&nbsp;...])</td>
+<td>Raises an AssertionError if two items are not equal up to desired precision.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.testing.assert_approx_equal.html#numpy.testing.assert_approx_equal" title="numpy.testing.assert_approx_equal"><code class="xref py py-obj docutils literal"><span class="pre">assert_approx_equal</span></code></a>(actual,&nbsp;desired[,&nbsp;...])</td>
+<td>Raises an AssertionError if two items are not equal up to significant digits.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.testing.assert_array_almost_equal.html#numpy.testing.assert_array_almost_equal" title="numpy.testing.assert_array_almost_equal"><code class="xref py py-obj docutils literal"><span class="pre">assert_array_almost_equal</span></code></a>(x,&nbsp;y[,&nbsp;decimal,&nbsp;...])</td>
+<td>Raises an AssertionError if two objects are not equal up to desired precision.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.testing.assert_allclose.html#numpy.testing.assert_allclose" title="numpy.testing.assert_allclose"><code class="xref py py-obj docutils literal"><span class="pre">assert_allclose</span></code></a>(actual,&nbsp;desired[,&nbsp;rtol,&nbsp;...])</td>
+<td>Raises an AssertionError if two objects are not equal up to desired tolerance.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.testing.assert_array_almost_equal_nulp.html#numpy.testing.assert_array_almost_equal_nulp" title="numpy.testing.assert_array_almost_equal_nulp"><code class="xref py py-obj docutils literal"><span class="pre">assert_array_almost_equal_nulp</span></code></a>(x,&nbsp;y[,&nbsp;nulp])</td>
+<td>Compare two arrays relatively to their spacing.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.testing.assert_array_max_ulp.html#numpy.testing.assert_array_max_ulp" title="numpy.testing.assert_array_max_ulp"><code class="xref py py-obj docutils literal"><span class="pre">assert_array_max_ulp</span></code></a>(a,&nbsp;b[,&nbsp;maxulp,&nbsp;dtype])</td>
+<td>Check that all items of arrays differ in at most N Units in the Last Place.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.testing.assert_array_equal.html#numpy.testing.assert_array_equal" title="numpy.testing.assert_array_equal"><code class="xref py py-obj docutils literal"><span class="pre">assert_array_equal</span></code></a>(x,&nbsp;y[,&nbsp;err_msg,&nbsp;verbose])</td>
+<td>Raises an AssertionError if two array_like objects are not equal.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.testing.assert_array_less.html#numpy.testing.assert_array_less" title="numpy.testing.assert_array_less"><code class="xref py py-obj docutils literal"><span class="pre">assert_array_less</span></code></a>(x,&nbsp;y[,&nbsp;err_msg,&nbsp;verbose])</td>
+<td>Raises an AssertionError if two array_like objects are not ordered by less than.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.testing.assert_equal.html#numpy.testing.assert_equal" title="numpy.testing.assert_equal"><code class="xref py py-obj docutils literal"><span class="pre">assert_equal</span></code></a>(actual,&nbsp;desired[,&nbsp;err_msg,&nbsp;verbose])</td>
+<td>Raises an AssertionError if two objects are not equal.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.testing.assert_raises.html#numpy.testing.assert_raises" title="numpy.testing.assert_raises"><code class="xref py py-obj docutils literal"><span class="pre">assert_raises</span></code></a>(exception_class,&nbsp;callable,&nbsp;...)</td>
+<td>Fail unless an exception of class exception_class is thrown by callable when invoked with arguments args and keyword arguments kwargs.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.testing.assert_raises_regex.html#numpy.testing.assert_raises_regex" title="numpy.testing.assert_raises_regex"><code class="xref py py-obj docutils literal"><span class="pre">assert_raises_regex</span></code></a>(exception_class,&nbsp;...)</td>
+<td>Fail unless an exception of class exception_class and with message that matches expected_regexp is thrown by callable when invoked with arguments args and keyword arguments kwargs.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.testing.assert_warns.html#numpy.testing.assert_warns" title="numpy.testing.assert_warns"><code class="xref py py-obj docutils literal"><span class="pre">assert_warns</span></code></a>(warning_class,&nbsp;*args,&nbsp;**kwargs)</td>
+<td>Fail unless the given callable throws the specified warning.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.testing.assert_string_equal.html#numpy.testing.assert_string_equal" title="numpy.testing.assert_string_equal"><code class="xref py py-obj docutils literal"><span class="pre">assert_string_equal</span></code></a>(actual,&nbsp;desired)</td>
+<td>Test if two strings are equal.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="decorators">
+<h2>Decorators<a class="headerlink" href="#decorators" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.testing.decorators.deprecated.html#numpy.testing.decorators.deprecated" title="numpy.testing.decorators.deprecated"><code class="xref py py-obj docutils literal"><span class="pre">decorators.deprecated</span></code></a>([conditional])</td>
+<td>Filter deprecation warnings while running the test suite.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.testing.decorators.knownfailureif.html#numpy.testing.decorators.knownfailureif" title="numpy.testing.decorators.knownfailureif"><code class="xref py py-obj docutils literal"><span class="pre">decorators.knownfailureif</span></code></a>(fail_condition[,&nbsp;msg])</td>
+<td>Make function raise KnownFailureException exception if given condition is true.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.testing.decorators.setastest.html#numpy.testing.decorators.setastest" title="numpy.testing.decorators.setastest"><code class="xref py py-obj docutils literal"><span class="pre">decorators.setastest</span></code></a>([tf])</td>
+<td>Signals to nose that this function is or is not a test.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.testing.decorators.skipif.html#numpy.testing.decorators.skipif" title="numpy.testing.decorators.skipif"><code class="xref py py-obj docutils literal"><span class="pre">decorators.skipif</span></code></a>(skip_condition[,&nbsp;msg])</td>
+<td>Make function raise SkipTest exception if a given condition is true.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.testing.decorators.slow.html#numpy.testing.decorators.slow" title="numpy.testing.decorators.slow"><code class="xref py py-obj docutils literal"><span class="pre">decorators.slow</span></code></a>(t)</td>
+<td>Label a test as &#8216;slow&#8217;.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.testing.decorate_methods.html#numpy.testing.decorate_methods" title="numpy.testing.decorate_methods"><code class="xref py py-obj docutils literal"><span class="pre">decorate_methods</span></code></a>(cls,&nbsp;decorator[,&nbsp;testmatch])</td>
+<td>Apply a decorator to all methods in a class matching a regular expression.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="test-running">
+<h2>Test Running<a class="headerlink" href="#test-running" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.testing.Tester.html#numpy.testing.Tester" title="numpy.testing.Tester"><code class="xref py py-obj docutils literal"><span class="pre">Tester</span></code></a></td>
+<td>alias of <code class="xref py py-class docutils literal"><span class="pre">NoseTester</span></code></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.testing.run_module_suite.html#numpy.testing.run_module_suite" title="numpy.testing.run_module_suite"><code class="xref py py-obj docutils literal"><span class="pre">run_module_suite</span></code></a>([file_to_run,&nbsp;argv])</td>
+<td>Run a test module.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/numpy.testing.rundocs.html#numpy.testing.rundocs" title="numpy.testing.rundocs"><code class="xref py py-obj docutils literal"><span class="pre">rundocs</span></code></a>([filename,&nbsp;raise_on_error])</td>
+<td>Run doctests found in the given file.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/numpy.testing.suppress_warnings.html#numpy.testing.suppress_warnings" title="numpy.testing.suppress_warnings"><code class="xref py py-obj docutils literal"><span class="pre">suppress_warnings</span></code></a>([forwarding_rule])</td>
+<td>Context manager and decorator doing much the same as <code class="docutils literal"><span class="pre">warnings.catch_warnings</span></code>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

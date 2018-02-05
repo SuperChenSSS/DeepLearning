@@ -1,0 +1,441 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pandas.wide_to_long &#8212; pandas 0.22.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.22.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pandas.isna" href="pandas.isna.html" />
+    <link rel="prev" title="pandas.unique" href="pandas.unique.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pandas.isna.html" title="pandas.isna"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pandas.unique.html" title="pandas.unique"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pandas 0.22.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" accesskey="U">API Reference</a> &#187;</li> 
+      </ul>
+    </div>
+<div class="content-wrapper">
+    <div class="content">
+        <div class="document">
+            <div class="sphinxsidebar">
+                <h3>Table Of Contents</h3>
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew.html">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Package overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../10min.html">10 Minutes to pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dsintro.html">Intro to Data Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basics.html">Essential Basic Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text.html">Working with Text Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../options.html">Options and Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indexing.html">Indexing and Selecting Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced.html">MultiIndex / Advanced Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../computation.html">Computational tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../missing_data.html">Working with missing data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../groupby.html">Group By: split-apply-combine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../merging.html">Merge, join, and concatenate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reshaping.html">Reshaping and Pivot Tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timeseries.html">Time Series / Date functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timedeltas.html">Time Deltas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../categorical.html">Categorical Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../style.html">Styling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io.html">IO Tools (Text, CSV, HDF5, ...)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../remote_data.html">Remote Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enhancingperf.html">Enhancing Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sparse.html">Sparse data structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gotchas.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../r_interface.html">rpy2 / R interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ecosystem.html">pandas Ecosystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_r.html">Comparison with R / R libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_sql.html">Comparison with SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison_with_sas.html">Comparison with SAS</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#input-output">Input/Output</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#general-functions">General functions</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../api.html#data-manipulations">Data manipulations</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pandas.melt.html">pandas.melt</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.pivot.html">pandas.pivot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.pivot_table.html">pandas.pivot_table</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.crosstab.html">pandas.crosstab</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.cut.html">pandas.cut</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.qcut.html">pandas.qcut</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.merge.html">pandas.merge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.merge_ordered.html">pandas.merge_ordered</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.merge_asof.html">pandas.merge_asof</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.concat.html">pandas.concat</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.get_dummies.html">pandas.get_dummies</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.factorize.html">pandas.factorize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pandas.unique.html">pandas.unique</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pandas.wide_to_long</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#top-level-missing-data">Top-level missing data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#top-level-conversions">Top-level conversions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#top-level-dealing-with-datetimelike">Top-level dealing with datetimelike</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#top-level-dealing-with-intervals">Top-level dealing with intervals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#top-level-evaluation">Top-level evaluation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#series">Series</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#dataframe">DataFrame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#panel">Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#index">Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#numeric-index">Numeric Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#categoricalindex">CategoricalIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#intervalindex">IntervalIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#multiindex">MultiIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#datetimeindex">DatetimeIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#timedeltaindex">TimedeltaIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#periodindex">PeriodIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#scalars">Scalars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#window">Window</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#groupby">GroupBy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#resampling">Resampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#style">Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#general-utility-functions">General utility functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developer.html">Developer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../internals.html">Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release Notes</a></li>
+</ul>
+
+                <h3 style="margin-top: 1.5em;">Search</h3>
+
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18"/>
+                    <input type="submit" value="Go"/>
+                    <input type="hidden" name="check_keywords" value="yes"/>
+                    <input type="hidden" name="area" value="default"/>
+                </form>
+                <p class="searchtip" style="font-size: 90%">
+                    Enter search terms or a module, class or function name.
+                </p>
+
+            </div>
+             
+            <div class="documentwrapper">
+                <div class="bodywrapper">
+                    <div class="body">
+                        
+  <div class="section" id="pandas-wide-to-long">
+<h1>pandas.wide_to_long<a class="headerlink" href="#pandas-wide-to-long" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pandas.wide_to_long">
+<code class="descclassname">pandas.</code><code class="descname">wide_to_long</code><span class="sig-paren">(</span><em>df</em>, <em>stubnames</em>, <em>i</em>, <em>j</em>, <em>sep=''</em>, <em>suffix='\\d+'</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/pandas-dev/pandas/blob/v0.22.0/pandas/core/reshape/reshape.py#L839-L1069"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pandas.wide_to_long" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wide panel to long format. Less flexible but more user-friendly than melt.</p>
+<p>With stubnames [&#8216;A&#8217;, &#8216;B&#8217;], this function expects to find one or more
+group of columns with format Asuffix1, Asuffix2,..., Bsuffix1, Bsuffix2,...
+You specify what you want to call this suffix in the resulting long format
+with <cite>j</cite> (for example <cite>j=&#8217;year&#8217;</cite>)</p>
+<p>Each row of these wide variables are assumed to be uniquely identified by
+<cite>i</cite> (can be a single column name or a list of column names)</p>
+<p>All remaining variables in the data frame are left intact.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>df</strong> : DataFrame</p>
+<blockquote>
+<div><p>The wide-format DataFrame</p>
+</div></blockquote>
+<p><strong>stubnames</strong> : str or list-like</p>
+<blockquote>
+<div><p>The stub name(s). The wide format variables are assumed to
+start with the stub names.</p>
+</div></blockquote>
+<p><strong>i</strong> : str or list-like</p>
+<blockquote>
+<div><p>Column(s) to use as id variable(s)</p>
+</div></blockquote>
+<p><strong>j</strong> : str</p>
+<blockquote>
+<div><p>The name of the subobservation variable. What you wish to name your
+suffix in the long format.</p>
+</div></blockquote>
+<p><strong>sep</strong> : str, default &#8220;&#8221;</p>
+<blockquote>
+<div><p>A character indicating the separation of the variable names
+in the wide format, to be stripped from the names in the long format.
+For example, if your column names are A-suffix1, A-suffix2, you
+can strip the hypen by specifying <cite>sep=&#8217;-&#8216;</cite></p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.20.0.</span></p>
+</div>
+</div></blockquote>
+<p><strong>suffix</strong> : str, default &#8216;\d+&#8217;</p>
+<blockquote>
+<div><p>A regular expression capturing the wanted suffixes. &#8216;\d+&#8217; captures
+numeric suffixes. Suffixes with no numbers could be specified with the
+negated character class &#8216;\D+&#8217;. You can also further disambiguate
+suffixes, for example, if your wide variables are of the form
+Aone, Btwo,.., and you have an unrelated column Arating, you can
+ignore the last one by specifying <cite>suffix=&#8217;(!?one|two)&#8217;</cite></p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.20.0.</span></p>
+</div>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">DataFrame</p>
+<blockquote class="last">
+<div><p>A DataFrame that contains each stub name as a variable, with new index
+(i, j)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>All extra variables are left untouched. This simply uses
+<cite>pandas.melt</cite> under the hood, but is hard-coded to &#8220;do the right thing&#8221;
+in a typicaly case.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;A1970&quot;</span> <span class="p">:</span> <span class="p">{</span><span class="mi">0</span> <span class="p">:</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="mi">1</span> <span class="p">:</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="mi">2</span> <span class="p">:</span> <span class="s2">&quot;c&quot;</span><span class="p">},</span>
+<span class="gp">... </span>                   <span class="s2">&quot;A1980&quot;</span> <span class="p">:</span> <span class="p">{</span><span class="mi">0</span> <span class="p">:</span> <span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="mi">1</span> <span class="p">:</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="mi">2</span> <span class="p">:</span> <span class="s2">&quot;f&quot;</span><span class="p">},</span>
+<span class="gp">... </span>                   <span class="s2">&quot;B1970&quot;</span> <span class="p">:</span> <span class="p">{</span><span class="mi">0</span> <span class="p">:</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mi">1</span> <span class="p">:</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mi">2</span> <span class="p">:</span> <span class="o">.</span><span class="mi">7</span><span class="p">},</span>
+<span class="gp">... </span>                   <span class="s2">&quot;B1980&quot;</span> <span class="p">:</span> <span class="p">{</span><span class="mi">0</span> <span class="p">:</span> <span class="mf">3.2</span><span class="p">,</span> <span class="mi">1</span> <span class="p">:</span> <span class="mf">1.3</span><span class="p">,</span> <span class="mi">2</span> <span class="p">:</span> <span class="o">.</span><span class="mi">1</span><span class="p">},</span>
+<span class="gp">... </span>                   <span class="s2">&quot;X&quot;</span>     <span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span>
+<span class="gp">... </span>                  <span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
+<span class="go">  A1970 A1980  B1970  B1980         X  id</span>
+<span class="go">0     a     d    2.5    3.2 -1.085631   0</span>
+<span class="go">1     b     e    1.2    1.3  0.997345   1</span>
+<span class="go">2     c     f    0.7    0.1  0.282978   2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pd</span><span class="o">.</span><span class="n">wide_to_long</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">],</span> <span class="n">i</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="s2">&quot;year&quot;</span><span class="p">)</span>
+<span class="gp">... </span>
+<span class="go">                X  A    B</span>
+<span class="go">id year</span>
+<span class="go">0  1970 -1.085631  a  2.5</span>
+<span class="go">1  1970  0.997345  b  1.2</span>
+<span class="go">2  1970  0.282978  c  0.7</span>
+<span class="go">0  1980 -1.085631  d  3.2</span>
+<span class="go">1  1980  0.997345  e  1.3</span>
+<span class="go">2  1980  0.282978  f  0.1</span>
+</pre></div>
+</div>
+<p>With multuple id columns</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s1">&#39;famid&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;birth&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;ht1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">2.8</span><span class="p">,</span> <span class="mf">2.9</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">1.8</span><span class="p">,</span> <span class="mf">1.9</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">,</span> <span class="mf">2.3</span><span class="p">,</span> <span class="mf">2.1</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;ht2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">3.4</span><span class="p">,</span> <span class="mf">3.8</span><span class="p">,</span> <span class="mf">2.9</span><span class="p">,</span> <span class="mf">3.2</span><span class="p">,</span> <span class="mf">2.8</span><span class="p">,</span> <span class="mf">2.4</span><span class="p">,</span> <span class="mf">3.3</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">,</span> <span class="mf">2.9</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
+<span class="go">   birth  famid  ht1  ht2</span>
+<span class="go">0      1      1  2.8  3.4</span>
+<span class="go">1      2      1  2.9  3.8</span>
+<span class="go">2      3      1  2.2  2.9</span>
+<span class="go">3      1      2  2.0  3.2</span>
+<span class="go">4      2      2  1.8  2.8</span>
+<span class="go">5      3      2  1.9  2.4</span>
+<span class="go">6      1      3  2.2  3.3</span>
+<span class="go">7      2      3  2.3  3.4</span>
+<span class="go">8      3      3  2.1  2.9</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">wide_to_long</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">stubnames</span><span class="o">=</span><span class="s1">&#39;ht&#39;</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;famid&#39;</span><span class="p">,</span> <span class="s1">&#39;birth&#39;</span><span class="p">],</span> <span class="n">j</span><span class="o">=</span><span class="s1">&#39;age&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span>
+<span class="gp">... </span>
+<span class="go">                  ht</span>
+<span class="go">famid birth age</span>
+<span class="go">1     1     1    2.8</span>
+<span class="go">            2    3.4</span>
+<span class="go">      2     1    2.9</span>
+<span class="go">            2    3.8</span>
+<span class="go">      3     1    2.2</span>
+<span class="go">            2    2.9</span>
+<span class="go">2     1     1    2.0</span>
+<span class="go">            2    3.2</span>
+<span class="go">      2     1    1.8</span>
+<span class="go">            2    2.8</span>
+<span class="go">      3     1    1.9</span>
+<span class="go">            2    2.4</span>
+<span class="go">3     1     1    2.2</span>
+<span class="go">            2    3.3</span>
+<span class="go">      2     1    2.3</span>
+<span class="go">            2    3.4</span>
+<span class="go">      3     1    2.1</span>
+<span class="go">            2    2.9</span>
+</pre></div>
+</div>
+<p>Going from long back to wide just takes some creative use of <cite>unstack</cite></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s1">&#39;famid&#39;</span><span class="p">,</span> <span class="s1">&#39;birth&#39;</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="go">   famid  birth  ht1  ht2</span>
+<span class="go">0      1      1  2.8  3.4</span>
+<span class="go">1      1      2  2.9  3.8</span>
+<span class="go">2      1      3  2.2  2.9</span>
+<span class="go">3      2      1  2.0  3.2</span>
+<span class="go">4      2      2  1.8  2.8</span>
+<span class="go">5      2      3  1.9  2.4</span>
+<span class="go">6      3      1  2.2  3.3</span>
+<span class="go">7      3      2  2.3  3.4</span>
+<span class="go">8      3      3  2.1  2.9</span>
+</pre></div>
+</div>
+<p>Less wieldy column names are also handled</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A(quarterly)-2010&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+<span class="gp">... </span>                   <span class="s1">&#39;A(quarterly)-2011&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+<span class="gp">... </span>                   <span class="s1">&#39;B(quarterly)-2010&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+<span class="gp">... </span>                   <span class="s1">&#39;B(quarterly)-2011&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+<span class="gp">... </span>                   <span class="s1">&#39;X&#39;</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">3</span><span class="p">)})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> 
+<span class="go">   A(quarterly)-2010  A(quarterly)-2011  B(quarterly)-2010  ...</span>
+<span class="go">0           0.548814           0.544883           0.437587  ...</span>
+<span class="go">1           0.715189           0.423655           0.891773  ...</span>
+<span class="go">2           0.602763           0.645894           0.963663  ...</span>
+<span class="go">   X  id</span>
+<span class="go">0  0   0</span>
+<span class="go">1  1   1</span>
+<span class="go">2  1   2</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pd</span><span class="o">.</span><span class="n">wide_to_long</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;A(quarterly)&#39;</span><span class="p">,</span> <span class="s1">&#39;B(quarterly)&#39;</span><span class="p">],</span> <span class="n">i</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                <span class="n">j</span><span class="o">=</span><span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+<span class="gp">... </span>
+<span class="go">         X  A(quarterly)  B(quarterly)</span>
+<span class="go">id year</span>
+<span class="go">0  2010  0      0.548814     0.437587</span>
+<span class="go">1  2010  1      0.715189     0.891773</span>
+<span class="go">2  2010  1      0.602763     0.963663</span>
+<span class="go">0  2011  0      0.544883     0.383442</span>
+<span class="go">1  2011  1      0.423655     0.791725</span>
+<span class="go">2  2011  1      0.645894     0.528895</span>
+</pre></div>
+</div>
+<p>If we have many columns, we could also use a regex to find our
+stubnames and pass that list on to wide_to_long</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stubnames</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="nb">set</span><span class="p">([</span><span class="n">match</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="sa">r</span><span class="s1">&#39;[A-B]\(.*\)&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span> <span class="k">if</span> <span class="n">match</span> <span class="o">!=</span> <span class="p">[]</span> <span class="p">])</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">stubnames</span><span class="p">)</span>
+<span class="go">[&#39;A(quarterly)&#39;, &#39;B(quarterly)&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="clearer"></div>
+        </div>
+    </div>
+</div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pandas.isna.html" title="pandas.isna"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pandas.unique.html" title="pandas.unique"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pandas 0.22.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API Reference</a> &#187;</li> 
+      </ul>
+    </div>
+<style type="text/css">
+    .scrollToTop {
+        text-align: center;
+        font-weight: bold;
+        position: fixed;
+        bottom: 60px;
+        right: 40px;
+        display: none;
+    }
+</style>
+<a href="#" class="scrollToTop">Scroll To Top</a>
+<script type="text/javascript">
+$(document).ready(function() {
+    //Check to see if the window is top if not then display button
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 200) {
+            $('.scrollToTop').fadeIn();
+        } else {
+            $('.scrollToTop').fadeOut();
+        }
+    });
+
+    //Click event to scroll to top
+    $('.scrollToTop').click(function() {
+        $('html, body').animate({
+            scrollTop: 0
+        }, 500);
+        return false;
+    });
+});
+</script>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27880019-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </body>
+</html>

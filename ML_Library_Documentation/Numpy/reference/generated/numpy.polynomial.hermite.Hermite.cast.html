@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy.polynomial.hermite.Hermite.cast &mdash; NumPy v1.14 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.14.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" >
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="NumPy v1.14 Manual" href="../../index.html" >
+    <link rel="up" title="numpy.polynomial.hermite.Hermite" href="numpy.polynomial.hermite.Hermite.html" >
+    <link rel="next" title="numpy.polynomial.hermite.Hermite.convert" href="numpy.polynomial.hermite.Hermite.convert.html" >
+    <link rel="prev" title="numpy.polynomial.hermite.Hermite.basis" href="numpy.polynomial.hermite.Hermite.basis.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.14 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html" >NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html" >Routines</a></li>
+          <li class="active"><a href="../routines.polynomials.html" >Polynomials</a></li>
+          <li class="active"><a href="../routines.polynomials.package.html" >Polynomial Package</a></li>
+          <li class="active"><a href="../routines.polynomials.hermite.html" >Hermite Module, &#8220;Physicists&#8217;&#8221; (<code class="docutils literal"><span class="pre">numpy.polynomial.hermite</span></code>)</a></li>
+          <li class="active"><a href="numpy.polynomial.hermite.Hermite.html" accesskey="U">numpy.polynomial.hermite.Hermite</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.polynomial.hermite.Hermite.convert.html" title="numpy.polynomial.hermite.Hermite.convert"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.polynomial.hermite.Hermite.basis.html" title="numpy.polynomial.hermite.Hermite.basis"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.polynomial.hermite.Hermite.basis.html"
+                        title="previous chapter">numpy.polynomial.hermite.Hermite.basis</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.polynomial.hermite.Hermite.convert.html"
+                        title="next chapter">numpy.polynomial.hermite.Hermite.convert</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-polynomial-hermite-hermite-cast">
+<h1>numpy.polynomial.hermite.Hermite.cast<a class="headerlink" href="#numpy-polynomial-hermite-hermite-cast" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="numpy.polynomial.hermite.Hermite.cast">
+<code class="descclassname">Hermite.</code><code class="descname">cast</code><span class="sig-paren">(</span><em>series</em>, <em>domain=None</em>, <em>window=None</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/numpy/numpy/blob/v1.14.0/numpy/polynomial/_polybase.py#L919-L959"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy.polynomial.hermite.Hermite.cast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert series to series of this class.</p>
+<p>The <em class="xref py py-obj">series</em> is expected to be an instance of some polynomial
+series of one of the types supported by by the numpy.polynomial
+module, but could be some other class that supports the convert
+method.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.7.0.</span></p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>series</strong> : series</p>
+<blockquote>
+<div><p>The series instance to be converted.</p>
+</div></blockquote>
+<p><strong>domain</strong> : {None, array_like}, optional</p>
+<blockquote>
+<div><p>If given, the array must be of the form <code class="docutils literal"><span class="pre">[beg,</span> <span class="pre">end]</span></code>, where
+<code class="docutils literal"><span class="pre">beg</span></code> and <code class="docutils literal"><span class="pre">end</span></code> are the endpoints of the domain. If None is
+given then the class domain is used. The default is None.</p>
+</div></blockquote>
+<p><strong>window</strong> : {None, array_like}, optional</p>
+<blockquote>
+<div><p>If given, the resulting array must be if the form
+<code class="docutils literal"><span class="pre">[beg,</span> <span class="pre">end]</span></code>, where <code class="docutils literal"><span class="pre">beg</span></code> and <code class="docutils literal"><span class="pre">end</span></code> are the endpoints of
+the window. If None is given then the class window is used. The
+default is None.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>new_series</strong> : series</p>
+<blockquote class="last">
+<div><p>A series of the same kind as the calling class and equal to
+<em class="xref py py-obj">series</em> when evaluated.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="numpy.polynomial.hermite.Hermite.convert.html#numpy.polynomial.hermite.Hermite.convert" title="numpy.polynomial.hermite.Hermite.convert"><code class="xref py py-obj docutils literal"><span class="pre">convert</span></code></a></dt>
+<dd>similar instance method</dd>
+</dl>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2017, The SciPy community.
+      </li>
+      <li>
+      Last updated on Jan 08, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>
